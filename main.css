@@ -1,0 +1,464 @@
+* {
+   font-family: 'Courier New', Courier, monospace;
+   color: white;
+}
+
+input {
+   background-color: transparent;
+}
+
+body {
+   margin: 0;
+
+   max-width: 1540px;
+   background-color: #313038;
+}
+
+html {
+   max-width: 1540px;
+}
+
+.main {
+   background-color: #313038;
+
+   min-width: 100%;
+
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+}
+
+#file-choose {
+   max-width: fit-content;
+}
+
+#empty-message {
+   text-align: center;
+   font-size: 50px;
+
+   color: #00788b;
+   font-weight: 600;
+}
+
+#file-choose {
+   margin-right: -0px;
+   max-width: 90px;
+}
+
+#input-section {
+   align-self: flex-end;
+   min-width: 700px;
+
+   display: grid;
+   grid-template-columns: 1fr 340px 70px;
+
+   margin: 20px 20px 20px 0;
+   width: auto;
+}
+
+#input-section input[type="file"] {
+   display: none;
+}
+
+#input-section #fc{
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+   padding: 5px 10px;
+   transition: background-color ease 0.1s;
+
+   text-align: center;
+}
+
+#input-section #fc:hover {
+   cursor: pointer;
+
+   background-color: #00788b;
+   transition: background-color ease 0.1s;
+}
+
+#input-section select {
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   min-width: 60px;
+   max-height: 25px;
+
+   float: right;
+
+   border: 1px solid #ffffff;
+   border-radius: 3px;
+   
+   text-align: center;
+   font-weight: 400;
+   font-size: 13px;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#input-section select:hover {
+   cursor: pointer;
+   background-color: #4e4e4e;
+   transition: background-color ease 0.1s;
+}
+
+#input-section select:focus {
+   outline: none;
+}
+
+#input-section #opt {
+   background-color: #313038;
+}
+
+button[type="button"] {
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+
+   background-color: transparent;
+   transition: background-color ease 0.2s;
+   
+   align-self: flex-start;
+}
+
+button[type="button"]:hover {
+   cursor: pointer;
+
+   background-color: #00788b;
+   transition: background-color ease 0.2s;
+}
+
+#input-form {
+   border-bottom: 10px solid linear-gradient(#00ffff, #ffffff, 90deg);
+
+   display: flex;
+   flex-direction: column;
+   border-bottom-left-radius: 15px;
+   border-bottom-right-radius: 15px;
+}
+
+#row-counter-label {
+   min-width: 350px;
+}
+
+#row-limiter {
+   max-width: 85px;
+
+   border: 1px solid rgb(255, 255, 255);
+   border-radius: 3px;
+}
+
+#row-limiter::placeholder {
+   color: rgba(255, 255, 255, 0.5);
+}
+
+.submit-section {
+   margin-right: 20px;
+
+   display: grid;
+
+   grid-template-columns: minmax(150px auto);
+   row-gap: 20px;
+}
+
+.submit-section a {
+   text-align: center;
+}
+
+.submit-section input {
+   transition: background-color ease 0.1s;
+}
+
+.submit-section input:hover {
+   cursor: pointer;
+
+   background-color: #00788b;
+   transition: background-color ease 0.1s;
+}
+
+#reset {
+   padding: 10px 15px;
+
+   min-height: 30px;
+}
+
+#reload-table, #submit-button {
+   border-radius: 3px;
+   border: 1px solid #00ffff;
+}
+
+#reload-table:disabled {
+   background-color: rgb(30, 30, 30);
+
+   cursor: not-allowed;
+}
+
+span {
+   color: #00788b;
+}
+
+.filters {
+
+   align-self: flex-end;
+   
+   display: grid;
+
+   grid-template-columns: 1fr 1fr;
+}
+
+.filters input {
+   max-width: 90px;
+}
+
+.filters div {
+   background-color: transparent;
+   color: rgb(255, 255, 255);
+}
+
+.filters input {
+   background-color: rgba(100, 99, 114, 0.2);
+   transition: background-color ease 0.1s;
+
+   border: none;
+   border-bottom: 1px solid #00ffff;
+   border-radius: 3px;
+
+   padding: 3px 10px;
+   margin: 10px 15px;
+}
+
+.filter input:hover {
+   background-color: rgba(255, 255, 255, 0.1);
+   transition: background-color ease 0.1s;
+   
+   cursor: pointer;
+}
+
+.filters input:focus {
+   outline: none;
+}
+
+.filters-date-submit {
+   display: flex;
+   flex-direction: row;
+}
+
+.label-input label {
+   margin-left: 15px;
+}
+
+.label-input-avo {
+   display: flex;
+   flex-direction: column;
+}
+
+.label-input-avo label {
+   margin-left: 15px;
+}
+
+#date-params {
+   padding: 3px 8px;
+
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+   
+   border: 1px solid #fff;
+   border-radius: 3px;
+   
+   margin-bottom: 20px;
+   margin-left: 15px;
+}
+
+#date-params:hover {
+   cursor: pointer;
+
+   background-color: #ffffff1a;
+   transition: background-color ease 0.1s;
+}
+
+#option {
+   background-color: #313038;
+}
+
+.left-date input {
+   padding: 5px 10px;
+   border: 1px solid #ffffff;
+   border-radius: 3px;
+
+   margin-bottom: 20px;
+}
+
+.right-date input {
+   padding: 5px 10px;
+   border: 1px solid #ffffff;
+   border-radius: 3px;
+}
+
+article {
+   margin: 20px 0 0 20px;
+
+   min-width: 500px;
+}
+
+article h1 {
+   max-width: 500px;
+}
+
+article span {
+   font-weight: 800;
+   color:#00d9ff
+}
+
+#sum-file {
+   text-decoration: none;
+
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+
+   max-width: fit-content;
+
+   padding: 3px 8px;
+
+   align-self: center;
+}
+
+#sum-file:hover {
+   background-color: #ff5e00;
+   transition: background-color ease 0.1s;
+}
+
+#left-date-inp:hover {
+   background-color: rgba(255, 255, 255, 0.1);
+   transition: background-color ease 0.1s;
+   cursor: pointer;
+}
+
+#right-date-inp:hover {
+   background-color: rgba(255, 255, 255, 0.1);
+   transition: background-color ease 0.1s;
+   cursor: pointer;
+}
+
+#click-toggler {
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #fff;
+   border-radius: 3px;
+   outline: none;
+
+   padding: 5px 10px;
+   margin-top: 30px;
+   margin-left: -3px;
+
+   max-width: 150px;
+}
+
+#click-toggler:hover {
+   background-color: #ffffff1a;
+   transition: background-color ease 0.1s;
+
+   cursor: pointer;
+}
+
+#click-toggler #ct-option {
+   background-color: #313038;
+   transition: background-color ease 0.1s;
+}
+
+#click-toggler #ct-option:hover {
+   cursor: pointer;
+}
+
+#data-table table {
+   margin: none;
+}
+
+#data-table {
+   margin: auto;
+   
+   border-collapse: collapse;
+   border-radius: 5px;
+   font-size: 0.9em;
+   font-family: sans-serif;
+
+   min-width: fit-content;
+
+   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+#data-table {
+   margin-top: 40px;
+   margin-bottom: 40px;
+
+   max-width: 1400px;
+}
+
+#data-table thead tr {
+   background-color: #00788b;
+   color: #4e4e4e;
+   
+   text-align: left;
+}
+
+#data-table th, #data-table td {
+   padding: 12px 15px;
+}
+
+#data-table tbody tr {
+   border-bottom: 1px solid #464646;
+   background-color: #cacaca;
+}
+
+#data-table tbody tr:nth-child(even) {
+   transition: background-color ease 0.1s;
+   background-color: #a2a2a2;
+}
+
+#data-table tbody tr:last-of-type {
+   border-bottom: 2px solid #00788b;
+   border-radius: 50px;
+}
+
+#data-table td {
+   color:rgb(0, 0, 0);
+   font-size: 13px;
+   font-weight: 500;
+}
+
+#data-table td:hover {
+   cursor: pointer;
+   background-color: #6f6e6e;
+   transition: background-color ease 0.1s;
+}
+
+#data-table td {
+   padding: 12px 15px;
+}
+
+#data-table #rowTable tbody tr {
+   border-bottom: 1px solid #464646;
+   background-color: #00788b;
+}
+
+#data-table #rowTable tbody tr:nth-child(even) {
+   transition: background-color ease 0.1s;
+   background-color: #a2a2a2;
+   margin-bottom: 15px;
+}
+
+#data-table #rowTable tbody tr:last-of-type {
+   border-bottom: 2px solid #00788b;
+   border-radius: 50px;
+}
+
+#data-table #rowTable td {
+   color:rgb(0, 0, 0);
+   font-size: 13px;
+   font-weight: 500;
+}
+
+#data-table #rowTable td:hover {
+   cursor: pointer;
+   background-color: #6f6e6e;
+   transition: background-color ease 0.1s;
+}
+

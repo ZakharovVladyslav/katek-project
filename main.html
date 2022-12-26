@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>Katek GmbH</title>
+      <link rel="stylesheet" href="./main.css">
+   </head>
+   <body>
+      <section class="main">
+         <article>
+            <img src="./Katek-Logosvg.png">
+            <h1>This website was made for filtering information in excel files with sorting and checking functions</h1>
+            <p>Made by <span>Katek GmBH</span></p>
+         </article>
+
+         <form id="input-form">
+
+            <section id="input-section">
+               <div class="file-input-section">
+                  <label id="fc" for="file-choose">Datei wählen</label>
+                  <input type="file" id="file-choose" accept=".csv"><br>
+                  <p id="chosen-file"></p>
+               </div>
+
+               <div>
+                  <label id="row-counter-label">Anzahl der Zeilen:</label>
+                  <input type="number" id="row-limiter" value="0" readonly>
+               </div>
+
+               <select id="chooseLangId" onchange="chooseLang()">
+                  <option id="opt">GE</option>
+                  <option id="opt">EN</option>
+               </select>
+            </section><br>
+
+            <section class="filters-date-submit">
+               <div class="date-input">
+                  <select id="date-params">
+                     <option id="option">tLogIn</option>
+                     <option id="option">tLogOut</option>
+                     <option id="option">tLastAcc</option>
+                  </select>
+
+                  <div class="left-date">
+                     <label id="left-date-label">Erstes Datum</label>
+                     <input id="left-date-inp" type="date">
+                  </div>
+                  
+                  <div class="right-date">
+                     <label id="right-date-label">Zweites Datum</label>
+                     <input id="right-date-inp" type="date">
+                  </div>
+
+                  <select id="click-toggler">
+                     <option id="ct-option">Show row</option>
+                     <option id="ct-option">Add to filter</option>
+                  </select>
+               </div>
+               
+               <section class="filters">
+                  <div class="label-input">
+                     <label for="ProdCode">ProdCode</label>
+                     <input type="text" id="ProdCode" list="prodCodeList">
+                     <datalist id="prodCodeList"></datalist>
+                  </div>
+                  
+                  <div class="label-input">
+                     <label for="Customer">Customer</label>
+                     <input type="text" id="Customer" list="customerList">
+                     <datalist id="customerList"></datalist>
+                  </div>
+                  
+                  <div class="label-input">
+                     <label for="ProdName">ProdName</label>
+                     <input type="text" id="ProdName" list="prodNameList">
+                     <datalist id="prodNameList"></datalist>
+                  </div>
+                  
+                  <div class="label-input">
+                     <label for="ArticleNum">ArticleNum</label>
+                     <input type="text" id="ArticleNum" list="articleNumList">
+                     <datalist id="articleNumList"></datalist>
+                  </div>
+
+                  <div class="label-input">
+                     <label for="MatNum">MatNum</label>
+                     <input type="text" id="MatNum" list="matNumList">
+                     <datalist id="matNumList"></datalist>
+                  </div>
+                  
+                  <div class="label-input">
+                     <label for="HostName">HostName</label>
+                     <input type="text" id="HostName" list="hostNameList">
+                     <datalist id="hostNameList"></datalist>
+                  </div>
+                  
+                  <div class="label-input">
+                     <label for="WkStNmae">WkStName</label>
+                     <input type="text" id="WkStNmae" list="wkStNameList">
+                     <datalist id="wkStNameList"></datalist>
+                  </div>
+                  
+                  <div class="label-input">
+                     <label for="AdpNum">AdpNum</label>
+                     <input type="text" id="AdpNum" list="adpNumList">
+                     <datalist id="adpNumList"></datalist>
+                  </div>
+                  
+                  <div class="label-input">
+                     <label for="ProcName">ProcName</label>
+                     <input type="text" id="ProcName" list="procNameList">
+                     <datalist id="procNameList"></datalist>
+                  </div>
+                  
+                  <div class="label-input-avo">
+                     <label for="AVO">AVO</label>
+                     <input type="text" id="AVO" list="avoList">
+                     <datalist id="avoList"></datalist>
+                  </div>
+               </section><br>
+               
+               <div class="submit-section">
+                  <input type="submit" value="Einreichen" id="submit-button">
+                  <input type="submit" value="Anfangstabelle" id="reload-table" disabled>
+                  
+                  <a href="./sum.html" id="sum-file">Summen Datei</a>
+
+                  <button type="button" id="reset">Zurucksetzen</button>
+               </div>
+
+            </section>
+         </form><br>
+      </section>
+      
+      <p id="empty-message"></p>
+
+      <table id="data-table"></table>
+
+      <script>
+         const option = document.getElementById('chooseLangId')
+
+         const fileLabel = document.getElementById('fc')
+         const leftDateLabel = document.getElementById('left-date-label')
+         const rightDateLabel = document.getElementById('right-date-label')
+         const dataSumFile = document.getElementById('sum-file')
+         const resetButton = document.getElementById('reset')
+         const submitButton = document.querySelector('.submit-button')
+         const initialTabel = document.querySelector('.reload-table')
+         const rowCounterLabel = document.getElementById('row-counter-label')
+
+         function chooseLang() {
+            if (option.value === "GE") {
+               fileLabel.innerHTML = "Datei wählen"
+               leftDateLabel.innerHTML = "Erstes Datum"
+               rightDateLabel.innerHTML = "Zweites Datum"
+               dataSumFile.innerHTML = "Summen Datei"
+               resetButton.value = "Zurücksetzen"
+               submitButton.value = "Einreichen"
+               initialTabel.value = "Anfangstabelle"
+               rowCounterLabel.innerHTML = "Anzahl der Zeilen"
+            }
+            if (option.value === "EN") {
+               fileLabel.innerHTML = "File choose"
+               leftDateLabel.innerHTML = "First date"
+               rightDateLabel.innerHTML = "Second date"
+               dataSumFile.innerHTML = "Summary File"
+               resetButton.value = "Reset"
+               submitButton.value = "Submit"
+               initialTabel.value = "Initial table"
+               rowCounterLabel.innerHTML = "Row counter"
+            }
+         }               
+      </script>
+      
+      <script type="module" src="./main.js"></script>
+   </body>
+</html>         
