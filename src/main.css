@@ -31,6 +31,34 @@ html {
    grid-template-columns: 1fr 1fr;
 }
 
+/* -------------------------------------------------------------------------------------------*/
+/* KATEK LOGO --------------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------------------------*/
+
+article {
+   margin: 20px -40px 0 60px;
+
+   min-width: 500px;
+}
+
+article h1 {
+   max-width: 500px;
+}
+
+article span {
+   font-weight: 800;
+   color: #00d9ff
+}
+
+/* ---------------------------------------------------------------------------------------------*/
+/* END OF KATEK LOGO ---------------------------------------------------------------------------*/
+/* ---------------------------------------------------------------------------------------------*/
+
+/* ---------------------------------------------------------------------------------------------*/
+/* SIDE SECTION PART ---------------------------------------------------------------------------*/
+/* ---------------------------------------------------------------------------------------------*/
+
+
 #side-section {
    background-color: #323232;
 
@@ -67,7 +95,7 @@ html {
    float: left;
    z-index: 1;
    position: fixed;
-
+   margin: 20px 0 0 10px;
 
    background-color: transparent;
 
@@ -92,339 +120,44 @@ html {
    align-self: center;
 }
 
-#filters-table {
-   margin-top: 20px;
+.sqr {
+   width: 50px;
+   height: 50px;
 }
 
-#filters-table tr td {
-   padding: 7px 15px;
-
-   background-color: rgb(90, 90, 90);
+.sqr:hover {
+   background-color: rgb(0, 125, 125);
    transition: background-color ease 0.1s;
 }
 
-#filters-table tr td:hover {
-   background-color: rgb(120, 120, 120);
+.selected {
+   background-color: #00ffff;
    transition: background-color ease 0.1s;
-
-   cursor: pointer;
 }
 
-#filters-table tbody tr td label {
+#showRes {
    color: white;
-}
+   transition: color ease 0.1s;
+   font-size: 18px;
 
-#filters-table tbody tr td label:hover {
-   cursor: pointer;
-}
+   background-color: transparent;
+   transition: background-color ease 0.1s;
 
-#file-choose {
-   max-width: fit-content;
-}
-
-#empty-message {
-   text-align: center;
-   font-size: 50px;
-
-   color: #00788b;
-   font-weight: 600;
-}
-
-#file-choose {
-   margin-right: -0px;
-   max-width: 90px;
-}
-
-#input-section {
-   align-self: flex-end;
-   min-width: 700px;
-
-   display: grid;
-   grid-template-columns: 1fr 340px 70px;
-
-   margin: 20px 20px 20px 0;
-   width: auto;
-}
-
-#input-section input[type="file"] {
-   display: none;
-}
-
-#input-section #fc{
    border: 1px solid #00ffff;
    border-radius: 3px;
+
+   margin-top: 30px;
    padding: 5px 10px;
+}
+
+#showRes:hover {
+   color: black;
+   transition: color ease 0.1s;
+   ;
+
+   background-color: #00ffff;
    transition: background-color ease 0.1s;
 
-   text-align: center;
-}
-
-#input-section #fc:hover {
-   cursor: pointer;
-
-   background-color: #00788b;
-   transition: background-color ease 0.1s;
-}
-
-#input-section select {
-   background-color: transparent;
-   transition: background-color ease 0.1s;
-
-   min-width: 60px;
-   max-height: 25px;
-
-   float: right;
-
-   border: 1px solid #ffffff;
-   border-radius: 3px;
-   
-   text-align: center;
-   font-weight: 400;
-   font-size: 13px;
-   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-#input-section select:hover {
-   cursor: pointer;
-   background-color: #4e4e4e;
-   transition: background-color ease 0.1s;
-}
-
-#input-section select:focus {
-   outline: none;
-}
-
-#input-section #opt {
-   background-color: #313038;
-}
-
-button[type="button"] {
-   border: 1px solid #00ffff;
-   border-radius: 3px;
-
-   background-color: transparent;
-   transition: background-color ease 0.2s;
-   
-   align-self: flex-start;
-}
-
-button[type="button"]:hover {
-   cursor: pointer;
-
-   background-color: #00788b;
-   transition: background-color ease 0.2s;
-}
-
-#input-form {
-   border-bottom: 10px solid linear-gradient(#00ffff, #ffffff, 90deg);
-
-   display: flex;
-   flex-direction: column;
-   border-bottom-left-radius: 15px;
-   border-bottom-right-radius: 15px;
-}
-
-#row-counter-label {
-   min-width: 350px;
-}
-
-#row-limiter {
-   max-width: 85px;
-
-   border: 1px solid rgb(255, 255, 255);
-   border-radius: 3px;
-}
-
-#row-limiter::placeholder {
-   color: rgba(255, 255, 255, 0.5);
-}
-
-.submit-section {
-   margin-right: 20px;
-
-   display: grid;
-
-   grid-template-columns: minmax(150px auto);
-   row-gap: 20px;
-}
-
-.submit-section a {
-   text-align: center;
-}
-
-.submit-section input {
-   transition: background-color ease 0.1s;
-}
-
-.submit-section input:hover {
-   cursor: pointer;
-
-   background-color: #00788b;
-   transition: background-color ease 0.1s;
-}
-
-#reset {
-   padding: 10px 15px;
-
-   min-height: 30px;
-}
-
-#reload-#filters-table, #submit-button {
-   border-radius: 3px;
-   border: 1px solid #00ffff;
-}
-
-#reload-#filters-table:disabled {
-   background-color: rgb(30, 30, 30);
-
-   cursor: not-allowed;
-}
-
-span {
-   color: #00788b;
-}
-
-.filters {
-
-   align-self: flex-end;
-   
-   display: grid;
-
-   grid-template-columns: 1fr 1fr;
-}
-
-.filters input {
-   max-width: 90px;
-}
-
-.filters div {
-   background-color: transparent;
-   color: rgb(255, 255, 255);
-}
-
-.filters input {
-   background-color: rgba(100, 99, 114, 0.2);
-   transition: background-color ease 0.1s;
-
-   border: none;
-   border-bottom: 1px solid #00ffff;
-   border-radius: 3px;
-
-   padding: 3px 10px;
-   margin: 10px 15px;
-}
-
-.filter input:hover {
-   background-color: rgba(255, 255, 255, 0.1);
-   transition: background-color ease 0.1s;
-   
-   cursor: pointer;
-}
-
-.filters input:focus {
-   outline: none;
-}
-
-.filters-date-submit {
-   display: flex;
-   flex-direction: row;
-}
-
-.label-input label {
-   margin-left: 15px;
-}
-
-.label-input-avo {
-   display: flex;
-   flex-direction: column;
-}
-
-.label-input-avo label {
-   margin-left: 15px;
-}
-
-#date-params {
-   padding: 3px 8px;
-
-   background-color: transparent;
-   transition: background-color ease 0.1s;
-   
-   border: 1px solid #fff;
-   border-radius: 3px;
-   
-   margin-bottom: 20px;
-   margin-left: 15px;
-}
-
-#date-params:hover {
-   cursor: pointer;
-
-   background-color: #ffffff1a;
-   transition: background-color ease 0.1s;
-}
-
-#option {
-   background-color: #313038;
-}
-
-.left-date input {
-   padding: 5px 10px;
-   border: 1px solid #ffffff;
-   border-radius: 3px;
-
-   margin-bottom: 20px;
-}
-
-.right-date input {
-   padding: 5px 10px;
-   border: 1px solid #ffffff;
-   border-radius: 3px;
-}
-
-article {
-   margin: 20px 0 0 20px;
-
-   min-width: 500px;
-}
-
-article h1 {
-   max-width: 500px;
-}
-
-article span {
-   font-weight: 800;
-   color:#00d9ff
-}
-
-#sum-file {
-   text-decoration: none;
-
-   transition: background-color ease 0.1s;
-
-   border: 1px solid #00ffff;
-   border-radius: 3px;
-
-   max-width: fit-content;
-
-   padding: 3px 8px;
-
-   align-self: center;
-}
-
-#sum-file:hover {
-   background-color: #ff5e00;
-   transition: background-color ease 0.1s;
-}
-
-#left-date-inp:hover {
-   background-color: rgba(255, 255, 255, 0.1);
-   transition: background-color ease 0.1s;
-   cursor: pointer;
-}
-
-#right-date-inp:hover {
-   background-color: rgba(255, 255, 255, 0.1);
-   transition: background-color ease 0.1s;
    cursor: pointer;
 }
 
@@ -459,13 +192,366 @@ article span {
    cursor: pointer;
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------------- */
+
+#file-choose {
+   max-width: fit-content;
+}
+
+#file-choose {
+   margin-right: -0px;
+   max-width: 90px;
+}
+
+#empty-message {
+   text-align: center;
+   font-size: 50px;
+
+   color: #00788b;
+   font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+/* SECTION WITH ALL INPUTES --------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------------- */
+
+#input-section {
+   align-self: flex-end;
+   min-width: 700px;
+
+   display: grid;
+   grid-template-columns: 1fr 340px 70px;
+
+   margin: 20px 20px 20px 0;
+   width: auto;
+}
+
+#input-section input[type="file"] {
+   display: none;
+}
+
+#input-section #fc {
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+   padding: 5px 10px;
+   transition: background-color ease 0.1s;
+
+   text-align: center;
+}
+
+#input-section #fc:hover {
+   cursor: pointer;
+
+   background-color: #00788b;
+   transition: background-color ease 0.1s;
+}
+
+#input-section select {
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   min-width: 60px;
+   max-height: 25px;
+
+   float: right;
+
+   border: 1px solid #ffffff;
+   border-radius: 3px;
+
+   text-align: center;
+   font-weight: 400;
+   font-size: 13px;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#input-section select:hover {
+   cursor: pointer;
+   background-color: #4e4e4e;
+   transition: background-color ease 0.1s;
+}
+
+#input-section select:focus {
+   outline: none;
+}
+
+#input-section #opt {
+   background-color: #313038;
+}
+
+/* ----------------------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------------------- */
+
+button[type="button"] {
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+
+   background-color: transparent;
+   transition: background-color ease 0.2s;
+
+   align-self: flex-start;
+}
+
+button[type="button"]:hover {
+   cursor: pointer;
+
+   background-color: #00788b;
+   transition: background-color ease 0.2s;
+}
+
+/* ------------------------------------------------------------------------------------------------------------ */
+/* INPUT FORM - MAIN FORM ATTRIBUTE --------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------------------------ */
+
+#input-form {
+   border-bottom: 10px solid linear-gradient(#00ffff, #ffffff, 90deg);
+
+   display: flex;
+   flex-direction: column;
+   border-bottom-left-radius: 15px;
+   border-bottom-right-radius: 15px;
+}
+
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+
+/* -------------------------------------------------------------------------------------------- */
+/* ROW COUNTER PART --------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------------- */
+
+#row-counter-label {
+   min-width: 350px;
+}
+
+#row-limiter {
+   max-width: 85px;
+
+   border: 1px solid rgb(255, 255, 255);
+   border-radius: 3px;
+}
+
+#row-limiter::placeholder {
+   color: rgba(255, 255, 255, 0.5);
+}
+
+/*---------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------*/
+
+/* --------------------------------------------------------------------------------------------*/
+/* SUBMIT SECTION PART ------------------------------------------------------------------------*/
+/* --------------------------------------------------------------------------------------------*/
+
+.submit-section {
+   margin-right: 20px;
+
+   display: grid;
+
+   grid-template-columns: minmax(150px auto);
+   row-gap: 20px;
+}
+
+/* --------------------------------------------------------------------------------------------*/
+/* --------------------------------------------------------------------------------------------*/
+
+.submit-section a {
+   text-align: center;
+}
+
+.submit-section input {
+   transition: background-color ease 0.1s;
+}
+
+.submit-section input:hover {
+   cursor: pointer;
+
+   background-color: #00788b;
+   transition: background-color ease 0.1s;
+}
+
+#reset {
+   padding: 10px 15px;
+
+   min-height: 30px;
+}
+
+#reload-table,
+#submit-button {
+   border-radius: 3px;
+   border: 1px solid #00ffff;
+}
+
+#reload-table:disabled {
+   background-color: rgb(30, 30, 30);
+
+   cursor: not-allowed;
+}
+/* -------------------------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------------------------*/
+
+span {
+   color: #00788b;
+}
+
+/* -------------------------------------------------------------------------------------------*/
+/* SECTION WITH TABLE FILTERS ----------------------------------------------------------------*/
+/* -------------------------------------------------------------------------------------------*/
+
+.filters {
+   min-height: 303px;
+   min-width: 375px;
+
+   align-self: flex-end;
+
+   display: grid;
+
+   grid-template-columns: 1fr 1fr;
+}
+
+.filters input {
+   max-width: 90px;
+}
+
+.filters div {
+   background-color: transparent;
+   color: rgb(255, 255, 255);
+}
+
+.filters input {
+   background-color: rgba(100, 99, 114, 0.2);
+   transition: background-color ease 0.1s;
+
+   border: none;
+   border-bottom: 1px solid #00ffff;
+   border-radius: 3px;
+
+   padding: 3px 10px;
+   margin: 10px 15px;
+}
+
+.filters input:hover {
+   background-color: rgba(255, 255, 255, 0.1);
+   transition: background-color ease 0.1s;
+
+   cursor: pointer;
+}
+
+.filters input:focus {
+   outline: none;
+}
+
+.label-input label {
+   margin-left: 15px;
+}
+
+.label-input-avo {
+   display: flex;
+   flex-direction: column;
+}
+
+.label-input-avo label {
+   margin-left: 15px;
+}
+
+/* -------------------------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------------------------*/
+
+.filters-date-submit {
+   display: flex;
+   flex-direction: row;
+}
+
+/* -------------------------------------------------------------------------------------------*/
+/* SECTION WITH DATE INPUTS-------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------------------------*/
+
+#date-params {
+   padding: 3px 8px;
+
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #fff;
+   border-radius: 3px;
+
+   margin-bottom: 20px;
+   margin-left: 15px;
+}
+
+#date-params:hover {
+   cursor: pointer;
+
+   background-color: #ffffff1a;
+   transition: background-color ease 0.1s;
+}
+
+.left-date input {
+   padding: 5px 10px;
+   border: 1px solid #ffffff;
+   border-radius: 3px;
+
+   margin-bottom: 20px;
+}
+
+.right-date input {
+   padding: 5px 10px;
+   border: 1px solid #ffffff;
+   border-radius: 3px;
+}
+
+#left-date-inp:hover {
+   background-color: rgba(255, 255, 255, 0.1);
+   transition: background-color ease 0.1s;
+   cursor: pointer;
+}
+
+#right-date-inp:hover {
+   background-color: rgba(255, 255, 255, 0.1);
+   transition: background-color ease 0.1s;
+   cursor: pointer;
+}
+
+/* -------------------------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------------------------*/
+
+#option {
+   background-color: #313038;
+}
+
+#sum-file {
+   text-decoration: none;
+
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+
+   max-width: fit-content;
+
+   padding: 3px 8px;
+
+   align-self: center;
+}
+
+#sum-file:hover {
+   background-color: #ff5e00;
+   transition: background-color ease 0.1s;
+}
+
+#mode {
+   margin-left: 100px;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/* MAIN TABLE WITH ALL DATA------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
 #data-table #filters-table {
    margin: none;
 }
 
 #data-table {
    margin: auto;
-   
+
    border-collapse: collapse;
    border-radius: 5px;
    font-size: 0.9em;
@@ -486,11 +572,12 @@ article span {
 #data-table thead tr {
    background-color: #00788b;
    color: #4e4e4e;
-   
+
    text-align: left;
 }
 
-#data-table th, #data-table td {
+#data-table th,
+#data-table td {
    padding: 12px 15px;
 }
 
@@ -510,7 +597,7 @@ article span {
 }
 
 #data-table td {
-   color:rgb(0, 0, 0);
+   color: rgb(0, 0, 0);
    font-size: 13px;
    font-weight: 500;
 }
@@ -542,7 +629,7 @@ article span {
 }
 
 #data-table #rowTable td {
-   color:rgb(0, 0, 0);
+   color: rgb(0, 0, 0);
    font-size: 13px;
    font-weight: 500;
 }
@@ -553,3 +640,5 @@ article span {
    transition: background-color ease 0.1s;
 }
 
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/

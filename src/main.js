@@ -1,9 +1,10 @@
 'use strict'
 
-import dropDown from "./functions/funcs.js"
-import sideBarToggle from "./functions/sidebar.js"
+import dropDown from './functions/funcs.js'
+import sideBarToggle from './functions/sidebar.js'
 import csvToArray from './functions/csvConvert.js'
-import getFilters from "./functions/mainFiltering.js"
+import getFilters from './functions/mainFiltering.js'
+import tableHeadersSelection from './functions/headersSelection.js'
 
 const inputForm = document.getElementById('input-form')
 const file = document.getElementById('file-choose')
@@ -13,6 +14,7 @@ const rowLimiter = document.getElementById('row-limiter')
 const chosenFile = document.getElementById('chosen-file')
 const reloadTable = document.getElementById('reload-table')
 const cellSelect = document.getElementById('click-toggler')
+const mode = document.getElementById('mode')
 
 const prodCode = document.getElementById('ProdCode')
 const customer = document.getElementById('Customer')
@@ -46,6 +48,9 @@ file.oninput = (e) => {
 
    chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1]
 }
+
+console.log(document.getElementById('filters').offsetHeight)
+console.log(document.getElementById('filters').offsetWidth)
 
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
@@ -88,7 +93,10 @@ inputForm.addEventListener("submit", (e) => {
             const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO"]
             const tableHeaderLists = [prodCodeList, customerList, prodNameList, hostNameList, matNumList, articleNumList, wkStNameList, adpNumList, procNameList, avoList]
 
-            const data = [...csvToArray(text)[0]]
+            const arrayFromCsv = [...csvToArray(text)]
+            const data = arrayFromCsv[0]
+
+            tableHeadersSelection(arrayFromCsv[1])
 
             const initialArray = getFilters(data, tableHeaders)
             data.length = 0
@@ -169,10 +177,19 @@ inputForm.addEventListener("submit", (e) => {
             table.appendChild(tbody)
             dataTable.appendChild(table)
 
+            let clickOption = cellSelect.options[cellSelect.selectedIndex].value
+            mode.innerHTML = `Mode: ${clickOption}`
+
+            cellSelect.onchange = () => {
+               clickOption = cellSelect.options[cellSelect.selectedIndex].value
+               mode.innerHTML = `Mode: ${clickOption}`
+            }
+
             table.addEventListener('click', e => {
                const clickOption = cellSelect.options[cellSelect.selectedIndex].value
 
-               console.log(clickOption)
+               mode.innerHTML = `Mode: ${clickOption}`  
+
                if (clickOption === "Add to filter") {
                   const data = [...csvToArray(text)[0]]
                   data.length = 0

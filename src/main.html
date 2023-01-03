@@ -9,7 +9,7 @@
    <body>
       <section class="main">
          <article>
-            <!--<img src="./Katek-Logosvg.png">-->
+            <img src="../assets/Katek-Logosvg.png">
             <h1>This website was made for filtering information in excel files with sorting and checking functions</h1>
             <p>Made by <span>Katek GmBH</span></p>
          </article>
@@ -21,8 +21,10 @@
                <option id="ct-option">Show row</option>
                <option id="ct-option">Add to filter</option>
             </select>
-
-            <table id="filters-table"></table>
+            
+            <table id="table-selection"></table>
+            
+            <button type="button" id="showRes">Create Filters</button>
          </section>
 
          <label for="sidebar-input" id="sidebar-input-label">&times</label>
@@ -49,7 +51,8 @@
             </section><br>
 
             <section class="filters-date-submit">
-               <section class="filters">
+               <section class="filters" id="filters">
+                  <!--
                   <div class="label-input">
                      <label for="ProdCode">ProdCode</label>
                      <input type="text" id="ProdCode" list="prodCodeList">
@@ -109,6 +112,7 @@
                      <input type="text" id="AVO" list="avoList">
                      <datalist id="avoList"></datalist>
                   </div>
+               -->
                </section><br>
 
                <div class="date-input">
@@ -144,6 +148,8 @@
       
       <p id="empty-message"></p>
 
+
+      <p id="mode"></p>
       <table id="data-table"></table>
 
       <script>
