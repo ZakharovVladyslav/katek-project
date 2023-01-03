@@ -1,3 +1,7 @@
+:root {
+   --katek-blue: #00ffff;
+}
+
 * {
    font-family: 'Courier New', Courier, monospace;
    color: white;
@@ -25,6 +29,93 @@ html {
 
    display: grid;
    grid-template-columns: 1fr 1fr;
+}
+
+#side-section {
+   background-color: #323232;
+
+   display: flex;
+   flex-direction: column;
+
+   height: 100%;
+   width: 0;
+
+   position: fixed;
+   z-index: 1;
+
+   top: 0;
+   left: 0;
+
+   float: left;
+
+   overflow-x: hidden;
+   padding-top: 60px;
+   transition: 0.5s ease-in-out;
+}
+
+#side-section h1 {
+   align-self: center;
+
+   margin-left: 10px;
+}
+
+#sidebar-input {
+   display: none;
+}
+
+#sidebar-input-label {
+   float: left;
+   z-index: 1;
+   position: fixed;
+
+
+   background-color: transparent;
+
+   font-size: 3rem;
+
+   color: white;
+   transition: color 0.1s;
+
+   border: none;
+   outline: none;
+}
+
+#sidebar-input-label:hover {
+   cursor: pointer;
+   transition: transform ease 0.3s;
+
+   color: var(--katek-blue);
+   transition: color 0.1s;
+}
+
+#side-section select {
+   align-self: center;
+}
+
+#filters-table {
+   margin-top: 20px;
+}
+
+#filters-table tr td {
+   padding: 7px 15px;
+
+   background-color: rgb(90, 90, 90);
+   transition: background-color ease 0.1s;
+}
+
+#filters-table tr td:hover {
+   background-color: rgb(120, 120, 120);
+   transition: background-color ease 0.1s;
+
+   cursor: pointer;
+}
+
+#filters-table tbody tr td label {
+   color: white;
+}
+
+#filters-table tbody tr td label:hover {
+   cursor: pointer;
 }
 
 #file-choose {
@@ -178,12 +269,12 @@ button[type="button"]:hover {
    min-height: 30px;
 }
 
-#reload-table, #submit-button {
+#reload-#filters-table, #submit-button {
    border-radius: 3px;
    border: 1px solid #00ffff;
 }
 
-#reload-table:disabled {
+#reload-#filters-table:disabled {
    background-color: rgb(30, 30, 30);
 
    cursor: not-allowed;
@@ -368,7 +459,7 @@ article span {
    cursor: pointer;
 }
 
-#data-table table {
+#data-table #filters-table {
    margin: none;
 }
 
@@ -436,7 +527,7 @@ article span {
 
 #data-table #rowTable tbody tr {
    border-bottom: 1px solid #464646;
-   background-color: #00788b;
+   background-color: rgba(0, 255, 255, 0.5);
 }
 
 #data-table #rowTable tbody tr:nth-child(even) {

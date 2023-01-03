@@ -3,14 +3,30 @@
    <head>
       <title>Katek GmbH</title>
       <link rel="stylesheet" href="./main.css">
+      
+      <script type="module" src="./main.js" defer></script>
    </head>
    <body>
       <section class="main">
          <article>
-            <img src="./Katek-Logosvg.png">
+            <!--<img src="./Katek-Logosvg.png">-->
             <h1>This website was made for filtering information in excel files with sorting and checking functions</h1>
             <p>Made by <span>Katek GmBH</span></p>
          </article>
+
+         <section id="side-section">
+            <h1>Settings:</h1>
+
+            <select id="click-toggler">
+               <option id="ct-option">Show row</option>
+               <option id="ct-option">Add to filter</option>
+            </select>
+
+            <table id="filters-table"></table>
+         </section>
+
+         <label for="sidebar-input" id="sidebar-input-label">&times</label>
+         <input type="checkbox" id="sidebar-input">
 
          <form id="input-form">
 
@@ -33,29 +49,6 @@
             </section><br>
 
             <section class="filters-date-submit">
-               <div class="date-input">
-                  <select id="date-params">
-                     <option id="option">tLogIn</option>
-                     <option id="option">tLogOut</option>
-                     <option id="option">tLastAcc</option>
-                  </select>
-
-                  <div class="left-date">
-                     <label id="left-date-label">Erstes Datum</label>
-                     <input id="left-date-inp" type="date">
-                  </div>
-                  
-                  <div class="right-date">
-                     <label id="right-date-label">Zweites Datum</label>
-                     <input id="right-date-inp" type="date">
-                  </div>
-
-                  <select id="click-toggler">
-                     <option id="ct-option">Show row</option>
-                     <option id="ct-option">Add to filter</option>
-                  </select>
-               </div>
-               
                <section class="filters">
                   <div class="label-input">
                      <label for="ProdCode">ProdCode</label>
@@ -117,6 +110,24 @@
                      <datalist id="avoList"></datalist>
                   </div>
                </section><br>
+
+               <div class="date-input">
+                  <select id="date-params">
+                     <option id="option">tLogIn</option>
+                     <option id="option">tLogOut</option>
+                     <option id="option">tLastAcc</option>
+                  </select>
+
+                  <div class="left-date">
+                     <label id="left-date-label">Erstes Datum</label>
+                     <input id="left-date-inp" type="date">
+                  </div>
+                  
+                  <div class="right-date">
+                     <label id="right-date-label">Zweites Datum</label>
+                     <input id="right-date-inp" type="date">
+                  </div>
+               </div>
                
                <div class="submit-section">
                   <input type="submit" value="Einreichen" id="submit-button">
@@ -170,7 +181,5 @@
             }
          }               
       </script>
-      
-      <script type="module" src="./main.js"></script>
    </body>
 </html>         

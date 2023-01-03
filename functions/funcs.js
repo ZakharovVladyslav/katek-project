@@ -1,6 +1,6 @@
 'use strict'
 
-export function dropDown(data, header, listName) {
+export default function dropDown(data, header, listName) {
     const options = document.querySelectorAll(`#${header}-option`)
     options.forEach(opt => opt.remove())
 
@@ -23,8 +23,4 @@ export function dropDown(data, header, listName) {
         listName.appendChild(option)
     }
 
-}
-
-export function getKeyByItsValue(object, value) {
-    return Object.keys(object).find(key => object[key] === value)
 }

@@ -1,6 +1,9 @@
 'use strict'
 
-import { dropDown, getKeyByItsValue } from "./funcs.js"
+import dropDown from "./functions/funcs.js"
+import sideBarToggle from "./functions/sidebar.js"
+import csvToArray from './functions/csvConvert.js'
+import getFilters from "./functions/mainFiltering.js"
 
 const inputForm = document.getElementById('input-form')
 const file = document.getElementById('file-choose')
@@ -33,93 +36,8 @@ const adpNumList = document.getElementById('adpNumList')
 const procNameList = document.getElementById('procNameList')
 const avoList = document.getElementById('avoList')
 
-function csvToArray(str, delimiter = ',') {
-   const headers = str.slice(0, str.indexOf("\n")).split(delimiter)
-   const rows = str.slice(str.indexOf("\n") + 1).split("\n")
-
-   headers.pop()
-
-   const arr = rows.map((row) => {
-      const values = row.split(delimiter)
-      const element = headers.reduce((object, header, index) => {
-         object[header] = values[index]
-         return object
-      }, {})
-      return element
-   })
-
-   return [arr, headers]
-}
-
-function dateFilter(data) {
-   const leftDate = document.getElementById('left-date-inp').value
-   const rigthDate = document.getElementById('right-date-inp').value
-
-   if (leftDate.length === 0 || rigthDate === 0)
-      return data
-
-   else {
-      let newData = []
-
-      const select = document.getElementById('date-params')
-      const opt = select.options[select.selectedIndex].value
-
-      const revertDate = (date) => {
-         const arr = date.split('-').reverse()
-
-         return `${+arr[1]}/${+arr[0]}/${+arr[2]}`
-      }
-
-      const leftDateArr = revertDate(leftDate)
-      const rigthDateArr = revertDate(rigthDate)
-
-
-      newData = data.filter(elem => {
-         if (elem[opt] !== undefined) {
-            let targetDate = elem[opt].split('')
-
-            if (targetDate.length > 10) {
-               targetDate.length = 10
-
-               targetDate = targetDate.join('').split('/')
-
-               let date = `${+targetDate[0]}/${+targetDate[1]}/${+targetDate[2]}`
-
-               if (new Date(leftDateArr) <= new Date(date) && new Date(date) <= new Date(rigthDateArr))
-                  return elem
-            }
-         }
-      })
-
-      return newData
-   }
-}
-
-function getFilters(inputData, headers) {
-   const data = dateFilter(inputData)
-
-   const filters = [prodCode, customer, prodName, hostName, matNum, articleNum, wkstname, adpNum, procName, avo]
-
-   const keys = filters.map((header, index) => {
-      if (header.value.length != 0)
-         return headers[index]
-   }).filter(header => header !== undefined)
-
-   const values = filters.map(filter => {
-      if (filter.value.length != 0)
-         return filter.value
-   }).filter(filter => filter !== undefined)
-
-   const filteredArray = data.filter(e => {
-      return keys.every(a => {
-         return values.includes(e[a])
-      })
-   })
-
-   filteredArray.unshift(headers)
-
-   return filteredArray
-}
+document.getElementById('sidebar-input-label').style.opacity = '0.1'
+document.getElementById('sidebar-input-label').style.transition = 'opacity ease 0.3s'
 
 file.oninput = (e) => {
    e.preventDefault()
@@ -164,22 +82,26 @@ inputForm.addEventListener("submit", (e) => {
          }
 
          else {
-            const clickOption = cellSelect.options[cellSelect.selectedIndex].value
-
             if (emptyMessage.value != 0)
                emptyMessage.innerHTML = ''
 
-            const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO"]
-            const headerLists = [prodCodeList, customerList, prodNameList, hostNameList, matNumList, articleNumList, wkStNameList, adpNumList, procNameList, avoList]
+            const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO"]
+            const tableHeaderLists = [prodCodeList, customerList, prodNameList, hostNameList, matNumList, articleNumList, wkStNameList, adpNumList, procNameList, avoList]
 
             const data = [...csvToArray(text)[0]]
 
-            const initialArray = getFilters(data, headers)
+            const initialArray = getFilters(data, tableHeaders)
             data.length = 0
 
-            const headerListLength = headers.length;
+            sideBarToggle(
+               document.getElementById('side-section'),
+               document.getElementById('sidebar-input'),
+               document.getElementById('sidebar-input-label')
+            )
+
+            const headerListLength = tableHeaders.length;
             for (let i = 0; i < headerListLength; i++)
-               dropDown(initialArray, headers[i], headerLists[i])
+               dropDown(initialArray, tableHeaders[i], tableHeaderLists[i])
 
             if (initialArray.length === 0) {
                emptyMessage.innerHTML = "Bitte fügen Sie Filter hinzu"
@@ -232,7 +154,7 @@ inputForm.addEventListener("submit", (e) => {
             for (let i = 1; i < initialArray.length; i++) {
                let body_row = document.createElement('tr')
 
-               headers.forEach((header, j) => {
+               tableHeaders.forEach((header, j) => {
                   let table_data = document.createElement('td')
 
                   table_data.setAttribute('id', `cell ${i}${j}`)
@@ -248,10 +170,11 @@ inputForm.addEventListener("submit", (e) => {
             dataTable.appendChild(table)
 
             table.addEventListener('click', e => {
+               const clickOption = cellSelect.options[cellSelect.selectedIndex].value
+
+               console.log(clickOption)
                if (clickOption === "Add to filter") {
-                  const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO"]
                   const data = [...csvToArray(text)[0]]
-                  const initialArray = getFilters(data, headers)
                   data.length = 0
 
                   const targetId = e.target.id
@@ -260,7 +183,7 @@ inputForm.addEventListener("submit", (e) => {
 
                   const columnKeys = {
                      "1": "ProdCode",
-                     "2": "Customer", 
+                     "2": "Customer",
                      "3": "ProdName",
                      "4": "HostName",
                      "5": "MatNum",
@@ -280,7 +203,7 @@ inputForm.addEventListener("submit", (e) => {
                }
                else if (clickOption === "Show row") {
                   reloadTable.disabled = false
-                  
+
                   const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO"]
                   const data = [...csvToArray(text)[0]]
                   const initialArray = getFilters(data, headers)
@@ -327,7 +250,7 @@ inputForm.addEventListener("submit", (e) => {
                   const resArr = []
                   for (let i = 0; i < 3; i++)
                      resArr.push(divideArrByNine(allHeaders)[i], divideArrByNine(allValues)[i])
-                  
+
                   for (let i = 0; i < 6; i++) {
                      const tr = document.createElement('tr')
                      for (let j = 0; j < 9; j++) {
@@ -350,7 +273,7 @@ inputForm.addEventListener("submit", (e) => {
 
             data.length = 0
             initialArray.length = 0
-            headers.length = 0
+            tableHeaders.length = 0
          }
       }
       reader.readAsText(input)

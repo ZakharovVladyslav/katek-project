@@ -1,6 +1,6 @@
 'use strict'
 
-import { dropDown } from "./funcs.js"
+import { dropDown } from "./functions/funcs.js"
 
 const form = document.getElementById('input-section')
 const file = document.getElementById('file-choose')
@@ -13,6 +13,28 @@ const materialNum = document.getElementById("MatirealNum")
 const hostNameList = document.getElementById('hostNameList')
 const articleNumList = document.getElementById('articleNumList')
 const materialNumList = document.getElementById('matirealNumList')
+
+const sideSection = document.getElementById('side-section')
+const sideSectionToggleInput = document.getElementById('sidebar-input')
+const sideSectionToggleLabel = document.getElementById('sidebar-input-label')
+
+// SideBar opening
+sideSectionToggleInput.onchange = () => {
+   if (sideSectionToggleInput.checked) {
+      console.log('checked')
+      sideSection.style.width = '400px'
+      sideSection.style.borderRight = '1px solid #00ffff'
+      sideSectionToggleLabel.style.marginLeft = '400px'
+      sideSectionToggleLabel.style.transform = 'rotate(360deg)'
+      sideSectionToggleLabel.style.transition = '0.5s ease-in-out'
+   } else {
+      sideSection.style.width = '0px'
+      
+      setTimeout(() => sideSection.style.borderRight = '0px', 500)
+      sideSectionToggleLabel.style.transform = 'rotate(-360deg)'
+      sideSectionToggleLabel.style.marginLeft = '0px'
+   }
+}
 
 function csvToArray(str, delimiter = ',') {
    const headers = str.slice(0, str.indexOf("\n")).split(delimiter)
