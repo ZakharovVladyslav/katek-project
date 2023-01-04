@@ -44,19 +44,10 @@ function dateFilter(data) {
 
 export default function getFilters(inputData, headers) {
     const prodCode = document.getElementById('ProdCode')
-    const customer = document.getElementById('Customer')
-    const prodName = document.getElementById('ProdName')
-    const hostName = document.getElementById('HostName')
-    const matNum = document.getElementById('MatNum')
-    const articleNum = document.getElementById('ArticleNum')
-    const wkstname = document.getElementById('WkStNmae')
-    const adpNum = document.getElementById('AdpNum')
-    const procName = document.getElementById('ProcName')
-    const avo = document.getElementById('AVO')
 
     const data = dateFilter(inputData)
 
-    const filters = [prodCode, customer, prodName, hostName, matNum, articleNum, wkstname, adpNum, procName, avo]
+    const filters = [prodCode]
 
     const keys = filters.map((header, index) => {
         if (header.value.length != 0)
