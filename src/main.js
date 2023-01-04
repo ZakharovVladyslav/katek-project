@@ -49,9 +49,6 @@ file.oninput = (e) => {
    chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1]
 }
 
-console.log(document.getElementById('filters').offsetHeight)
-console.log(document.getElementById('filters').offsetWidth)
-
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
 
@@ -91,12 +88,20 @@ inputForm.addEventListener("submit", (e) => {
                emptyMessage.innerHTML = ''
 
             const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO"]
-            const tableHeaderLists = [prodCodeList, customerList, prodNameList, hostNameList, matNumList, articleNumList, wkStNameList, adpNumList, procNameList, avoList]
+            const tableHeaderLists = [prodCodeList]
 
             const arrayFromCsv = [...csvToArray(text)]
             const data = arrayFromCsv[0]
 
             tableHeadersSelection(arrayFromCsv[1])
+
+            const divs = document.querySelectorAll('#filter-div')
+
+            divs.forEach(div => {
+               console.log(typeof(div.textContent))
+               const nelem = ['×', '\n', ' ']
+               console.log(div.textContent.split('').filter(elem => !nelem.includes(elem)))
+            })
 
             const initialArray = getFilters(data, tableHeaders)
             data.length = 0
@@ -109,7 +114,7 @@ inputForm.addEventListener("submit", (e) => {
 
             const headerListLength = tableHeaders.length;
             for (let i = 0; i < headerListLength; i++)
-               dropDown(initialArray, tableHeaders[i], tableHeaderLists[i])
+               dropDown(initialArray, tableHeaders[0], tableHeaderLists[0])
 
             if (initialArray.length === 0) {
                emptyMessage.innerHTML = "Bitte fügen Sie Filter hinzu"

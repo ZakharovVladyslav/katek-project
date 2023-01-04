@@ -140,6 +140,8 @@ article span {
    transition: color ease 0.1s;
    font-size: 18px;
 
+   align-self: center;
+
    background-color: transparent;
    transition: background-color ease 0.1s;
 
@@ -147,13 +149,13 @@ article span {
    border-radius: 3px;
 
    margin-top: 30px;
+   margin-bottom: 100px; 
    padding: 5px 10px;
 }
 
 #showRes:hover {
    color: black;
    transition: color ease 0.1s;
-   ;
 
    background-color: #00ffff;
    transition: background-color ease 0.1s;
@@ -190,6 +192,51 @@ article span {
 
 #click-toggler #ct-option:hover {
    cursor: pointer;
+}
+
+#table-selection {
+   margin: 20px auto 0 auto;
+}
+
+#table-selection td {
+   padding: 7px 15px;
+
+   background-color: rgb(90, 90, 90);
+   transition: background-color ease 0.1s;
+}
+
+#table-selection td:hover {
+   background-color: rgb(120, 120, 120);
+   transition: background-color ease 0.1s;
+
+   cursor: pointer;
+}
+
+#table-selection td label {
+   color: white;
+}
+
+#table-selection td label:hover {
+   cursor: pointer;
+}
+
+.sqr {
+   width: 50px;
+   height: 50px;
+}
+
+.sqr:hover {
+   background-color: rgb(0, 125, 125);
+   transition: background-color ease 0.1s;
+}
+
+#table-selection .selected {
+   background-color: #00d9ff;
+   transition: background-color ease 0.1s;
+}
+
+#table-selection .selected:hover {
+   background-color: #00aac8;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -385,6 +432,7 @@ button[type="button"]:hover {
 
    cursor: not-allowed;
 }
+
 /* -------------------------------------------------------------------------------------------*/
 /* -------------------------------------------------------------------------------------------*/
 
@@ -408,7 +456,7 @@ span {
 }
 
 .filters input {
-   max-width: 90px;
+   max-width: 130px;
 }
 
 .filters div {

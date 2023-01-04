@@ -4,9 +4,9 @@ export default function sideBarToggle(panel, input, label) {
 
     input.onchange = () => {
         if (input.checked) {
-            panel.style.width = '400px'
+            panel.style.width = '600px'
             panel.style.borderRight = '1px solid #00ffff'
-            label.style.marginLeft = '400px'
+            label.style.marginLeft = '600px'
             label.style.transform = 'rotate(360deg)'
             label.style.transition = '0.5s ease-in-out'
         } else {
