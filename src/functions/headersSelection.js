@@ -1,11 +1,9 @@
-export default function tableHeadersSelecton(headers) {
+export default function tableHeadersSelecton(headers, results) {
 
     const table = document.querySelector('#table-selection')
     const tbody = document.createElement('tbody')
     const showResButton = document.querySelector('#showRes')
     const filtersForm = document.querySelector('#filters')
-
-    let results = []
 
     const divideArrByNine = (arr) => {
         const resultArr = []
@@ -35,6 +33,25 @@ export default function tableHeadersSelecton(headers) {
                 });
 
                 td.classList.add(`sqr-${td.innerHTML}`)
+                td.id = `sqr-${td.innerHTML}`
+
+                showResButton.onclick = () => {
+                    console.log(results)
+                    const divs = document.querySelectorAll('#filter-div')
+                    console.log(divs)
+                    divs.forEach(div => div.remove())
+
+                    console.log('2')
+                    results.forEach(filter => {
+                        const html = `
+                                            <div id='filter-div'>
+                                                <label id='label-${filter}'><button type="button">&times</button>${filter}</label>
+                                                <input id="input-${filter}"/>
+                                            </div>
+                                        `
+                        filtersForm.insertAdjacentHTML('beforeend', html)
+                    })
+                }
 
                 filtersForm.addEventListener('click', e => {
 
@@ -47,10 +64,10 @@ export default function tableHeadersSelecton(headers) {
 
                     const nelem = ['×', ' ', '\n']
                     const targetInnerText = e.target.closest('#filter-div')
-                                                    .textContent
-                                                    .split('')
-                                                    .filter(elem => !nelem.includes(elem))
-                                                    .join('')
+                        .textContent
+                        .split('')
+                        .filter(elem => !nelem.includes(elem))
+                        .join('')
 
                     const targetElementClassName = document.querySelector(`.sqr-${targetInnerText}`)
 
@@ -73,6 +90,7 @@ export default function tableHeadersSelecton(headers) {
 
     if (table.innerHTML !== '') {
         showResButton.onclick = () => {
+
             const divs = document.querySelectorAll('#filter-div')
             divs.forEach(div => div.remove())
 
@@ -80,7 +98,7 @@ export default function tableHeadersSelecton(headers) {
                 const html = `
                                 <div id='filter-div'>
                                     <label id='label-${filter}'><button type="button">&times</button>${filter}</label>
-                                    <input id="${filter}"/>
+                                    <input id="input-${filter}"/>
                                 </div>
                             `
                 filtersForm.insertAdjacentHTML('beforeend', html)
@@ -91,4 +109,6 @@ export default function tableHeadersSelecton(headers) {
     filtersForm.addEventListener('submit', e => {
         e.preventDefault()
     })
+
+    filters.length = 0
 }

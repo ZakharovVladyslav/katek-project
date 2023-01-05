@@ -120,6 +120,44 @@ article span {
    align-self: center;
 }
 
+#click-toggler {
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #fff;
+   border-radius: 3px;
+   outline: none;
+
+   padding: 5px 10px;
+   margin-top: 20px;
+   margin-left: -3px;
+
+   max-width: 150px;
+}
+
+#click-toggler:hover {
+   background-color: #ffffff1a;
+   transition: background-color ease 0.1s;
+
+   cursor: pointer;
+}
+
+#click-toggler #ct-option {
+   background-color: #313038;
+   transition: background-color ease 0.1s;
+}
+
+#click-toggler #ct-option:hover {
+   cursor: pointer;
+}
+
+#line {
+   border-bottom: 1px solid var(--katek-blue);
+   width: 550px;
+
+   margin: 20px 0 0 25px;
+}
+
 .sqr {
    width: 50px;
    height: 50px;
@@ -160,37 +198,6 @@ article span {
    background-color: #00ffff;
    transition: background-color ease 0.1s;
 
-   cursor: pointer;
-}
-
-#click-toggler {
-   background-color: transparent;
-   transition: background-color ease 0.1s;
-
-   border: 1px solid #fff;
-   border-radius: 3px;
-   outline: none;
-
-   padding: 5px 10px;
-   margin-top: 30px;
-   margin-left: -3px;
-
-   max-width: 150px;
-}
-
-#click-toggler:hover {
-   background-color: #ffffff1a;
-   transition: background-color ease 0.1s;
-
-   cursor: pointer;
-}
-
-#click-toggler #ct-option {
-   background-color: #313038;
-   transition: background-color ease 0.1s;
-}
-
-#click-toggler #ct-option:hover {
    cursor: pointer;
 }
 
@@ -456,7 +463,6 @@ span {
 }
 
 .filters input {
-   max-width: 130px;
 }
 
 .filters div {
@@ -464,9 +470,19 @@ span {
    color: rgb(255, 255, 255);
 }
 
+.filters div label {
+   margin-left: 20px;
+}
+
+.filters div button {
+   margin-right: 10px;
+}
+
 .filters input {
    background-color: rgba(100, 99, 114, 0.2);
    transition: background-color ease 0.1s;
+
+   max-width: 130px;
 
    border: none;
    border-bottom: 1px solid #00ffff;

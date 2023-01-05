@@ -16,27 +16,10 @@ const reloadTable = document.getElementById('reload-table')
 const cellSelect = document.getElementById('click-toggler')
 const mode = document.getElementById('mode')
 
-const prodCode = document.getElementById('ProdCode')
-const customer = document.getElementById('Customer')
-const prodName = document.getElementById('ProdName')
-const hostName = document.getElementById('HostName')
-const matNum = document.getElementById('MatNum')
-const articleNum = document.getElementById('ArticleNum')
-const wkstname = document.getElementById('WkStNmae')
-const adpNum = document.getElementById('AdpNum')
-const procName = document.getElementById('ProcName')
-const avo = document.getElementById('AVO')
+document.getElementById('left-date-inp').value = '2022-10-01'
+document.getElementById('right-date-inp').value = '2022-10-02'
 
-const prodCodeList = document.getElementById('prodCodeList')
-const customerList = document.getElementById('customerList')
-const prodNameList = document.getElementById('prodNameList')
-const articleNumList = document.getElementById('articleNumList')
-const matNumList = document.getElementById('matNumList')
-const hostNameList = document.getElementById('hostNameList')
-const wkStNameList = document.getElementById('wkStNameList')
-const adpNumList = document.getElementById('adpNumList')
-const procNameList = document.getElementById('procNameList')
-const avoList = document.getElementById('avoList')
+let results = []
 
 document.getElementById('sidebar-input-label').style.opacity = '0.1'
 document.getElementById('sidebar-input-label').style.transition = 'opacity ease 0.3s'
@@ -88,20 +71,11 @@ inputForm.addEventListener("submit", (e) => {
                emptyMessage.innerHTML = ''
 
             const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO"]
-            const tableHeaderLists = [prodCodeList]
 
             const arrayFromCsv = [...csvToArray(text)]
             const data = arrayFromCsv[0]
 
-            tableHeadersSelection(arrayFromCsv[1])
-
-            const divs = document.querySelectorAll('#filter-div')
-
-            divs.forEach(div => {
-               console.log(typeof(div.textContent))
-               const nelem = ['×', '\n', ' ']
-               console.log(div.textContent.split('').filter(elem => !nelem.includes(elem)))
-            })
+            tableHeadersSelection(arrayFromCsv[1], results)
 
             const initialArray = getFilters(data, tableHeaders)
             data.length = 0
@@ -112,10 +86,6 @@ inputForm.addEventListener("submit", (e) => {
                document.getElementById('sidebar-input-label')
             )
 
-            const headerListLength = tableHeaders.length;
-            for (let i = 0; i < headerListLength; i++)
-               dropDown(initialArray, tableHeaders[0], tableHeaderLists[0])
-
             if (initialArray.length === 0) {
                emptyMessage.innerHTML = "Bitte fügen Sie Filter hinzu"
 
@@ -125,16 +95,6 @@ inputForm.addEventListener("submit", (e) => {
             reset.addEventListener('click', (e) => {
                e.preventDefault()
 
-               prodCode.value = ''
-               procName.value = ''
-               prodName.value = ''
-               customer.value = ''
-               hostName.value = ''
-               matNum.value = ''
-               articleNum.value = ''
-               wkstname.value = ''
-               adpNum.value = ''
-               avo.value = ''
                rowLimiter.value = 0
             })
 

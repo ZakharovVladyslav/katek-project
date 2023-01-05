@@ -43,23 +43,32 @@ function dateFilter(data) {
 }
 
 export default function getFilters(inputData, headers) {
-    const prodCode = document.getElementById('ProdCode')
-
     const data = dateFilter(inputData)
+    let filteredArray = []
 
-    const filters = [prodCode]
+    const selectedNodesList = document.querySelectorAll('.selected')
+
+    let selectedNodesListNames = []
+    let filters = []
+
+    if (selectedNodesList.length !== 0) {
+        selectedNodesList.forEach(node => {
+            selectedNodesListNames.push(node.classList[0].slice(4))
+            filters.push(document.querySelector(`#input-${node.classList[0].slice(4)}`))
+        })
+    }
 
     const keys = filters.map((header, index) => {
-        if (header.value.length != 0)
+        if (header.value !== '')
             return headers[index]
     }).filter(header => header !== undefined)
 
     const values = filters.map(filter => {
-        if (filter.value.length != 0)
+        if (filter.value !== '')
             return filter.value
     }).filter(filter => filter !== undefined)
 
-    const filteredArray = data.filter(e => {
+    filteredArray = data.filter(e => {
         return keys.every(a => {
             return values.includes(e[a])
         })
@@ -67,5 +76,6 @@ export default function getFilters(inputData, headers) {
 
     filteredArray.unshift(headers)
 
+    console.log(filteredArray)
     return filteredArray
 }
