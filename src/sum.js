@@ -1,6 +1,6 @@
 'use strict'
 
-import { dropDown } from "./functions/funcs.js"
+import tableHeadersSelection from "./functions/headersSelection.js"
 
 const form = document.getElementById('input-section')
 const file = document.getElementById('file-choose')
@@ -18,13 +18,14 @@ const sideSection = document.getElementById('side-section')
 const sideSectionToggleInput = document.getElementById('sidebar-input')
 const sideSectionToggleLabel = document.getElementById('sidebar-input-label')
 
+let results = []
+
 // SideBar opening
 sideSectionToggleInput.onchange = () => {
    if (sideSectionToggleInput.checked) {
-      console.log('checked')
-      sideSection.style.width = '400px'
+      sideSection.style.width = '600px'
       sideSection.style.borderRight = '1px solid #00ffff'
-      sideSectionToggleLabel.style.marginLeft = '400px'
+      sideSectionToggleLabel.style.marginLeft = '600px'
       sideSectionToggleLabel.style.transform = 'rotate(360deg)'
       sideSectionToggleLabel.style.transition = '0.5s ease-in-out'
    } else {
@@ -146,7 +147,7 @@ function summe(headers, data, keys, filters) {
 
    filters.forEach(filter => {
       keys.forEach(key => {
-         if (filter.id === key)
+         if (filter.id.slice(6) === key)
             zeros.unshift(filter.value)
       })
    })
@@ -157,11 +158,21 @@ function summe(headers, data, keys, filters) {
 function filteringArray(headers, text) {
    const data = dateFilter(text)
 
-   const filters = [hostName, articleNum, materialNum]
+   const selectedNodesList = document.querySelectorAll('.selected')
+
+   let selectedNodesListNames = []
+   let filters = []
+
+   if (selectedNodesList.length !== 0) {
+       selectedNodesList.forEach(node => {
+           selectedNodesListNames.push(node.classList[0].slice(4))
+           filters.push(document.querySelector(`#input-${node.classList[0].slice(4)}`))
+       })
+   }
 
    const keys = filters.map(filter => {
       if (filter.value.length !== 0)
-         return filter.id
+         return filter.id.slice(6)
    }).filter(elem => elem !== undefined)
 
    const values = filters.map(filter => {
@@ -184,6 +195,9 @@ function filteringArray(headers, text) {
 form.addEventListener("submit", (e) => {
    e.preventDefault()
 
+   console.log(document.querySelector('#filters').offsetWidth)
+   console.log(document.querySelector('#filters').offsetHeight)
+
    const table = document.createElement('table')
    const thead = document.createElement('thead')
    const tbody = document.createElement('tbody')
@@ -204,23 +218,15 @@ form.addEventListener("submit", (e) => {
       }
 
       else {
+         tableHeadersSelection(csvToArray(text)[1], results)
+
          dataTable.innerHTML = ''
          table.innerHTML = ''
          thead.innerHTML = ''
          tbody.innerHTML = ''
 
          const headers = ['tLatenz', 'tLatenzSumme', 'tCycle', 'tProc', 'FPY', 'CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest']
-         const [keys, filteredArray, data] = filteringArray(headers, text)
-
-         const filterInputHeaders = ['HostName', 'ArticleNum', 'MatirealNum']
-         const filterInputLists = [hostNameList, articleNumList, materialNumList]
-         
-         console.log(filterInputHeaders)
-         console.log(filterInputLists)
-         console.log(data)
-
-         for (let i = 0; i < filterInputHeaders.length; i++)
-            dropDown(data, filterInputHeaders[i], filterInputLists[i])
+         const [keys, filteredArray] = filteringArray(headers, text)
 
          keys.forEach(key => headers.unshift(key))
 

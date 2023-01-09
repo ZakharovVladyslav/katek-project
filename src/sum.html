@@ -12,6 +12,10 @@
 <body>
    <section id="side-section">
       <h1>Settings:</h1>
+
+      <table id="table-selection"></table>
+
+      <button type="button" id="showRes">Create Filters</button><br>
    </section>
 
    <label for="sidebar-input" id="sidebar-input-label">&times</label>
@@ -44,40 +48,22 @@
                </div>
             </section>
 
-            <section class="filter-input">
-               <div>
-                  <label for="hostname-input" id="hostname-label">HostName</label>
-                  <input type="text" id="HostName" list="hostNameList">
-                  <datalist id="hostNameList"></datalist>
-               </div>
+            <section class="filter-input" id="filters"></section>
 
-               <div>
-                  <label for="article-input" id="article-label">ArticleNum</label>
-                  <input type="text" id="ArticleNum" list="articleNumList">
-                  <datalist id="articleNumList"></datalist>
-               </div>
-
-               <div>
-                  <label for="matirealnum-input" id="matirealnum-label">MatirealNum</label>
-                  <input type="text" id="MatirealNum" list="matirealNumList">
-                  <datalist id="matirealNumList"></datalist>
-               </div>
+            <section class="buttons">
+               <label id="fc" for="file-choose">Datei wählen</label>
+               <input type="file" id="file-choose" accept=".csv"><br>
+               <input type="submit" value="Einreichen" id="submit">
+               <input type="submit" value="Anfangstabelle" id="initial-table">
 
                <div id="row-counter-div">
                   <label for="row-counter" id="row-counter-label">Anzahl der Zeilen</label>
                   <input type="number" id="row-counter-input" value="0" readonly>
                </div>
             </section>
-            
-            <section class="buttons">
-               <label id="fc" for="file-choose">Datei wählen</label>
-               <input type="file" id="file-choose" accept=".csv"><br>
-               <input type="submit" value="Einreichen" id="submit">
-               <input type="submit" value="Anfangstabelle" id="initial-table">
-            </section>
 
             <a href="./main.html" id="main-page">Main page</a>
-            
+
             <select id="choose-lang-id" onchange="chooseLang()">
                <option id="opt">GE</option>
                <option id="opt">EN</option>
@@ -115,6 +101,7 @@
             submitButton.value = "Submit"
             resetButton.value = "Reset"
             leftDateLabel.innerHTML = "First date"
+            rightDateLabel.innerHTML = 'Second date'
             rowCounterLabel.innerHTML = "Row counter"
          }
       }

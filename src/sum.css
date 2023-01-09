@@ -58,6 +58,94 @@ body {
    transition: transform ease 0.3s;
 }
 
+.sqr {
+   width: 50px;
+   height: 50px;
+}
+
+.sqr:hover {
+   background-color: rgb(0, 125, 125);
+   transition: background-color ease 0.1s;
+}
+
+.selected {
+   background-color: #00ffff;
+   transition: background-color ease 0.1s;
+}
+
+#showRes {
+   color: white;
+   transition: color ease 0.1s;
+   font-size: 18px;
+
+   align-self: center;
+
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+
+   margin-top: 30px;
+   margin-bottom: 100px; 
+   padding: 5px 10px;
+}
+
+#showRes:hover {
+   color: black;
+   transition: color ease 0.1s;
+
+   background-color: #00ffff;
+   transition: background-color ease 0.1s;
+
+   cursor: pointer;
+}
+
+#table-selection {
+   margin: 20px auto 0 auto;
+}
+
+#table-selection td {
+   padding: 7px 15px;
+
+   background-color: rgb(90, 90, 90);
+   transition: background-color ease 0.1s;
+}
+
+#table-selection td:hover {
+   background-color: rgb(120, 120, 120);
+   transition: background-color ease 0.1s;
+
+   cursor: pointer;
+}
+
+#table-selection td label {
+   color: white;
+}
+
+#table-selection td label:hover {
+   cursor: pointer;
+}
+
+.sqr {
+   width: 50px;
+   height: 50px;
+}
+
+.sqr:hover {
+   background-color: rgb(0, 125, 125);
+   transition: background-color ease 0.1s;
+}
+
+#table-selection .selected {
+   background-color: #00d9ff;
+   transition: background-color ease 0.1s;
+}
+
+#table-selection .selected:hover {
+   background-color: #00aac8;
+}
+
 .main {
    margin: -7.75px 0 0 -7.75px;
 
@@ -70,7 +158,7 @@ body {
 }
 
 article {
-   margin: 20px 0 0 20px;
+   margin: 20px -40px 0 60px;
 
    min-width: 500px;
 }
@@ -81,7 +169,7 @@ article h1 {
 
 article span {
    font-weight: 800;
-   color:#00d9ff
+   color: #00d9ff
 }
 
 .right-part {
@@ -124,6 +212,8 @@ article span {
 }
 
 #input-section {
+   margin-left: -40px;
+
    display: flex;
    flex-direction: row;
 }
@@ -282,7 +372,7 @@ article span {
    border: 1px solid #fff;
    border-radius: 3px;
 
-   max-width: 30%;
+   max-width: 33%;
    align-self: center;
 
    text-align: center;
@@ -301,28 +391,25 @@ article span {
    cursor: default;
 }
 
-#data-table table {
-   margin: none;
-}
 
 #data-table {
-   margin: auto;
+   grid-column-start: 1;
+   grid-column-end: 3;
+
+   margin: 70px auto;
    
    border-collapse: collapse;
    border-radius: 5px;
    font-size: 0.9em;
    font-family: sans-serif;
-
+   
    min-width: fit-content;
-
+   
    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
-#data-table {
-   margin-top: 40px;
-   margin-bottom: 40px;
-
-   max-width: 1400px;
+#data-table table {
+   margin: auto;
 }
 
 #data-table thead tr {
@@ -368,27 +455,75 @@ article span {
    display: flex;
    flex-direction: column;
 
+   min-width: 180px;
+
    gap: 10px;
 
    max-width: 180px;
+}
+
+.filter-input div {
+   background-color: transparent;
+   color: rgb(255, 255, 255);
+}
+
+.filter-input div label {
+   margin-left: 20px;
+}
+
+.filter-input div button {
+   margin-right: 10px;
+
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+}
+
+.filter-input div button:hover {
+   background-color: #00788b;
+   transition: background-color ease 0.1s;
+
+   cursor: pointer;
 }
 
 .filter-input input {
    background-color: rgba(100, 99, 114, 0.2);
    transition: background-color ease 0.1s;
 
+   max-width: 130px;
+
    border: none;
-   border-bottom: 1px solid #00d9ff;
+   border-bottom: 1px solid #00ffff;
    border-radius: 3px;
+
+   padding: 3px 10px;
+   margin: 10px 15px;
 }
 
 .filter-input input:hover {
    background-color: rgba(255, 255, 255, 0.1);
    transition: background-color ease 0.1s;
+
+   cursor: pointer;
 }
 
 .filter-input input:focus {
    outline: none;
+}
+
+.label-input label {
+   margin-left: 15px;
+}
+
+.label-input-avo {
+   display: flex;
+   flex-direction: column;
+}
+
+.label-input-avo label {
+   margin-left: 15px;
 }
 
 .date-input {
