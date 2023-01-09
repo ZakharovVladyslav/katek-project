@@ -15,13 +15,13 @@
          </article>
 
          <section id="side-section">
-            <h1>Settings:</h1>
+            <h1 id="settings">Einstellungen:</h1>
 
             <span id="line"></span>
             
             <select id="click-toggler">
-               <option id="ct-option">Show row</option>
-               <option id="ct-option">Add to filter</option>
+               <option id="opt1" class="ct-option">Reihe zeigen</option>
+               <option id="opt2" class="ct-option">Zum Filtern hinzufugen</option>
             </select>
 
             <span id="line"></span>
@@ -56,8 +56,7 @@
 
             <section class="filters-date-submit">
 
-               <section class="filters" id="filters">
-               </section><br>
+               <section class="filters" id="filters"></section><br>
 
                <div class="date-input">
                   <select id="date-params">
@@ -102,10 +101,13 @@
          const leftDateLabel = document.getElementById('left-date-label')
          const rightDateLabel = document.getElementById('right-date-label')
          const dataSumFile = document.getElementById('sum-file')
-         const resetButton = document.getElementById('reset')
-         const submitButton = document.querySelector('.submit-button')
-         const initialTabel = document.querySelector('.reload-table')
+         const resetButton = document.querySelector('#reset')
+         const submitButton = document.querySelector('#submit-button')
+         const initialTabel = document.querySelector('#reload-table')
          const rowCounterLabel = document.getElementById('row-counter-label')
+         const settings = document.querySelector('#settings')
+         const opt1 = document.querySelector('#opt1')
+         const opt2 = document.querySelector('#opt2')
 
          function chooseLang() {
             if (option.value === "GE") {
@@ -117,16 +119,22 @@
                submitButton.value = "Einreichen"
                initialTabel.value = "Anfangstabelle"
                rowCounterLabel.innerHTML = "Anzahl der Zeilen"
+               settings.innerHTML = 'Einstellungen:'
+               opt1.innerHTML = 'Reihe zeigen'
+               opt2.innerHTML = 'Zum Filtern hinzufugen'
             }
             if (option.value === "EN") {
                fileLabel.innerHTML = "File choose"
                leftDateLabel.innerHTML = "First date"
                rightDateLabel.innerHTML = "Second date"
                dataSumFile.innerHTML = "Summary File"
-               resetButton.value = "Reset"
+               resetButton.innerHTML = "Reset"
                submitButton.value = "Submit"
                initialTabel.value = "Initial table"
                rowCounterLabel.innerHTML = "Row counter"
+               settings.innerHTML = 'Settings:'
+               opt1.innerHTML = 'Show row'
+               opt2.innerHTML = 'Add to filter'
             }
          }               
       </script>

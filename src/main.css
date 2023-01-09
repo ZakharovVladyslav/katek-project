@@ -142,12 +142,12 @@ article span {
    cursor: pointer;
 }
 
-#click-toggler #ct-option {
+#click-toggler .ct-option {
    background-color: #313038;
    transition: background-color ease 0.1s;
 }
 
-#click-toggler #ct-option:hover {
+#click-toggler .ct-option:hover {
    cursor: pointer;
 }
 
@@ -460,9 +460,6 @@ span {
    display: grid;
 
    grid-template-columns: 1fr 1fr;
-}
-
-.filters input {
 }
 
 .filters div {

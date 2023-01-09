@@ -96,6 +96,17 @@ inputForm.addEventListener("submit", (e) => {
                e.preventDefault()
 
                rowLimiter.value = 0
+
+               const inputs = document.querySelectorAll('.selected')
+               console.log(inputs)
+               console.log(inputs[0].value)
+
+               inputs.forEach(input => {
+                  const targetInput = document.querySelector(`#input-${input.classList[0].slice(4)}`)
+
+                  console.log(targetInput)
+                  targetInput.value = ''
+               })
             })
 
             dataTable.innerHTML = ''
@@ -155,35 +166,30 @@ inputForm.addEventListener("submit", (e) => {
 
                mode.innerHTML = `Mode: ${clickOption}`  
 
-               if (clickOption === "Add to filter") {
-                  const data = [...csvToArray(text)[0]]
+               if (clickOption === "Add to filter" || clickOption === 'Zum Filtern hinzufugen') {
+                  const data = csvToArray(text)[0]
+                  const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO"]
                   data.length = 0
 
                   const targetId = e.target.id
                   const splittedTargetId = targetId.split('')
                   splittedTargetId.splice(0, 5)
 
-                  const columnKeys = {
-                     "1": "ProdCode",
-                     "2": "Customer",
-                     "3": "ProdName",
-                     "4": "HostName",
-                     "5": "MatNum",
-                     "6": "ArticleNum",
-                     "7": "WkStName",
-                     "8": "AdpNum",
-                     "9": "ProcName",
-                     "10": "AVO"
-                  }
+                  const headersKeys = new Map()
+                  headers.forEach((header, index) => {
+                     headersKeys.set((index + 1).toString(), header)
+                  })
 
                   const column = +splittedTargetId[1] + 1
+                  
                   const targetValue = document.getElementById(targetId).innerHTML
-                  const key = columnKeys[column.toString()]
-                  const targetInput = document.getElementById(key)
+                  
+                  const key = headersKeys.get(column.toString())
+                  const targetInput = document.getElementById(`input-${key}`)
 
                   targetInput.value = targetValue
                }
-               else if (clickOption === "Show row") {
+               else if (clickOption === "Show row" || clickOption == 'Reihe zeigen') {
                   reloadTable.disabled = false
 
                   const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO"]
