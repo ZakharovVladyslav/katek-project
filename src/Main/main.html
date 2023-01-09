@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>Katek GmbH</title>
+      <link rel="stylesheet" href="./main.css">
+      
+      <script type="module" src="./main.js" defer></script>
+   </head>
+   <body>
+      <section class="main">
+         <article>
+            <img src="../../assets/Katek-Logosvg.png">
+            <h1>This website was made for filtering information in excel files with sorting and checking functions</h1>
+            <p>Made by <span>Katek GmBH</span></p>
+         </article>
+
+         <section id="side-section">
+            <h1 id="settings">Einstellungen:</h1>
+
+            <span id="line"></span>
+            
+            <select id="click-toggler">
+               <option id="opt1" class="ct-option">Reihe zeigen</option>
+               <option id="opt2" class="ct-option">Zum Filtern hinzufugen</option>
+            </select>
+
+            <span id="line"></span>
+            
+            <table id="table-selection"></table>
+            
+            <button type="button" id="showRes">Filter erstellen</button><br>
+         </section>
+
+         <label for="sidebar-input" id="sidebar-input-label">&times</label>
+         <input type="checkbox" id="sidebar-input">
+
+         <form id="input-form">
+
+            <section id="input-section">
+               <div class="file-input-section">
+                  <label id="fc" for="file-choose">Datei wählen</label>
+                  <input type="file" id="file-choose" accept=".csv"><br>
+                  <p id="chosen-file"></p>
+               </div>
+
+               <div>
+                  <label id="row-counter-label">Anzahl der Zeilen:</label>
+                  <input type="number" id="row-limiter" value="0" readonly>
+               </div>
+
+               <select id="chooseLangId" onchange="chooseLang()">
+                  <option id="opt">GE</option>
+                  <option id="opt">EN</option>
+               </select>
+            </section><br>
+
+            <section class="filters-date-submit">
+
+               <section class="filters" id="filters"></section><br>
+
+               <div class="date-input">
+                  <select id="date-params">
+                     <option id="option">tLogIn</option>
+                     <option id="option">tLogOut</option>
+                     <option id="option">tLastAcc</option>
+                  </select>
+
+                  <div class="left-date">
+                     <label id="left-date-label">Erstes Datum</label>
+                     <input id="left-date-inp" type="date" placeholder="dd/mm/yyyy">
+                  </div>
+                  
+                  <div class="right-date">
+                     <label id="right-date-label">Zweites Datum</label>
+                     <input id="right-date-inp" type="date" placeholder="dd-mm-yyyy">
+                  </div>
+               </div>
+               
+               <div class="submit-section">
+                  <input type="submit" value="Einreichen" id="submit-button">
+                  <input type="submit" value="Anfangstabelle" id="reload-table" disabled>
+                  
+                  <a href="../Summary/sum.html" id="sum-file">Summen Datei</a>
+
+                  <button type="button" id="reset">Zurucksetzen</button>
+               </div>
+            </section>
+         </form><br>
+      </section>
+      
+      <p id="empty-message"></p>
+
+
+      <p id="mode"></p>
+      <table id="data-table"></table>
+
+      <script>
+         const option = document.getElementById('chooseLangId')
+
+         const fileLabel = document.querySelector('#fc')
+         const leftDateLabel = document.querySelector('#left-date-label')
+         const rightDateLabel = document.querySelector('#right-date-label')
+         const dataSumFile = document.querySelector('#sum-file')
+         const resetButton = document.querySelector('#reset')
+         const submitButton = document.querySelector('#submit-button')
+         const initialTabel = document.querySelector('#reload-table')
+         const rowCounterLabel = document.getElementById('row-counter-label')
+         const settings = document.querySelector('#settings')
+         const opt1 = document.querySelector('#opt1')
+         const opt2 = document.querySelector('#opt2')
+         const showResButton = document.querySelector('#showRes')
+
+         function chooseLang() {
+            if (option.value === "GE") {
+               fileLabel.innerHTML = "Datei wählen"
+               leftDateLabel.innerHTML = "Erstes Datum"
+               rightDateLabel.innerHTML = "Zweites Datum"
+               dataSumFile.innerHTML = "Summen Datei"
+               resetButton.value = "Zurücksetzen"
+               submitButton.value = "Einreichen"
+               initialTabel.value = "Anfangstabelle"
+               rowCounterLabel.innerHTML = "Anzahl der Zeilen"
+               settings.innerHTML = 'Einstellungen:'
+               opt1.innerHTML = 'Reihe zeigen'
+               opt2.innerHTML = 'Zum Filtern hinzufugen'
+               showResButton.innerHTML = 'Filter erstellen'
+            }
+            if (option.value === "EN") {
+               fileLabel.innerHTML = "File choose"
+               leftDateLabel.innerHTML = "First date"
+               rightDateLabel.innerHTML = "Second date"
+               dataSumFile.innerHTML = "Summary File"
+               resetButton.innerHTML = "Reset"
+               submitButton.value = "Submit"
+               initialTabel.value = "Initial table"
+               rowCounterLabel.innerHTML = "Row counter"
+               settings.innerHTML = 'Settings:'
+               opt1.innerHTML = 'Show row'
+               opt2.innerHTML = 'Add to filter'
+               showResButton.innerHTML = 'Create filters'
+            }
+         }               
+      </script>
+   </body>
+</html>         
