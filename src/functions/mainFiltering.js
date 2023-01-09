@@ -75,7 +75,6 @@ export default function getFilters(inputData, headers) {
     })
 
     filteredArray.unshift(headers)
-
-    console.log(filteredArray)
+    
     return filteredArray
 }
