@@ -1,4 +1,4 @@
-export default function tableHeadersSelecton(headers, results) {
+export default function tableHeadersSelection(headers, results) {
 
     const table = document.querySelector('#table-selection')
     const tbody = document.createElement('tbody')
@@ -38,17 +38,15 @@ export default function tableHeadersSelecton(headers, results) {
                 showResButton.onclick = () => {
                     console.log(results)
                     const divs = document.querySelectorAll('#filter-div')
-                    console.log(divs)
                     divs.forEach(div => div.remove())
 
-                    console.log('2')
                     results.forEach(filter => {
                         const html = `
-                                            <div id='filter-div'>
-                                                <label id='label-${filter}'><button type="button">&times</button>${filter}</label>
-                                                <input id="input-${filter}"/>
-                                            </div>
-                                        `
+                                        <div id='filter-div'>
+                                            <label id='label-${filter}'><button type="button">&times</button>${filter}</label>
+                                            <input id="input-${filter}"/>
+                                        </div>
+                                    `
                         filtersForm.insertAdjacentHTML('beforeend', html)
                     })
                 }
