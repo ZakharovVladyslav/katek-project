@@ -1,6 +1,7 @@
 'use strict'
 
 import tableHeadersSelection from "../Functions/headersSelection.js"
+import datePlusMinus from '../Functions/datePlusMinus.js'
 
 const form = document.getElementById('input-section')
 const file = document.getElementById('file-choose')
@@ -187,6 +188,8 @@ function filteringArray(headers, text) {
 
 form.addEventListener("submit", (e) => {
    e.preventDefault()
+
+   datePlusMinus()
 
    console.log(document.querySelector('#filters').offsetWidth)
    console.log(document.querySelector('#filters').offsetHeight)

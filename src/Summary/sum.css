@@ -526,64 +526,109 @@ article span {
    margin-left: 15px;
 }
 
-.date-input {
-   display: flex;
-   flex-direction: column;
-   gap: 20px;
+#select {
+   padding: 3px 8px;
 
-   margin-right: 30px;
-
-   max-width: 130px;
-}
-
-.date-input div {
-   display: flex;
-   flex-direction: column;
-
-   gap: 10px;
-}
-
-.date-input select {
    background-color: transparent;
    transition: background-color ease 0.1s;
 
-   max-height: 30px;
-   padding: 5px 10px;
-
    border: 1px solid #fff;
    border-radius: 3px;
+
+   margin-bottom: 20px;
+   margin-left: 15px;
 }
 
-.date-input select:hover {
+#select:hover {
    cursor: pointer;
 
-   background-color: rgba(255, 255, 255, 0.1);
+   background-color: #ffffff1a;
    transition: background-color ease 0.1s;
 }
 
-.date-input #option {
-   background-color: #313038;
+#option {
+   background-color: #464646;
+}
+
+.plus-minus-divs {
+   display: flex;
+   flex-direction: row;
+   gap: 30px;
+
+   margin-top: 10px;
+   margin-left: -35px;
+}
+
+.plus-minus-divs div button {
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+
+   padding: 2px 5px
+}
+
+.plus-minus-divs div button:hover {
+   background-color: #00ffff;
+   transition: background-color ease 0.1s;
+   
+   cursor: pointer;
+}
+
+.left-minus-div input, .left-plus-div input {
+   max-width: 40px;
+
+   background-color: transparent;
    transition: background-color ease 0.1s;
 }
 
-.date-input #option::selection {
-   background-color: rgb(74, 73, 84);
+.right-minus-div input, .right-plus-div input {
+   max-width: 40px;
+   
+   background-color: transparent;
    transition: background-color ease 0.1s;
 }
 
-.date-input input {
+.right-date {
+   margin-top: 30px;
+}
+
+.left-date input {
+   padding: 5px 10px;
+   margin-top: 10px;
+
    background-color: transparent;
    transition: background-color ease 0.1s;
    
-   padding: 5px 10px;
-
-   border: 1px solid #fff;
+   border: 1px solid #ffffff;
    border-radius: 3px;
-
-   color: #fff;
+   
 }
 
-.date-input input:hover {
+.right-date input {
+   padding: 5px 10px;
+   margin-top: 10px;
+
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #ffffff;
+   border-radius: 3px;
+}
+
+.left-date input:hover, .right-date input:hover {
+   background-color: #252525;
+   transition: background-color ease 0.1s;
+}
+
+#left-date-inp:hover {
+   background-color: rgba(255, 255, 255, 0.1);
+   transition: background-color ease 0.1s;
+   cursor: pointer;
+}
+
+#right-date-inp:hover {
    background-color: rgba(255, 255, 255, 0.1);
    transition: background-color ease 0.1s;
    cursor: pointer;
