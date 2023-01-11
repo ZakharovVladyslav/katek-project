@@ -67,12 +67,36 @@
 
                   <div class="left-date">
                      <label id="left-date-label">Erstes Datum</label>
-                     <input id="left-date-inp" type="date" placeholder="dd/mm/yyyy">
+                     <div class="plus-minus-divs">
+                        <div class="left-minus-div">
+                           <input type="number" id="left-date-minus-input" class="days-button" min="1" value="3">
+                           <button type="button" id="left-date-minus" class="days-button">-</button>
+                        </div>
+                        
+                        <div class="left-plus-div">
+                           <input type="number" id="left-date-plus-input" class="days-button" min="1" value="3">
+                           <button type="button" id="left-date-plus" class="days-button">+</button>
+                        </div>
+                     </div>
+
+                     <input type="date" id="left-date-inp" class="date-input">
                   </div>
                   
                   <div class="right-date">
                      <label id="right-date-label">Zweites Datum</label>
-                     <input id="right-date-inp" type="date" placeholder="dd-mm-yyyy">
+                     <div class="plus-minus-divs">
+                        <div class="right-minus-div">
+                           <input type="number" id="right-date-minus-input" class="days-button" min="1" value="3">
+                           <button type="button" id="right-date-minus" class="days-button">-</button>
+                        </div>
+                        
+                        <div class="left-plus-div">
+                           <input type="number" id="right-date-plus-input" class="days-button" min="1" value="3">
+                           <button type="button" id="right-date-plus" class="days-button">+</button>
+                        </div>
+                     </div>
+
+                     <input type="date" id="right-date-inp" class="date-input">
                   </div>
                </div>
                
@@ -83,6 +107,11 @@
                   <a href="../Summary/sum.html" id="sum-file">Summen Datei</a>
 
                   <button type="button" id="reset">Zurucksetzen</button>
+
+                  <div class="summary-row-toggler-il">
+                     <label for="summary-row-toggler-input" id="summary-row-toggler-label">Summary Row</label>
+                     <input type="checkbox" id="summary-row-toggler-input" checked="false">
+                  </div>
                </div>
             </section>
          </form><br>
@@ -90,6 +119,7 @@
       
       <p id="empty-message"></p>
 
+      <table id="summary-table"></table>
 
       <p id="mode"></p>
       <table id="data-table"></table>
@@ -109,6 +139,7 @@
          const opt1 = document.querySelector('#opt1')
          const opt2 = document.querySelector('#opt2')
          const showResButton = document.querySelector('#showRes')
+         const summaryRowLabel = document.querySelector('#summary-row-toggler-label')
 
          function chooseLang() {
             if (option.value === "GE") {
@@ -124,6 +155,7 @@
                opt1.innerHTML = 'Reihe zeigen'
                opt2.innerHTML = 'Zum Filtern hinzufugen'
                showResButton.innerHTML = 'Filter erstellen'
+               summaryRowLabel.innerHTML = 'Zusammenfassungszeile'
             }
             if (option.value === "EN") {
                fileLabel.innerHTML = "File choose"
@@ -138,6 +170,7 @@
                opt1.innerHTML = 'Show row'
                opt2.innerHTML = 'Add to filter'
                showResButton.innerHTML = 'Create filters'
+               summaryRowLabel.innerHTML = 'Summary row'
             }
          }               
       </script>

@@ -5,6 +5,8 @@ import sideBarToggle from '../Functions/sidebar.js'
 import csvToArray from '../Functions/csvConvert.js'
 import getFilters from '../Functions/mainFiltering.js'
 import tableHeadersSelection from '../Functions/headersSelection.js'
+import datePlusMinus from '../Functions/datePlusMinus.js'
+import summaryRowToggle from '../Functions/summaryRow.js'
 
 const inputForm = document.getElementById('input-form')
 const file = document.getElementById('file-choose')
@@ -16,10 +18,8 @@ const reloadTable = document.getElementById('reload-table')
 const cellSelect = document.getElementById('click-toggler')
 const mode = document.getElementById('mode')
 
-/*
 document.getElementById('left-date-inp').value = '2022-10-01'
 document.getElementById('right-date-inp').value = '2022-10-02'
-*/
 
 let results = []
 
@@ -36,6 +36,8 @@ file.oninput = (e) => {
 
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
+
+   datePlusMinus()
 
    reloadTable.disabled = true
 
@@ -81,6 +83,8 @@ inputForm.addEventListener("submit", (e) => {
 
             const initialArray = getFilters(data, tableHeaders)
             data.length = 0
+
+            summaryRowToggle(initialArray)
 
             sideBarToggle(
                document.getElementById('side-section'),
