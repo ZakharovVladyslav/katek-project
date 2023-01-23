@@ -14,12 +14,12 @@ input {
 body {
    margin: 0;
 
-   max-width: 1540px;
+   max-width: 1920px;
    background-color: #313038;
 }
 
 html {
-   max-width: 1540px;
+   max-width: 1920px;
 }
 
 .main {
@@ -360,6 +360,8 @@ button[type="button"]:hover {
 #input-form {
    border-bottom: 10px solid linear-gradient(#00ffff, #ffffff, 90deg);
 
+   margin-left: 150px;
+
    display: flex;
    flex-direction: column;
    border-bottom-left-radius: 15px;
@@ -476,7 +478,7 @@ span {
    min-height: 303px;
    min-width: 375px;
 
-   align-self: flex-end;
+   margin-right: 120px;
 
    display: grid;
 
@@ -759,7 +761,7 @@ span {
 
 #data-table td {
    color: rgb(0, 0, 0);
-   font-size: 11px;
+   font-size: 12px;
    font-weight: 500;
 }
 

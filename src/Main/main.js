@@ -18,8 +18,8 @@ const reloadTable = document.getElementById('reload-table')
 const cellSelect = document.getElementById('click-toggler')
 const mode = document.getElementById('mode')
 
-document.getElementById('left-date-inp').value = '2022-10-01'
-document.getElementById('right-date-inp').value = '2022-10-02'
+document.getElementById('left-date-inp').value = '2022-05-01'
+document.getElementById('right-date-inp').value = '2022-05-03'
 
 let results = []
 
@@ -74,9 +74,9 @@ inputForm.addEventListener("submit", (e) => {
             if (emptyMessage.value != 0)
                emptyMessage.innerHTML = ''
 
-            const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail']
+            const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
-            const arrayFromCsv = [...csvToArray(text)]
+            const arrayFromCsv = csvToArray(text)
             const data = arrayFromCsv[0]
 
             tableHeadersSelection(arrayFromCsv[1], results)
@@ -133,7 +133,7 @@ inputForm.addEventListener("submit", (e) => {
                rowLimiter.value = `${initialArray.length - 1}`
 
             let hrow = document.createElement('tr')
-            for (let i = 0; i < 13; i++) {
+            for (let i = 0; i < 16; i++) {
                let theader = document.createElement('th')
 
                theader.innerHTML = initialArray[0][i]
@@ -174,7 +174,7 @@ inputForm.addEventListener("submit", (e) => {
 
                if (clickOption === "Add to filter" || clickOption === 'Zum Filtern hinzufugen') {
                   const data = csvToArray(text)[0]
-                  const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO"]
+                  const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
                   data.length = 0
 
                   const targetId = e.target.id
@@ -198,7 +198,7 @@ inputForm.addEventListener("submit", (e) => {
                else if (clickOption === "Show row" || clickOption == 'Reihe zeigen') {
                   reloadTable.disabled = false
 
-                  const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO"]
+                  const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
                   const data = [...csvToArray(text)[0]]
                   const initialArray = getFilters(data, headers)
                   data.length = 0

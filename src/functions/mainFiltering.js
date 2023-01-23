@@ -20,15 +20,15 @@ function dateFilter(data) {
         const leftDateArr = revertDate(leftDate)
         const rigthDateArr = revertDate(rigthDate)
 
-
         newData = data.filter(elem => {
+
             if (elem[opt] !== undefined) {
                 let targetDate = elem[opt].split('')
 
                 if (targetDate.length > 10) {
                     targetDate.length = 10
 
-                    targetDate = targetDate.join('').split('/')
+                    targetDate = targetDate.join('').split('.')
 
                     let date = `${+targetDate[0]}/${+targetDate[1]}/${+targetDate[2]}`
 
@@ -54,27 +54,42 @@ export default function getFilters(inputData, headers) {
     if (selectedNodesList.length !== 0) {
         selectedNodesList.forEach(node => {
             selectedNodesListNames.push(node.classList[0].slice(4))
+            console.log(node.classList[0].slice(4))
+            
+            console.log(document.querySelector(`#input-${node.classList[0]}`))
+
             filters.push(document.querySelector(`#input-${node.classList[0].slice(4)}`))
+            console.log(document.querySelector(`#input-${node.classList[0].slice(4)}`))
         })
     }
 
-    const keys = filters.map((header, index) => {
-        if (header.value !== '')
-            return headers[index]
-    }).filter(header => header !== undefined)
+    console.log(filters)
+    
+    const keys = filters.map((input, index) => {
+        const inputId = input.id.slice(6)
+        
+        console.log(input.value)
+
+        if (input.value !== '') 
+            return inputId
+    }).filter(inputId => inputId !== undefined)
+
+    console.log(keys)
 
     const values = filters.map(filter => {
         if (filter.value !== '')
             return filter.value
     }).filter(filter => filter !== undefined)
 
-    filteredArray = data.filter(e => {
-        return keys.every(a => {
-            return values.includes(e[a])
+    console.log(values)
+
+    filteredArray = data.filter(obj => {
+        return keys.every(key => {
+            return values.includes(obj[key])
         })
     })
 
     filteredArray.unshift(headers)
-    
+
     return filteredArray
 }
