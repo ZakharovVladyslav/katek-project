@@ -3,8 +3,16 @@
    color: white;
 }
 
+html {
+   max-width: 1920px;
+}
+
 body {
    background: #313038;
+
+   margin: 0;
+
+   max-width: 1920px;
 }
 
 #side-section {
@@ -151,8 +159,6 @@ body {
 
    background-color: #313038;
 
-   min-width: 100%;
-
    display: grid;
    grid-template-columns: 1fr 1fr;
 }
@@ -175,11 +181,12 @@ article span {
 .right-part {
    display: flex;
    flex-direction: row;
-   justify-content: flex-start;
+   justify-content: center;
 
-   gap: 15px;
+   gap: 40px;
 
    margin-top: 20px;
+   
 }
 
 #main-page {
@@ -190,6 +197,7 @@ article span {
    transition: background-color ease 0.1s;
    border-radius: 3px;
 
+   min-width: 90px;
    max-width: 90px;
    max-height: 20px;
 
@@ -212,7 +220,7 @@ article span {
 }
 
 #input-section {
-   margin-left: -40px;
+   margin-left: 350px;
 
    display: flex;
    flex-direction: row;
@@ -304,6 +312,7 @@ article span {
 }
 
 .buttons {
+
    display: flex;
    flex-direction: column;
 
@@ -440,7 +449,7 @@ article span {
 
 #data-table td {
    color:rgb(0, 0, 0);
-   font-size: 13px;
+   font-size: 15px;
    font-weight: 500;
 }
 
@@ -455,11 +464,9 @@ article span {
    display: flex;
    flex-direction: column;
 
-   min-width: 180px;
+   min-width: 200px;
 
    gap: 10px;
-
-   max-width: 180px;
 }
 
 .filter-input div {
@@ -548,6 +555,10 @@ article span {
 
 #option {
    background-color: #464646;
+}
+
+.date-input {
+   min-width: 200px;
 }
 
 .plus-minus-divs {
