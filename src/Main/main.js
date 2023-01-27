@@ -193,7 +193,12 @@ inputForm.addEventListener("submit", (e) => {
                   const key = headersKeys.get(column.toString())
                   const targetInput = document.getElementById(`input-${key}`)
 
-                  targetInput.value = targetValue
+                  if (targetInput)
+                     targetInput.value = targetValue
+                  else {
+                     emptyMessage.innerHTML = 'Mode: "Add to filter"  |  There are no filters detected'
+                     setTimeout(() => emptyMessage.innerHTML = '', 3000)
+                  }
                }
                else if (clickOption === "Show row" || clickOption == 'Reihe zeigen') {
                   reloadTable.disabled = false

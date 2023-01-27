@@ -91,11 +91,17 @@ article span {
    display: none;
 }
 
+i.fa-solid {
+   transform: scale(0.6);
+}
+
 #sidebar-input-label {
    float: left;
    z-index: 1;
    position: fixed;
    margin: 20px 0 0 10px;
+
+   transform: scale(0.1);
 
    background-color: transparent;
 

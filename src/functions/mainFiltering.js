@@ -65,23 +65,17 @@ export default function getFilters(inputData, headers) {
 
     console.log(filters)
     
-    const keys = filters.map((input, index) => {
+    const keys = filters.map(input => {
         const inputId = input.id.slice(6)
-        
-        console.log(input.value)
 
         if (input.value !== '') 
             return inputId
     }).filter(inputId => inputId !== undefined)
 
-    console.log(keys)
-
     const values = filters.map(filter => {
         if (filter.value !== '')
             return filter.value
     }).filter(filter => filter !== undefined)
-
-    console.log(values)
 
     filteredArray = data.filter(obj => {
         return keys.every(key => {
