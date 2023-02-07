@@ -44,13 +44,16 @@ function dateFilter(data) {
 
 export default function getFilters(inputData, headers) {
     const data = dateFilter(inputData)
+
+    let inputFields = []
     let filteredArray = []
 
-    const selectedNodesList = document.querySelectorAll('.selected')
+    for (let i = 0; i < 5; i++)
+        inputFields.push(document.querySelector(`#filter-input-${i + 1}`))
 
-    let selectedNodesListNames = []
-    let filters = []
+    inputFields = inputFields.filter(field => field.value !== '')    
 
+<<<<<<< HEAD
     if (selectedNodesList.length !== 0) {
         selectedNodesList.forEach(node => {
             selectedNodesListNames.push(node.classList[0].slice(4))
@@ -73,12 +76,35 @@ export default function getFilters(inputData, headers) {
     }).filter(inputId => inputId !== undefined)
 
     const values = filters.map(filter => {
+=======
+    const values = inputFields.map(filter => {
+>>>>>>> testing
         if (filter.value !== '')
             return filter.value
     }).filter(filter => filter !== undefined)
 
+    const keys = []
+
+    data.forEach(obj => {
+        console.log(obj)
+        values.forEach(value => {
+            console.log(value)
+            Object.keys(obj).forEach(key => {
+                console.log(key)
+                if (obj[key] === value) {
+                    console.log(key)
+                    keys.push(key)
+                }
+            })
+        })
+    })
+
     console.log(values)
     console.log(keys)
+<<<<<<< HEAD
+=======
+
+>>>>>>> testing
     filteredArray = data.filter(obj => {
         console.log(obj)
         return keys.every(key => {
@@ -87,6 +113,8 @@ export default function getFilters(inputData, headers) {
             return values.includes(obj[key])
         })
     })
+
+    console.log(filteredArray)
 
     filteredArray.unshift(headers)
 

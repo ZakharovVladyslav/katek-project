@@ -3,7 +3,6 @@
 import dropDown from '../Functions/funcs.js'
 import csvToArray from '../Functions/csvConvert.js'
 import getFilters from '../Functions/mainFiltering.js'
-import tableHeadersSelection from '../Functions/headersSelection.js'
 import datePlusMinus from '../Functions/datePlusMinus.js'
 import summaryRowToggle from '../Functions/summaryRow.js'
 
@@ -21,9 +20,6 @@ document.getElementById('left-date-inp').value = '2022-05-01'
 document.getElementById('right-date-inp').value = '2022-05-03'
 
 let results = []
-
-document.getElementById('sidebar-input-label').style.opacity = '0.1'
-document.getElementById('sidebar-input-label').style.transition = 'opacity ease 0.3s'
 
 file.oninput = (e) => {
    e.preventDefault()
@@ -78,8 +74,6 @@ inputForm.addEventListener("submit", (e) => {
             const arrayFromCsv = csvToArray(text)
             const data = arrayFromCsv[0]
 
-            tableHeadersSelection(arrayFromCsv[1], results)
-
             const initialArray = getFilters(data, tableHeaders)
             data.length = 0
 
@@ -97,13 +91,10 @@ inputForm.addEventListener("submit", (e) => {
                rowLimiter.value = 0
 
                const inputs = document.querySelectorAll('.selected')
-               console.log(inputs)
-               console.log(inputs[0].value)
 
                inputs.forEach(input => {
                   const targetInput = document.querySelector(`#input-${input.classList[0].slice(4)}`)
 
-                  console.log(targetInput)
                   targetInput.value = ''
                })
             })
