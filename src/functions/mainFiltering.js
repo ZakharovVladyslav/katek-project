@@ -51,24 +51,34 @@ export default function getFilters(inputData, headers) {
     for (let i = 0; i < 5; i++)
         inputFields.push(document.querySelector(`#filter-input-${i + 1}`))
 
-    inputFields = inputFields.filter(field => field.value !== '')
-
-    const keys = Object.keys(data[0]).map(key => key)
+    inputFields = inputFields.filter(field => field.value !== '')    
 
     const values = inputFields.map(filter => {
         if (filter.value !== '')
             return filter.value
     }).filter(filter => filter !== undefined)
 
-    console.log(data)
-    console.log(keys)
+    const keys = []
+
+    data.forEach(obj => {
+        console.log(obj)
+        values.forEach(value => {
+            console.log(value)
+            Object.keys(obj).forEach(key => {
+                console.log(key)
+                if (obj[key] === value) {
+                    console.log(key)
+                    keys.push(key)
+                }
+            })
+        })
+    })
+
     console.log(values)
+    console.log(keys)
 
     filteredArray = data.filter(obj => {
-        console.log(obj)
         return keys.every(key => {
-            console.log(key)
-            console.log(obj[key])
             return values.includes(obj[key])
         })
     })
