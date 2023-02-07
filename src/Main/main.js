@@ -1,7 +1,6 @@
 'use strict'
 
 import dropDown from '../Functions/funcs.js'
-import sideBarToggle from '../Functions/sidebar.js'
 import csvToArray from '../Functions/csvConvert.js'
 import getFilters from '../Functions/mainFiltering.js'
 import tableHeadersSelection from '../Functions/headersSelection.js'
@@ -85,12 +84,6 @@ inputForm.addEventListener("submit", (e) => {
             data.length = 0
 
             summaryRowToggle(initialArray)
-
-            sideBarToggle(
-               document.getElementById('side-section'),
-               document.getElementById('sidebar-input'),
-               document.getElementById('sidebar-input-label')
-            )
 
             if (initialArray.length === 0) {
                emptyMessage.innerHTML = "Bitte fügen Sie Filter hinzu"

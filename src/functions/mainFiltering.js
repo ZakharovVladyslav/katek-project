@@ -77,8 +77,13 @@ export default function getFilters(inputData, headers) {
             return filter.value
     }).filter(filter => filter !== undefined)
 
+    console.log(values)
+    console.log(keys)
     filteredArray = data.filter(obj => {
+        console.log(obj)
         return keys.every(key => {
+            console.log(key)
+            console.log(obj[key])
             return values.includes(obj[key])
         })
     })
