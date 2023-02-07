@@ -36,7 +36,6 @@ export default function tableHeadersSelection(headers, results) {
                 td.id = `sqr-${td.innerHTML}`
 
                 showResButton.onclick = () => {
-                    console.log(results)
                     const divs = document.querySelectorAll('#filter-div')
                     divs.forEach(div => div.remove())
 

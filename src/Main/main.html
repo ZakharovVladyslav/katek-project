@@ -15,27 +15,6 @@
             <p>Made by <span>Katek GmBH</span></p>
          </article>
 
-         <section id="side-section">
-            <h1 id="settings">Einstellungen:</h1>
-
-            <span id="line"></span>
-            
-            <select id="click-toggler">
-               <option id="opt2" class="ct-option">Zum Filtern hinzufugen</option>
-               <option id="opt1" class="ct-option">Reihe zeigen</option>
-            </select>
-
-            <span id="line"></span>
-            
-            <table id="table-selection"></table>
-            
-            <button type="button" id="showRes">Filter erstellen</button><br>
-         </section>
-
-         <!--<label for="sidebar-input" id="sidebar-input-label"><i class="fa-regular fa-gear"></i></label>-->
-         <label for="sidebar-input" id="sidebar-input-label">&times</label>
-         <input type="checkbox" id="sidebar-input">
-
          <form id="input-form">
 
             <section id="input-section">
@@ -58,7 +37,13 @@
 
             <section class="filters-date-submit">
 
-               <section class="filters" id="filters"></section><br>
+               <section class="filters" id="filters">
+                  <input type="text" id="filter-input-1" class="filter-input" placeholder="filter">
+                  <input type="text" id="filter-input-2" class="filter-input" placeholder="filter">
+                  <input type="text" id="filter-input-3" class="filter-input" placeholder="filter">
+                  <input type="text" id="filter-input-4" class="filter-input" placeholder="filter">
+                  <input type="text" id="filter-input-5" class="filter-input" placeholder="filter">
+               </section><br>
 
                <div class="date-input">
                   <select id="date-params">
@@ -111,7 +96,7 @@
                   <button type="button" id="reset">Zurucksetzen</button>
 
                   <div class="summary-row-toggler-il">
-                     <label for="summary-row-toggler-input" id="summary-row-toggler-label">Summary Row</label>
+                     <label for="summary-row-toggler-input" id="summary-row-toggler-label">Summe</label>
                      <input type="checkbox" id="summary-row-toggler-input" checked="false">
                   </div>
                </div>
@@ -124,6 +109,12 @@
       <table id="summary-table"></table>
 
       <p id="mode"></p>
+
+      <select id="click-toggler">
+         <option id="opt2" class="ct-option">Zum Filtern hinzufugen</option>
+         <option id="opt1" class="ct-option">Reihe zeigen</option>
+      </select>
+
       <table id="data-table"></table>
 
       <script>
@@ -153,11 +144,9 @@
                submitButton.value = "Einreichen"
                initialTabel.value = "Anfangstabelle"
                rowCounterLabel.innerHTML = "Anzahl der Zeilen"
-               settings.innerHTML = 'Einstellungen:'
                opt1.innerHTML = 'Reihe zeigen'
                opt2.innerHTML = 'Zum Filtern hinzufugen'
-               showResButton.innerHTML = 'Filter erstellen'
-               summaryRowLabel.innerHTML = 'Zusammenfassungszeile'
+               summaryRowLabel.innerHTML = 'Summe'
             }
             if (option.value === "EN") {
                fileLabel.innerHTML = "File choose"
@@ -168,10 +157,8 @@
                submitButton.value = "Submit"
                initialTabel.value = "Initial table"
                rowCounterLabel.innerHTML = "Row counter"
-               settings.innerHTML = 'Settings:'
                opt1.innerHTML = 'Show row'
                opt2.innerHTML = 'Add to filter'
-               showResButton.innerHTML = 'Create filters'
                summaryRowLabel.innerHTML = 'Summary row'
             }
          }               
