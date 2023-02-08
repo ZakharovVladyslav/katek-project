@@ -437,8 +437,6 @@ span {
 
 .filters input::placeholder {
    color:rgb(167, 167, 167);
-<<<<<<< HEAD
-=======
 }
 
 .filters div {
@@ -462,7 +460,6 @@ span {
 
 .filters div button:hover {
    background-color: #009cb4;
->>>>>>> testing
 }
 
 /* -------------------------------------------------------------------------------------------*/
