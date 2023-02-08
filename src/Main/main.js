@@ -1,28 +1,27 @@
 'use strict'
 
-import dropDown from '../Functions/funcs.js'
 import csvToArray from '../Functions/csvConvert.js'
 import getFilters from '../Functions/mainFiltering.js'
 import datePlusMinus from '../Functions/datePlusMinus.js'
 import summaryRowToggle from '../Functions/summaryRow.js'
 
-const inputForm = document.getElementById('input-form')
-const file = document.getElementById('file-choose')
-const dataTable = document.getElementById('data-table')
-const emptyMessage = document.getElementById('empty-message')
-const rowLimiter = document.getElementById('row-limiter')
-const chosenFile = document.getElementById('chosen-file')
-const reloadTable = document.getElementById('reload-table')
-const cellSelect = document.getElementById('click-toggler')
-const mode = document.getElementById('mode')
+const inputForm = document.querySelector('#input-form')
+const file = document.querySelector('#file-choose')
+const dataTable = document.querySelector('#data-table')
+const emptyMessage = document.querySelector('#empty-message')
+const rowLimiter = document.querySelector('#row-limiter')
+const chosenFile = document.querySelector('#chosen-file')
+const reloadTable = document.querySelector('#reload-table')
+const cellSelect = document.querySelector('#click-toggler')
+const filters = document.querySelector('#filters')
 const clickToggler = document.querySelector('#click-toggler')
+const saveButton = document.querySelector('#save')
 
 document.getElementById('left-date-inp').value = '2022-05-01'
 document.getElementById('right-date-inp').value = '2022-05-03'
 
 clickToggler.style.display = 'none'
-
-let results = []
+saveButton.style.display = 'none'
 
 file.oninput = (e) => {
    e.preventDefault()
@@ -73,14 +72,46 @@ inputForm.addEventListener("submit", (e) => {
                emptyMessage.innerHTML = ''
 
             clickToggler.style.display = 'block'
+            saveButton.style.display = 'block'
+
+            filters.addEventListener('click', e => {
+               const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
+
+               if (e.target.id.substring(0, 6) === 'eraser') {
+                  const targetId = e.target.id.slice(7)
+                  const targetInputField = filters[targetId - 1]
+
+                  targetInputField.value = ''
+               }
+            })
 
             const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-
             const arrayFromCsv = csvToArray(text)
             const data = arrayFromCsv[0]
-
             const initialArray = getFilters(data, tableHeaders)
+
+            const csvExportHeaders = csvToArray(text)[1]
+            const dataForCsv = getFilters(data, csvExportHeaders)
+            
             data.length = 0
+
+            const refinedData = []
+
+            dataForCsv.forEach(obj => {
+               refinedData.push(Object.values(obj))  
+            })
+
+            let csvContent = ''
+            refinedData.forEach(row => {
+               csvContent += row.join(',') + '\n'
+            })
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8,' })
+            const objUrl = URL.createObjectURL(blob)
+            saveButton.setAttribute('href', objUrl)
+
+            const dateNow = new Date()
+            saveButton.setAttribute('download', `csvExport-${dateNow.getDate()}-${dateNow.getMonth()}-${dateNow.getFullYear()}-${dateNow.getHours()}-${dateNow.getMinutes()}`)
 
             summaryRowToggle(initialArray)
 
@@ -150,45 +181,33 @@ inputForm.addEventListener("submit", (e) => {
 
             let clickOption = cellSelect.options[cellSelect.selectedIndex].value
 
-
             cellSelect.onchange = () => {
                clickOption = cellSelect.options[cellSelect.selectedIndex].value
-
             }
 
             table.addEventListener('click', e => {
                const clickOption = cellSelect.options[cellSelect.selectedIndex].value
 
-
-
                if (clickOption === "Add to filter" || clickOption === 'Zum Filtern hinzufugen') {
-                  const data = csvToArray(text)[0]
-                  const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-                  data.length = 0
+                  const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
+                  const targetCellValue = e.target.innerHTML
 
-                  const targetId = e.target.id
-                  const splittedTargetId = targetId.split('')
-                  splittedTargetId.splice(0, 5)
+                  let index = filters.length - (filters.map(filter => {
+                     if (filter.value === '')
+                        return filter
+                  }).filter(filter => filter !== undefined).length)
 
-                  const headersKeys = new Map()
-                  headers.forEach((header, index) => {
-                     headersKeys.set((index + 1).toString(), header)
-                  })
+                  const emptyFieldIndexes = filters.map((filter, index) => {
+                     if (filter.value === '')
+                        return index
+                  }).filter(filter => filter !== undefined)
 
-                  const column = +splittedTargetId[1] + 1
-
-                  const targetValue = document.getElementById(targetId).innerHTML
-
-                  const key = headersKeys.get(column.toString())
-                  const targetInput = document.getElementById(`input-${key}`)
-
-                  if (targetInput)
-                     targetInput.value = targetValue
-                  else {
-                     emptyMessage.innerHTML = 'Mode: "Add to filter"  |  There are no filters detected'
-                     setTimeout(() => emptyMessage.innerHTML = '', 3000)
+                  if (emptyFieldIndexes.length !== 0) {
+                     const targetInputField = filters[emptyFieldIndexes[0]]
+                     targetInputField.value = targetCellValue
                   }
                }
+
                else if (clickOption === "Show row" || clickOption == 'Reihe zeigen') {
                   reloadTable.disabled = false
 

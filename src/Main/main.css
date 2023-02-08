@@ -437,6 +437,32 @@ span {
 
 .filters input::placeholder {
    color:rgb(167, 167, 167);
+<<<<<<< HEAD
+=======
+}
+
+.filters div {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   gap: 10px;
+}
+
+.filters div button {
+   background-color: transparent;
+
+   font-size: 20px;
+   height: 38px;
+   width: 40px;
+
+   border: 1px solid var(--border-grey);
+   
+}
+
+.filters div button:hover {
+   background-color: #009cb4;
+>>>>>>> testing
 }
 
 /* -------------------------------------------------------------------------------------------*/
@@ -620,6 +646,27 @@ span {
 /*-------------------------------------------------------------------------------------*/
 /* MAIN TABLE WITH ALL DATA------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
+
+.over-tables {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.over-tables .save {
+   font-size: 50px;
+   transition: 0.2s;
+
+   margin: 0 50px;
+}
+
+.over-tables .save i:hover {
+   color: #00d9ff;
+   transition: 0.2s;
+
+   cursor: pointer;
+}
 
 #data-table #filters-table {
    margin: none;
