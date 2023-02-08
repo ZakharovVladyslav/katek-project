@@ -644,6 +644,27 @@ span {
 /* MAIN TABLE WITH ALL DATA------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
+.over-tables {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.over-tables .save {
+   font-size: 50px;
+   transition: 0.2s;
+
+   margin: 0 50px;
+}
+
+.over-tables .save i:hover {
+   color: #00d9ff;
+   transition: 0.2s;
+
+   cursor: pointer;
+}
+
 #data-table #filters-table {
    margin: none;
 }

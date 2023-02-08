@@ -1,6 +1,5 @@
 'use strict'
 
-import dropDown from '../Functions/funcs.js'
 import csvToArray from '../Functions/csvConvert.js'
 import getFilters from '../Functions/mainFiltering.js'
 import datePlusMinus from '../Functions/datePlusMinus.js'
@@ -16,13 +15,13 @@ const reloadTable = document.querySelector('#reload-table')
 const cellSelect = document.querySelector('#click-toggler')
 const filters = document.querySelector('#filters')
 const clickToggler = document.querySelector('#click-toggler')
+const saveButton = document.querySelector('#save')
 
 document.getElementById('left-date-inp').value = '2022-05-01'
 document.getElementById('right-date-inp').value = '2022-05-03'
 
 clickToggler.style.display = 'none'
-
-let results = []
+saveButton.style.display = 'none'
 
 file.oninput = (e) => {
    e.preventDefault()
@@ -73,6 +72,7 @@ inputForm.addEventListener("submit", (e) => {
                emptyMessage.innerHTML = ''
 
             clickToggler.style.display = 'block'
+            saveButton.style.display = 'block'
 
             filters.addEventListener('click', e => {
                const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
@@ -80,7 +80,7 @@ inputForm.addEventListener("submit", (e) => {
                if (e.target.id.substring(0, 6) === 'eraser') {
                   const targetId = e.target.id.slice(7)
                   const targetInputField = filters[targetId - 1]
-                  
+
                   targetInputField.value = ''
                }
             })
@@ -89,7 +89,29 @@ inputForm.addEventListener("submit", (e) => {
             const arrayFromCsv = csvToArray(text)
             const data = arrayFromCsv[0]
             const initialArray = getFilters(data, tableHeaders)
+
+            const csvExportHeaders = csvToArray(text)[1]
+            const dataForCsv = getFilters(data, csvExportHeaders)
+            
             data.length = 0
+
+            const refinedData = []
+
+            dataForCsv.forEach(obj => {
+               refinedData.push(Object.values(obj))  
+            })
+
+            let csvContent = ''
+            refinedData.forEach(row => {
+               csvContent += row.join(',') + '\n'
+            })
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8,' })
+            const objUrl = URL.createObjectURL(blob)
+            saveButton.setAttribute('href', objUrl)
+
+            const dateNow = new Date()
+            saveButton.setAttribute('download', `csvExport-${dateNow.getDate()}-${dateNow.getMonth()}-${dateNow.getFullYear()}-${dateNow.getHours()}-${dateNow.getMinutes()}`)
 
             summaryRowToggle(initialArray)
 
@@ -169,15 +191,21 @@ inputForm.addEventListener("submit", (e) => {
                if (clickOption === "Add to filter" || clickOption === 'Zum Filtern hinzufugen') {
                   const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
                   const targetCellValue = e.target.innerHTML
-                  
+
                   let index = filters.length - (filters.map(filter => {
                      if (filter.value === '')
                         return filter
                   }).filter(filter => filter !== undefined).length)
 
-                  const targetInputField = filters[index]
-                  if (index > -1 && index < 5)
+                  const emptyFieldIndexes = filters.map((filter, index) => {
+                     if (filter.value === '')
+                        return index
+                  }).filter(filter => filter !== undefined)
+
+                  if (emptyFieldIndexes.length !== 0) {
+                     const targetInputField = filters[emptyFieldIndexes[0]]
                      targetInputField.value = targetCellValue
+                  }
                }
 
                else if (clickOption === "Show row" || clickOption == 'Reihe zeigen') {
