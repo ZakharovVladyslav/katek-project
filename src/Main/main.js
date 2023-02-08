@@ -6,15 +6,15 @@ import getFilters from '../Functions/mainFiltering.js'
 import datePlusMinus from '../Functions/datePlusMinus.js'
 import summaryRowToggle from '../Functions/summaryRow.js'
 
-const inputForm = document.getElementById('input-form')
-const file = document.getElementById('file-choose')
-const dataTable = document.getElementById('data-table')
-const emptyMessage = document.getElementById('empty-message')
-const rowLimiter = document.getElementById('row-limiter')
-const chosenFile = document.getElementById('chosen-file')
-const reloadTable = document.getElementById('reload-table')
-const cellSelect = document.getElementById('click-toggler')
-const mode = document.getElementById('mode')
+const inputForm = document.querySelector('#input-form')
+const file = document.querySelector('#file-choose')
+const dataTable = document.querySelector('#data-table')
+const emptyMessage = document.querySelector('#empty-message')
+const rowLimiter = document.querySelector('#row-limiter')
+const chosenFile = document.querySelector('#chosen-file')
+const reloadTable = document.querySelector('#reload-table')
+const cellSelect = document.querySelector('#click-toggler')
+const filters = document.querySelector('#filters')
 const clickToggler = document.querySelector('#click-toggler')
 
 document.getElementById('left-date-inp').value = '2022-05-01'
@@ -74,11 +74,20 @@ inputForm.addEventListener("submit", (e) => {
 
             clickToggler.style.display = 'block'
 
-            const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
+            filters.addEventListener('click', e => {
+               const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
 
+               if (e.target.id.substring(0, 6) === 'eraser') {
+                  const targetId = e.target.id.slice(7)
+                  const targetInputField = filters[targetId - 1]
+                  
+                  targetInputField.value = ''
+               }
+            })
+
+            const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
             const arrayFromCsv = csvToArray(text)
             const data = arrayFromCsv[0]
-
             const initialArray = getFilters(data, tableHeaders)
             data.length = 0
 
