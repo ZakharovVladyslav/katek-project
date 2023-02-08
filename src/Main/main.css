@@ -1,5 +1,6 @@
 :root {
    --katek-blue: #00ffff;
+   --border-grey: #646464;
 }
 
 * {
@@ -54,6 +55,78 @@ article span {
 /* END OF KATEK LOGO ---------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------------------------*/
 
+/* ---------------------------------------------------------------------------------------------*/
+/* SIDE SECTION PART ---------------------------------------------------------------------------*/
+/* ---------------------------------------------------------------------------------------------*/
+
+
+#side-section {
+   background-color: #323232;
+
+   display: flex;
+   flex-direction: column;
+
+   height: 100%;
+   width: 0;
+
+   position: fixed;
+   z-index: 1;
+
+   top: 0;
+   left: 0;
+
+   float: left;
+
+   overflow-x: hidden;
+   padding-top: 60px;
+   transition: 0.5s ease-in-out;
+}
+
+#side-section h1 {
+   align-self: center;
+
+   margin-left: 10px;
+}
+
+#sidebar-input {
+   display: none;
+}
+
+i.fa-solid {
+   transform: scale(0.6);
+}
+
+#sidebar-input-label {
+   float: left;
+   z-index: 1;
+   position: fixed;
+   margin: 20px 0 0 10px;
+
+   transform: scale(0.1);
+
+   background-color: transparent;
+
+   font-size: 3rem;
+
+   color: white;
+   transition: color 0.1s;
+
+   border: none;
+   outline: none;
+}
+
+#sidebar-input-label:hover {
+   cursor: pointer;
+   transition: transform ease 0.3s;
+
+   color: var(--katek-blue);
+   transition: color 0.1s;
+}
+
+#side-section select {
+   align-self: center;
+}
+
 #click-toggler {
    margin-left: 100px;
    
@@ -62,7 +135,7 @@ article span {
    
    padding: 5px 10px;
 
-   border: 1px solid #fff;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
    outline: none;
 
@@ -88,6 +161,10 @@ article span {
 #file-choose {
    margin-right: -0px;
    max-width: 90px;
+}
+
+#chosen-file {
+   z-index: 1;
 }
 
 #empty-message {
@@ -142,7 +219,7 @@ article span {
 
    float: right;
 
-   border: 1px solid #ffffff;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
 
    text-align: center;
@@ -190,6 +267,8 @@ button[type="button"]:hover {
 /* ------------------------------------------------------------------------------------------------------------ */
 
 #input-form {
+   min-width: 1100px;
+
    border-bottom: 10px solid linear-gradient(#00ffff, #ffffff, 90deg);
 
    margin-left: 150px;
@@ -212,7 +291,7 @@ button[type="button"]:hover {
 #row-limiter {
    max-width: 85px;
 
-   border: 1px solid rgb(255, 255, 255);
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
 }
 
@@ -342,7 +421,7 @@ span {
 
    padding: 9px 15px;
 
-   border: 1px solid #4e4e4e;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
 
    cursor: text;
@@ -357,7 +436,7 @@ span {
 }
 
 .filters input::placeholder {
-   color:rgb(131, 131, 131);
+   color:rgb(167, 167, 167);
 }
 
 /* -------------------------------------------------------------------------------------------*/
@@ -383,7 +462,7 @@ span {
    background-color: transparent;
    transition: background-color ease 0.1s;
 
-   border: 1px solid #fff;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
 
    margin-bottom: 20px;
@@ -422,16 +501,21 @@ span {
    padding: 5px 10px;
    margin-top: 10px;
    
-   border: 1px solid #ffffff;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
    
 }
+
+.left-date input[type="date"]::-webkit-calendar-picker-indicator, .right-date input[type="date"]::-webkit-calendar-picker-indicator {
+   color: transparent;
+
+} 
 
 .right-date input {
    padding: 5px 10px;
    margin-top: 10px;
    
-   border: 1px solid #ffffff;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
 }
 

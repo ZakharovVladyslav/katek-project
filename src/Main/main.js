@@ -15,9 +15,12 @@ const chosenFile = document.getElementById('chosen-file')
 const reloadTable = document.getElementById('reload-table')
 const cellSelect = document.getElementById('click-toggler')
 const mode = document.getElementById('mode')
+const clickToggler = document.querySelector('#click-toggler')
 
 document.getElementById('left-date-inp').value = '2022-05-01'
 document.getElementById('right-date-inp').value = '2022-05-03'
+
+clickToggler.style.display = 'none'
 
 let results = []
 
@@ -68,6 +71,8 @@ inputForm.addEventListener("submit", (e) => {
          else {
             if (emptyMessage.value != 0)
                emptyMessage.innerHTML = ''
+
+            clickToggler.style.display = 'block'
 
             const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
@@ -144,41 +149,28 @@ inputForm.addEventListener("submit", (e) => {
             dataTable.appendChild(table)
 
             let clickOption = cellSelect.options[cellSelect.selectedIndex].value
-            mode.innerHTML = `Mode: ${clickOption}`
 
             cellSelect.onchange = () => {
                clickOption = cellSelect.options[cellSelect.selectedIndex].value
-               mode.innerHTML = `Mode: ${clickOption}`
             }
 
             table.addEventListener('click', e => {
                const clickOption = cellSelect.options[cellSelect.selectedIndex].value
 
-               mode.innerHTML = `Mode: ${clickOption}`  
-
                if (clickOption === "Add to filter" || clickOption === 'Zum Filtern hinzufugen') {
-                  const data = csvToArray(text)[0]
-                  const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-                  data.length = 0
-
-                  const targetId = e.target.id
-                  const splittedTargetId = targetId.split('')
-                  splittedTargetId.splice(0, 5)
-
-                  const headersKeys = new Map()
-                  headers.forEach((header, index) => {
-                     headersKeys.set((index + 1).toString(), header)
-                  })
-
-                  const column = +splittedTargetId[1] + 1
+                  const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
+                  const targetCellValue = e.target.innerHTML
                   
-                  const targetValue = document.getElementById(targetId).innerHTML
-                  
-                  const key = headersKeys.get(column.toString())
-                  const targetInput = document.getElementById(`input-${key}`)
+                  let index = filters.length - (filters.map(filter => {
+                     if (filter.value === '')
+                        return filter
+                  }).filter(filter => filter !== undefined).length)
 
-                  targetInput.value = targetValue
+                  const targetInputField = filters[index]
+                  if (index > -1 && index < 5)
+                     targetInputField.value = targetCellValue
                }
+
                else if (clickOption === "Show row" || clickOption == 'Reihe zeigen') {
                   reloadTable.disabled = false
 

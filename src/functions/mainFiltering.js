@@ -61,29 +61,20 @@ export default function getFilters(inputData, headers) {
     const keys = []
 
     data.forEach(obj => {
-        console.log(obj)
         values.forEach(value => {
-            console.log(value)
             Object.keys(obj).forEach(key => {
-                console.log(key)
                 if (obj[key] === value) {
-                    console.log(key)
                     keys.push(key)
                 }
             })
         })
     })
 
-    console.log(values)
-    console.log(keys)
-
     filteredArray = data.filter(obj => {
         return keys.every(key => {
             return values.includes(obj[key])
         })
     })
-
-    console.log(filteredArray)
 
     filteredArray.unshift(headers)
 
