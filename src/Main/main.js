@@ -15,9 +15,12 @@ const chosenFile = document.getElementById('chosen-file')
 const reloadTable = document.getElementById('reload-table')
 const cellSelect = document.getElementById('click-toggler')
 const mode = document.getElementById('mode')
+const clickToggler = document.querySelector('#click-toggler')
 
 document.getElementById('left-date-inp').value = '2022-05-01'
 document.getElementById('right-date-inp').value = '2022-05-03'
+
+clickToggler.style.display = 'none'
 
 let results = []
 
@@ -68,6 +71,8 @@ inputForm.addEventListener("submit", (e) => {
          else {
             if (emptyMessage.value != 0)
                emptyMessage.innerHTML = ''
+
+            clickToggler.style.display = 'block'
 
             const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
@@ -144,17 +149,17 @@ inputForm.addEventListener("submit", (e) => {
             dataTable.appendChild(table)
 
             let clickOption = cellSelect.options[cellSelect.selectedIndex].value
-            mode.innerHTML = `Mode: ${clickOption}`
+
 
             cellSelect.onchange = () => {
                clickOption = cellSelect.options[cellSelect.selectedIndex].value
-               mode.innerHTML = `Mode: ${clickOption}`
+
             }
 
             table.addEventListener('click', e => {
                const clickOption = cellSelect.options[cellSelect.selectedIndex].value
 
-               mode.innerHTML = `Mode: ${clickOption}`  
+
 
                if (clickOption === "Add to filter" || clickOption === 'Zum Filtern hinzufugen') {
                   const data = csvToArray(text)[0]
@@ -171,9 +176,9 @@ inputForm.addEventListener("submit", (e) => {
                   })
 
                   const column = +splittedTargetId[1] + 1
-                  
+
                   const targetValue = document.getElementById(targetId).innerHTML
-                  
+
                   const key = headersKeys.get(column.toString())
                   const targetInput = document.getElementById(`input-${key}`)
 

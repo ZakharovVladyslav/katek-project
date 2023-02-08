@@ -1,5 +1,6 @@
 :root {
    --katek-blue: #00ffff;
+   --border-grey: #646464;
 }
 
 * {
@@ -54,7 +55,6 @@ article span {
 /* END OF KATEK LOGO ---------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------------------------*/
 
-<<<<<<< HEAD
 /* ---------------------------------------------------------------------------------------------*/
 /* SIDE SECTION PART ---------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------------------------*/
@@ -127,8 +127,6 @@ i.fa-solid {
    align-self: center;
 }
 
-=======
->>>>>>> testing
 #click-toggler {
    margin-left: 100px;
    
@@ -137,7 +135,7 @@ i.fa-solid {
    
    padding: 5px 10px;
 
-   border: 1px solid #fff;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
    outline: none;
 
@@ -163,6 +161,10 @@ i.fa-solid {
 #file-choose {
    margin-right: -0px;
    max-width: 90px;
+}
+
+#chosen-file {
+   z-index: 1;
 }
 
 #empty-message {
@@ -217,7 +219,7 @@ i.fa-solid {
 
    float: right;
 
-   border: 1px solid #ffffff;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
 
    text-align: center;
@@ -265,6 +267,8 @@ button[type="button"]:hover {
 /* ------------------------------------------------------------------------------------------------------------ */
 
 #input-form {
+   min-width: 1100px;
+
    border-bottom: 10px solid linear-gradient(#00ffff, #ffffff, 90deg);
 
    margin-left: 150px;
@@ -287,7 +291,7 @@ button[type="button"]:hover {
 #row-limiter {
    max-width: 85px;
 
-   border: 1px solid rgb(255, 255, 255);
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
 }
 
@@ -417,7 +421,7 @@ span {
 
    padding: 9px 15px;
 
-   border: 1px solid #4e4e4e;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
 
    cursor: text;
@@ -432,7 +436,7 @@ span {
 }
 
 .filters input::placeholder {
-   color:rgb(131, 131, 131);
+   color:rgb(167, 167, 167);
 }
 
 /* -------------------------------------------------------------------------------------------*/
@@ -458,7 +462,7 @@ span {
    background-color: transparent;
    transition: background-color ease 0.1s;
 
-   border: 1px solid #fff;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
 
    margin-bottom: 20px;
@@ -497,16 +501,21 @@ span {
    padding: 5px 10px;
    margin-top: 10px;
    
-   border: 1px solid #ffffff;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
    
 }
+
+.left-date input[type="date"]::-webkit-calendar-picker-indicator, .right-date input[type="date"]::-webkit-calendar-picker-indicator {
+   color: transparent;
+
+} 
 
 .right-date input {
    padding: 5px 10px;
    margin-top: 10px;
    
-   border: 1px solid #ffffff;
+   border: 1px solid var(--border-grey);
    border-radius: 3px;
 }
 
