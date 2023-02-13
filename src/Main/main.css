@@ -32,6 +32,10 @@ html {
    grid-template-columns: 1fr 1fr;
 }
 
+i {
+   transform: scale(0.6);
+}
+
 /* -------------------------------------------------------------------------------------------*/
 /* KATEK LOGO --------------------------------------------------------------------------------*/
 /* -------------------------------------------------------------------------------------------*/
@@ -55,76 +59,21 @@ article span {
 /* END OF KATEK LOGO ---------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------------------------*/
 
-/* ---------------------------------------------------------------------------------------------*/
-/* SIDE SECTION PART ---------------------------------------------------------------------------*/
-/* ---------------------------------------------------------------------------------------------*/
+.fill-variant-button {
+   padding: 5px 10px;
 
+   transition: 0.1s;
 
-#side-section {
-   background-color: #323232;
-
-   display: flex;
-   flex-direction: column;
-
-   height: 100%;
-   width: 0;
-
-   position: fixed;
-   z-index: 1;
-
-   top: 0;
-   left: 0;
-
-   float: left;
-
-   overflow-x: hidden;
-   padding-top: 60px;
-   transition: 0.5s ease-in-out;
+   font-size: 20px;
 }
 
-#side-section h1 {
-   align-self: center;
-
-   margin-left: 10px;
+.fill-variant-button:hover {
+   background-color: #00788b;
+   transition: 0.1s;
 }
 
-#sidebar-input {
-   display: none;
-}
-
-i.fa-solid {
-   transform: scale(0.6);
-}
-
-#sidebar-input-label {
-   float: left;
-   z-index: 1;
-   position: fixed;
-   margin: 20px 0 0 10px;
-
-   transform: scale(0.1);
-
-   background-color: transparent;
-
-   font-size: 3rem;
-
-   color: white;
-   transition: color 0.1s;
-
-   border: none;
+.fill-variant-button:focus {
    outline: none;
-}
-
-#sidebar-input-label:hover {
-   cursor: pointer;
-   transition: transform ease 0.3s;
-
-   color: var(--katek-blue);
-   transition: color 0.1s;
-}
-
-#side-section select {
-   align-self: center;
 }
 
 #click-toggler {
@@ -171,7 +120,7 @@ i.fa-solid {
    text-align: center;
    font-size: 50px;
 
-   color: #00788b;
+   color: #fff;
    font-weight: 600;
 }
 
