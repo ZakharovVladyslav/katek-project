@@ -4,6 +4,7 @@ import csvToArray from '../Functions/csvConvert.js'
 import getFilters from '../Functions/mainFiltering.js'
 import datePlusMinus from '../Functions/datePlusMinus.js'
 import summaryRowToggle from '../Functions/summaryRow.js'
+import { countDateRange } from '../Functions/countDateRange.js'
 
 const inputForm = document.querySelector('#input-form')
 const file = document.querySelector('#file-choose')
@@ -65,14 +66,29 @@ inputForm.addEventListener("submit", (e) => {
 
          const suggestionsButton = document.querySelector('#suggested-variant-button')
 
+         const [firstDate, secondDate] = filtersInput.slice(-2)
+
          suggestionsButton.addEventListener('click', () => {
             filtersInput[filtersInput.length - 2].value = '2022-05-02'
             filtersInput[filtersInput.length - 1].value = '2022-05-03'
          })
       }
       else {
-         if ((filtersInput[filtersInput.length - 1].value === '' || filtersInput[filtersInput.length - 2].value === '') && numOfEmptyFilters === 0)
+         const [firstDate, secondDate] = filtersInput.slice(-2)
+         const filtersInputs = filtersInput.map(filter => filter).splice(0, 5)
+         const numberOfUsedInputFields = filtersInputs.filter(inputField => inputField.value !== '').length
+
+         if ((filtersInput[filtersInput.length - 1].value === '' || filtersInput[filtersInput.length - 2].value === '') && numOfEmptyFilters === 0) {
+            dataTable.innerHTML = ''
             emptyMessage.innerHTML = 'Sie mussen ein zweites Datum hinzufugen'
+            clickToggler.style.display = 'none'
+            saveButton.style.display = 'none'
+         }
+         else if (countDateRange(firstDate.value, secondDate.value) > 31 && numberOfUsedInputFields === 0) {
+            emptyMessage.innerHTML = 'Data range is too big. Please add some filters'
+            clickToggler.style.display = 'none'
+            saveButton.style.display = 'none'
+         }
          else {
             datePlusMinus()
 
