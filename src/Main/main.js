@@ -5,6 +5,7 @@ import getFilters from '../Functions/mainFiltering.js'
 import datePlusMinus from '../Functions/datePlusMinus.js'
 import summaryRowToggle from '../Functions/summaryRow.js'
 import { countDateRange } from '../Functions/countDateRange.js'
+import { getAllValues } from '../Functions/getAllValues.js'
 
 const inputForm = document.querySelector('#input-form')
 const file = document.querySelector('#file-choose')
@@ -17,6 +18,9 @@ const cellSelect = document.querySelector('#click-toggler')
 const filters = document.querySelector('#filters')
 const clickToggler = document.querySelector('#click-toggler')
 const saveButton = document.querySelector('#save')
+
+document.querySelector('#left-date-inp').value = '2022-05-02'
+document.querySelector('#right-date-inp').value = '2022-05-03'
 
 clickToggler.style.display = 'none'
 saveButton.style.display = 'none'
@@ -69,8 +73,8 @@ inputForm.addEventListener("submit", (e) => {
          const [firstDate, secondDate] = filtersInput.slice(-2)
 
          suggestionsButton.addEventListener('click', () => {
-            filtersInput[filtersInput.length - 2].value = '2022-05-02'
-            filtersInput[filtersInput.length - 1].value = '2022-05-03'
+            firstDate.value = '2022-05-02'
+            secondDate.value = '2022-05-03'
          })
       }
       else {
@@ -134,12 +138,34 @@ inputForm.addEventListener("submit", (e) => {
                      }
                   })
 
+                  /*----------------------------------------------------------------------------------------------------------------*/
+                  /*----------------------------------------------------------------------------------------------------------------*/
+                  /*---------------------------------------    PROGRAM ENTRY POINT    ----------------------------------------------*/
+                  /*----------------------------------------------------------------------------------------------------------------*/
+                  /*----------------------------------------------------------------------------------------------------------------*/
+
                   const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
                   const arrayFromCsv = csvToArray(text)
                   const data = arrayFromCsv[0]
                   const initialArray = getFilters(data, tableHeaders)
+                  
+                  const dataLists = [...Array(5)].map((_, index) => {
+                     return document.querySelector(`#datalist-${index + 1}`)
+                  })
 
-                  console.log(initialArray)
+                  const values = getAllValues(initialArray, tableHeaders)
+
+                  dataLists.forEach(datalist => {
+                     for (let option of datalist.children)
+                        option.value = ''
+
+                     values.forEach(value => {
+                        const option = document.createElement('option')
+                        option.className = 'datalist-option'
+                        option.value = value
+                        datalist.appendChild(option)
+                     })
+                  })
 
                   const dataForCsv = getFilters(data, csvToArray(text)[1])
 

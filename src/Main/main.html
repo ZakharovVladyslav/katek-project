@@ -1,187 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <title>Katek GmbH</title>
-      <link rel="stylesheet" href="./main.css">
-      
-      <script type="module" src="./main.js" defer></script>
-      <link rel="icon" type="image/x-icon" href="../../assets/katek-favicon.ico">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-   </head>
-   <body>
-      <section class="main">
-         <article>
-            <img src="../../assets/Katek-Logosvg.png">
-            <h1>This website was made for filtering information in excel files with sorting and checking functions</h1>
-            <p>Made by <span>Katek GmBH</span></p>
-         </article>
 
-         <form id="input-form">
+<head>
+   <title>Katek GmbH</title>
+   <link rel="stylesheet" href="./main.css">
 
-            <section id="input-section">
-               <div class="file-input-section">
-                  <label id="fc" for="file-choose">Datei wählen</label>
-                  <input type="file" id="file-choose"><br>
-                  <p id="chosen-file"></p>
-               </div>
+   <script type="module" src="./main.js" defer></script>
+   <link rel="icon" type="image/x-icon" href="../../assets/katek-favicon.ico">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+      integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
 
-               <div>
-                  <label id="row-counter-label">Anzahl der Zeilen:</label>
-                  <input type="number" id="row-limiter" value="0" readonly>
-               </div>
+<body>
+   <section class="main">
+      <article>
+         <img src="../../assets/Katek-Logosvg.png">
+         <h1>This website was made for filtering information in excel files with sorting and checking functions</h1>
+         <p>Made by <span>Katek GmBH</span></p>
+      </article>
 
-               <select id="chooseLangId" onchange="chooseLang()">
-                  <option id="opt">GE</option>
-                  <option id="opt">EN</option>
+      <form id="input-form">
+
+         <section id="input-section">
+            <div class="file-input-section">
+               <label id="fc" for="file-choose">Datei wählen</label>
+               <input type="file" id="file-choose"><br>
+               <p id="chosen-file"></p>
+            </div>
+
+            <div>
+               <label id="row-counter-label">Anzahl der Zeilen:</label>
+               <input type="number" id="row-limiter" value="0" readonly>
+            </div>
+
+            <select id="chooseLangId" onchange="chooseLang()">
+               <option id="opt">GE</option>
+               <option id="opt">EN</option>
+            </select>
+         </section><br>
+
+         <section class="filters-date-submit">
+
+            <div class="date-input">
+               <select id="date-params">
+                  <option id="option">tLogIn</option>
+                  <option id="option">tLogOut</option>
+                  <option id="option">tLastAcc</option>
                </select>
+
+               <div class="left-date">
+                  <label id="left-date-label">Erstes Datum</label>
+                  <div class="plus-minus-divs">
+                     <div class="left-minus-div">
+                        <input type="number" id="left-date-minus-input" class="days-button" min="1" value="3">
+                        <button type="button" id="left-date-minus" class="days-button">-</button>
+                     </div>
+
+                     <div class="left-plus-div">
+                        <input type="number" id="left-date-plus-input" class="days-button" min="1" value="3">
+                        <button type="button" id="left-date-plus" class="days-button">+</button>
+                     </div>
+                  </div>
+
+                  <input type="date" id="left-date-inp" class="date-input">
+               </div>
+
+               <div class="right-date">
+                  <label id="right-date-label">Zweites Datum</label>
+                  <div class="plus-minus-divs">
+                     <div class="right-minus-div">
+                        <input type="number" id="right-date-minus-input" class="days-button" min="1" value="3">
+                        <button type="button" id="right-date-minus" class="days-button">-</button>
+                     </div>
+
+                     <div class="left-plus-div">
+                        <input type="number" id="right-date-plus-input" class="days-button" min="1" value="3">
+                        <button type="button" id="right-date-plus" class="days-button">+</button>
+                     </div>
+                  </div>
+
+                  <input type="date" id="right-date-inp" class="date-input">
+               </div>
+            </div>
+
+            <section class="filters" id="filters">
+               <div class="filter-div">
+                  <input type="text" id="filter-input-1" class="filter-input" placeholder="filter" list="datalist-1">
+                  <datalist id="datalist-1"></datalist>
+                  <button type="button" id="eraser-1"><i id="eraser-1" class="fa-solid fa-eraser"></i></button>
+               </div>
+               <div class="filter-div">
+                  <input type="text" id="filter-input-2" class="filter-input" placeholder="filter" list="datalist-2">
+                  <datalist id="datalist-2"></datalist>
+                  <button type="button" id="eraser-2"><i id="eraser-2" class="fa-solid fa-eraser"></i></button>
+               </div>
+               <div class="filter-div">
+                  <input type="text" id="filter-input-3" class="filter-input" placeholder="filter" list="datalist-3">
+                  <datalist id="datalist-3"></datalist>
+                  <button type="button" id="eraser-3"><i id="eraser-3" class="fa-solid fa-eraser"></i></button>
+               </div>
+               <div class="filter-div">
+                  <input type="text" id="filter-input-4" class="filter-input" placeholder="filter" list="datalist-4">
+                  <datalist id="datalist-4"></datalist>
+                  <button type="button" id="eraser-4"><i id="eraser-4" class="fa-solid fa-eraser"></i></button>
+               </div>
+               <div class="filter-div">
+                  <input type="text" id="filter-input-5" class="filter-input" placeholder="filter" list="datalist-5">
+                  <datalist id="datalist-5"></datalist>
+                  <button type="button" id="eraser-5"><i id="eraser-5" class="fa-solid fa-eraser"></i></button>
+               </div>
             </section><br>
 
-            <section class="filters-date-submit">
+            <div class="submit-section">
+               <input type="submit" value="Einreichen" id="submit-button">
+               <input type="submit" value="Anfangstabelle" id="reload-table" disabled>
 
-               <section class="filters" id="filters">
-                  <div class="filter-div">
-                     <input type="text" id="filter-input-1" class="filter-input" placeholder="filter">
-                     <button type="button" id="eraser-1"><i id="eraser-1" class="fa-solid fa-eraser"></i></button>
-                  </div>
-                  <div class="filter-div">
-                     <input type="text" id="filter-input-2" class="filter-input" placeholder="filter">
-                     <button type="button" id="eraser-2"><i id="eraser-2"class="fa-solid fa-eraser"></i></button>
-                  </div>
-                  <div class="filter-div">
-                     <input type="text" id="filter-input-3" class="filter-input" placeholder="filter">
-                     <button type="button" id="eraser-3"><i id="eraser-3"class="fa-solid fa-eraser"></i></button>
-                  </div>
-                  <div class="filter-div">
-                     <input type="text" id="filter-input-4" class="filter-input" placeholder="filter">
-                     <button type="button" id="eraser-4"><i id="eraser-4"class="fa-solid fa-eraser"></i></button>
-                  </div>
-                  <div class="filter-div">
-                     <input type="text" id="filter-input-5" class="filter-input" placeholder="filter">
-                     <button type="button" id="eraser-5"><i id="eraser-5"class="fa-solid fa-eraser"></i></button>
-                  </div>
-               </section><br>
+               <button type="button" id="reset">Zurucksetzen</button>
 
-               <div class="date-input">
-                  <select id="date-params">
-                     <option id="option">tLogIn</option>
-                     <option id="option">tLogOut</option>
-                     <option id="option">tLastAcc</option>
-                  </select>
-
-                  <div class="left-date">
-                     <label id="left-date-label">Erstes Datum</label>
-                     <div class="plus-minus-divs">
-                        <div class="left-minus-div">
-                           <input type="number" id="left-date-minus-input" class="days-button" min="1" value="3">
-                           <button type="button" id="left-date-minus" class="days-button">-</button>
-                        </div>
-                        
-                        <div class="left-plus-div">
-                           <input type="number" id="left-date-plus-input" class="days-button" min="1" value="3">
-                           <button type="button" id="left-date-plus" class="days-button">+</button>
-                        </div>
-                     </div>
-
-                     <input type="date" id="left-date-inp" class="date-input">
-                  </div>
-                  
-                  <div class="right-date">
-                     <label id="right-date-label">Zweites Datum</label>
-                     <div class="plus-minus-divs">
-                        <div class="right-minus-div">
-                           <input type="number" id="right-date-minus-input" class="days-button" min="1" value="3">
-                           <button type="button" id="right-date-minus" class="days-button">-</button>
-                        </div>
-                        
-                        <div class="left-plus-div">
-                           <input type="number" id="right-date-plus-input" class="days-button" min="1" value="3">
-                           <button type="button" id="right-date-plus" class="days-button">+</button>
-                        </div>
-                     </div>
-
-                     <input type="date" id="right-date-inp" class="date-input">
-                  </div>
+               <div class="summary-row-toggler-il">
+                  <label for="summary-row-toggler-input" id="summary-row-toggler-label">Summe</label>
+                  <input type="checkbox" id="summary-row-toggler-input" checked="false">
                </div>
-               
-               <div class="submit-section">
-                  <input type="submit" value="Einreichen" id="submit-button">
-                  <input type="submit" value="Anfangstabelle" id="reload-table" disabled>
-                  
-                  <a href="../Summary/sum.html" id="sum-file">Summen Datei</a>
+            </div>
+         </section>
+      </form><br>
+   </section>
 
-                  <button type="button" id="reset">Zurucksetzen</button>
+   <p id="empty-message"></p>
 
-                  <div class="summary-row-toggler-il">
-                     <label for="summary-row-toggler-input" id="summary-row-toggler-label">Summe</label>
-                     <input type="checkbox" id="summary-row-toggler-input" checked="false">
-                  </div>
-               </div>
-            </section>
-         </form><br>
-      </section>
-      
-      <p id="empty-message"></p>
+   <table id="summary-table"></table>
 
-      <table id="summary-table"></table>
+   <p id="mode"></p>
 
-      <p id="mode"></p>
+   <div class="over-tables">
+      <select id="click-toggler">
+         <option id="opt2" class="ct-option">Zum Filtern hinzufugen</option>
+         <option id="opt1" class="ct-option">Reihe zeigen</option>
+      </select>
 
-      <div class="over-tables">
-         <select id="click-toggler">
-            <option id="opt2" class="ct-option">Zum Filtern hinzufugen</option>
-            <option id="opt1" class="ct-option">Reihe zeigen</option>
-         </select>
+      <a id="save" class="save" type="download"><i class="fa-solid fa-download"></i></a>
+   </div>
 
-         <a id="save" class="save" type="download"><i class="fa-solid fa-download"></i></a>
-      </div>
+   <table id="data-table"></table>
 
-      <table id="data-table"></table>
+   <script>
+      const option = document.getElementById('chooseLangId')
 
-      <script>
-         const option = document.getElementById('chooseLangId')
+      const fileLabel = document.querySelector('#fc')
+      const leftDateLabel = document.querySelector('#left-date-label')
+      const rightDateLabel = document.querySelector('#right-date-label')
+      const dataSumFile = document.querySelector('#sum-file')
+      const resetButton = document.querySelector('#reset')
+      const submitButton = document.querySelector('#submit-button')
+      const initialTabel = document.querySelector('#reload-table')
+      const rowCounterLabel = document.getElementById('row-counter-label')
+      const settings = document.querySelector('#settings')
+      const opt1 = document.querySelector('#opt1')
+      const opt2 = document.querySelector('#opt2')
+      const showResButton = document.querySelector('#showRes')
+      const summaryRowLabel = document.querySelector('#summary-row-toggler-label')
 
-         const fileLabel = document.querySelector('#fc')
-         const leftDateLabel = document.querySelector('#left-date-label')
-         const rightDateLabel = document.querySelector('#right-date-label')
-         const dataSumFile = document.querySelector('#sum-file')
-         const resetButton = document.querySelector('#reset')
-         const submitButton = document.querySelector('#submit-button')
-         const initialTabel = document.querySelector('#reload-table')
-         const rowCounterLabel = document.getElementById('row-counter-label')
-         const settings = document.querySelector('#settings')
-         const opt1 = document.querySelector('#opt1')
-         const opt2 = document.querySelector('#opt2')
-         const showResButton = document.querySelector('#showRes')
-         const summaryRowLabel = document.querySelector('#summary-row-toggler-label')
+      function chooseLang() {
+         if (option.value === "GE") {
+            fileLabel.innerHTML = "Datei wählen"
+            leftDateLabel.innerHTML = "Erstes Datum"
+            rightDateLabel.innerHTML = "Zweites Datum"
+            dataSumFile.innerHTML = "Summen Datei"
+            resetButton.value = "Zurücksetzen"
+            submitButton.value = "Einreichen"
+            initialTabel.value = "Anfangstabelle"
+            rowCounterLabel.innerHTML = "Anzahl der Zeilen"
+            opt1.innerHTML = 'Reihe zeigen'
+            opt2.innerHTML = 'Zum Filtern hinzufugen'
+            summaryRowLabel.innerHTML = 'Summe'
+         }
+         if (option.value === "EN") {
+            fileLabel.innerHTML = "File choose"
+            leftDateLabel.innerHTML = "First date"
+            rightDateLabel.innerHTML = "Second date"
+            dataSumFile.innerHTML = "Summary File"
+            resetButton.innerHTML = "Reset"
+            submitButton.value = "Submit"
+            initialTabel.value = "Initial table"
+            rowCounterLabel.innerHTML = "Row counter"
+            opt1.innerHTML = 'Show row'
+            opt2.innerHTML = 'Add to filter'
+            summaryRowLabel.innerHTML = 'Summary row'
+         }
+      }               
+   </script>
+</body>
 
-         function chooseLang() {
-            if (option.value === "GE") {
-               fileLabel.innerHTML = "Datei wählen"
-               leftDateLabel.innerHTML = "Erstes Datum"
-               rightDateLabel.innerHTML = "Zweites Datum"
-               dataSumFile.innerHTML = "Summen Datei"
-               resetButton.value = "Zurücksetzen"
-               submitButton.value = "Einreichen"
-               initialTabel.value = "Anfangstabelle"
-               rowCounterLabel.innerHTML = "Anzahl der Zeilen"
-               opt1.innerHTML = 'Reihe zeigen'
-               opt2.innerHTML = 'Zum Filtern hinzufugen'
-               summaryRowLabel.innerHTML = 'Summe'
-            }
-            if (option.value === "EN") {
-               fileLabel.innerHTML = "File choose"
-               leftDateLabel.innerHTML = "First date"
-               rightDateLabel.innerHTML = "Second date"
-               dataSumFile.innerHTML = "Summary File"
-               resetButton.innerHTML = "Reset"
-               submitButton.value = "Submit"
-               initialTabel.value = "Initial table"
-               rowCounterLabel.innerHTML = "Row counter"
-               opt1.innerHTML = 'Show row'
-               opt2.innerHTML = 'Add to filter'
-               summaryRowLabel.innerHTML = 'Summary row'
-            }
-         }               
-      </script>
-   </body>
-</html>         
+</html>
