@@ -78,10 +78,10 @@ article span {
 
 #click-toggler {
    margin-left: 100px;
-   
+
    background-color: transparent;
    transition: 0.1s;
-   
+
    padding: 5px 10px;
 
    border: 1px solid var(--border-grey);
@@ -113,6 +113,8 @@ article span {
 }
 
 #chosen-file {
+   min-height: 30px;
+
    z-index: 1;
 }
 
@@ -256,7 +258,7 @@ button[type="button"]:hover {
 /* --------------------------------------------------------------------------------------------*/
 
 .submit-section {
-   margin-right: 20px;
+   margin-right: 40px;
 
    display: grid;
 
@@ -264,29 +266,22 @@ button[type="button"]:hover {
    justify-items: center;
 
    grid-template-columns: minmax(150px auto);
-   row-gap: 0px;
 }
 
-/* --------------------------------------------------------------------------------------------*/
-/* --------------------------------------------------------------------------------------------*/
-
-.submit-section a {
-   padding: 9px 13px;
-
-   text-align: center;
-
-   max-width: fit-content;
+#submit-button {
+   margin-bottom: -40px;
 }
 
-.submit-section input {
+.submit-section button {
    padding: 9px 13px;
 
+   background-color: transparent;
    transition: background-color ease 0.1s;
-   
-   max-width: fit-content;
+
+   min-width: 170px;
 }
 
-.submit-section input:hover {
+.submit-section button:hover {
    cursor: pointer;
 
    background-color: #00788b;
@@ -296,18 +291,17 @@ button[type="button"]:hover {
 #reset {
    padding: 10px 15px;
 
-   margin-top: 15px;
-
    min-height: 30px;
-   
-   max-width: fit-content;
+
+   margin-top: -10px;
+   margin-bottom: -400px;
 }
 
 #reload-table,
 #submit-button {
    border-radius: 3px;
    border: 1px solid #00ffff;
-   
+
    max-width: fit-content;
 }
 
@@ -319,18 +313,20 @@ button[type="button"]:hover {
    cursor: not-allowed;
 }
 
+.summary-row-toggler-il {
+   padding: 7px 10px;
+
+   margin-top: -50px;
+}
+
 .summary-row-toggler-il label {
    border: 1px solid var(--katek-blue);
    border-radius: 3px;
 
    padding: 6px 10px;
 
-   margin: 0 auto 0 auto;
-
    background-color: transparent;
    transition: background-color ease 0.1s;
-   
-   max-width: fit-content;
 }
 
 .summary-row-toggler-il label:hover {
@@ -385,7 +381,7 @@ span {
 }
 
 .filters input::placeholder {
-   color:rgb(167, 167, 167);
+   color: rgb(167, 167, 167);
 }
 
 .filters div {
@@ -404,7 +400,7 @@ span {
    width: 40px;
 
    border: 1px solid var(--border-grey);
-   
+
 }
 
 .filters div button:hover {
@@ -457,11 +453,13 @@ span {
    margin-left: -35px;
 }
 
-.left-minus-div input, .left-plus-div input {
+.left-minus-div input,
+.left-plus-div input {
    max-width: 40px;
 }
 
-.right-minus-div input, .right-plus-div input {
+.right-minus-div input,
+.right-plus-div input {
    max-width: 40px;
 }
 
@@ -472,21 +470,22 @@ span {
 .left-date input {
    padding: 5px 10px;
    margin-top: 10px;
-   
+
    border: 1px solid var(--border-grey);
    border-radius: 3px;
-   
+
 }
 
-.left-date input[type="date"]::-webkit-calendar-picker-indicator, .right-date input[type="date"]::-webkit-calendar-picker-indicator {
+.left-date input[type="date"]::-webkit-calendar-picker-indicator,
+.right-date input[type="date"]::-webkit-calendar-picker-indicator {
    color: transparent;
 
-} 
+}
 
 .right-date input {
    padding: 5px 10px;
    margin-top: 10px;
-   
+
    border: 1px solid var(--border-grey);
    border-radius: 3px;
 }
@@ -614,6 +613,131 @@ span {
    cursor: pointer;
 }
 
+/*---------------------------------------------------------------------------------------*/
+/*LOADING CIRCLE ANIMATION --------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------*/
+
+.loading-table {
+   margin: auto;
+}
+
+.lds-roller {
+   display: inline-block;
+   transition: display ease 2s;
+
+   transition: 0.5s;
+
+   position: absolute;
+   margin-top: 100px;
+   right: 50%;
+   left: 50%;
+
+   width: 80px;
+   height: 80px;
+}
+
+.lds-roller div {
+   animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+   transform-origin: 40px 40px;
+}
+
+.lds-roller div:after {
+   content: " ";
+   display: block;
+   position: absolute;
+   width: 7px;
+   height: 7px;
+   border-radius: 50%;
+   background: #cef;
+   margin: -4px 0 0 -4px;
+}
+
+.lds-roller div:nth-child(1) {
+   animation-delay: -0.036s;
+}
+
+.lds-roller div:nth-child(1):after {
+   top: 63px;
+   left: 63px;
+}
+
+.lds-roller div:nth-child(2) {
+   animation-delay: -0.072s;
+}
+
+.lds-roller div:nth-child(2):after {
+   top: 68px;
+   left: 56px;
+}
+
+.lds-roller div:nth-child(3) {
+   animation-delay: -0.108s;
+}
+
+.lds-roller div:nth-child(3):after {
+   top: 71px;
+   left: 48px;
+}
+
+.lds-roller div:nth-child(4) {
+   animation-delay: -0.144s;
+}
+
+.lds-roller div:nth-child(4):after {
+   top: 72px;
+   left: 40px;
+}
+
+.lds-roller div:nth-child(5) {
+   animation-delay: -0.18s;
+}
+
+.lds-roller div:nth-child(5):after {
+   top: 71px;
+   left: 32px;
+}
+
+.lds-roller div:nth-child(6) {
+   animation-delay: -0.216s;
+}
+
+.lds-roller div:nth-child(6):after {
+   top: 68px;
+   left: 24px;
+}
+
+.lds-roller div:nth-child(7) {
+   animation-delay: -0.252s;
+}
+
+.lds-roller div:nth-child(7):after {
+   top: 63px;
+   left: 17px;
+}
+
+.lds-roller div:nth-child(8) {
+   animation-delay: -0.288s;
+}
+
+.lds-roller div:nth-child(8):after {
+   top: 56px;
+   left: 12px;
+}
+
+@keyframes lds-roller {
+   0% {
+      transform: rotate(0deg);
+   }
+
+   100% {
+      transform: rotate(360deg);
+   }
+}
+
+/*---------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------*/
+
 #data-table #filters-table {
    margin: none;
 }
@@ -707,3 +831,9 @@ span {
 
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
+
+@media only screen and (min-width: 3440px) {
+   #input-form {
+      min-width: 2100px;
+   }
+}

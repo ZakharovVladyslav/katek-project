@@ -18,10 +18,14 @@ const cellSelect = document.querySelector('#click-toggler')
 const filters = document.querySelector('#filters')
 const clickToggler = document.querySelector('#click-toggler')
 const saveButton = document.querySelector('#save')
+const load = document.querySelector('#load')
+const loadingMessage = document.querySelector('#loading-table')
 
 document.querySelector('#left-date-inp').value = '2022-05-02'
 document.querySelector('#right-date-inp').value = '2022-05-03'
 
+load.style.display = 'none'
+loadingMessage.style.display = 'none'
 clickToggler.style.display = 'none'
 saveButton.style.display = 'none'
 
@@ -35,6 +39,10 @@ file.oninput = (e) => {
 
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
+
+   dataTable.innerHTML = ''
+   load.style.display = 'inline-block'
+   loadingMessage.style.display = 'block'
 
    const input = file.files[0]
 
@@ -220,6 +228,9 @@ inputForm.addEventListener("submit", (e) => {
                   table.setAttribute('id', 'tb')
 
                   document.getElementById('data-table').appendChild(table)
+
+                  load.style.display = 'none'
+                  loadingMessage.style.display = 'none'
 
                   if (initialArray.length != +rowLimiter.value)
                      rowLimiter.value = `${initialArray.length - 1}`

@@ -113,8 +113,8 @@
             </section><br>
 
             <div class="submit-section">
-               <input type="submit" value="Einreichen" id="submit-button">
-               <input type="submit" value="Anfangstabelle" id="reload-table" disabled>
+               <button type="submit" value="Einreichen" id="submit-button">Einreichen</button>
+               <button type="submit" value="Anfangstabelle" id="reload-table" disabled>Anfangstabelle</button>
 
                <button type="button" id="reset">Zurucksetzen</button>
 
@@ -142,6 +142,17 @@
       <a id="save" class="save" type="download"><i class="fa-solid fa-download"></i></a>
    </div>
 
+   <p class='loading-table' id="loading-table">Table is loading...</p>
+   <div id='load' class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+   </div>
    <table id="data-table"></table>
 
    <script>
