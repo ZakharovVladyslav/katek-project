@@ -21,7 +21,7 @@ export const getAllValues = (array, headers) => {
       valuesMap.forEach(arr => {
             arr = arr.filter(elem => elem !== '')
 
-            if (arr.length > 2)
+            if (arr.length > 1)
                   resultArray.push(arr)
       })
 
