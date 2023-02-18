@@ -20,14 +20,25 @@ const clickToggler = document.querySelector('#click-toggler')
 const saveButton = document.querySelector('#save')
 const load = document.querySelector('#load')
 const loadingMessage = document.querySelector('#loading-table')
+const rowsAmount = document.querySelector('#rows-amount')
 
 document.querySelector('#left-date-inp').value = '2022-05-02'
 document.querySelector('#right-date-inp').value = '2022-05-03'
 
-load.style.display = 'none'
-loadingMessage.style.display = 'none'
+load.style.opacity = '0'
+loadingMessage.style.opacity = '0'
 clickToggler.style.display = 'none'
 saveButton.style.display = 'none'
+
+reset.addEventListener('click', (e) => {
+   e.preventDefault()
+
+   const filtersInput = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
+   filtersInput.push(document.querySelector('#left-date-inp'))
+   filtersInput.push(document.querySelector('#right-date-inp'))
+
+   filtersInput.forEach(filter => filter.value = '')
+})
 
 file.oninput = (e) => {
    e.preventDefault()
@@ -37,12 +48,78 @@ file.oninput = (e) => {
    chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1]
 }
 
+file.onchange = () => {
+   const fileReader = new FileReader()
+   const inputFileData = file.files[0]
+
+   fileReader.onload = (e) => {
+      const text = e.target.result
+      const data = csvToArray(text)[0]
+      const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
+
+      const filteredArray = getFilters(data, tableHeaders)
+
+      const values = getAllValues(filteredArray, tableHeaders)
+
+      const dataLists = [...Array(5)].map((_, index) => {
+         return document.querySelector(`#datalist-${index + 1}`)
+      })
+
+      dataLists.forEach(datalist => {
+         for (let option of datalist.children)
+            option.value = ''
+
+         values.forEach(value => {
+            const option = document.createElement('option')
+            option.className = 'datalist-option'
+            option.value = value
+            datalist.appendChild(option)
+         })
+      })
+
+      rowsAmount.innerHTML = filteredArray.length - 1
+
+      filters.onclick = (e) => {
+         const targetId = e.target.id
+         const targetNumber = targetId.slice(-1)
+
+         const targetField = document.querySelector(`#filter-input-${targetNumber}`)
+
+         targetField.onchange = () => {
+            const arr = getFilters(data, tableHeaders)
+
+            const values = getAllValues(arr, tableHeaders)
+
+            const dataLists = [...Array(5)].map((_, index) => {
+               return document.querySelector(`#datalist-${index + 1}`)
+            })
+
+            dataLists.forEach(datalist => {
+               for (let option of datalist.children)
+                  option.value = ''
+
+               values.forEach(value => {
+                  const option = document.createElement('option')
+                  option.className = 'datalist-option'
+                  option.value = value
+                  datalist.appendChild(option)
+               })
+            })
+
+            arr.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = arr.length - 1
+         }
+      }
+   }
+
+   fileReader.readAsText(inputFileData)
+}
+
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
 
    dataTable.innerHTML = ''
-   load.style.display = 'inline-block'
-   loadingMessage.style.display = 'block'
+   clickToggler.style.display = 'none'
+   saveButton.style.display = 'none'
 
    const input = file.files[0]
 
@@ -61,7 +138,7 @@ inputForm.addEventListener("submit", (e) => {
       if (numOfEmptyFilters.length === 0) {
          if (dataTable.innerHTML !== '') {
             dataTable.innerHTML = ''
-            
+
             clickToggler.style.display = 'none'
             saveButton.style.display = 'none'
          }
@@ -90,7 +167,7 @@ inputForm.addEventListener("submit", (e) => {
          const filtersInputs = filtersInput.map(filter => filter).splice(0, 5)
          const numberOfUsedInputFields = filtersInputs.filter(inputField => inputField.value !== '').length
 
-         if ((filtersInput[filtersInput.length - 1].value === '' || filtersInput[filtersInput.length - 2].value === '') && numOfEmptyFilters === 0) {
+         if ((filtersInput.at(-1).value === '' || filtersInput.at(-2).value === '')) {
             dataTable.innerHTML = ''
             emptyMessage.innerHTML = 'Sie mussen ein zweites Datum hinzufugen'
             clickToggler.style.display = 'none'
@@ -102,6 +179,11 @@ inputForm.addEventListener("submit", (e) => {
             saveButton.style.display = 'none'
          }
          else {
+            load.style.transition = '0.2s'
+            loadingMessage.style.transition = '0.2s'
+            load.style.opacity = '1'
+            loadingMessage.style.opacity = '1'
+
             datePlusMinus()
 
             reloadTable.disabled = true
@@ -156,7 +238,9 @@ inputForm.addEventListener("submit", (e) => {
                   const arrayFromCsv = csvToArray(text)
                   const data = arrayFromCsv[0]
                   const initialArray = getFilters(data, tableHeaders)
-                  
+
+                  initialArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = initialArray.length - 1
+
                   const dataLists = [...Array(5)].map((_, index) => {
                      return document.querySelector(`#datalist-${index + 1}`)
                   })
@@ -205,16 +289,6 @@ inputForm.addEventListener("submit", (e) => {
                      document.body.append(emptyMessage)
                   }
 
-                  reset.addEventListener('click', (e) => {
-                     e.preventDefault()
-
-                     const filtersInput = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
-                     filtersInput.push(document.querySelector('#left-date-inp'))
-                     filtersInput.push(document.querySelector('#right-date-inp'))
-
-                     filtersInput.forEach(filter => filter.value = '')
-                  })
-
                   dataTable.innerHTML = ''
                   table.innerHTML = ''
                   thead.innerHTML = ''
@@ -229,8 +303,10 @@ inputForm.addEventListener("submit", (e) => {
 
                   document.getElementById('data-table').appendChild(table)
 
-                  load.style.display = 'none'
-                  loadingMessage.style.display = 'none'
+                  load.style.transition = '0s'
+                  loadingMessage.style.transition = '0s'
+                  load.style.opacity = '0'
+                  loadingMessage.style.opacity = '0'
 
                   if (initialArray.length != +rowLimiter.value)
                      rowLimiter.value = `${initialArray.length - 1}`
@@ -262,8 +338,6 @@ inputForm.addEventListener("submit", (e) => {
                   table.appendChild(tbody)
                   dataTable.appendChild(table)
 
-                  let clickOption = cellSelect.options[cellSelect.selectedIndex].value
-
                   cellSelect.onchange = () => {
                      clickOption = cellSelect.options[cellSelect.selectedIndex].value
                   }
@@ -272,13 +346,20 @@ inputForm.addEventListener("submit", (e) => {
                      const clickOption = cellSelect.options[cellSelect.selectedIndex].value
 
                      if (clickOption === "Add to filter" || clickOption === 'Zum Filtern hinzufugen') {
+                        const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
+                        const valuesMap = new Map()
+                        const targetCellColumnIndex = e.target.id.slice(6)
+
+                        tableHeaders.forEach((header, index) => {
+                           valuesMap.set(`${index}`, `${header}`)
+                        }) 
+
+                        const keyOfValue = valuesMap.get(`${targetCellColumnIndex}`)
+
+                        console.log(keyOfValue)
+
                         const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
                         const targetCellValue = e.target.innerHTML
-
-                        let index = filters.length - (filters.map(filter => {
-                           if (filter.value === '')
-                              return filter
-                        }).filter(filter => filter !== undefined).length)
 
                         const emptyFieldIndexes = filters.map((filter, index) => {
                            if (filter.value === '')

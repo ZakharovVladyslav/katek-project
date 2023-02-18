@@ -356,6 +356,34 @@ span {
    flex-direction: column;
 
    gap: 20px;
+
+   margin-right: 100px;
+}
+
+.rows-amount {
+   margin: 0;
+   margin-left: 10px;
+}
+
+.counter {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+
+   min-width: 40px;
+   max-height: 20px;
+
+   margin-left: 100px;
+
+   border: 1px solid rgb(120, 120, 120);
+   border-radius: 3px;
+   
+   padding: 8px 15px;
+}
+
+.filter-div-1 #bars {
+   color: rgb(255, 255, 255);
+   transform: scale(1.5);
 }
 
 .filters input {
@@ -618,7 +646,11 @@ span {
 /*---------------------------------------------------------------------------------------*/
 
 .loading-table {
-   margin: auto;
+   min-width: 200px;
+
+   position: absolute;
+   right: 53%;
+   left: 47%;
 }
 
 .lds-roller {
@@ -832,8 +864,8 @@ span {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
-@media only screen and (min-width: 3440px) {
+@media only screen and (max-width: 1500px) {
    #input-form {
-      min-width: 2100px;
+      margin-right: -100px;
    }
 }

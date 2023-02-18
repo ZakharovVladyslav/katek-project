@@ -2,7 +2,7 @@ function dateFilter(data) {
     const leftDate = document.getElementById('left-date-inp').value
     const rigthDate = document.getElementById('right-date-inp').value
 
-    if (leftDate.length === 0 || rigthDate === 0)
+    if (leftDate.length === 0 || rigthDate.length === 0)
         return data
 
     else {
@@ -21,7 +21,6 @@ function dateFilter(data) {
         const rigthDateArr = revertDate(rigthDate)
 
         newData = data.filter(elem => {
-
             if (elem[opt] !== undefined) {
                 let targetDate = elem[opt].split('')
 
@@ -32,8 +31,9 @@ function dateFilter(data) {
 
                     let date = `${+targetDate[0]}/${+targetDate[1]}/${+targetDate[2]}`
 
-                    if (new Date(leftDateArr) <= new Date(date) && new Date(date) <= new Date(rigthDateArr))
+                    if (new Date(leftDateArr) <= new Date(date) && new Date(date) <= new Date(rigthDateArr)) {
                         return elem
+                    }
                 }
             }
         })
@@ -58,7 +58,7 @@ export default function getFilters(inputData, headers) {
             return filter.value
     }).filter(filter => filter !== undefined)
 
-    const keys = []
+    let keys = []
 
     data.forEach(obj => {
         values.forEach(value => {
@@ -69,6 +69,8 @@ export default function getFilters(inputData, headers) {
             })
         })
     })
+
+    keys = Array.from(new Set(keys))
 
     filteredArray = data.filter(obj => {
         return keys.every(key => {
