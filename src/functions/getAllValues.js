@@ -18,8 +18,6 @@ export const getAllValues = (array, headers) => {
             const targetArray = valuesMap.get(`${header}`)
 
             busyInputs.forEach(value => {
-                  console.log(targetArray)
-                  console.log(value)
                   if (targetArray.includes(value)) {
                         console.log('deletion')
                         valuesMap.delete(`${header}`)

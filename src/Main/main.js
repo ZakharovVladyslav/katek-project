@@ -21,6 +21,8 @@ const saveButton = document.querySelector('#save')
 const load = document.querySelector('#load')
 const loadingMessage = document.querySelector('#loading-table')
 const rowsAmount = document.querySelector('#rows-amount')
+const leftDateInput = document.querySelector('#left-date-inp')
+const rightDateInput = document.querySelector('#right-date-inp')
 
 document.querySelector('#left-date-inp').value = '2022-05-02'
 document.querySelector('#right-date-inp').value = '2022-05-03'
@@ -30,22 +32,90 @@ loadingMessage.style.opacity = '0'
 clickToggler.style.display = 'none'
 saveButton.style.display = 'none'
 
-reset.addEventListener('click', (e) => {
-   e.preventDefault()
-
-   const filtersInput = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
-   filtersInput.push(document.querySelector('#left-date-inp'))
-   filtersInput.push(document.querySelector('#right-date-inp'))
-
-   filtersInput.forEach(filter => filter.value = '')
-})
-
 file.oninput = (e) => {
    e.preventDefault()
 
    const arrFromFileName = file.value.replaceAll('\\', ',').split(',')
 
    chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1]
+
+   const fileReader = new FileReader()
+   const inputFileData = file.files[0]
+
+   fileReader.onload = (e) => {
+      const text = e.target.result
+      const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
+      
+      reset.addEventListener('click', (e) => {
+         e.preventDefault()
+
+         const data = csvToArray(text)[0]
+         const updatedArray = getFilters(data, tableHeaders)
+         data.length = 0
+
+         const filtersInput = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
+         filtersInput.push(document.querySelector('#left-date-inp'))
+         filtersInput.push(document.querySelector('#right-date-inp'))
+
+         filtersInput.forEach(filter => filter.value = '')
+
+         updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1
+
+         const values = getAllValues(updatedArray, tableHeaders)
+
+         const dataLists = [...Array(5)].map((_, index) => {
+            return document.querySelector(`#datalist-${index + 1}`)
+         })
+
+         dataLists.forEach(datalist => {
+            for (let option of datalist.children)
+               option.value = ''
+
+            values.forEach(value => {
+               const option = document.createElement('option')
+               option.className = 'datalist-option'
+               option.value = value
+               datalist.appendChild(option)
+            })
+         })
+      })
+
+      filters.addEventListener('click', e => {
+         const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
+         const data = csvToArray(text)[0]
+         const updatedArray = getFilters(data, tableHeaders)
+         data.length = 0
+
+         if (e.target.id.substring(0, 6) === 'eraser') {
+            const targetId = e.target.id.slice(7)
+            const targetInputField = filters[targetId - 1]
+
+            targetInputField.value = ''
+
+            updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML =updatedArray.length - 1
+
+            const values = getAllValues(updatedArray, tableHeaders)
+
+            const dataLists = [...Array(5)].map((_, index) => {
+               return document.querySelector(`#datalist-${index + 1}`)
+            })
+
+            dataLists.forEach(datalist => {
+               for (let option of datalist.children)
+                  option.value = ''
+
+               values.forEach(value => {
+                  const option = document.createElement('option')
+                  option.className = 'datalist-option'
+                  option.value = value
+                  datalist.appendChild(option)
+               })
+            })
+         }
+      })
+   }
+
+   fileReader.readAsText(inputFileData)
 }
 
 file.onchange = () => {
@@ -113,6 +183,17 @@ file.onchange = () => {
 
    fileReader.readAsText(inputFileData)
 }
+
+filters.addEventListener('click', e => {
+   const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
+
+   if (e.target.id.substring(0, 6) === 'eraser') {
+      const targetId = e.target.id.slice(7)
+      const targetInputField = filters[targetId - 1]
+
+      targetInputField.value = ''
+   }
+})
 
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
@@ -233,7 +314,7 @@ inputForm.addEventListener("submit", (e) => {
                   /*---------------------------------------    PROGRAM ENTRY POINT    ----------------------------------------------*/
                   /*----------------------------------------------------------------------------------------------------------------*/
                   /*----------------------------------------------------------------------------------------------------------------*/
-
+                  
                   const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
                   const arrayFromCsv = csvToArray(text)
                   const data = arrayFromCsv[0]
@@ -347,16 +428,6 @@ inputForm.addEventListener("submit", (e) => {
 
                      if (clickOption === "Add to filter" || clickOption === 'Zum Filtern hinzufugen') {
                         const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-                        const valuesMap = new Map()
-                        const targetCellColumnIndex = e.target.id.slice(6)
-
-                        tableHeaders.forEach((header, index) => {
-                           valuesMap.set(`${index}`, `${header}`)
-                        }) 
-
-                        const keyOfValue = valuesMap.get(`${targetCellColumnIndex}`)
-
-                        console.log(keyOfValue)
 
                         const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
                         const targetCellValue = e.target.innerHTML
@@ -370,6 +441,12 @@ inputForm.addEventListener("submit", (e) => {
                            const targetInputField = filters[emptyFieldIndexes[0]]
                            targetInputField.value = targetCellValue
                         }
+
+                        const data = csvToArray(text)[0]
+                        const updatedArray = getFilters(data, tableHeaders)
+                        data.length = 0
+
+                        updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML =updatedArray.length - 1
                      }
 
                      else if (clickOption === "Show row" || clickOption == 'Reihe zeigen') {
