@@ -24,8 +24,10 @@ const rowsAmount = document.querySelector('#rows-amount')
 const leftDateInput = document.querySelector('#left-date-inp')
 const rightDateInput = document.querySelector('#right-date-inp')
 
+/*
 document.querySelector('#left-date-inp').value = '2022-05-02'
 document.querySelector('#right-date-inp').value = '2022-05-03'
+*/
 
 load.style.opacity = '0'
 loadingMessage.style.opacity = '0'
@@ -326,8 +328,6 @@ inputForm.addEventListener("submit", (e) => {
             })
 
             const initialArray = getFilters(data, tableHeaders)
-
-            console.log(initialArray)
 
             initialArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = initialArray.length - 1
 

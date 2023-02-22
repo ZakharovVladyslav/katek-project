@@ -16,3 +16,4 @@ export default function csvToArray(str, delimiter = ',') {
 
    return [arr, headers]
 }
+
