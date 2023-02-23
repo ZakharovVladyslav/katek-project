@@ -655,7 +655,6 @@ span {
 }
 
 .lds-roller {
-   opacity: 0;
 
    display: inline-block;
    transition: display ease 2s;

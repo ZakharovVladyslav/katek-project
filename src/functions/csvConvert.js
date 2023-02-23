@@ -1,9 +1,14 @@
 export default function csvToArray(str, delimiter = ',') {
 
-   const headers = str.slice(0, str.indexOf("\n")).split(delimiter)
-   const rows = str.slice(str.indexOf("\n") + 1).split("\n")
+   if (!str.includes('#') || (str.indexOf('ProdCode') - 2 !== str.indexOf('#')))
+      str = '#,' + str
 
-   headers.pop()
+   const filters = str.slice(0, str.indexOf('#'))
+   let headers = str.slice(str.indexOf('#') + 2, str.indexOf('\n')).split(delimiter)
+   const rows = str.slice(str.indexOf("\n")).split("\n")
+
+   if (headers.includes('#'))
+      headers.splice(headers.indexOf('#'), 1)
 
    const arr = rows.map((row) => {
       const values = row.split(delimiter)
@@ -14,6 +19,6 @@ export default function csvToArray(str, delimiter = ',') {
       return element
    })
 
-   return [arr, headers]
+   return [arr, headers, filters]
 }
 

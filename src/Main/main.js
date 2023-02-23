@@ -53,6 +53,10 @@ file.oninput = (e) => {
 
          const data = csvToArray(text)[0]
          const updatedArray = getFilters(data, tableHeaders)
+
+         if (data.length > 8000) 
+            emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
+
          data.length = 0
 
          const filtersInput = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
@@ -85,6 +89,11 @@ file.oninput = (e) => {
       filters.addEventListener('click', e => {
          const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
          const data = csvToArray(text)[0]
+
+         if (data.length > 8000) {
+            emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
+         }
+
          const updatedArray = getFilters(data, tableHeaders)
          data.length = 0
 
@@ -127,6 +136,13 @@ file.onchange = () => {
    fileReader.onload = (e) => {
       const text = e.target.result
       const data = csvToArray(text)[0]
+      
+      if (data.length > 8000) {
+         dataTable.innerHTML = ''
+
+         emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
+      }
+      
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
       const filteredArray = getFilters(data, tableHeaders)
@@ -200,88 +216,53 @@ filters.addEventListener('click', e => {
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
 
+   emptyMessage.innerHTML = ''
+
    dataTable.innerHTML = ''
    clickToggler.style.display = 'none'
    saveButton.style.display = 'none'
 
    const input = file.files[0]
 
-   if (file.value == '') {
-      emptyMessage.innerHTML = "Datei nicht ausgewählt"
+   const reader = new FileReader()
 
-      dataTable.innerHTML = ''
-   }
-   /*
-   else {
-      const filtersInput = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
-      filtersInput.push(document.querySelector('#left-date-inp'))
-      filtersInput.push(document.querySelector('#right-date-inp'))
+   reader.onload = e => {
+      if (file.value == '') {
+         emptyMessage.innerHTML = "Datei nicht ausgewählt"
 
-      const numOfEmptyFilters = filtersInput.filter(filter => filter.value !== '')
-
-      if (numOfEmptyFilters.length === 0) {
-         if (dataTable.innerHTML !== '') {
-            dataTable.innerHTML = ''
-
-            clickToggler.style.display = 'none'
-            saveButton.style.display = 'none'
-         }
-
-         emptyMessage.innerHTML = 'Filter erforderlich'
-
-         const suggestedVariantHTML = `
-         <div class='suggested-variant'>
-            <button type='button' class='fill-variant-button' id='suggested-variant-button'>Daten hinzufugen</button>
-         </div>
-         `
-
-         emptyMessage.insertAdjacentHTML('beforeend', suggestedVariantHTML)
-
-         const suggestionsButton = document.querySelector('#suggested-variant-button')
-
-         const [firstDate, secondDate] = filtersInput.slice(-2)
-
-         suggestionsButton.addEventListener('click', () => {
-            firstDate.value = '2022-05-02'
-            secondDate.value = '2022-05-03'
-         })
+         dataTable.innerHTML = ''
       }
+     
+      const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
+     
+      const text = e.target.result
+      const csvArray = csvToArray(text)
+      let data = csvArray[0]
+      const initialArray = getFilters(data, tableHeaders)
+      
+      if (initialArray.length > 8000) {
+         dataTable.innerHTML = ''
+
+         emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
+      }
+
       else {
-         const [firstDate, secondDate] = filtersInput.slice(-2)
-         const filtersInputs = filtersInput.map(filter => filter).splice(0, 5)
-         const numberOfUsedInputFields = filtersInputs.filter(inputField => inputField.value !== '').length
+         load.style.transition = '0.2s'
+         loadingMessage.style.transition = '0.2s'
+         load.style.opacity = '1'
+         loadingMessage.style.opacity = '1'
 
-         if ((filtersInput.at(-1).value === '' || filtersInput.at(-2).value === '')) {
-            dataTable.innerHTML = ''
-            emptyMessage.innerHTML = 'Sie mussen ein zweites Datum hinzufugen'
-            clickToggler.style.display = 'none'
-            saveButton.style.display = 'none'
-         }
-         else if (countDateRange(firstDate.value, secondDate.value) > 31 && numberOfUsedInputFields === 0) {
-            emptyMessage.innerHTML = 'Data range is too big. Please add some filters'
-            clickToggler.style.display = 'none'
-            saveButton.style.display = 'none'
-         }
-         */
-   else {
-      load.style.transition = '0.2s'
-      loadingMessage.style.transition = '0.2s'
-      load.style.opacity = '1'
-      loadingMessage.style.opacity = '1'
+         datePlusMinus()
 
-      datePlusMinus()
+         reloadTable.disabled = true
 
-      reloadTable.disabled = true
-
-      let table = document.createElement("table")
-      let thead = document.createElement("thead")
-      let tbody = document.createElement("tbody")
-      const reader = new FileReader()
+         let table = document.createElement("table")
+         let thead = document.createElement("thead")
+         let tbody = document.createElement("tbody")
 
 
-      const arrFromFileName = file.value.replaceAll('\\', ',').split(',')
+         const arrFromFileName = file.value.replaceAll('\\', ',').split(',')
 
-      reader.onload = function (e) {
          const text = e.target.result
 
          if (text.length === 0) {
@@ -320,14 +301,23 @@ inputForm.addEventListener("submit", (e) => {
             /*----------------------------------------------------------------------------------------------------------------*/
 
             const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-            const arrayFromCsv = csvToArray(text)
-            let data = arrayFromCsv[0]
 
             data = data.filter((obj, index) => {
                return !Object.values(obj).includes(undefined)
             })
 
             const initialArray = getFilters(data, tableHeaders)
+            const filtersFromCsvFile = csvArray[2]
+
+            const filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '')
+
+            console.log(filtersFromCsvFileSplitted)
+
+            const inputFields = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
+
+            filtersFromCsvFileSplitted.forEach((value, index) => {
+               inputFields[index].setAttribute('placeholder', value)
+            })
 
             initialArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = initialArray.length - 1
 
@@ -355,9 +345,20 @@ inputForm.addEventListener("submit", (e) => {
 
             const refinedData = []
 
+            let filtersValues = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`).value)
+            filtersValues = filtersValues.filter(value => value !== '')
+            
+            dataForCsv[0].unshift('#')
+
+            if (filtersValues.length > 0)
+               dataForCsv[0].unshift(filtersValues)
+            
+            dataForCsv[0] = dataForCsv[0].flat(Infinity)
+
             dataForCsv.forEach(obj => {
                refinedData.push(Object.values(obj))
             })
+
 
             let csvContent = ''
             refinedData.forEach(row => {
@@ -533,6 +534,7 @@ inputForm.addEventListener("submit", (e) => {
             tableHeaders.length = 0
          }
       }
-      reader.readAsText(input)
    }
+
+   reader.readAsText(input)
 })
