@@ -123,6 +123,8 @@
 
                <button type="button" id="reset">Zurucksetzen</button>
 
+               <button type="button" id="full-table-button" class="full-table-button">Full table</button>
+
                <div class="summary-row-toggler-il">
                   <label for="summary-row-toggler-input" id="summary-row-toggler-label">Summe</label>
                   <input type="checkbox" id="summary-row-toggler-input" checked="false">
@@ -134,21 +136,30 @@
 
    <p id="empty-message"></p>
 
+   <section id="full-table-section" class="full-table-section">
+      <div id="index-arrows" class="index-arrows" style="opacity: 0;">
+         <button type="button" id="left-arrow" class="left-arrow"><i class="fa-solid fa-chevron-left"></i></button>
+         <button type="button" id="right-arrow" class="right-arrow"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+      
+      <table id="full-table" class="full-table"></table>
+   </section>
+
    <table id="summary-table"></table>
 
    <p id="mode"></p>
 
    <div class="over-tables">
-      <select id="click-toggler">
+      <select id="click-toggler" style="display: none;">
          <option id="opt2" class="ct-option">Zum Filtern hinzufugen</option>
          <option id="opt1" class="ct-option">Reihe zeigen</option>
       </select>
 
-      <a id="save" class="save" type="download"><i class="fa-solid fa-download"></i></a>
+      <a id="save" class="save" type="download" style="display: none;"><i class="fa-solid fa-download"></i></a>
    </div>
 
-   <p class='loading-table' id="loading-table">Table is loading...</p>
-   <div id='load' class="lds-roller">
+   <p class='loading-table' id="loading-table" style="opacity: 0;">Table is loading...</p>
+   <div id='load' class="lds-roller" style="opacity: 0;">
       <div></div>
       <div></div>
       <div></div>
@@ -158,6 +169,7 @@
       <div></div>
       <div></div>
    </div>
+   
    <table id="data-table"></table>
 
    <script>

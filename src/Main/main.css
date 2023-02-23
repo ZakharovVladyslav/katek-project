@@ -269,7 +269,7 @@ button[type="button"]:hover {
 }
 
 #submit-button {
-   margin-bottom: -40px;
+   margin-bottom: -30px;
 }
 
 .submit-section button {
@@ -316,7 +316,7 @@ button[type="button"]:hover {
 .summary-row-toggler-il {
    padding: 7px 10px;
 
-   margin-top: -50px;
+   margin-top: -70px;
 }
 
 .summary-row-toggler-il label {
@@ -864,6 +864,53 @@ span {
 }
 
 /*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+.index-arrows {
+   max-width: fit-content;
+
+   margin: auto;
+   margin-right: 600px;
+   margin-bottom: 20px;
+}
+
+.index-arrows button {
+   font-size: 15px;
+}
+
+.full-table {
+   margin: auto;
+}
+
+.full-table thead tr th {
+   padding: 10px 10px;
+
+   color: rgb(255, 255, 255);
+   background-color: #00788b;
+}
+
+.full-table tbody tr td {
+   padding: 12px 15px;
+
+   color: rgb(0, 0, 0);
+}
+
+.full-table tbody tr td:hover {
+   background-color: #6f6e6e;
+
+   cursor: pointer;
+}
+
+.full-table tbody tr:nth-child(odd) {
+   background-color: #a2a2a2;
+}
+
+.full-table tbody tr:nth-child(even) {
+   background-color: #cacaca;
+}
+
+/*-------------------------------------------------------------------------------------*/
+/*--------------------------------------FULL TABLE-------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
 @media only screen and (max-width: 1500px) {

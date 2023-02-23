@@ -1,5 +1,6 @@
 'use strict'
 
+import { showFullTable } from '../Functions/showFullTable.js'
 import csvToArray from '../Functions/csvConvert.js'
 import getFilters from '../Functions/getFilters.js'
 import datePlusMinus from '../Functions/datePlusMinus.js'
@@ -21,18 +22,20 @@ const saveButton = document.querySelector('#save')
 const load = document.querySelector('#load')
 const loadingMessage = document.querySelector('#loading-table')
 const rowsAmount = document.querySelector('#rows-amount')
-const leftDateInput = document.querySelector('#left-date-inp')
-const rightDateInput = document.querySelector('#right-date-inp')
+const fullTable = document.querySelector('#full-table')
+const arrows = document.querySelector('#index-arrows')
 
-/*
-document.querySelector('#left-date-inp').value = '2022-05-02'
-document.querySelector('#right-date-inp').value = '2022-05-03'
-*/
+const fullTableButton = document.querySelector('#full-table-button')
+const fullTableSection = document.querySelector('#full-table-section')
 
+fullTableSection.style.opacity = '0'
 load.style.opacity = '0'
 loadingMessage.style.opacity = '0'
 clickToggler.style.display = 'none'
 saveButton.style.display = 'none'
+
+document.querySelector('#left-date-inp').value = '2022-05-02'
+document.querySelector('#right-date-inp').value = '2022-05-03'
 
 file.oninput = (e) => {
    e.preventDefault()
@@ -54,8 +57,8 @@ file.oninput = (e) => {
          const data = csvToArray(text)[0]
          const updatedArray = getFilters(data, tableHeaders)
 
-         if (data.length > 8000) 
-            emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
+         if (data.length > 8000)
+            emptyMessage.innerHTML = '1Table is too big. Please add dates or filters'
 
          data.length = 0
 
@@ -89,10 +92,6 @@ file.oninput = (e) => {
       filters.addEventListener('click', e => {
          const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
          const data = csvToArray(text)[0]
-
-         if (data.length > 8000) {
-            emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
-         }
 
          const updatedArray = getFilters(data, tableHeaders)
          data.length = 0
@@ -136,16 +135,14 @@ file.onchange = () => {
    fileReader.onload = (e) => {
       const text = e.target.result
       const data = csvToArray(text)[0]
-      
-      if (data.length > 8000) {
+      const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
+      const filteredArray = getFilters(data, tableHeaders)
+
+      if (filteredArray.length > 8000) {
          dataTable.innerHTML = ''
 
-         emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
+         emptyMessage.innerHTML = '3Table is too big. Please add dates or filters'
       }
-      
-      const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-
-      const filteredArray = getFilters(data, tableHeaders)
 
       const values = getAllValues(filteredArray, tableHeaders)
 
@@ -216,6 +213,13 @@ filters.addEventListener('click', e => {
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
 
+   load.style.opacity = '1'
+   loadingMessage.style.opacity = '1'
+   load.style.transition = '0.2s'
+   loadingMessage.style.transition = '0.2s'
+
+   fullTable.innerHTML = ''
+   arrows.style.opacity = '0'
    emptyMessage.innerHTML = ''
 
    dataTable.innerHTML = ''
@@ -232,25 +236,26 @@ inputForm.addEventListener("submit", (e) => {
 
          dataTable.innerHTML = ''
       }
-     
+
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-     
+
       const text = e.target.result
       const csvArray = csvToArray(text)
       let data = csvArray[0]
       const initialArray = getFilters(data, tableHeaders)
-      
+
       if (initialArray.length > 8000) {
          dataTable.innerHTML = ''
 
-         emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
+         emptyMessage.innerHTML = '4Table is too big. Please add dates or filters'
       }
 
       else {
-         load.style.transition = '0.2s'
-         loadingMessage.style.transition = '0.2s'
+
          load.style.opacity = '1'
          loadingMessage.style.opacity = '1'
+         load.style.transition = '0.2s'
+         loadingMessage.style.transition = '0.2s'
 
          datePlusMinus()
 
@@ -280,6 +285,10 @@ inputForm.addEventListener("submit", (e) => {
             if (emptyMessage.value != 0)
                emptyMessage.innerHTML = ''
 
+            load.style.transition = '0.2s'
+            loadingMessage.style.transition = '0.2s'
+            load.style.opacity = '1'
+            loadingMessage.style.opacity = '1'
             clickToggler.style.display = 'block'
             saveButton.style.display = 'block'
 
@@ -310,8 +319,6 @@ inputForm.addEventListener("submit", (e) => {
             const filtersFromCsvFile = csvArray[2]
 
             const filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '')
-
-            console.log(filtersFromCsvFileSplitted)
 
             const inputFields = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
 
@@ -347,12 +354,12 @@ inputForm.addEventListener("submit", (e) => {
 
             let filtersValues = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`).value)
             filtersValues = filtersValues.filter(value => value !== '')
-            
+
             dataForCsv[0].unshift('#')
 
             if (filtersValues.length > 0)
                dataForCsv[0].unshift(filtersValues)
-            
+
             dataForCsv[0] = dataForCsv[0].flat(Infinity)
 
             dataForCsv.forEach(obj => {
@@ -428,6 +435,8 @@ inputForm.addEventListener("submit", (e) => {
             table.appendChild(thead)
             table.appendChild(tbody)
             dataTable.appendChild(table)
+
+            showFullTable(initialArray)
 
             cellSelect.onchange = () => {
                clickOption = cellSelect.options[cellSelect.selectedIndex].value
