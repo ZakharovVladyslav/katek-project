@@ -24,6 +24,8 @@ const loadingMessage = document.querySelector('#loading-table')
 const rowsAmount = document.querySelector('#rows-amount')
 const fullTable = document.querySelector('#full-table')
 const arrows = document.querySelector('#index-arrows')
+const saveFiltersOption = document.querySelector('#save-filter-option')
+const saveFiltersOptionLabel = document.querySelector('#save-filter-option-label')
 
 const fullTableButton = document.querySelector('#full-table-button')
 const fullTableSection = document.querySelector('#full-table-section')
@@ -31,6 +33,8 @@ const fullTableSection = document.querySelector('#full-table-section')
 fullTableSection.style.opacity = '0'
 load.style.opacity = '0'
 loadingMessage.style.opacity = '0'
+saveFiltersOption.style.opacity = '0'
+saveFiltersOptionLabel.style.opacity = '0'
 clickToggler.style.display = 'none'
 saveButton.style.display = 'none'
 
@@ -58,7 +62,7 @@ file.oninput = (e) => {
          const updatedArray = getFilters(data, tableHeaders)
 
          if (data.length > 8000)
-            emptyMessage.innerHTML = '1Table is too big. Please add dates or filters'
+            emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
 
          data.length = 0
 
@@ -215,8 +219,12 @@ inputForm.addEventListener("submit", (e) => {
 
    load.style.opacity = '1'
    loadingMessage.style.opacity = '1'
+   saveFiltersOption.style.opacity = '1'
+   saveFiltersOptionLabel.style.opacity = '1'
    load.style.transition = '0.2s'
    loadingMessage.style.transition = '0.2s'
+   saveFiltersOption.style.transition = '0.2s'
+   saveFiltersOptionLabel.style.transition = '0.2s'
 
    fullTable.innerHTML = ''
    arrows.style.opacity = '0'
@@ -247,7 +255,7 @@ inputForm.addEventListener("submit", (e) => {
       if (initialArray.length > 8000) {
          dataTable.innerHTML = ''
 
-         emptyMessage.innerHTML = '4Table is too big. Please add dates or filters'
+         emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
       }
 
       else {
@@ -348,36 +356,41 @@ inputForm.addEventListener("submit", (e) => {
 
             const dataForCsv = getFilters(data, csvToArray(text)[1])
 
+            saveButton.onclick = () => {
+               const refinedData = []
+               let filtersValues
+
+               if (saveFiltersOption.checked === true) {
+                  filtersValues = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`).value)
+                  filtersValues = filtersValues.filter(value => value !== '')
+
+                  dataForCsv[0].unshift('#')
+                  if (filtersValues.length > 0)
+                     dataForCsv[0].unshift(filtersValues)
+
+                  dataForCsv[0] = dataForCsv[0].flat(Infinity)
+
+               }
+
+               dataForCsv.forEach(obj => {
+                  refinedData.push(Object.values(obj))
+               })
+
+               let csvContent = ''
+               refinedData.forEach(row => {
+                  csvContent += row.join(',') + '\n'
+               })
+
+               const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8,' })
+               const objUrl = URL.createObjectURL(blob)
+               saveButton.setAttribute('href', objUrl)
+
+               const dateNow = new Date()
+               saveButton.setAttribute('download', `Filtered-table-${dateNow.getDate()}-${dateNow.getMonth()}-${dateNow.getFullYear()}-${dateNow.getHours()}-${dateNow.getMinutes()}-${dateNow.getSeconds()}`)
+
+            }
+
             data.length = 0
-
-            const refinedData = []
-
-            let filtersValues = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`).value)
-            filtersValues = filtersValues.filter(value => value !== '')
-
-            dataForCsv[0].unshift('#')
-
-            if (filtersValues.length > 0)
-               dataForCsv[0].unshift(filtersValues)
-
-            dataForCsv[0] = dataForCsv[0].flat(Infinity)
-
-            dataForCsv.forEach(obj => {
-               refinedData.push(Object.values(obj))
-            })
-
-
-            let csvContent = ''
-            refinedData.forEach(row => {
-               csvContent += row.join(',') + '\n'
-            })
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8,' })
-            const objUrl = URL.createObjectURL(blob)
-            saveButton.setAttribute('href', objUrl)
-
-            const dateNow = new Date()
-            saveButton.setAttribute('download', `Filtered-table-${dateNow.getDate()}-${dateNow.getMonth()}-${dateNow.getFullYear()}-${dateNow.getHours()}-${dateNow.getMinutes()}`)
 
             summaryRowToggle(initialArray)
 
@@ -435,6 +448,7 @@ inputForm.addEventListener("submit", (e) => {
             table.appendChild(thead)
             table.appendChild(tbody)
             dataTable.appendChild(table)
+
 
             showFullTable(initialArray)
 
