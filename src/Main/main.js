@@ -26,6 +26,7 @@ const fullTable = document.querySelector('#full-table')
 const arrows = document.querySelector('#index-arrows')
 const saveFiltersOption = document.querySelector('#save-filter-option')
 const saveFiltersOptionLabel = document.querySelector('#save-filter-option-label')
+const saveDiv = document.querySelector('#save-div')
 
 const fullTableButton = document.querySelector('#full-table-button')
 const fullTableSection = document.querySelector('#full-table-section')
@@ -33,13 +34,14 @@ const fullTableSection = document.querySelector('#full-table-section')
 fullTableSection.style.opacity = '0'
 load.style.opacity = '0'
 loadingMessage.style.opacity = '0'
-saveFiltersOption.style.opacity = '0'
-saveFiltersOptionLabel.style.opacity = '0'
+saveDiv.style.opacity = '0'
 clickToggler.style.display = 'none'
 saveButton.style.display = 'none'
 
+/*
 document.querySelector('#left-date-inp').value = '2022-05-02'
 document.querySelector('#right-date-inp').value = '2022-05-03'
+*/
 
 file.oninput = (e) => {
    e.preventDefault()
@@ -54,6 +56,7 @@ file.oninput = (e) => {
    fileReader.onload = (e) => {
       const text = e.target.result
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
+
 
       reset.addEventListener('click', (e) => {
          e.preventDefault()
@@ -133,6 +136,8 @@ file.oninput = (e) => {
 }
 
 file.onchange = () => {
+   datePlusMinus()
+
    const fileReader = new FileReader()
    const inputFileData = file.files[0]
 
@@ -216,15 +221,13 @@ filters.addEventListener('click', e => {
 
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
-
+   
+   saveDiv.style.opacity = '0'
    load.style.opacity = '1'
    loadingMessage.style.opacity = '1'
-   saveFiltersOption.style.opacity = '1'
-   saveFiltersOptionLabel.style.opacity = '1'
    load.style.transition = '0.2s'
    loadingMessage.style.transition = '0.2s'
-   saveFiltersOption.style.transition = '0.2s'
-   saveFiltersOptionLabel.style.transition = '0.2s'
+   saveDiv.style.transition = '0.2s'
 
    fullTable.innerHTML = ''
    arrows.style.opacity = '0'
@@ -449,6 +452,8 @@ inputForm.addEventListener("submit", (e) => {
             table.appendChild(tbody)
             dataTable.appendChild(table)
 
+            saveDiv.style.opacity = '1'
+            saveDiv.style.transition = '0.2s'
 
             showFullTable(initialArray)
 

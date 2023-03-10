@@ -3,7 +3,8 @@
 
 <head>
    <title>Katek GmbH</title>
-   <link rel="stylesheet" href="./main.css">
+   <link rel="stylesheet" href="../../styles/main.css">
+   <link rel="stylesheet" href="../../styles/media.css">
 
    <script type="module" src="./main.js" defer></script>
    <link rel="icon" type="image/x-icon" href="../../assets/katek-favicon.ico">
@@ -134,6 +135,8 @@
       </form><br>
    </section>
 
+   <table id="summary-table"></table>
+
    <p id="empty-message"></p>
 
    <section id="full-table-section" class="full-table-section">
@@ -145,8 +148,6 @@
       <table id="full-table" class="full-table"></table>
    </section>
 
-   <table id="summary-table"></table>
-
    <p id="mode"></p>
 
    <div class="over-tables">
@@ -155,7 +156,7 @@
          <option id="opt1" class="ct-option">Reihe zeigen</option>
       </select>
 
-      <div>
+      <div id="save-div">
          <label id="save-filter-option-label" for="save-filter-option">
             Save filters
             <input type="checkbox" id='save-filter-option'>
@@ -180,7 +181,6 @@
 
    <script>
       const option = document.getElementById('chooseLangId')
-
       const fileLabel = document.querySelector('#fc')
       const leftDateLabel = document.querySelector('#left-date-label')
       const rightDateLabel = document.querySelector('#right-date-label')

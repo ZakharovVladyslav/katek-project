@@ -32,6 +32,13 @@ export default function summaryRowToggle(inputArray) {
                     if (values[i][j] !== undefined && values[i][j] != 0)
                         zeros[j] += parseFloat(values[i][j])
 
+            const countPass = zeros[5]
+            const countFail = zeros[6]
+
+            const FPY = `${parseFloat(((countPass) / (countPass + countFail)) * 100).toPrecision(5)}%`
+
+            zeros[4] = FPY
+
             const keysRow = document.createElement('tr')
             keys.forEach(key => {
                 let keyHeader = document.createElement('th')
@@ -49,6 +56,8 @@ export default function summaryRowToggle(inputArray) {
                     valueCell.innerHTML = parseInt(value)
                 else if (value === parseFloat(value))
                     valueCell.innerHTML = value.toFixed(2)
+                else if (typeof(value) === 'string')
+                    valueCell.innerHTML = value
 
                 valuesRow.appendChild(valueCell)
             })
