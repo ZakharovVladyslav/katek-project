@@ -75,7 +75,7 @@ file.oninput = (e) => {
 
          filtersInput.forEach(filter => filter.value = '')
 
-         updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 3
+         updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1
 
          const values = getAllValues(updatedArray, tableHeaders)
 
@@ -181,6 +181,7 @@ file.onchange = () => {
 
          targetField.onchange = () => {
             const arr = getFilters(data, tableHeaders)
+            console.log(arr)
 
             const values = getAllValues(arr, tableHeaders)
 
@@ -319,6 +320,51 @@ inputForm.addEventListener("submit", (e) => {
             /*---------------------------------------    PROGRAM ENTRY POINT    ----------------------------------------------*/
             /*----------------------------------------------------------------------------------------------------------------*/
             /*----------------------------------------------------------------------------------------------------------------*/
+
+            reset.addEventListener('click', (e) => {
+               e.preventDefault()
+               const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
+
+               const csvArray = csvToArray(text)
+               let data = csvArray[0]
+
+               console.log(tableHeaders)
+               const updatedArray = getFilters(data, tableHeaders)
+               const poppedUpdatedArray = updatedArray.pop()
+      
+               if (data.length > 8000)
+                  emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
+      
+               data.length = 0
+      
+               const filtersInput = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
+               filtersInput.push(document.querySelector('#left-date-inp'))
+               filtersInput.push(document.querySelector('#right-date-inp'))
+      
+               filtersInput.forEach(filter => filter.value = '')
+      
+               updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 2
+      
+               console.log(updatedArray)
+               console.log(tableHeaders)
+               const values = getAllValues(updatedArray, tableHeaders)
+      
+               const dataLists = [...Array(5)].map((_, index) => {
+                  return document.querySelector(`#datalist-${index + 1}`)
+               })
+      
+               dataLists.forEach(datalist => {
+                  for (let option of datalist.children)
+                     option.value = ''
+      
+                  values.forEach(value => {
+                     const option = document.createElement('option')
+                     option.className = 'datalist-option'
+                     option.value = value
+                     datalist.appendChild(option)
+                  })
+               })
+            })
 
             const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 

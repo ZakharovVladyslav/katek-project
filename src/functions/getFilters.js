@@ -52,7 +52,7 @@ export default function getFilters(inputData, headers) {
     for (let i = 0; i < 5; i++)
         inputFields.push(document.querySelector(`#filter-input-${i + 1}`))
 
-    inputFields = inputFields.filter(field => field.value !== '')    
+    inputFields = inputFields.filter(field => field.value !== '') 
 
     const values = inputFields.map(filter => {
         if (filter.value !== '')

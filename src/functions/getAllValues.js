@@ -1,4 +1,5 @@
 export const getAllValues = (array, headers) => {
+
       const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
       const resultArray = []
       const timeKeys = ['tLogIn', 'tLogOut', 'tLastAcc']
@@ -12,17 +13,6 @@ export const getAllValues = (array, headers) => {
 
       mapHeaders.forEach(header => {
             valuesMap.set(`${header}`, [`---- ${header} ----`])
-      })
-      
-      mapHeaders.forEach(header => {
-            const targetArray = valuesMap.get(`${header}`)
-
-            busyInputs.forEach(value => {
-                  if (targetArray.includes(value)) {
-                        console.log('deletion')
-                        valuesMap.delete(`${header}`)
-                  }
-            })
       })
 
       array.forEach(obj => {
