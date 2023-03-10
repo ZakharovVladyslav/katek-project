@@ -441,7 +441,11 @@ inputForm.addEventListener("submit", (e) => {
                   let table_data = document.createElement('td')
 
                   table_data.setAttribute('id', `cell ${i}${j}`)
-                  table_data.innerHTML = initialArray[i][header]
+
+                  if (header === 'FPY')
+                     table_data.innerHTML = `${initialArray[i][header]}%`
+                  else
+                     table_data.innerHTML = initialArray[i][header]
 
                   body_row.appendChild(table_data)
                })

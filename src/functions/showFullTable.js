@@ -59,7 +59,11 @@ export const showFullTable = (inputArray) => {
 
                         keys[index].forEach(key => {
                               const dataRowCell = document.createElement('td')
-                              dataRowCell.innerHTML = obj[key]
+                              
+                              if (key === 'FPY')
+                                    dataRowCell.innerHTML = `${obj[key]}%`
+                              else
+                                    dataRowCell.innerHTML = obj[key]
                               
                               dataRowCell.style.minHeight = '30px'
                               dataRowCell.style.minWidth = '30px'
