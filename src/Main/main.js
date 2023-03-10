@@ -75,7 +75,7 @@ file.oninput = (e) => {
 
          filtersInput.forEach(filter => filter.value = '')
 
-         updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1
+         updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 3
 
          const values = getAllValues(updatedArray, tableHeaders)
 
@@ -109,7 +109,7 @@ file.oninput = (e) => {
 
             targetInputField.value = ''
 
-            updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1
+            updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 3
 
             const values = getAllValues(updatedArray, tableHeaders)
 
@@ -171,7 +171,7 @@ file.onchange = () => {
          })
       })
 
-      rowsAmount.innerHTML = filteredArray.length - 1
+      rowsAmount.innerHTML = filteredArray.length - 3
 
       filters.onclick = (e) => {
          const targetId = e.target.id
