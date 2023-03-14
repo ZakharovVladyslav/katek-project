@@ -27,6 +27,7 @@ const arrows = document.querySelector('#index-arrows')
 const saveFiltersOption = document.querySelector('#save-filter-option')
 const saveFiltersOptionLabel = document.querySelector('#save-filter-option-label')
 const saveDiv = document.querySelector('#save-div')
+const delimiterSelection = document.querySelector('#delimiter-selection')
 
 const fullTableButton = document.querySelector('#full-table-button')
 const fullTableSection = document.querySelector('#full-table-section')
@@ -61,7 +62,9 @@ file.oninput = (e) => {
       reset.addEventListener('click', (e) => {
          e.preventDefault()
 
-         const data = csvToArray(text)[0]
+         const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
+
+         const data = csvToArray(text, delimiterOption)[0]
          const updatedArray = getFilters(data, tableHeaders)
 
          if (data.length > 8000)
@@ -98,7 +101,9 @@ file.oninput = (e) => {
 
       filters.addEventListener('click', e => {
          const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
-         const data = csvToArray(text)[0]
+
+         const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
+         const data = csvToArray(text, delimiterOption)[0]
 
          const updatedArray = getFilters(data, tableHeaders)
          data.length = 0
@@ -143,14 +148,18 @@ file.onchange = () => {
 
    fileReader.onload = (e) => {
       const text = e.target.result
-      const data = csvToArray(text)[0]
+
+      const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
+      const data = csvToArray(text, delimiterOption)[0]
+
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
       const filteredArray = getFilters(data, tableHeaders)
+      console.log(filteredArray)
 
       if (filteredArray.length > 8000) {
          dataTable.innerHTML = ''
 
-         emptyMessage.innerHTML = '3Table is too big. Please add dates or filters'
+         emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
       }
 
       const values = getAllValues(filteredArray, tableHeaders)
@@ -243,6 +252,7 @@ inputForm.addEventListener("submit", (e) => {
    const reader = new FileReader()
 
    reader.onload = e => {
+
       if (file.value == '') {
          emptyMessage.innerHTML = "Datei nicht ausgewählt"
 
@@ -252,7 +262,10 @@ inputForm.addEventListener("submit", (e) => {
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
       const text = e.target.result
-      const csvArray = csvToArray(text)
+
+      const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
+      const csvArray = csvToArray(text, delimiterOption)
+
       let data = csvArray[0]
       const initialArray = getFilters(data, tableHeaders)
 
@@ -324,11 +337,14 @@ inputForm.addEventListener("submit", (e) => {
             reset.addEventListener('click', (e) => {
                e.preventDefault()
                const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-
-               const csvArray = csvToArray(text)
+               
+               const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
+               const csvArray = csvToArray(text, delimiterOption)
+               
                let data = csvArray[0]
 
-               console.log(tableHeaders)
+               console.log(data)
+
                const updatedArray = getFilters(data, tableHeaders)
                const poppedUpdatedArray = updatedArray.pop()
       
@@ -344,9 +360,6 @@ inputForm.addEventListener("submit", (e) => {
                filtersInput.forEach(filter => filter.value = '')
       
                updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 2
-      
-               console.log(updatedArray)
-               console.log(tableHeaders)
                const values = getAllValues(updatedArray, tableHeaders)
       
                const dataLists = [...Array(5)].map((_, index) => {
@@ -403,7 +416,8 @@ inputForm.addEventListener("submit", (e) => {
                })
             })
 
-            const dataForCsv = getFilters(data, csvToArray(text)[1])
+            const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
+            const dataForCsv = getFilters(data, csvToArray(text, delimiterOption)[1])
 
             saveButton.onclick = () => {
                const refinedData = []
@@ -530,7 +544,9 @@ inputForm.addEventListener("submit", (e) => {
                      targetInputField.value = targetCellValue
                   }
 
-                  const data = csvToArray(text)[0]
+                  const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
+                  const data = csvToArray(text, delimiterOption)[0]
+
                   const updatedArray = getFilters(data, tableHeaders)
                   data.length = 0
 
@@ -541,7 +557,10 @@ inputForm.addEventListener("submit", (e) => {
                   reloadTable.disabled = false
 
                   const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-                  const data = [...csvToArray(text)[0]]
+                  
+                  const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
+                  const data = [...csvToArray(text, delimiterOption)[0]]
+                  
                   const initialArray = getFilters(data, headers)
                   data.length = 0
 

@@ -141,6 +141,27 @@ article span {
    width: auto;
 }
 
+#input-section #delimiter-selection {
+   background-color: transparent;
+
+   border: 1px solid #6f6e6e;
+   border-radius: 4px;
+   padding: 6.3px 10px;
+}
+
+#input-section #delimiter-selection:hover {
+   background-color: #4e4e4e;
+   cursor: pointer;
+}
+
+#input-section #delimiter-selection option {
+   background-color: #313038; 
+}
+
+#input-section #delimiter-selection-option {
+   cursor: pointer;
+}
+
 #input-section input[type="file"] {
    display: none;
 }
@@ -161,7 +182,7 @@ article span {
    transition: background-color ease 0.1s;
 }
 
-#input-section select {
+#input-section #chooseLangId {
    background-color: transparent;
    transition: background-color ease 0.1s;
 
@@ -179,13 +200,13 @@ article span {
    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-#input-section select:hover {
+#input-section #chooseLangId:hover {
    cursor: pointer;
    background-color: #4e4e4e;
    transition: background-color ease 0.1s;
 }
 
-#input-section select:focus {
+#input-section #chooseLangId:focus {
    outline: none;
 }
 

@@ -25,6 +25,12 @@
 
          <section id="input-section">
             <div class="file-input-section">
+               
+               <select id="delimiter-selection">
+                  <option id="delimiter-selection-option">,</option>
+                  <option id="delimiter-selection-option">;</option>
+               </select>
+
                <label id="fc" for="file-choose">Datei wählen</label>
                <input type="file" id="file-choose"><br>
                <p id="chosen-file"></p>
@@ -156,7 +162,7 @@
          <option id="opt1" class="ct-option">Reihe zeigen</option>
       </select>
 
-      <div id="save-div">
+      <div id="save-div" style="opacity: 0;">
          <label id="save-filter-option-label" for="save-filter-option">
             Save filters
             <input type="checkbox" id='save-filter-option'>
