@@ -16,7 +16,7 @@ body {
    margin: 0;
 
    max-width: 1920px;
-   background-color: #313038;
+   background-color: #333236;
 }
 
 html {
@@ -24,7 +24,7 @@ html {
 }
 
 .main {
-   background-color: #313038;
+   background-color: #333236;
 
    min-width: 100%;
 
@@ -97,7 +97,7 @@ article span {
 }
 
 #click-toggler .ct-option {
-   background-color: #313038;
+   background-color: #282a2b;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -135,7 +135,7 @@ article span {
    min-width: 700px;
 
    display: grid;
-   grid-template-columns: 1fr 340px 70px;
+   grid-template-columns: 1fr 500px 100px;
 
    margin: 20px 20px 20px 0;
    width: auto;
@@ -155,7 +155,7 @@ article span {
 }
 
 #input-section #delimiter-selection option {
-   background-color: #313038; 
+   background-color: #282a2b; 
 }
 
 #input-section #delimiter-selection-option {
@@ -211,7 +211,7 @@ article span {
 }
 
 #input-section #opt {
-   background-color: #313038;
+   background-color: #282a2b;
 }
 
 /* ----------------------------------------------------------------------------------------------------------- */
@@ -256,8 +256,14 @@ button[type="button"]:hover {
 /* ROW COUNTER PART --------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------------------------- */
 
-#row-counter-label {
-   min-width: 350px;
+.row-counter-div {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   gap: 10px;
+
+   max-height: 25px;
 }
 
 #row-limiter {
@@ -555,7 +561,7 @@ span {
 /* -------------------------------------------------------------------------------------------*/
 
 #option {
-   background-color: #313038;
+   background-color: #282a2b;
 }
 
 #sum-file {
@@ -656,8 +662,26 @@ span {
    align-items: center;
 }
 
+#save-filter-option {
+   margin-left: 15px;
+}
+
 .over-tables div input {
    transform: scale(1.6);
+}
+
+.over-tables .shown-rows-counter-div {
+   margin-right: 50em;
+
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   gap: 10px;
+}
+
+.over-tables .shown-rows-counter-div shown-rows-counte {
+   margin-left: 15px;
 }
 
 .over-tables .save {

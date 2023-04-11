@@ -10,32 +10,48 @@ import { getAllValues } from '../Functions/getAllValues.js'
 
 const inputForm = document.querySelector('#input-form')
 const file = document.querySelector('#file-choose')
+
 const dataTable = document.querySelector('#data-table')
+
 const emptyMessage = document.querySelector('#empty-message')
+
 const rowLimiter = document.querySelector('#row-limiter')
+
 const chosenFile = document.querySelector('#chosen-file')
 const reloadTable = document.querySelector('#reload-table')
 const cellSelect = document.querySelector('#click-toggler')
+
 const filters = document.querySelector('#filters')
+
 const clickToggler = document.querySelector('#click-toggler')
 const saveButton = document.querySelector('#save')
 const load = document.querySelector('#load')
 const loadingMessage = document.querySelector('#loading-table')
+
 const rowsAmount = document.querySelector('#rows-amount')
+
 const fullTable = document.querySelector('#full-table')
 const arrows = document.querySelector('#index-arrows')
+
 const saveFiltersOption = document.querySelector('#save-filter-option')
-const saveFiltersOptionLabel = document.querySelector('#save-filter-option-label')
 const saveDiv = document.querySelector('#save-div')
+
 const delimiterSelection = document.querySelector('#delimiter-selection')
 
-const fullTableButton = document.querySelector('#full-table-button')
+const realRowsNumber = document.querySelector('#real-rows-number')
+const shownRowsCounter = document.querySelector('#shown-rows-counter')
+const shownRowsCounterDiv = document.querySelector('.shown-rows-counter-div')
 const fullTableSection = document.querySelector('#full-table-section')
+
+const langOption = document.querySelector('#chooseLangId')
 
 fullTableSection.style.opacity = '0'
 load.style.opacity = '0'
 loadingMessage.style.opacity = '0'
 saveDiv.style.opacity = '0'
+realRowsNumber.style.opacity = '0'
+shownRowsCounter.style.opacity = '0'
+shownRowsCounterDiv.style.opacity = '0'
 clickToggler.style.display = 'none'
 saveButton.style.display = 'none'
 
@@ -154,7 +170,6 @@ file.onchange = () => {
 
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
       const filteredArray = getFilters(data, tableHeaders)
-      console.log(filteredArray)
 
       if (filteredArray.length > 8000) {
          dataTable.innerHTML = ''
@@ -190,7 +205,6 @@ file.onchange = () => {
 
          targetField.onchange = () => {
             const arr = getFilters(data, tableHeaders)
-            console.log(arr)
 
             const values = getAllValues(arr, tableHeaders)
 
@@ -233,6 +247,9 @@ inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
    
    saveDiv.style.opacity = '0'
+   realRowsNumber.style.opacity = '0'
+   shownRowsCounter.style.opacity = '0'
+   shownRowsCounterDiv.style.opacity = '0'
    load.style.opacity = '1'
    loadingMessage.style.opacity = '1'
    load.style.transition = '0.2s'
@@ -314,6 +331,9 @@ inputForm.addEventListener("submit", (e) => {
             loadingMessage.style.transition = '0.2s'
             load.style.opacity = '1'
             loadingMessage.style.opacity = '1'
+            realRowsNumber.style.opacity = '1'
+            shownRowsCounter.style.opacity = '1'
+            shownRowsCounterDiv.style.opacity = '1'
             clickToggler.style.display = 'block'
             saveButton.style.display = 'block'
 
@@ -342,8 +362,6 @@ inputForm.addEventListener("submit", (e) => {
                const csvArray = csvToArray(text, delimiterOption)
                
                let data = csvArray[0]
-
-               console.log(data)
 
                const updatedArray = getFilters(data, tableHeaders)
                const poppedUpdatedArray = updatedArray.pop()
@@ -482,9 +500,12 @@ inputForm.addEventListener("submit", (e) => {
             load.style.opacity = '0'
             loadingMessage.style.opacity = '0'
 
-            if (initialArray.length != +rowLimiter.value)
-               rowLimiter.value = `${initialArray.length - 1}`
+            if (rowLimiter.value !== '') 
+               initialArray.length = `${+rowLimiter.value + 1}`
 
+            shownRowsCounter.innerHTML = initialArray.length - 1
+
+               
             let hrow = document.createElement('tr')
             for (let i = 0; i < 16; i++) {
                let theader = document.createElement('th')
@@ -528,7 +549,7 @@ inputForm.addEventListener("submit", (e) => {
             table.addEventListener('click', e => {
                const clickOption = cellSelect.options[cellSelect.selectedIndex].value
 
-               if (clickOption === "Add to filter" || clickOption === 'Zum Filtern hinzufugen') {
+               if (clickOption === "Add to filter" || clickOption === 'Zum Filtern hinzufügen') {
                   const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
                   const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
@@ -553,7 +574,7 @@ inputForm.addEventListener("submit", (e) => {
                   updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1
                }
 
-               else if (clickOption === "Show row" || clickOption == 'Reihe zeigen') {
+               else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
                   reloadTable.disabled = false
 
                   const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
