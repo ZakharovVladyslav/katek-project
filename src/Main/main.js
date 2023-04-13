@@ -5,11 +5,13 @@ import csvToArray from '../Functions/csvConvert.js'
 import getFilters from '../Functions/getFilters.js'
 import datePlusMinus from '../Functions/datePlusMinus.js'
 import summaryRowToggle from '../Functions/summaryRow.js'
-import { countDateRange } from '../Functions/countDateRange.js'
 import { getAllValues } from '../Functions/getAllValues.js'
 
 const inputForm = document.querySelector('#input-form')
 const file = document.querySelector('#file-choose')
+
+const submitBtn = document.querySelector('#submit-button')
+const resetBtn = document.querySelector('#reset')
 
 const dataTable = document.querySelector('#data-table')
 
@@ -31,6 +33,7 @@ const loadingMessage = document.querySelector('#loading-table')
 const rowsAmount = document.querySelector('#rows-amount')
 
 const fullTable = document.querySelector('#full-table')
+const fullTableBtn = document.querySelector('#full-table-button')
 const arrows = document.querySelector('#index-arrows')
 
 const saveFiltersOption = document.querySelector('#save-filter-option')
@@ -43,7 +46,8 @@ const shownRowsCounter = document.querySelector('#shown-rows-counter')
 const shownRowsCounterDiv = document.querySelector('.shown-rows-counter-div')
 const fullTableSection = document.querySelector('#full-table-section')
 
-const langOption = document.querySelector('#chooseLangId')
+const summaryRowToggleInput = document.querySelector('#summary-row-toggler-input')
+const modeLabel = document.querySelector('#mode-label')
 
 fullTableSection.style.opacity = '0'
 load.style.opacity = '0'
@@ -52,8 +56,11 @@ saveDiv.style.opacity = '0'
 realRowsNumber.style.opacity = '0'
 shownRowsCounter.style.opacity = '0'
 shownRowsCounterDiv.style.opacity = '0'
+modeLabel.style.opacity = '0'
 clickToggler.style.display = 'none'
 saveButton.style.display = 'none'
+
+submitBtn.disabled = true
 
 /*
 document.querySelector('#left-date-inp').value = '2022-05-02'
@@ -62,6 +69,8 @@ document.querySelector('#right-date-inp').value = '2022-05-03'
 
 file.oninput = (e) => {
    e.preventDefault()
+
+   submitBtn.disabled = false
 
    const arrFromFileName = file.value.replaceAll('\\', ',').split(',')
 
@@ -245,11 +254,19 @@ filters.addEventListener('click', e => {
 
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
+
+   resetBtn.disabled = false
+   fullTableBtn.disabled = false
+   summaryRowToggleInput.disabled = false
    
+   if (submitBtn.disabled)
+      submitBtn.disabled = false
+
    saveDiv.style.opacity = '0'
    realRowsNumber.style.opacity = '0'
    shownRowsCounter.style.opacity = '0'
    shownRowsCounterDiv.style.opacity = '0'
+   modeLabel.style.opacity = '0'
    load.style.opacity = '1'
    loadingMessage.style.opacity = '1'
    load.style.transition = '0.2s'
@@ -286,7 +303,7 @@ inputForm.addEventListener("submit", (e) => {
       let data = csvArray[0]
       const initialArray = getFilters(data, tableHeaders)
 
-      if (initialArray.length > 8000) {
+      if (initialArray.length > 3000) {
          dataTable.innerHTML = ''
 
          emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
@@ -334,6 +351,7 @@ inputForm.addEventListener("submit", (e) => {
             realRowsNumber.style.opacity = '1'
             shownRowsCounter.style.opacity = '1'
             shownRowsCounterDiv.style.opacity = '1'
+            modeLabel.style.opacity = '1'
             clickToggler.style.display = 'block'
             saveButton.style.display = 'block'
 
@@ -505,7 +523,6 @@ inputForm.addEventListener("submit", (e) => {
 
             shownRowsCounter.innerHTML = initialArray.length - 1
 
-               
             let hrow = document.createElement('tr')
             for (let i = 0; i < 16; i++) {
                let theader = document.createElement('th')
@@ -549,7 +566,7 @@ inputForm.addEventListener("submit", (e) => {
             table.addEventListener('click', e => {
                const clickOption = cellSelect.options[cellSelect.selectedIndex].value
 
-               if (clickOption === "Add to filter" || clickOption === 'Zum Filtern hinzufügen') {
+               if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
                   const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
                   const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
@@ -585,13 +602,17 @@ inputForm.addEventListener("submit", (e) => {
                   const initialArray = getFilters(data, headers)
                   data.length = 0
 
+                  console.log(initialArray)
+
                   const targetId = e.target.id
                   const splittedTargetId = targetId.split('')
                   splittedTargetId.splice(0, 5)
 
-                  const row = splittedTargetId[0]
+                  const row = +splittedTargetId[0]
+                  console.log(row)
 
                   const object = initialArray[row]
+                  console.log(object)
 
                   dataTable.innerHTML = ''
                   table.innerHTML = ''

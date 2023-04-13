@@ -128,13 +128,13 @@
                <button type="submit" value="Bestätigen" id="submit-button">Bestätigen</button>
                <button type="submit" value="Ursprüngliche" id="reload-table" disabled>Ursprüngliche Tabelle</button>
 
-               <button type="button" id="reset">Reset</button>
+               <button type="button" id="reset" disabled>Reset</button>
 
-               <button type="button" id="full-table-button" class="full-table-button">Komplette Tabelle</button>
+               <button type="button" id="full-table-button" class="full-table-button" disabled>Komplette Tabelle</button>
 
                <div class="summary-row-toggler-il">
+                  <input type="checkbox" id="summary-row-toggler-input" checked="false" disabled>
                   <label for="summary-row-toggler-input" id="summary-row-toggler-label">Ergebnis</label>
-                  <input type="checkbox" id="summary-row-toggler-input" checked="false">
                </div>
             </div>
          </section>
@@ -156,12 +156,13 @@
 
 
    <div class="over-tables">
+      <p id="mode-label">Cell click mode: </p>
       <select id="click-toggler" style="display: none;">
-         <option id="opt1" class="ct-option">Zum Filter hinzufügen</option>
+         <option id="opt1" class="ct-option">Zum Filtern hinzufügen</option>
          <option id="opt2" class="ct-option">Zeile anzeigen</option>
       </select>
       
-      <div class="shown-rows-counter-div">
+      <div class="shown-rows-counter-div" id="shown-rows-counter-div">
          <p id="real-rows-number">Anzahl der angezeigten Zeilen:</p>
          <p id="shown-rows-counter">0</p>
       </div>
@@ -205,6 +206,7 @@
       const showRowOption = document.querySelector('#opt2')
       const leftDateLabel = document.querySelector('#left-date-label')
       const rightDateLabel = document.querySelector('#right-date-label')
+      const cellModeSelection = document.querySelector('#click-toggler')
       
       function chooseLang() {
          if (option.value === 'GE') {
@@ -222,6 +224,7 @@
             leftDateLabel.innerHTML = 'Erstes Datum '
             rightDateLabel.innerHTML = 'Zweites Datum'
          }
+         
          else if (option.value === 'EN') {
             fileChoose.innerHTML = 'Choose file'
             rowLimiter.innerHTML = 'Row limiter: '
