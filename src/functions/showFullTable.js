@@ -1,4 +1,5 @@
 export const showFullTable = (inputArray) => {
+
       let arr = [...inputArray]
 
       const remove = arr.shift()
@@ -11,6 +12,14 @@ export const showFullTable = (inputArray) => {
       const fullTableButton = document.querySelector('#full-table-button')
 
       fullTableButton.addEventListener('click', () => {
+            document.querySelector('#submit-button').disabled = true
+            document.querySelector('#reset').disabled = true
+            document.querySelector('#full-table-button').disabled = true
+            document.querySelector('#summary-row-toggler-input').disabled = true
+            document.querySelector('#mode-label').style.opacity = '0'
+            document.querySelector('#shown-rows-counter-div').style.opacity = '0'
+            document.querySelector('#save-div').style.opacity = '0'
+
             const dataTable = document.querySelector('#data-table')
             const clickToggler = document.querySelector('#click-toggler')
             const saveButton = document.querySelector('#save')
@@ -53,7 +62,6 @@ export const showFullTable = (inputArray) => {
                   thead.appendChild(headerRow)
 
                   arr.forEach(obj => {
-                        console.log(obj)
 
                         const dataRow = document.createElement('tr')
 
