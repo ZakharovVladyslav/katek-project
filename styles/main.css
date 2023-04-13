@@ -20,7 +20,7 @@ body {
 }
 
 html {
-   max-width: 1920px;
+   max-width: 1900px;
 }
 
 .main {
@@ -77,7 +77,7 @@ article span {
 }
 
 #click-toggler {
-   margin-left: 100px;
+   margin-right: 50px;
 
    background-color: transparent;
    transition: 0.1s;
@@ -135,7 +135,7 @@ article span {
    min-width: 700px;
 
    display: grid;
-   grid-template-columns: 1fr 500px 100px;
+   grid-template-columns: 400px 500px 100px;
 
    margin: 20px 20px 20px 0;
    width: auto;
@@ -295,8 +295,13 @@ button[type="button"]:hover {
    grid-template-columns: minmax(150px auto);
 }
 
-#submit-button {
-   margin-bottom: -30px;
+
+.submit-section button:disabled {
+   border: 2px solid #222222;
+
+   background-color: #444444;
+
+   cursor: not-allowed;
 }
 
 .submit-section button {
@@ -308,7 +313,7 @@ button[type="button"]:hover {
    min-width: 170px;
 }
 
-.submit-section button:hover {
+.submit-section button:hover :not(:disabled) {
    cursor: pointer;
 
    background-color: #00788b;
@@ -324,15 +329,35 @@ button[type="button"]:hover {
    margin-bottom: -400px;
 }
 
+#reset:disabled {
+   border: 2px solid #222222;
+
+   background-color: #444444;
+
+   cursor: not-allowed;
+}
+
 #reload-table,
 #submit-button {
    border-radius: 3px;
    border: 1px solid #00ffff;
 
+   background-color: transparent;
+
    max-width: fit-content;
 }
 
-#reload-table:disabled {
+#submit-button {
+   margin-bottom: -30px;
+}
+
+#submit-button:hover, #reload-table:hover {
+   background-color: #00788b;
+
+   cursor: pointer;
+}
+
+#submit-button:disabled, #reload-table:disabled {
    border: 2px solid #222222;
 
    background-color: #444444;
@@ -346,9 +371,19 @@ button[type="button"]:hover {
    margin-top: -70px;
 }
 
+.summary-row-toggler-il input:disabled+label {
+   border: 2px solid #222222;
+
+   background-color: #444444;
+
+   cursor: not-allowed;
+}
+
 .summary-row-toggler-il label {
    border: 1px solid var(--katek-blue);
    border-radius: 3px;
+
+   font-size: 15px;
 
    padding: 6px 10px;
 
@@ -662,8 +697,18 @@ span {
    align-items: center;
 }
 
+.over-tables #mode-label {
+   margin: 0 10px 0 100px;
+
+   min-width: fit-content;
+}
+
 #save-filter-option {
    margin-left: 15px;
+}
+
+#save-filter-option-label {
+   min-width: fit-content;
 }
 
 .over-tables div input {
@@ -671,16 +716,18 @@ span {
 }
 
 .over-tables .shown-rows-counter-div {
-   margin-right: 50em;
+   min-width: fit-content;
+
+   margin-right: 45em;
 
    display: flex;
    flex-direction: row;
    justify-content: center;
    align-items: center;
-   gap: 10px;
+   gap: 5px;
 }
 
-.over-tables .shown-rows-counter-div shown-rows-counte {
+.over-tables .shown-rows-counter-div #shown-rows-counter {
    margin-left: 15px;
 }
 
