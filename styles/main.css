@@ -155,7 +155,7 @@ article span {
 }
 
 #input-section #delimiter-selection option {
-   background-color: #282a2b; 
+   background-color: #282a2b;
 }
 
 #input-section #delimiter-selection-option {
@@ -420,6 +420,30 @@ span {
    gap: 20px;
 
    margin-right: 100px;
+   margin-left: 5px;
+}
+
+.filters select {
+   background-color: transparent;
+
+   padding: 9px 15px;
+
+   border: 1px solid #717171;
+   border-radius: 3px;
+
+   color: rgb(200, 200, 200);
+}
+
+.filters select:hover {
+   background-color: #4e4e4e;
+
+   transition: background-color ease 0.1s;
+
+   cursor: pointer;
+}
+
+.filters select:focus {
+   outline: none;
 }
 
 .rows-amount {
@@ -435,11 +459,9 @@ span {
    min-width: 40px;
    max-height: 20px;
 
-   margin-left: 100px;
-
    border: 1px solid rgb(120, 120, 120);
    border-radius: 3px;
-   
+
    padding: 8px 15px;
 }
 
