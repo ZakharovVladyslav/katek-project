@@ -24,10 +24,10 @@ export default function summaryRowToggle(inputArray) {
 
                 return objectValues
             })
-            
+
             let zeros = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-            for (let i = 0; i < values.length; i++) 
+            for (let i = 0; i < values.length; i++)
                 for (let j = 0; j < values[i].length; j++)
                     if (values[i][j] !== undefined && values[i][j] != 0)
                         zeros[j] += parseFloat(values[i][j])
@@ -76,4 +76,6 @@ export default function summaryRowToggle(inputArray) {
             tbody.innerHTML = ''
         }
     })
+
+    array.length = 0
 }

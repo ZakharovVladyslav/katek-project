@@ -80,11 +80,10 @@ file.oninput = (e) => {
    const inputFileData = file.files[0]
 
    fileReader.onload = (e) => {
-      const text = e.target.result
+      let text = e.target.result
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
-
-      reset.addEventListener('click', (e) => {
+      reset.addEventListener('click', e => {
          e.preventDefault()
 
          const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
@@ -103,7 +102,7 @@ file.oninput = (e) => {
 
          filtersInput.forEach(filter => filter.value = '')
 
-         updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1
+         updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 3
 
          const values = getAllValues(updatedArray, tableHeaders)
 
@@ -172,7 +171,7 @@ file.onchange = () => {
    const inputFileData = file.files[0]
 
    fileReader.onload = (e) => {
-      const text = e.target.result
+      let text = e.target.result
 
       const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
       const data = csvToArray(text, delimiterOption)[0]
@@ -258,7 +257,7 @@ inputForm.addEventListener("submit", (e) => {
    resetBtn.disabled = false
    fullTableBtn.disabled = false
    summaryRowToggleInput.disabled = false
-   
+
    if (submitBtn.disabled)
       submitBtn.disabled = false
 
@@ -295,10 +294,10 @@ inputForm.addEventListener("submit", (e) => {
 
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
-      const text = e.target.result
+      var mainText = e.target.result
 
       const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-      const csvArray = csvToArray(text, delimiterOption)
+      const csvArray = csvToArray(mainText, delimiterOption)
 
       let data = csvArray[0]
       const initialArray = getFilters(data, tableHeaders)
@@ -324,12 +323,11 @@ inputForm.addEventListener("submit", (e) => {
          let thead = document.createElement("thead")
          let tbody = document.createElement("tbody")
 
-
          const arrFromFileName = file.value.replaceAll('\\', ',').split(',')
 
-         const text = e.target.result
+         var mainText = e.target.result
 
-         if (text.length === 0) {
+         if (mainText.length === 0) {
             if (file.DOCUMENT_NODE > 0) {
                dataTable.innerHTML = ''
                table.innerHTML = ''
@@ -374,38 +372,42 @@ inputForm.addEventListener("submit", (e) => {
 
             reset.addEventListener('click', (e) => {
                e.preventDefault()
+
                const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-               
+
                const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-               const csvArray = csvToArray(text, delimiterOption)
-               
+
+               console.log(mainText)
+
+               const csvArray = csvToArray(mainText, delimiterOption)
+
                let data = csvArray[0]
 
                const updatedArray = getFilters(data, tableHeaders)
                const poppedUpdatedArray = updatedArray.pop()
-      
+
                if (data.length > 8000)
                   emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
-      
+
                data.length = 0
-      
+
                const filtersInput = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
                filtersInput.push(document.querySelector('#left-date-inp'))
                filtersInput.push(document.querySelector('#right-date-inp'))
-      
+
                filtersInput.forEach(filter => filter.value = '')
-      
-               updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 2
+
+               updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length
                const values = getAllValues(updatedArray, tableHeaders)
-      
+
                const dataLists = [...Array(5)].map((_, index) => {
                   return document.querySelector(`#datalist-${index + 1}`)
                })
-      
+
                dataLists.forEach(datalist => {
                   for (let option of datalist.children)
                      option.value = ''
-      
+
                   values.forEach(value => {
                      const option = document.createElement('option')
                      option.className = 'datalist-option'
@@ -422,6 +424,8 @@ inputForm.addEventListener("submit", (e) => {
             })
 
             const initialArray = getFilters(data, tableHeaders)
+            data.length = 0
+
             const filtersFromCsvFile = csvArray[2]
 
             const filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '')
@@ -453,7 +457,7 @@ inputForm.addEventListener("submit", (e) => {
             })
 
             const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-            const dataForCsv = getFilters(data, csvToArray(text, delimiterOption)[1])
+            const dataForCsv = getFilters(data, csvToArray(mainText, delimiterOption)[1])
 
             saveButton.onclick = () => {
                const refinedData = []
@@ -518,8 +522,12 @@ inputForm.addEventListener("submit", (e) => {
             load.style.opacity = '0'
             loadingMessage.style.opacity = '0'
 
-            if (rowLimiter.value !== '') 
-               initialArray.length = `${+rowLimiter.value + 1}`
+            if (rowLimiter.value !== '') {
+               if (initialArray.length > rowLimiter.length)
+                  initialArray.length = rowLimiter.length
+               else
+                  rowLimiter.length = initialArray.length
+            }
 
             shownRowsCounter.innerHTML = initialArray.length - 1
 
@@ -559,6 +567,8 @@ inputForm.addEventListener("submit", (e) => {
 
             showFullTable(initialArray)
 
+            let clickOption = ''
+
             cellSelect.onchange = () => {
                clickOption = cellSelect.options[cellSelect.selectedIndex].value
             }
@@ -583,36 +593,32 @@ inputForm.addEventListener("submit", (e) => {
                   }
 
                   const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-                  const data = csvToArray(text, delimiterOption)[0]
+                  const data = csvToArray(mainText, delimiterOption)[0]
 
                   const updatedArray = getFilters(data, tableHeaders)
                   data.length = 0
 
-                  updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1
+                  updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length
                }
 
                else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
                   reloadTable.disabled = false
 
                   const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-                  
+
                   const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-                  const data = [...csvToArray(text, delimiterOption)[0]]
-                  
+                  const data = [...csvToArray(mainText, delimiterOption)[0]]
+
                   const initialArray = getFilters(data, headers)
                   data.length = 0
-
-                  console.log(initialArray)
 
                   const targetId = e.target.id
                   const splittedTargetId = targetId.split('')
                   splittedTargetId.splice(0, 5)
 
                   const row = +splittedTargetId[0]
-                  console.log(row)
 
                   const object = initialArray[row]
-                  console.log(object)
 
                   dataTable.innerHTML = ''
                   table.innerHTML = ''
@@ -672,7 +678,9 @@ inputForm.addEventListener("submit", (e) => {
             initialArray.length = 0
             tableHeaders.length = 0
          }
+         mainText = ''
       }
+      mainText = ''
    }
 
    reader.readAsText(input)

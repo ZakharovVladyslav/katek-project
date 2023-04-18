@@ -1,5 +1,4 @@
 export const showFullTable = (inputArray) => {
-
       let arr = [...inputArray]
 
       const remove = arr.shift()
@@ -67,12 +66,12 @@ export const showFullTable = (inputArray) => {
 
                         keys[index].forEach(key => {
                               const dataRowCell = document.createElement('td')
-                              
+
                               if (key === 'FPY')
                                     dataRowCell.innerHTML = `${obj[key]}%`
                               else
                                     dataRowCell.innerHTML = obj[key]
-                              
+
                               dataRowCell.style.minHeight = '30px'
                               dataRowCell.style.minWidth = '30px'
 

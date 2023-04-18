@@ -446,6 +446,12 @@ span {
    outline: none;
 }
 
+.filters select option {
+   background-color: #333236;
+
+   cursor: pointer;
+}
+
 .rows-amount {
    margin: 0;
    margin-left: 10px;
