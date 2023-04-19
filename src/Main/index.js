@@ -113,6 +113,25 @@ file.oninput = (e) => {
          Controller.instance.core.secondDate.value = ''
 
          rowsAmount.innerHTML = Controller.instance.core.staticDataArrayLength
+
+         const dataLists = [
+            document.querySelector('#datalist-1'),
+            document.querySelector('#datalist-2'),
+            document.querySelector('#datalist-3'),
+            document.querySelector('#datalist-4'),
+            document.querySelector('#datalist-5')
+         ]
+
+         dataLists.forEach(datalist => {
+            for (let option of datalist.children)
+               option.value = ''
+            Controller.instance.core.allValues.forEach(value => {
+               const option = document.createElement('option')
+               option.className = 'datalist-option'
+               option.value = value
+               datalist.appendChild(option)
+            })
+         })
       })
 
       filters.addEventListener('click', e => {
@@ -429,7 +448,6 @@ inputForm.addEventListener("submit", (e) => {
 
             }
 
-            console.log(initialArray)
             summaryRowToggle(initialArray)
 
             if (initialArray.length === 0) {
