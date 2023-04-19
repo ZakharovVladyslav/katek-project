@@ -1,6 +1,5 @@
 export const showFullTable = (inputArray) => {
       let arr = [...inputArray]
-
       const remove = arr.shift()
 
       const leftArrow = document.querySelector('#left-arrow')
@@ -36,7 +35,7 @@ export const showFullTable = (inputArray) => {
             arrows.style.transition = '0.2s'
 
             let index = 0
-            const allKeys = Object.keys(arr[1])
+            const allKeys = Object.keys(arr[0])
             const separatedKeys = []
 
             while (allKeys.length > 0) {

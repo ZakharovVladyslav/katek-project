@@ -1,14 +1,14 @@
-function dateFilter(data) {
+'use strict'
 
-    const leftDate = document.getElementById('left-date-inp').value
-    const rigthDate = document.getElementById('right-date-inp').value
+import Controller from "../functions/Controller.js"
 
-    if (leftDate.length === 0 || rigthDate.length === 0)
-        return data
+export default function getFilters(headers) {
+    Controller.instance.editCore('firstDate', document.querySelector('#left-date-inp'))
+    Controller.instance.editCore('secondDate', document.querySelector('#right-date-inp'))
 
-    else {
-        let newData = []
+    let data = [...Controller.instance.core.dataArray]
 
+    if (Controller.instance.core.firstDate.value.length !== 0 && Controller.instance.core.secondDate.value.length !== 0) {
         const select = document.getElementById('date-params')
         const opt = select.options[select.selectedIndex].value
 
@@ -18,10 +18,10 @@ function dateFilter(data) {
             return `${+arr[1]}/${+arr[0]}/${+arr[2]}`
         }
 
-        const leftDateArr = revertDate(leftDate)
-        const rigthDateArr = revertDate(rigthDate)
+        const leftDateArr = revertDate(Controller.instance.core.firstDate.value)
+        const rigthDateArr = revertDate(Controller.instance.core.secondDate.value)
 
-        newData = data.filter(elem => {
+        data = data.filter(elem => {
             if (elem[opt] !== undefined) {
                 let targetDate = elem[opt].split('')
 
@@ -38,21 +38,18 @@ function dateFilter(data) {
                 }
             }
         })
-
-        return newData
     }
-}
 
-export default function getFilters(inputData, headers) {
-    const data = dateFilter(inputData)
-
-    let inputFields = []
+    let inputFields = [
+        document.querySelector('#filter-input-1'),
+        document.querySelector('#filter-input-2'),
+        document.querySelector('#filter-input-3'),
+        document.querySelector('#filter-input-4'),
+        document.querySelector('#filter-input-5')
+    ]
     let filteredArray = []
 
-    for (let i = 0; i < 5; i++)
-        inputFields.push(document.querySelector(`#filter-input-${i + 1}`))
-
-    inputFields = inputFields.filter(field => field.value !== '') 
+    inputFields = inputFields.filter(field => field.value !== '')
 
     const values = inputFields.map(filter => {
         if (filter.value !== '')

@@ -1,150 +1,147 @@
 'use strict'
+import Controller from '../functions/Controller.js';
+import { showFullTable } from '../Functions/showFullTable.js';
+import csvToArray from '../Functions/csvConvert.js';
+import getFilters from '../Functions/getFilters.js';
+import datePlusMinus from '../Functions/datePlusMinus.js';
+import summaryRowToggle from '../Functions/summaryRow.js';
+import { getAllValues } from '../Functions/getAllValues.js';
 
-import { showFullTable } from '../Functions/showFullTable.js'
-import csvToArray from '../Functions/csvConvert.js'
-import getFilters from '../Functions/getFilters.js'
-import datePlusMinus from '../Functions/datePlusMinus.js'
-import summaryRowToggle from '../Functions/summaryRow.js'
-import { getAllValues } from '../Functions/getAllValues.js'
+const inputForm = document.querySelector('#input-form');
+const file = document.querySelector('#file-choose');
 
-const inputForm = document.querySelector('#input-form')
-const file = document.querySelector('#file-choose')
+const submitBtn = document.querySelector('#submit-button');
+const resetBtn = document.querySelector('#reset');
 
-const submitBtn = document.querySelector('#submit-button')
-const resetBtn = document.querySelector('#reset')
+const dataTable = document.querySelector('#data-table');
 
-const dataTable = document.querySelector('#data-table')
+const emptyMessage = document.querySelector('#empty-message');
 
-const emptyMessage = document.querySelector('#empty-message')
+const rowLimiter = document.querySelector('#row-limiter');
 
-const rowLimiter = document.querySelector('#row-limiter')
+const chosenFile = document.querySelector('#chosen-file');
+const reloadTable = document.querySelector('#reload-table');
+const cellSelect = document.querySelector('#click-toggler');
 
-const chosenFile = document.querySelector('#chosen-file')
-const reloadTable = document.querySelector('#reload-table')
-const cellSelect = document.querySelector('#click-toggler')
+const filters = document.querySelector('#filters');
 
-const filters = document.querySelector('#filters')
+const clickToggler = document.querySelector('#click-toggler');
+const saveButton = document.querySelector('#save');
+const load = document.querySelector('#load');
+const loadingMessage = document.querySelector('#loading-table');
 
-const clickToggler = document.querySelector('#click-toggler')
-const saveButton = document.querySelector('#save')
-const load = document.querySelector('#load')
-const loadingMessage = document.querySelector('#loading-table')
+const rowsAmount = document.querySelector('#rows-amount');
 
-const rowsAmount = document.querySelector('#rows-amount')
+const fullTable = document.querySelector('#full-table');
+const fullTableBtn = document.querySelector('#full-table-button');
+const arrows = document.querySelector('#index-arrows');
 
-const fullTable = document.querySelector('#full-table')
-const fullTableBtn = document.querySelector('#full-table-button')
-const arrows = document.querySelector('#index-arrows')
+const saveFiltersOption = document.querySelector('#save-filter-option');
+const saveDiv = document.querySelector('#save-div');
 
-const saveFiltersOption = document.querySelector('#save-filter-option')
-const saveDiv = document.querySelector('#save-div')
+const delimiterSelection = document.querySelector('#delimiter-selection');
 
-const delimiterSelection = document.querySelector('#delimiter-selection')
+const realRowsNumber = document.querySelector('#real-rows-number');
+const shownRowsCounter = document.querySelector('#shown-rows-counter');
+const shownRowsCounterDiv = document.querySelector('.shown-rows-counter-div');
+const fullTableSection = document.querySelector('#full-table-section');
 
-const realRowsNumber = document.querySelector('#real-rows-number')
-const shownRowsCounter = document.querySelector('#shown-rows-counter')
-const shownRowsCounterDiv = document.querySelector('.shown-rows-counter-div')
-const fullTableSection = document.querySelector('#full-table-section')
+const summaryRowToggleInput = document.querySelector('#summary-row-toggler-input');
+const modeLabel = document.querySelector('#mode-label');
 
-const summaryRowToggleInput = document.querySelector('#summary-row-toggler-input')
-const modeLabel = document.querySelector('#mode-label')
+fullTableSection.style.opacity = '0';
+load.style.opacity = '0';
+loadingMessage.style.opacity = '0';
+saveDiv.style.opacity = '0';
+realRowsNumber.style.opacity = '0';
+shownRowsCounter.style.opacity = '0';
+shownRowsCounterDiv.style.opacity = '0';
+modeLabel.style.opacity = '0';
+clickToggler.style.display = 'none';
+saveButton.style.display = 'none';
 
-fullTableSection.style.opacity = '0'
-load.style.opacity = '0'
-loadingMessage.style.opacity = '0'
-saveDiv.style.opacity = '0'
-realRowsNumber.style.opacity = '0'
-shownRowsCounter.style.opacity = '0'
-shownRowsCounterDiv.style.opacity = '0'
-modeLabel.style.opacity = '0'
-clickToggler.style.display = 'none'
-saveButton.style.display = 'none'
-
-submitBtn.disabled = true
-
+submitBtn.disabled = true;
 /*
-document.querySelector('#left-date-inp').value = '2022-05-02'
-document.querySelector('#right-date-inp').value = '2022-05-03'
+document.querySelector('#left-date-inp').value = '2022-01-01'
+document.querySelector('#right-date-inp').value = '2022-01-03'
 */
 
 file.oninput = (e) => {
-   e.preventDefault()
+   e.preventDefault();
 
-   submitBtn.disabled = false
+   submitBtn.disabled = false;
 
-   const arrFromFileName = file.value.replaceAll('\\', ',').split(',')
+   const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
 
-   chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1]
+   chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1];
 
-   const fileReader = new FileReader()
-   const inputFileData = file.files[0]
+   const fileReader = new FileReader();
+   const inputFileData = file.files[0];
 
    fileReader.onload = (e) => {
-      let text = e.target.result
+      let text = e.target.result;
+      Controller.instance.editCore('inputText', text);
+
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
+      const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value;
+
+      Controller.instance.editCore('dataArray', csvToArray(Controller.instance.core.inputText, delimiterOption)[0].filter((obj, index) => {
+         return !Object.values(obj).includes(undefined)
+      }))
+      Controller.instance.editCore('staticDataArray', Controller.instance.core.dataArray)
+      Controller.instance.editCore('staticDataArrayLength', Controller.instance.core.staticDataArray.length)
+      Controller.instance.editCore('headers', csvToArray(Controller.instance.core.inputText, delimiterOption)[1])
+      Controller.instance.editCore('filters', csvToArray(Controller.instance.core.inputText, delimiterOption)[2])
+      Controller.instance.editCore('allValues', getAllValues(Controller.instance.core.staticDataArray, tableHeaders))
+      Controller.instance.editCore('inputTextLength', Controller.instance.core.inputText.length)
+      Controller.instance.editCore('firstDate', document.querySelector('#left-date-inp'))
+      Controller.instance.editCore('secondDate', document.querySelector('#right-date-inp'))
+
+      delete Controller.instance.core.inputText
+
       reset.addEventListener('click', e => {
-         e.preventDefault()
+         e.preventDefault();
 
-         const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
+         document.querySelector('#filter-input-1').value = ''
+         document.querySelector('#filter-input-2').value = ''
+         document.querySelector('#filter-input-3').value = ''
+         document.querySelector('#filter-input-4').value = ''
+         document.querySelector('#filter-input-5').value = ''
+         rowLimiter.value = ''
+         Controller.instance.core.firstDate.value = ''
+         Controller.instance.core.secondDate.value = ''
 
-         const data = csvToArray(text, delimiterOption)[0]
-         const updatedArray = getFilters(data, tableHeaders)
-
-         if (data.length > 8000)
-            emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
-
-         data.length = 0
-
-         const filtersInput = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
-         filtersInput.push(document.querySelector('#left-date-inp'))
-         filtersInput.push(document.querySelector('#right-date-inp'))
-
-         filtersInput.forEach(filter => filter.value = '')
-
-         updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 3
-
-         const values = getAllValues(updatedArray, tableHeaders)
-
-         const dataLists = [...Array(5)].map((_, index) => {
-            return document.querySelector(`#datalist-${index + 1}`)
-         })
-
-         dataLists.forEach(datalist => {
-            for (let option of datalist.children)
-               option.value = ''
-
-            values.forEach(value => {
-               const option = document.createElement('option')
-               option.className = 'datalist-option'
-               option.value = value
-               datalist.appendChild(option)
-            })
-         })
+         rowsAmount.innerHTML = Controller.instance.core.staticDataArrayLength
       })
 
       filters.addEventListener('click', e => {
-         const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
-
-         const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-         const data = csvToArray(text, delimiterOption)[0]
-
-         const updatedArray = getFilters(data, tableHeaders)
-         data.length = 0
-
          if (e.target.id.substring(0, 6) === 'eraser') {
+            const updatedArray = getFilters(Controller.instance.core.dataArray, tableHeaders)
+
+            const filters = [
+               document.querySelector('#filter-input-1'),
+               document.querySelector('#filter-input-2'),
+               document.querySelector('#filter-input-3'),
+               document.querySelector('#filter-input-4'),
+               document.querySelector('#filter-input-5')
+            ]
+
             const targetId = e.target.id.slice(7)
-            const targetInputField = filters[targetId - 1]
 
-            targetInputField.value = ''
+            filters[targetId - 1].value = ''
 
-            updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 3
+            updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1
+
+            const dataLists = [
+               document.querySelector('#datalist-1'),
+               document.querySelector('#datalist-2'),
+               document.querySelector('#datalist-3'),
+               document.querySelector('#datalist-4'),
+               document.querySelector('#datalist-5')
+            ]
 
             const values = getAllValues(updatedArray, tableHeaders)
-
-            const dataLists = [...Array(5)].map((_, index) => {
-               return document.querySelector(`#datalist-${index + 1}`)
-            })
 
             dataLists.forEach(datalist => {
                for (let option of datalist.children)
@@ -171,15 +168,10 @@ file.onchange = () => {
    const inputFileData = file.files[0]
 
    fileReader.onload = (e) => {
-      let text = e.target.result
-
-      const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-      const data = csvToArray(text, delimiterOption)[0]
-
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-      const filteredArray = getFilters(data, tableHeaders)
+      const filteredArray = getFilters(tableHeaders)
 
-      if (filteredArray.length > 8000) {
+      if (Controller.instance.core.dataArray.length > 8000) {
          dataTable.innerHTML = ''
 
          emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
@@ -203,7 +195,7 @@ file.onchange = () => {
          })
       })
 
-      rowsAmount.innerHTML = filteredArray.length - 3
+      rowsAmount.innerHTML = filteredArray.length - 1
 
       filters.onclick = (e) => {
          const targetId = e.target.id
@@ -212,8 +204,7 @@ file.onchange = () => {
          const targetField = document.querySelector(`#filter-input-${targetNumber}`)
 
          targetField.onchange = () => {
-            const arr = getFilters(data, tableHeaders)
-
+            const arr = getFilters(tableHeaders)
             const values = getAllValues(arr, tableHeaders)
 
             const dataLists = [...Array(5)].map((_, index) => {
@@ -281,7 +272,6 @@ inputForm.addEventListener("submit", (e) => {
    saveButton.style.display = 'none'
 
    const input = file.files[0]
-
    const reader = new FileReader()
 
    reader.onload = e => {
@@ -294,15 +284,9 @@ inputForm.addEventListener("submit", (e) => {
 
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
-      var mainText = e.target.result
+      const initialArray = getFilters(tableHeaders)
 
-      const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-      const csvArray = csvToArray(mainText, delimiterOption)
-
-      let data = csvArray[0]
-      const initialArray = getFilters(data, tableHeaders)
-
-      if (initialArray.length > 3000) {
+      if (initialArray.length > 8000) {
          dataTable.innerHTML = ''
 
          emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
@@ -325,9 +309,7 @@ inputForm.addEventListener("submit", (e) => {
 
          const arrFromFileName = file.value.replaceAll('\\', ',').split(',')
 
-         var mainText = e.target.result
-
-         if (mainText.length === 0) {
+         if (Controller.instance.core.inputTextLength.length === 0) {
             if (file.DOCUMENT_NODE > 0) {
                dataTable.innerHTML = ''
                table.innerHTML = ''
@@ -353,10 +335,18 @@ inputForm.addEventListener("submit", (e) => {
             clickToggler.style.display = 'block'
             saveButton.style.display = 'block'
 
-            filters.addEventListener('click', e => {
-               const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
+            shownRowsCounter.innerHTML = `${Controller.instance.core.dataArrayLength}`
 
+            filters.addEventListener('click', e => {
                if (e.target.id.substring(0, 6) === 'eraser') {
+                  const filters = [
+                     document.querySelector('#filter-input-1'),
+                     document.querySelector('#filter-input-2'),
+                     document.querySelector('#filter-input-3'),
+                     document.querySelector('#filter-input-4'),
+                     document.querySelector('#filter-input-5')
+                  ]
+
                   const targetId = e.target.id.slice(7)
                   const targetInputField = filters[targetId - 1]
 
@@ -370,64 +360,11 @@ inputForm.addEventListener("submit", (e) => {
             /*----------------------------------------------------------------------------------------------------------------*/
             /*----------------------------------------------------------------------------------------------------------------*/
 
-            reset.addEventListener('click', (e) => {
-               e.preventDefault()
-
-               const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-
-               const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-
-               console.log(mainText)
-
-               const csvArray = csvToArray(mainText, delimiterOption)
-
-               let data = csvArray[0]
-
-               const updatedArray = getFilters(data, tableHeaders)
-               const poppedUpdatedArray = updatedArray.pop()
-
-               if (data.length > 8000)
-                  emptyMessage.innerHTML = 'Table is too big. Please add dates or filters'
-
-               data.length = 0
-
-               const filtersInput = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
-               filtersInput.push(document.querySelector('#left-date-inp'))
-               filtersInput.push(document.querySelector('#right-date-inp'))
-
-               filtersInput.forEach(filter => filter.value = '')
-
-               updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length
-               const values = getAllValues(updatedArray, tableHeaders)
-
-               const dataLists = [...Array(5)].map((_, index) => {
-                  return document.querySelector(`#datalist-${index + 1}`)
-               })
-
-               dataLists.forEach(datalist => {
-                  for (let option of datalist.children)
-                     option.value = ''
-
-                  values.forEach(value => {
-                     const option = document.createElement('option')
-                     option.className = 'datalist-option'
-                     option.value = value
-                     datalist.appendChild(option)
-                  })
-               })
-            })
-
             const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
-            data = data.filter((obj, index) => {
-               return !Object.values(obj).includes(undefined)
-            })
+            const initialArray = getFilters(tableHeaders)
 
-            const initialArray = getFilters(data, tableHeaders)
-            data.length = 0
-
-            const filtersFromCsvFile = csvArray[2]
-
+            const filtersFromCsvFile = Controller.instance.core.filters
             const filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '')
 
             const inputFields = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
@@ -456,8 +393,7 @@ inputForm.addEventListener("submit", (e) => {
                })
             })
 
-            const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-            const dataForCsv = getFilters(data, csvToArray(mainText, delimiterOption)[1])
+            const dataForCsv = getFilters(Controller.instance.core.headers)
 
             saveButton.onclick = () => {
                const refinedData = []
@@ -493,8 +429,7 @@ inputForm.addEventListener("submit", (e) => {
 
             }
 
-            data.length = 0
-
+            console.log(initialArray)
             summaryRowToggle(initialArray)
 
             if (initialArray.length === 0) {
@@ -513,7 +448,6 @@ inputForm.addEventListener("submit", (e) => {
 
             table.appendChild(thead)
             table.appendChild(tbody)
-            table.setAttribute('id', 'tb')
 
             document.getElementById('data-table').appendChild(table)
 
@@ -524,12 +458,15 @@ inputForm.addEventListener("submit", (e) => {
 
             if (rowLimiter.value !== '') {
                if (initialArray.length > rowLimiter.length)
-                  initialArray.length = rowLimiter.length
+                  initialArray.length = rowLimiter.value
                else
-                  rowLimiter.length = initialArray.length
+                  rowLimiter.value = initialArray.length
             }
 
-            shownRowsCounter.innerHTML = initialArray.length - 1
+            if (rowLimiter.value > initialArray.length)
+               shownRowsCounter.innerHTML = initialArray.length - 1
+            else
+               shownRowsCounter.innerHTML = rowLimiter.value
 
             let hrow = document.createElement('tr')
             for (let i = 0; i < 16; i++) {
@@ -539,6 +476,7 @@ inputForm.addEventListener("submit", (e) => {
                hrow.appendChild(theader)
             }
             thead.appendChild(hrow)
+
 
             for (let i = 1; i < initialArray.length; i++) {
                let body_row = document.createElement('tr')
@@ -567,12 +505,6 @@ inputForm.addEventListener("submit", (e) => {
 
             showFullTable(initialArray)
 
-            let clickOption = ''
-
-            cellSelect.onchange = () => {
-               clickOption = cellSelect.options[cellSelect.selectedIndex].value
-            }
-
             table.addEventListener('click', e => {
                const clickOption = cellSelect.options[cellSelect.selectedIndex].value
 
@@ -592,13 +524,9 @@ inputForm.addEventListener("submit", (e) => {
                      targetInputField.value = targetCellValue
                   }
 
-                  const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-                  const data = csvToArray(mainText, delimiterOption)[0]
+                  const updatedArray = getFilters(tableHeaders)
 
-                  const updatedArray = getFilters(data, tableHeaders)
-                  data.length = 0
-
-                  updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length
+                  updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1
                }
 
                else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
@@ -606,11 +534,7 @@ inputForm.addEventListener("submit", (e) => {
 
                   const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 
-                  const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value
-                  const data = [...csvToArray(mainText, delimiterOption)[0]]
-
-                  const initialArray = getFilters(data, headers)
-                  data.length = 0
+                  const initialArray = getFilters(headers)
 
                   const targetId = e.target.id
                   const splittedTargetId = targetId.split('')
@@ -674,13 +598,10 @@ inputForm.addEventListener("submit", (e) => {
 
             })
 
-            data.length = 0
             initialArray.length = 0
             tableHeaders.length = 0
          }
-         mainText = ''
       }
-      mainText = ''
    }
 
    reader.readAsText(input)

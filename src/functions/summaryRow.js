@@ -35,7 +35,6 @@ export default function summaryRowToggle(inputArray) {
             const countPass = zeros[5]
             const countFail = zeros[6]
 
-            //const FPY = `${parseFloat(((countPass) / (countPass + countFail)) * 100).toPrecision(5)}%`
             const FPY = `${((countPass * 100) / (countPass + countFail)).toPrecision(5)}%`
 
             zeros[4] = FPY
@@ -76,6 +75,4 @@ export default function summaryRowToggle(inputArray) {
             tbody.innerHTML = ''
         }
     })
-
-    array.length = 0
 }
