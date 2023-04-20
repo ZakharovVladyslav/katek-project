@@ -1,20 +1,41 @@
+import Controller from "./Controller.js"
+
 export default function DataPie() {
     const dataPieInput = document.querySelector("#pie-diagramm-checkbox")
     const svgElem = document.querySelector('#svg-element')
     const labels = document.querySelector('#labels')
-    const svgDiv = document.querySelector('#svg-div')
 
     dataPieInput.addEventListener('change', () => {
         svgElem.style.display = 'block'
+        labels.innerHTML = ''
+
+        const keys = ['CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest']
+
+        const values = Controller.instance.core.changableArray.map(object => {
+            const objectValues = []
+
+            keys.forEach(key => {
+                objectValues.push(object[key])
+            })
+
+            return objectValues
+        })
+
+        let zeros = [0, 0, 0, 0]
+
+        for (let i = 0; i < values.length; i++)
+            for (let j = 0; j < values[i].length; j++)
+                if (values[i][j] !== undefined && values[i][j] != 0)
+                    zeros[j] += parseFloat(values[i][j])
 
         const data = [
-            { label: "CountPass", value: 2156, color: "#74e0d1" },
-            { label: "CountFail", value: 281, color: "#00D4FF" },
-            { label: "CountPass_Retest", value: 511, color: "#008FFF" },
-            { label: "CountFail_Retest", value: 89, color: "#000CFF" },
+            { label: "CountPass", value: zeros[0], color: "#74e0d1" },
+            { label: "CountFail", value: zeros[1], color: "#00D4FF" },
+            { label: "CountPass_Retest", value: zeros[2], color: "#008FFF" },
+            { label: "CountFail_Retest", value: zeros[3], color: "#000CFF" },
         ];
 
-        if (!dataPieInput.checked) {
+        if (dataPieInput.checked) {
             const radius = 150;
 
             const arcGenerator = d3.arc()
@@ -41,6 +62,8 @@ export default function DataPie() {
                 .attr("d", arcGenerator)
                 .style("fill", function (d) { return d.data.color; });
 
+            console.log(data)
+
             data.forEach((elem, index) => {
                 const html = `
                         <div id='color-${index + 1}' style="display: flex; flex-direction: row; gap: 10px;">
@@ -51,6 +74,8 @@ export default function DataPie() {
 
                 labels.insertAdjacentHTML('beforeend', html)
             })
+
+            console.log(labels.innerHTML)
         }
         else {
             svgElem.style.display = 'none';

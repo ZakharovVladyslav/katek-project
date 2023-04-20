@@ -213,8 +213,12 @@ file.onchange = () => {
          const targetField = document.querySelector(`#filter-input-${targetNumber}`)
 
          targetField.onchange = () => {
-            const arr = getFilters(tableHeaders)
-            const values = getAllValues(arr, tableHeaders)
+            Controller.instance.editCore('changableArray', [...getFilters(tableHeaders)])
+            const values = getAllValues(Controller.instance.core.changableArray, tableHeaders)
+
+            pieDiagrammInput.checked = true
+
+            DataPie()
 
             Controller.instance.core.datalists.forEach(datalist => {
                for (let option of datalist.children)
@@ -228,7 +232,7 @@ file.onchange = () => {
                })
             })
 
-            arr.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = arr.length - 1
+            Controller.instance.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Controller.instance.core.changableArray.length - 1
          }
       }
    }
@@ -421,7 +425,8 @@ inputForm.addEventListener("submit", (e) => {
 
             }
 
-            summaryRowToggle(initialArray)
+            Controller.instance.editCore('changableArray', [...initialArray])
+            summaryRowToggle()
             DataPie()
 
             if (initialArray.length === 0) {
@@ -502,11 +507,9 @@ inputForm.addEventListener("submit", (e) => {
 
                if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
                   const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
-
-                  const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
                   const targetCellValue = e.target.innerHTML
 
-                  const emptyFieldIndexes = filters.map((filter, index) => {
+                  const emptyFieldIndexes = Controller.instance.core.inputFields.map((filter, index) => {
                      if (filter.value === '')
                         return index
                   }).filter(filter => filter !== undefined)

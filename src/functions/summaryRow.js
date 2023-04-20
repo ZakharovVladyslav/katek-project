@@ -1,11 +1,13 @@
-export default function summaryRowToggle(inputArray) {
+import Controller from "./Controller.js"
+
+export default function summaryRowToggle() {
     const toggleCheckboxInput = document.querySelector('#summary-row-toggler-input')
     const table = document.querySelector('#summary-table')
 
     const thead = document.createElement('thead')
     const tbody = document.createElement('tbody')
 
-    const array = [...inputArray]
+    const array = [...Controller.instance.core.changableArray]
 
     toggleCheckboxInput.addEventListener('change', e => {
         if (!toggleCheckboxInput.checked) {
