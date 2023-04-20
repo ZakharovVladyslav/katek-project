@@ -248,23 +248,24 @@ filters.addEventListener('click', e => {
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault()
 
-   resetBtn.disabled = false
-   fullTableBtn.disabled = false
-   summaryRowToggleInput.disabled = false
+   resetBtn.disabled = false;
+   fullTableBtn.disabled = false;
+   summaryRowToggleInput.disabled = false;
+   pieDiagrammInput.disabled = false;
 
    if (submitBtn.disabled)
-      submitBtn.disabled = false
+      submitBtn.disabled = false;
 
-   saveDiv.style.opacity = '0'
-   realRowsNumber.style.opacity = '0'
-   shownRowsCounter.style.opacity = '0'
-   shownRowsCounterDiv.style.opacity = '0'
-   modeLabel.style.opacity = '0'
-   load.style.opacity = '1'
-   loadingMessage.style.opacity = '1'
-   load.style.transition = '0.2s'
-   loadingMessage.style.transition = '0.2s'
-   saveDiv.style.transition = '0.2s'
+   saveDiv.style.opacity = '0';
+   realRowsNumber.style.opacity = '0';
+   shownRowsCounter.style.opacity = '0';
+   shownRowsCounterDiv.style.opacity = '0';
+   modeLabel.style.opacity = '0';
+   load.style.opacity = '1';
+   loadingMessage.style.opacity = '1';
+   load.style.transition = '0.2s';
+   loadingMessage.style.transition = '0.2s';
+   saveDiv.style.transition = '0.2s';
 
    fullTable.innerHTML = ''
    arrows.style.opacity = '0'
@@ -521,7 +522,12 @@ inputForm.addEventListener("submit", (e) => {
                }
 
                else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
-                  reloadTable.disabled = false
+                  reloadTable.disabled = false;
+                  submitBtn.disabled = true;
+                  resetBtn.disabled = true;
+                  fullTableBtn.disabled = true;
+                  summaryRowToggleInput.disabled = true;
+                  pieDiagrammInput.disabled = true;
 
                   const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc']
 

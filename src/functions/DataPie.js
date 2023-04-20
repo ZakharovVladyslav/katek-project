@@ -2,15 +2,16 @@ export default function DataPie() {
     const dataPieInput = document.querySelector("#pie-diagramm-checkbox")
     const svgElem = document.querySelector('#svg-element')
     const labels = document.querySelector('#labels')
+    const svgDiv = document.querySelector('#svg-div')
 
     dataPieInput.addEventListener('change', () => {
         svgElem.style.display = 'block'
 
         const data = [
-            { label: "CountPass", value: 2156, color: "#eeeeee" },
-            { label: "CountFail", value: 281, color: "#444444" },
-            { label: "CountPass_Retest", value: 511, color: "#aaaaaa" },
-            { label: "CountFail_Retest", value: 89, color: "#aaaaaa" },
+            { label: "CountPass", value: 2156, color: "#74e0d1" },
+            { label: "CountFail", value: 281, color: "#00D4FF" },
+            { label: "CountPass_Retest", value: 511, color: "#008FFF" },
+            { label: "CountFail_Retest", value: 89, color: "#000CFF" },
         ];
 
         if (!dataPieInput.checked) {
