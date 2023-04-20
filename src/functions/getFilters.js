@@ -1,6 +1,6 @@
 'use strict'
 
-import Controller from "../functions/Controller.js"
+import Controller from "./Controller.js"
 
 export default function getFilters(headers) {
     Controller.instance.editCore('firstDate', document.querySelector('#left-date-inp'))

@@ -118,6 +118,20 @@ article span {
    z-index: 1;
 }
 
+#svg-div {
+   margin: auto;
+}
+
+#labels {
+   display: flex;
+   flex-direction: row;
+   gap: 20px;
+   justify-content: center;
+   align-items: center;
+
+   margin-top: 150px;
+}
+
 #empty-message {
    text-align: center;
    font-size: 50px;
@@ -322,11 +336,10 @@ button[type="button"]:hover {
 
 #reset {
    padding: 10px 15px;
+   margin-top: -5px;
+   margin-bottom: -400px;
 
    min-height: 30px;
-
-   margin-top: -10px;
-   margin-bottom: -400px;
 }
 
 #reset:disabled {
@@ -345,6 +358,15 @@ button[type="button"]:hover {
    background-color: transparent;
 
    max-width: fit-content;
+}
+
+#reload-table {
+   margin-top: 13px;
+}
+
+.full-table-button {
+   margin-top: 20px;
+   margin-bottom: 0px;
 }
 
 #submit-button {
@@ -368,10 +390,11 @@ button[type="button"]:hover {
 .summary-row-toggler-il {
    padding: 7px 10px;
 
-   margin-top: -70px;
+   margin-top: -30px;
+   margin-bottom: -10px;
 }
 
-.summary-row-toggler-il input:disabled+label {
+.summary-row-toggler-il input:disabled+label, .pie-diagramm-toggler input:disabled+label {
    border: 2px solid #222222;
 
    background-color: #444444;
@@ -379,7 +402,7 @@ button[type="button"]:hover {
    cursor: not-allowed;
 }
 
-.summary-row-toggler-il label {
+.summary-row-toggler-il label, .pie-diagramm-toggler label {
    border: 1px solid var(--katek-blue);
    border-radius: 3px;
 
@@ -391,16 +414,23 @@ button[type="button"]:hover {
    transition: background-color ease 0.1s;
 }
 
-.summary-row-toggler-il label:hover {
+.summary-row-toggler-il label:hover, .pie-diagramm-toggler label:hover {
    background-color: #00788b;
    transition: background-color ease 0.1s;
 
    cursor: pointer;
 }
 
-.summary-row-toggler-il input {
+.summary-row-toggler-il input, .pie-diagramm-toggler input {
    display: none;
 }
+
+/* -------------------------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------------------------*/
+
+/* -------------------------------------------------------------------------------------------*/
+/* SECTION FOR PIE DIAGRAMM ------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------------------------*/
 
 /* -------------------------------------------------------------------------------------------*/
 /* -------------------------------------------------------------------------------------------*/

@@ -3,10 +3,11 @@
 
 <head>
    <title>Katek GmbH</title>
-   <link rel="stylesheet" href="../../styles/main.css">
+   <link rel="stylesheet" href="../../styles/index.css">
    <link rel="stylesheet" href="../../styles/media.css">
 
    <script type="module" src="./index.js" defer></script>
+   <script src="https://d3js.org/d3.v6.min.js"></script>
    <link rel="icon" type="image/x-icon" href="../../assets/katek-favicon.ico">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
       integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
@@ -99,6 +100,7 @@
             <section class="filters" id="filters">
                <div class="filter-div-1">
                   <select>
+                     <option value="Select">Select</option>
                      <option value="ProdCode">ProdCode</option>
                      <option value="Customer">Customer</option>
                      <option value="MatNum">MatNum</option>
@@ -109,6 +111,7 @@
                </div>
                <div class="filter-div-2">
                   <select>
+                     <option value="Select">Select</option>
                      <option value="ProdCode">ProdCode</option>
                      <option value="Customer">Customer</option>
                      <option value="MatNum">MatNum</option>
@@ -119,6 +122,7 @@
                </div>
                <div class="filter-div-3">
                   <select>
+                     <option value="Select">Select</option>
                      <option value="ProdCode">ProdCode</option>
                      <option value="Customer">Customer</option>
                      <option value="MatNum">MatNum</option>
@@ -129,6 +133,7 @@
                </div>
                <div class="filter-div-4">
                   <select>
+                     <option value="Select">Select</option>
                      <option value="ProdCode">ProdCode</option>
                      <option value="Customer">Customer</option>
                      <option value="MatNum">MatNum</option>
@@ -139,6 +144,7 @@
                </div>
                <div class="filter-div-5">
                   <select>
+                     <option value="Select">Select</option>
                      <option value="ProdCode">ProdCode</option>
                      <option value="Customer">Customer</option>
                      <option value="MatNum">MatNum</option>
@@ -161,12 +167,26 @@
                   <input type="checkbox" id="summary-row-toggler-input" checked="false" disabled>
                   <label for="summary-row-toggler-input" id="summary-row-toggler-label">Ergebnis</label>
                </div>
+
+               <div class="pie-diagramm-toggler">
+                  <input type="checkbox" id="pie-diagramm-checkbox" checked="false">
+                  <label for="pie-diagramm-checkbox" id="pie-diagramm-label">Pie diagramm</label>
+               </div>
             </div>
          </section>
       </form><br>
    </section>
 
+
+
    <table id="summary-table"></table>
+
+   <div id="svg-div">
+      <svg id='svg-element' width="400" height="400" style="display: block; margin: auto; transform: scale(1.5); margin-top: 50px;"></svg>
+      <div id="labels">
+
+      </div>
+   </div>
 
    <p id="empty-message"></p>
 

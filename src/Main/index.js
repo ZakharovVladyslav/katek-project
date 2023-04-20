@@ -1,11 +1,12 @@
 'use strict'
 import Controller from '../functions/Controller.js';
-import { showFullTable } from '../Functions/showFullTable.js';
-import csvToArray from '../Functions/csvConvert.js';
-import getFilters from '../Functions/getFilters.js';
-import datePlusMinus from '../Functions/datePlusMinus.js';
-import summaryRowToggle from '../Functions/summaryRow.js';
-import { getAllValues } from '../Functions/getAllValues.js';
+import { showFullTable } from '../functions/ShowFullTable.js';
+import csvToArray from '../functions/CsvConvert.js';
+import getFilters from '../functions/GetFilters.js';
+import datePlusMinus from '../functions/DatePlusMinus.js';
+import summaryRowToggle from '../functions/SummaryRow.js';
+import { getAllValues } from '../functions/GetAllValues.js';
+import DataPie from '../functions/DataPie.js';
 
 const inputForm = document.querySelector('#input-form');
 const file = document.querySelector('#file-choose');
@@ -47,6 +48,8 @@ const shownRowsCounterDiv = document.querySelector('.shown-rows-counter-div');
 const fullTableSection = document.querySelector('#full-table-section');
 
 const summaryRowToggleInput = document.querySelector('#summary-row-toggler-input');
+const pieDiagrammInput = document.querySelector('#pie-diagramm-checkbox')
+
 const modeLabel = document.querySelector('#mode-label');
 
 fullTableSection.style.opacity = '0';
@@ -98,6 +101,21 @@ file.oninput = (e) => {
       Controller.instance.editCore('firstDate', document.querySelector('#left-date-inp'))
       Controller.instance.editCore('secondDate', document.querySelector('#right-date-inp'))
 
+      Controller.instance.editCore('inputFields', [
+         document.querySelector('#filter-input-1'),
+         document.querySelector('#filter-input-2'),
+         document.querySelector('#filter-input-3'),
+         document.querySelector('#filter-input-4'),
+         document.querySelector('#filter-input-5')
+      ])
+      Controller.instance.editCore('datalists', [
+         document.querySelector('#datalist-1'),
+         document.querySelector('#datalist-2'),
+         document.querySelector('#datalist-3'),
+         document.querySelector('#datalist-4'),
+         document.querySelector('#datalist-5')
+      ])
+
       delete Controller.instance.core.inputText
 
       reset.addEventListener('click', e => {
@@ -114,15 +132,7 @@ file.oninput = (e) => {
 
          rowsAmount.innerHTML = Controller.instance.core.staticDataArrayLength
 
-         const dataLists = [
-            document.querySelector('#datalist-1'),
-            document.querySelector('#datalist-2'),
-            document.querySelector('#datalist-3'),
-            document.querySelector('#datalist-4'),
-            document.querySelector('#datalist-5')
-         ]
-
-         dataLists.forEach(datalist => {
+         Controller.instance.core.datalists.forEach(datalist => {
             for (let option of datalist.children)
                option.value = ''
             Controller.instance.core.allValues.forEach(value => {
@@ -138,31 +148,15 @@ file.oninput = (e) => {
          if (e.target.id.substring(0, 6) === 'eraser') {
             const updatedArray = getFilters(Controller.instance.core.dataArray, tableHeaders)
 
-            const filters = [
-               document.querySelector('#filter-input-1'),
-               document.querySelector('#filter-input-2'),
-               document.querySelector('#filter-input-3'),
-               document.querySelector('#filter-input-4'),
-               document.querySelector('#filter-input-5')
-            ]
-
             const targetId = e.target.id.slice(7)
 
-            filters[targetId - 1].value = ''
+            Controller.instance.core.inputFields[targetId - 1].value = ''
 
             updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1
 
-            const dataLists = [
-               document.querySelector('#datalist-1'),
-               document.querySelector('#datalist-2'),
-               document.querySelector('#datalist-3'),
-               document.querySelector('#datalist-4'),
-               document.querySelector('#datalist-5')
-            ]
-
             const values = getAllValues(updatedArray, tableHeaders)
 
-            dataLists.forEach(datalist => {
+            Controller.instance.core.datalists.forEach(datalist => {
                for (let option of datalist.children)
                   option.value = ''
 
@@ -198,11 +192,7 @@ file.onchange = () => {
 
       const values = getAllValues(filteredArray, tableHeaders)
 
-      const dataLists = [...Array(5)].map((_, index) => {
-         return document.querySelector(`#datalist-${index + 1}`)
-      })
-
-      dataLists.forEach(datalist => {
+      Controller.instance.core.datalists.forEach(datalist => {
          for (let option of datalist.children)
             option.value = ''
 
@@ -226,11 +216,7 @@ file.onchange = () => {
             const arr = getFilters(tableHeaders)
             const values = getAllValues(arr, tableHeaders)
 
-            const dataLists = [...Array(5)].map((_, index) => {
-               return document.querySelector(`#datalist-${index + 1}`)
-            })
-
-            dataLists.forEach(datalist => {
+            Controller.instance.core.datalists.forEach(datalist => {
                for (let option of datalist.children)
                   option.value = ''
 
@@ -251,11 +237,9 @@ file.onchange = () => {
 }
 
 filters.addEventListener('click', e => {
-   const filters = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`))
-
    if (e.target.id.substring(0, 6) === 'eraser') {
       const targetId = e.target.id.slice(7)
-      const targetInputField = filters[targetId - 1]
+      const targetInputField = Controller.instance.core.inputFields[targetId - 1]
 
       targetInputField.value = ''
    }
@@ -358,16 +342,8 @@ inputForm.addEventListener("submit", (e) => {
 
             filters.addEventListener('click', e => {
                if (e.target.id.substring(0, 6) === 'eraser') {
-                  const filters = [
-                     document.querySelector('#filter-input-1'),
-                     document.querySelector('#filter-input-2'),
-                     document.querySelector('#filter-input-3'),
-                     document.querySelector('#filter-input-4'),
-                     document.querySelector('#filter-input-5')
-                  ]
-
                   const targetId = e.target.id.slice(7)
-                  const targetInputField = filters[targetId - 1]
+                  const targetInputField = Controller.instance.core.inputFields[targetId - 1]
 
                   targetInputField.value = ''
                }
@@ -394,13 +370,9 @@ inputForm.addEventListener("submit", (e) => {
 
             initialArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = initialArray.length - 1
 
-            const dataLists = [...Array(5)].map((_, index) => {
-               return document.querySelector(`#datalist-${index + 1}`)
-            })
-
             const values = getAllValues(initialArray, tableHeaders)
 
-            dataLists.forEach(datalist => {
+            Controller.instance.core.datalists.forEach(datalist => {
                for (let option of datalist.children)
                   option.value = ''
 
@@ -419,7 +391,7 @@ inputForm.addEventListener("submit", (e) => {
                let filtersValues
 
                if (saveFiltersOption.checked === true) {
-                  filtersValues = [...Array(5)].map((_, index) => document.querySelector(`#filter-input-${index + 1}`).value)
+                  filtersValues = Controller.instance.core.inputFields.map(field => field.value)
                   filtersValues = filtersValues.filter(value => value !== '')
 
                   dataForCsv[0].unshift('#')
@@ -449,6 +421,7 @@ inputForm.addEventListener("submit", (e) => {
             }
 
             summaryRowToggle(initialArray)
+            DataPie()
 
             if (initialArray.length === 0) {
                emptyMessage.innerHTML = "Bitte fügen Sie Filter hinzu"
