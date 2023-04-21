@@ -133,12 +133,12 @@ article span {
 
 #labels {
    display: flex;
-   flex-direction: row;
+   flex-direction: column;
    gap: 20px;
    justify-content: center;
-   align-items: center;
+   align-items: flex-start;
 
-   margin: 50px 120px 0 -120px;
+   margin: 50px 550px 0 -350px;
 }
 
 #empty-message {

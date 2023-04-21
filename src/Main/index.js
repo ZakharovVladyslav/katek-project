@@ -84,6 +84,8 @@ file.oninput = (e) => {
    const inputFileData = file.files[0];
 
    fileReader.onload = (e) => {
+      datePlusMinus();
+
       let text = e.target.result;
       Controller.instance.editCore('inputText', text);
 
@@ -184,6 +186,8 @@ file.onchange = () => {
    const inputFileData = file.files[0];
 
    fileReader.onload = (e) => {
+      datePlusMinus();
+
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
       const filteredArray = getFilters(tableHeaders);
 
@@ -519,7 +523,7 @@ inputForm.addEventListener("submit", (e) => {
                   }).filter(filter => filter !== undefined);
 
                   if (emptyFieldIndexes.length !== 0) {
-                     const targetInputField = filters[emptyFieldIndexes[0]];
+                     const targetInputField = Controller.instance.core.inputFields[emptyFieldIndexes[0]];
                      targetInputField.value = targetCellValue;
                   }
 
