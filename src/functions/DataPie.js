@@ -38,10 +38,10 @@ export default function DataPie() {
                     zeros[j] += parseFloat(values[i][j]);
 
         const data = [
-            { label: "CountPass", value: zeros[0], color: "#74e0d1" },
-            { label: "CountFail", value: zeros[1], color: "#00D4FF" },
-            { label: "CountPass_Retest", value: zeros[2], color: "#008FFF" },
-            { label: "CountFail_Retest", value: zeros[3], color: "#000CFF" },
+            { label: "CountPass", value: zeros[0], color: "#5BB73E" },
+            { label: "CountFail", value: zeros[1], color: "#F00A0A" },
+            { label: "CountPass_Retest", value: zeros[2], color: "#F0E20A" },
+            { label: "CountFail_Retest", value: zeros[3], color: "#072F8B" },
         ];
 
         if (!dataPieInput.checked) {
