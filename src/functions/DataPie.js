@@ -1,32 +1,41 @@
 import Controller from "./Controller.js"
 
 export default function DataPie() {
-    const dataPieInput = document.querySelector("#pie-diagramm-checkbox")
-    const svgElem = document.querySelector('#svg-element')
-    const labels = document.querySelector('#labels')
+    const dataPieInput = document.querySelector("#pie-diagramm-checkbox");
+    const svgElem = document.querySelector('#svg-element');
+    const labels = document.querySelector('#labels');
+    const diagrammLabel = document.querySelector('#pie-diagramm-label');
+    const svgDiv = document.querySelector('#svg-div');
+    const diagrammDescriptionLabel = document.querySelector('#diagramm-description');
+
+    diagrammLabel.addEventListener('click', () => {
+        svgDiv.style.display = 'flex';
+    })
 
     dataPieInput.addEventListener('change', () => {
-        svgElem.style.display = 'block'
-        labels.innerHTML = ''
+        diagrammDescriptionLabel.style.display = 'block';
+        svgElem.style.display = 'block';
+        svgDiv.style.display = 'flex';
+        labels.innerHTML = '';
 
-        const keys = ['CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest']
+        const keys = ['CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
 
         const values = Controller.instance.core.changableArray.map(object => {
-            const objectValues = []
+            const objectValues = [];
 
             keys.forEach(key => {
-                objectValues.push(object[key])
+                objectValues.push(object[key]);
             })
 
-            return objectValues
+            return objectValues;
         })
 
-        let zeros = [0, 0, 0, 0]
+        let zeros = [0, 0, 0, 0];
 
         for (let i = 0; i < values.length; i++)
             for (let j = 0; j < values[i].length; j++)
                 if (values[i][j] !== undefined && values[i][j] != 0)
-                    zeros[j] += parseFloat(values[i][j])
+                    zeros[j] += parseFloat(values[i][j]);
 
         const data = [
             { label: "CountPass", value: zeros[0], color: "#74e0d1" },
@@ -35,7 +44,7 @@ export default function DataPie() {
             { label: "CountFail_Retest", value: zeros[3], color: "#000CFF" },
         ];
 
-        if (dataPieInput.checked) {
+        if (!dataPieInput.checked) {
             const radius = 150;
 
             const arcGenerator = d3.arc()
@@ -62,24 +71,22 @@ export default function DataPie() {
                 .attr("d", arcGenerator)
                 .style("fill", function (d) { return d.data.color; });
 
-            console.log(data)
-
             data.forEach((elem, index) => {
                 const html = `
                         <div id='color-${index + 1}' style="display: flex; flex-direction: row; gap: 10px;">
                             <span id='square' style="width: 40px; height: 40px; background-color: ${elem.color}; display: block; "></span>
                             <p>${elem.label} - ${elem.value}</p>
                         </div>
-                    `
+                `;
 
-                labels.insertAdjacentHTML('beforeend', html)
-            })
-
-            console.log(labels.innerHTML)
+                labels.insertAdjacentHTML('beforeend', html);
+            });
         }
         else {
+            svgDiv.style.display = 'none';
             svgElem.style.display = 'none';
-            labels.innerHTML = ''
+            labels.innerHTML = '';
+            diagrammDescriptionLabel.style.display = 'none';
         }
     })
 }

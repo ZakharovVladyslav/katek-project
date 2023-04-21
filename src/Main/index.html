@@ -170,7 +170,7 @@
 
                <div class="pie-diagramm-toggler">
                   <input type="checkbox" id="pie-diagramm-checkbox" checked="false" disabled>
-                  <label for="pie-diagramm-checkbox" id="pie-diagramm-label">Pie diagramm</label>
+                  <label for="pie-diagramm-checkbox" id="pie-diagramm-label">Kuchendiagramm</label>
                </div>
             </div>
          </section>
@@ -181,11 +181,10 @@
 
    <table id="summary-table"></table>
 
+   <p id="diagramm-description" style="display: none;">Hier kannst du die Prozessfähigkeit in einem Diagramm (pro Prozent) ein einsehen/beobachten.</p>
    <div id="svg-div">
       <svg id='svg-element' width="400" height="400" style="display: none; margin: auto; transform: scale(1.5); margin-top: 50px;"></svg>
-      <div id="labels">
-
-      </div>
+      <div id="labels"></div>
    </div>
 
    <p id="empty-message"></p>
@@ -252,6 +251,7 @@
       const leftDateLabel = document.querySelector('#left-date-label')
       const rightDateLabel = document.querySelector('#right-date-label')
       const cellModeSelection = document.querySelector('#click-toggler')
+      const diagrammLabel = document.querySelector('#pie-diagramm-label')
 
       function chooseLang() {
          if (option.value === 'GE') {
@@ -268,6 +268,7 @@
             showRowOption.innerHTML = 'Zeile anzeigen'
             leftDateLabel.innerHTML = 'Erstes Datum '
             rightDateLabel.innerHTML = 'Zweites Datum'
+            diagrammLabel.innerHTML = 'Kuchendiagramm'
          }
 
          else if (option.value === 'EN') {
@@ -284,6 +285,7 @@
             showRowOption.innerHTML = 'Show row'
             leftDateLabel.innerHTML = 'First date'
             rightDateLabel.innerHTML = 'Second date'
+            diagrammLabel.innerHTML = 'Diagramm'
          }
       }
    </script>

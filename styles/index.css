@@ -118,8 +118,17 @@ article span {
    z-index: 1;
 }
 
+#diagramm-description {
+   text-align: center;
+
+   margin-top: 100px;
+}
+
 #svg-div {
-   margin: auto;
+   display: flex;
+   flex-direction: row;
+
+   margin: 80px auto 50px auto;
 }
 
 #labels {
@@ -129,7 +138,7 @@ article span {
    justify-content: center;
    align-items: center;
 
-   margin-top: 150px;
+   margin: 50px 120px 0 -120px;
 }
 
 #empty-message {
@@ -692,6 +701,7 @@ span {
 #summary-table {
    margin: auto;
    margin-top: 80px;
+   max-width: 0px;
 }
 
 #summary-table th,
