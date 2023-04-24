@@ -38,10 +38,10 @@ export default function DataPie() {
                     zeros[j] += parseFloat(values[i][j]);
 
         const data = [
-            { label: "CountPass", value: zeros[0], color: "#5BB73E", outline: "" },
-            { label: "CountFail", value: zeros[1], color: "#F00A0A", outline: "" },
-            { label: "CountPass_Retest", value: zeros[2], color: "#F0E20A", outline: "" },
-            { label: "CountFail_Retest", value: zeros[3], color: "#072F8B", outline: "" },
+            { label: "CountPass", value: zeros[0], color: "#00FF00", stroke: "#396E28" },
+            { label: "CountFail", value: zeros[1], color: "#FF0000", stroke: "#900606" },
+            { label: "CountPass_Retest", value: zeros[2], color: "#C47A00", stroke: "#877E00" },
+            { label: "CountFail_Retest", value: zeros[3], color: "#00FFEC", stroke: "#041A4C" },
         ];
 
         if (!dataPieInput.checked) {
@@ -74,11 +74,14 @@ export default function DataPie() {
                 .style("fill", function (d) {
                     return d.data.color;
                 })
+                .style("stroke", '#000000')
+                .style("stroke-width", "1px")
 
             const blackCircle = circleDiagram.append("circle")
                 .attr("r", radius / 1.5)
                 .style("fill", "#313038")
-                .style("pointer-events", "none")
+                .style('stroke', 'black')
+                .style('stroke-width', "1px")
                 .raise();
 
             data.forEach((elem, index) => {

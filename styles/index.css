@@ -141,6 +141,15 @@ article span {
    margin: 50px 550px 0 -350px;
 }
 
+#labels #square {
+
+   border: 2px solid #000;
+}
+
+#labels p {
+   margin-top: 15px;
+}
+
 #empty-message {
    text-align: center;
    font-size: 50px;
