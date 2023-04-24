@@ -48,13 +48,14 @@ export default function DataPie() {
             const radius = 150;
 
             const arcGenerator = d3.arc()
-                .innerRadius(0)
+                .innerRadius(100)
                 .outerRadius(radius);
 
             const pieGenerator = d3.pie()
                 .value(function (d) {
                     return d.value;
-                });
+                })
+                .padAngle(0.04);
 
             const svg = d3.select("svg");
 
@@ -76,13 +77,6 @@ export default function DataPie() {
                 })
                 .style("stroke", '#000000')
                 .style("stroke-width", "1px")
-
-            const blackCircle = circleDiagram.append("circle")
-                .attr("r", radius / 1.5)
-                .style("fill", "#313038")
-                .style('stroke', 'black')
-                .style('stroke-width', "1px")
-                .raise();
 
             data.forEach((elem, index) => {
                 const html = `
