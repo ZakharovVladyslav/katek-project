@@ -76,7 +76,5 @@ export default function getFilters(headers) {
         })
     })
 
-    filteredArray.unshift(headers)
-
     return filteredArray
 }

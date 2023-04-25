@@ -17,9 +17,4 @@ export default class Controller {
     editCore(prop, value) {
         this._core[prop] = value;
     }
-
-    foo(prop, value) {
-        let todo = 1 + value;
-        this.editCore(prop, todo);
-    }
 }

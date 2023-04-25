@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 import Controller from '../functions/Controller.js';
 import { showFullTable } from '../functions/ShowFullTable.js';
 import csvToArray from '../functions/CsvConvert.js';
@@ -90,17 +91,21 @@ file.oninput = (e) => {
       Controller.instance.editCore('inputText', text);
 
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
+      Controller.instance.editCore('tableHeaders', tableHeaders)
 
       const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value;
 
       Controller.instance.editCore('dataArray', csvToArray(Controller.instance.core.inputText, delimiterOption)[0].filter((obj, index) => {
          return !Object.values(obj).includes(undefined);
-      }))
+      }));
+      Controller.instance.editCore('changableArray', csvToArray(Controller.instance.core.inputText, delimiterOption)[0].filter((obj, index) => {
+         return !Object.values(obj).includes(undefined);
+      }));
       Controller.instance.editCore('staticDataArray', Controller.instance.core.dataArray);
       Controller.instance.editCore('staticDataArrayLength', Controller.instance.core.staticDataArray.length);
       Controller.instance.editCore('headers', csvToArray(Controller.instance.core.inputText, delimiterOption)[1]);
       Controller.instance.editCore('filters', csvToArray(Controller.instance.core.inputText, delimiterOption)[2]);
-      Controller.instance.editCore('allValues', getAllValues(Controller.instance.core.staticDataArray, tableHeaders));
+      Controller.instance.editCore('allValues', getAllValues(Controller.instance.core.staticDataArray, Controller.instance.core.tableHeaders));
       Controller.instance.editCore('inputTextLength', Controller.instance.core.inputText.length);
       Controller.instance.editCore('firstDate', document.querySelector('#left-date-inp'));
       Controller.instance.editCore('secondDate', document.querySelector('#right-date-inp'));
@@ -134,6 +139,8 @@ file.oninput = (e) => {
          Controller.instance.core.firstDate.value = '';
          Controller.instance.core.secondDate.value = '';
 
+         Controller.instance.editCore('changableArray', [...Controller.instance.core.staticDataArray]);
+
          rowsAmount.innerHTML = Controller.instance.core.staticDataArrayLength;
 
          Controller.instance.core.datalists.forEach(datalist => {
@@ -151,15 +158,14 @@ file.oninput = (e) => {
 
       filters.addEventListener('click', e => {
          if (e.target.id.substring(0, 6) === 'eraser') {
-            const updatedArray = getFilters(Controller.instance.core.dataArray, tableHeaders);
+            Controller.instance.editCore('changableArray', getFilters(Controller.instance.core.staticDataArray, Controller.instance.core.tableHeaders));
 
             const targetId = e.target.id.slice(7);
 
             Controller.instance.core.inputFields[targetId - 1].value = '';
+            Controller.instance.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Controller.instance.core.changableArray.length;
 
-            updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1;
-
-            const values = getAllValues(updatedArray, tableHeaders);
+            const values = getAllValues(Controller.instance.core.changableArray, Controller.instance.core.tableHeaders);
 
             Controller.instance.core.datalists.forEach(datalist => {
                for (let option of datalist.children)
@@ -188,22 +194,17 @@ file.onchange = () => {
    fileReader.onload = (e) => {
       datePlusMinus();
 
-      const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
-      const filteredArray = getFilters(tableHeaders);
-
-      if (Controller.instance.core.dataArray.length > 8000) {
+      if (Controller.instance.core.changableArray.length > 8000) {
          dataTable.innerHTML = '';
 
          emptyMessage.innerHTML = 'Table is too big. Please add dates or filters';
       }
 
-      const values = getAllValues(filteredArray, tableHeaders);
-
       Controller.instance.core.datalists.forEach(datalist => {
          for (let option of datalist.children)
             option.value = '';
 
-         values.forEach(value => {
+         Controller.instance.core.allValues.forEach(value => {
             const option = document.createElement('option');
             option.className = 'datalist-option';
             option.value = value;
@@ -211,7 +212,7 @@ file.onchange = () => {
          })
       })
 
-      rowsAmount.innerHTML = filteredArray.length - 1;
+      rowsAmount.innerHTML = Controller.instance.core.staticDataArray.length;
 
       filters.onclick = (e) => {
          const targetId = e.target.id;
@@ -220,8 +221,8 @@ file.onchange = () => {
          const targetField = document.querySelector(`#filter-input-${targetNumber}`);
 
          targetField.onchange = () => {
-            Controller.instance.editCore('changableArray', [...getFilters(tableHeaders)]);
-            const values = getAllValues(Controller.instance.core.changableArray, tableHeaders);
+            Controller.instance.editCore('changableArray', getFilters(Controller.instance.core.tableHeaders));
+            let values = getAllValues(Controller.instance.core.changableArray, Controller.instance.core.tableHeaders);
 
             DataPie();
 
@@ -237,7 +238,9 @@ file.onchange = () => {
                })
             })
 
-            Controller.instance.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Controller.instance.core.changableArray.length - 1;
+            values = null;
+
+            Controller.instance.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Controller.instance.core.changableArray.length;
          }
       }
    }
@@ -300,18 +303,15 @@ inputForm.addEventListener("submit", (e) => {
          dataTable.innerHTML = '';
       }
 
-      const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
+      Controller.instance.editCore('changableArray', getFilters(Controller.instance.core.tableHeaders));
 
-      const initialArray = getFilters(tableHeaders);
-
-      if (initialArray.length > 8000) {
+      if (Controller.instance.core.changableArray.length > 8000) {
          dataTable.innerHTML = '';
 
          emptyMessage.innerHTML = 'Table is too big. Please add dates or filters';
       }
 
       else {
-
          load.style.opacity = '1';
          loadingMessage.style.opacity = '1';
          load.style.transition = '0.2s';
@@ -353,7 +353,8 @@ inputForm.addEventListener("submit", (e) => {
             clickToggler.style.display = 'block';
             saveButton.style.display = 'block';
 
-            shownRowsCounter.innerHTML = `${Controller.instance.core.dataArrayLength}`;
+            let limiter = Controller.instance.core.changableArray.length
+            shownRowsCounter.innerHTML = `${limiter}`;
 
             filters.addEventListener('click', e => {
                if (e.target.id.substring(0, 6) === 'eraser') {
@@ -370,9 +371,7 @@ inputForm.addEventListener("submit", (e) => {
             /*----------------------------------------------------------------------------------------------------------------*/
             /*----------------------------------------------------------------------------------------------------------------*/
 
-            const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
-
-            const initialArray = getFilters(tableHeaders);
+            Controller.instance.editCore('changableArray', getFilters(Controller.instance.core.tableHeaders));
 
             const filtersFromCsvFile = Controller.instance.core.filters;
             const filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '');
@@ -381,9 +380,9 @@ inputForm.addEventListener("submit", (e) => {
                Controller.instance.core.inputFields[index].setAttribute('placeholder', value);
             })
 
-            initialArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = initialArray.length - 1;
+            Controller.instance.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Controller.instance.core.changableArray.length;
 
-            const values = getAllValues(initialArray, tableHeaders);
+            let values = getAllValues(Controller.instance.core.changableArray, Controller.instance.core.tableHeaders);
 
             Controller.instance.core.datalists.forEach(datalist => {
                for (let option of datalist.children)
@@ -397,13 +396,15 @@ inputForm.addEventListener("submit", (e) => {
                })
             })
 
-            const dataForCsv = getFilters(Controller.instance.core.headers);
+            values = null;
+            let dataForCsv = getFilters(Controller.instance.core.headers);
 
             saveButton.onclick = () => {
-               const refinedData = [];
-               let filtersValues;
+               let refinedData = [];
 
                if (saveFiltersOption.checked === true) {
+                  let filtersValues = [];
+
                   filtersValues = Controller.instance.core.inputFields.map(field => field.value);
                   filtersValues = filtersValues.filter(value => value !== '');
 
@@ -413,6 +414,7 @@ inputForm.addEventListener("submit", (e) => {
 
                   dataForCsv[0] = dataForCsv[0].flat(Infinity);
 
+                  filtersValues = null;
                }
 
                dataForCsv.forEach(obj => {
@@ -431,13 +433,14 @@ inputForm.addEventListener("submit", (e) => {
                const dateNow = new Date();
                saveButton.setAttribute('download', `Filtered-table-${dateNow.getDate()}-${dateNow.getMonth()}-${dateNow.getFullYear()}-${dateNow.getHours()}-${dateNow.getMinutes()}-${dateNow.getSeconds()}`);
 
+               refinedData = null;
             }
+            dataForCsv = null;
 
-            Controller.instance.editCore('changableArray', [...initialArray]);
             summaryRowToggle();
             DataPie();
 
-            if (initialArray.length === 0) {
+            if (Controller.instance.core.changableArray.length === 0) {
                emptyMessage.innerHTML = "Bitte fügen Sie Filter hinzu";
 
                document.body.append(emptyMessage);
@@ -461,40 +464,37 @@ inputForm.addEventListener("submit", (e) => {
             load.style.opacity = '0';
             loadingMessage.style.opacity = '0';
 
-            if (rowLimiter.value !== '') {
-               if (initialArray.length > rowLimiter.length)
-                  initialArray.length = rowLimiter.value;
-               else
-                  rowLimiter.value = initialArray.length;
-            }
+            if (rowLimiter.value !== '')
+               if (Controller.instance.core.changableArray.length > +rowLimiter.value)
+                  limiter = +rowLimiter.value;
 
-            if (rowLimiter.value > initialArray.length)
-               shownRowsCounter.innerHTML = initialArray.length - 1;
+            if (+rowLimiter.value > Controller.instance.core.changableArray.length)
+               shownRowsCounter.innerHTML = Controller.instance.core.changableArray.length;
             else
-               shownRowsCounter.innerHTML = rowLimiter.value;
+               shownRowsCounter.innerHTML = +rowLimiter.value;
 
             let hrow = document.createElement('tr');
             for (let i = 0; i < 16; i++) {
                let theader = document.createElement('th');
 
-               theader.innerHTML = initialArray[0][i];
+               theader.innerHTML = Controller.instance.core.tableHeaders[i];
                hrow.appendChild(theader);
             }
             thead.appendChild(hrow);
 
 
-            for (let i = 1; i < initialArray.length; i++) {
+            for (let i = 0; i < limiter; i++) {
                let body_row = document.createElement('tr');
 
-               tableHeaders.forEach((header, j) => {
+               Controller.instance.core.tableHeaders.forEach((header, j) => {
                   let table_data = document.createElement('td');
 
                   table_data.setAttribute('id', `cell ${i}${j}`);
 
                   if (header === 'FPY')
-                     table_data.innerHTML = `${initialArray[i][header]}%`;
+                     table_data.innerHTML = `${Controller.instance.core.changableArray[i][header]}%`;
                   else
-                     table_data.innerHTML = initialArray[i][header];
+                     table_data.innerHTML = Controller.instance.core.changableArray[i][header];
 
                   body_row.appendChild(table_data);
                })
@@ -508,13 +508,12 @@ inputForm.addEventListener("submit", (e) => {
             saveDiv.style.opacity = '1';
             saveDiv.style.transition = '0.2s';
 
-            showFullTable(initialArray);
+            showFullTable();
 
             table.addEventListener('click', e => {
                const clickOption = cellSelect.options[cellSelect.selectedIndex].value;
 
                if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
-                  const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
                   const targetCellValue = e.target.innerHTML;
 
                   const emptyFieldIndexes = Controller.instance.core.inputFields.map((filter, index) => {
@@ -527,9 +526,9 @@ inputForm.addEventListener("submit", (e) => {
                      targetInputField.value = targetCellValue;
                   }
 
-                  const updatedArray = getFilters(tableHeaders);
+                  Controller.instance.editCore('changableArray', getFilters(Controller.instance.core.tableHeaders));
 
-                  updatedArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = updatedArray.length - 1;
+                  Controller.instance.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Controller.instance.core.changableArray.length;
                }
 
                else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
@@ -540,17 +539,13 @@ inputForm.addEventListener("submit", (e) => {
                   summaryRowToggleInput.disabled = true;
                   pieDiagrammInput.disabled = true;
 
-                  const headers = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
-
-                  const initialArray = getFilters(headers);
-
                   const targetId = e.target.id;
                   const splittedTargetId = targetId.split('');
                   splittedTargetId.splice(0, 5);
 
                   const row = +splittedTargetId[0];
 
-                  const object = initialArray[row];
+                  const object = Controller.instance.core.changableArray[row];
 
                   dataTable.innerHTML = '';
                   table.innerHTML = '';
@@ -599,15 +594,11 @@ inputForm.addEventListener("submit", (e) => {
                   rowTable.append(tbody);
                   dataTable.append(rowTable);
 
-                  initialArray.length = 0;
                   object.length = 0;
                   splittedTargetId.length = 0;
                }
 
             })
-
-            initialArray.length = 0;
-            tableHeaders.length = 0;
          }
       }
    }

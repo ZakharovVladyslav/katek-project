@@ -1,5 +1,7 @@
+import Controller from "./Controller.js"
+
 export const showFullTable = (inputArray) => {
-      let arr = [...inputArray]
+      let arr = [...Controller.instance.core.changableArray]
       const remove = arr.shift()
 
       const leftArrow = document.querySelector('#left-arrow')
