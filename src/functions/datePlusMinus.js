@@ -1,5 +1,4 @@
 export default function datePlusMinus() {
-
     const leftDateInput = document.querySelector('#left-date-inp');
     const leftDateButtonMinus = document.querySelector('#left-date-minus');
     const leftDateMinusInput = document.querySelector('#left-date-minus-input');

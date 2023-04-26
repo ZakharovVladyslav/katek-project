@@ -156,7 +156,7 @@
             </section><br>
 
             <div class="submit-section">
-               <button type="submit" value="Bestätigen" id="submit-button">Bestätigen</button>
+               <button type="submit" value="Bestätigen" id="submit-button" disabled>Bestätigen</button>
                <button type="submit" value="Ursprüngliche" id="reload-table" disabled>Ursprüngliche Tabelle</button>
 
                <button type="button" id="reset" disabled>Reset</button>
@@ -200,14 +200,14 @@
 
 
    <div class="over-tables">
-      <p id="mode-label">Cell click mode: </p>
+      <p id="mode-label" style="opacity: 0;">Cell click mode: </p>
       <select id="click-toggler" style="display: none;">
          <option id="opt1" class="ct-option">Zum Filtern hinzufügen</option>
          <option id="opt2" class="ct-option">Zeile anzeigen</option>
       </select>
 
       <div class="shown-rows-counter-div" id="shown-rows-counter-div">
-         <p id="real-rows-number">Anzahl der angezeigten Zeilen:</p>
+         <p id="real-rows-number" style="opacity: 0;">Anzahl der angezeigten Zeilen:</p>
          <p id="shown-rows-counter"></p>
       </div>
 

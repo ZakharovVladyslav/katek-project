@@ -1,4 +1,6 @@
-import Controller from "./Controller.js"
+import { CustomStorage } from "./CustomStorage.js"
+
+const Storage = new CustomStorage();
 
 export default function DataPie() {
     const dataPieInput = document.querySelector("#pie-diagramm-checkbox");
@@ -20,7 +22,7 @@ export default function DataPie() {
 
         const keys = ['CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
 
-        const values = Controller.instance.core.changableArray.map(object => {
+        const values = Storage.core.changableArray.map(object => {
             const objectValues = [];
 
             keys.forEach(key => {

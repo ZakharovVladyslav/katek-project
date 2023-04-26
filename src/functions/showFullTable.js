@@ -1,7 +1,9 @@
-import Controller from "./Controller.js"
+import { CustomStorage } from "./CustomStorage.js"
+
+const Storage = new CustomStorage();
 
 export const showFullTable = (inputArray) => {
-      let arr = [...Controller.instance.core.changableArray]
+      let arr = [...Storage.core.changableArray]
       const remove = arr.shift()
 
       const leftArrow = document.querySelector('#left-arrow')

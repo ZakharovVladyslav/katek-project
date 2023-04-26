@@ -1,4 +1,6 @@
-import Controller from "./Controller.js"
+import { CustomStorage } from "./CustomStorage.js"
+
+const Storage = new CustomStorage();
 
 export default function summaryRowToggle() {;
     const toggleCheckboxInput = document.querySelector('#summary-row-toggler-input');
@@ -6,7 +8,7 @@ export default function summaryRowToggle() {;
     const thead = document.createElement('thead');
     const tbody = document.createElement('tbody');
 
-    const array = [...Controller.instance.core.changableArray];
+    const array = [...Storage.core.changableArray];
 
     toggleCheckboxInput.addEventListener('change', e => {
         if (!toggleCheckboxInput.checked) {

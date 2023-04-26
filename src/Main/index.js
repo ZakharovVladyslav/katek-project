@@ -1,6 +1,5 @@
 'use strict';
 
-import Controller from '../functions/Controller.js';
 import { showFullTable } from '../functions/ShowFullTable.js';
 import csvToArray from '../functions/CsvConvert.js';
 import getFilters from '../functions/GetFilters.js';
@@ -8,6 +7,10 @@ import datePlusMinus from '../functions/DatePlusMinus.js';
 import summaryRowToggle from '../functions/SummaryRow.js';
 import { getAllValues } from '../functions/GetAllValues.js';
 import DataPie from '../functions/DataPie.js';
+
+import { CustomStorage, SecondaryStorage } from '../functions/CustomStorage.js';
+const Storage = new CustomStorage();
+const MinorStorage = new SecondaryStorage();
 
 const inputForm = document.querySelector('#input-form');
 const file = document.querySelector('#file-choose');
@@ -88,36 +91,35 @@ file.oninput = (e) => {
       datePlusMinus();
 
       let text = e.target.result;
-      Controller.instance.editCore('inputText', text);
+      Storage.editCore('inputText', text);
 
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
-      Controller.instance.editCore('tableHeaders', tableHeaders)
+      Storage.editCore('tableHeaders', tableHeaders)
 
       const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value;
 
-      Controller.instance.editCore('dataArray', csvToArray(Controller.instance.core.inputText, delimiterOption)[0].filter((obj, index) => {
+      Storage.editCore('changableArray', csvToArray(Storage.core.inputText, delimiterOption)[0].filter((obj, index) => {
          return !Object.values(obj).includes(undefined);
       }));
-      Controller.instance.editCore('changableArray', csvToArray(Controller.instance.core.inputText, delimiterOption)[0].filter((obj, index) => {
-         return !Object.values(obj).includes(undefined);
-      }));
-      Controller.instance.editCore('staticDataArray', Controller.instance.core.dataArray);
-      Controller.instance.editCore('staticDataArrayLength', Controller.instance.core.staticDataArray.length);
-      Controller.instance.editCore('headers', csvToArray(Controller.instance.core.inputText, delimiterOption)[1]);
-      Controller.instance.editCore('filters', csvToArray(Controller.instance.core.inputText, delimiterOption)[2]);
-      Controller.instance.editCore('allValues', getAllValues(Controller.instance.core.staticDataArray, Controller.instance.core.tableHeaders));
-      Controller.instance.editCore('inputTextLength', Controller.instance.core.inputText.length);
-      Controller.instance.editCore('firstDate', document.querySelector('#left-date-inp'));
-      Controller.instance.editCore('secondDate', document.querySelector('#right-date-inp'));
 
-      Controller.instance.editCore('inputFields', [
+      Storage.editCore('staticDataArray', Storage.core.changableArray);
+      Storage.editCore('allHeaders', Object.keys(Storage.core.staticDataArray[0]));
+      Storage.editCore('staticDataArrayLength', Storage.core.staticDataArray.length);
+      Storage.editCore('headers', csvToArray(Storage.core.inputText, delimiterOption)[1]);
+      Storage.editCore('filters', csvToArray(Storage.core.inputText, delimiterOption)[2]);
+      Storage.editCore('allValues', getAllValues(Storage.core.staticDataArray, Storage.core.tableHeaders));
+      Storage.editCore('inputTextLength', Storage.core.inputText.length);
+      Storage.editCore('firstDate', document.querySelector('#left-date-inp'));
+      Storage.editCore('secondDate', document.querySelector('#right-date-inp'));
+
+      Storage.editCore('inputFields', [
          document.querySelector('#filter-input-1'),
          document.querySelector('#filter-input-2'),
          document.querySelector('#filter-input-3'),
          document.querySelector('#filter-input-4'),
          document.querySelector('#filter-input-5')
       ]);
-      Controller.instance.editCore('datalists', [
+      Storage.editCore('datalists', [
          document.querySelector('#datalist-1'),
          document.querySelector('#datalist-2'),
          document.querySelector('#datalist-3'),
@@ -125,7 +127,7 @@ file.oninput = (e) => {
          document.querySelector('#datalist-5')
       ]);
 
-      delete Controller.instance.core.inputText;
+      delete Storage.core.inputText;
 
       reset.addEventListener('click', e => {
          e.preventDefault();
@@ -136,18 +138,18 @@ file.oninput = (e) => {
          document.querySelector('#filter-input-4').value = '';
          document.querySelector('#filter-input-5').value = '';
          rowLimiter.value = '';
-         Controller.instance.core.firstDate.value = '';
-         Controller.instance.core.secondDate.value = '';
+         Storage.core.firstDate.value = '';
+         Storage.core.secondDate.value = '';
 
-         Controller.instance.editCore('changableArray', [...Controller.instance.core.staticDataArray]);
+         Storage.editCore('changableArray', [...Storage.core.staticDataArray]);
 
-         rowsAmount.innerHTML = Controller.instance.core.staticDataArrayLength;
+         rowsAmount.innerHTML = Storage.core.staticDataArrayLength;
 
-         Controller.instance.core.datalists.forEach(datalist => {
+         Storage.core.datalists.forEach(datalist => {
             for (let option of datalist.children)
                option.value = '';
 
-            Controller.instance.core.allValues.forEach(value => {
+            Storage.core.allValues.forEach(value => {
                const option = document.createElement('option');
                option.className = 'datalist-option';
                option.value = value;
@@ -158,16 +160,16 @@ file.oninput = (e) => {
 
       filters.addEventListener('click', e => {
          if (e.target.id.substring(0, 6) === 'eraser') {
-            Controller.instance.editCore('changableArray', getFilters(Controller.instance.core.staticDataArray, Controller.instance.core.tableHeaders));
+            Storage.editCore('changableArray', getFilters());
 
             const targetId = e.target.id.slice(7);
 
-            Controller.instance.core.inputFields[targetId - 1].value = '';
-            Controller.instance.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Controller.instance.core.changableArray.length;
+            Storage.core.inputFields[targetId - 1].value = '';
+            Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
 
-            const values = getAllValues(Controller.instance.core.changableArray, Controller.instance.core.tableHeaders);
+            const values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
-            Controller.instance.core.datalists.forEach(datalist => {
+            Storage.core.datalists.forEach(datalist => {
                for (let option of datalist.children)
                   option.value = '';
 
@@ -194,17 +196,17 @@ file.onchange = () => {
    fileReader.onload = (e) => {
       datePlusMinus();
 
-      if (Controller.instance.core.changableArray.length > 8000) {
+      if (Storage.core.changableArray.length > 8000) {
          dataTable.innerHTML = '';
 
          emptyMessage.innerHTML = 'Table is too big. Please add dates or filters';
       }
 
-      Controller.instance.core.datalists.forEach(datalist => {
+      Storage.core.datalists.forEach(datalist => {
          for (let option of datalist.children)
             option.value = '';
 
-         Controller.instance.core.allValues.forEach(value => {
+         Storage.core.allValues.forEach(value => {
             const option = document.createElement('option');
             option.className = 'datalist-option';
             option.value = value;
@@ -212,7 +214,7 @@ file.onchange = () => {
          })
       })
 
-      rowsAmount.innerHTML = Controller.instance.core.staticDataArray.length;
+      rowsAmount.innerHTML = Storage.core.staticDataArray.length;
 
       filters.onclick = (e) => {
          const targetId = e.target.id;
@@ -221,12 +223,12 @@ file.onchange = () => {
          const targetField = document.querySelector(`#filter-input-${targetNumber}`);
 
          targetField.onchange = () => {
-            Controller.instance.editCore('changableArray', getFilters(Controller.instance.core.tableHeaders));
-            let values = getAllValues(Controller.instance.core.changableArray, Controller.instance.core.tableHeaders);
+            Storage.editCore('changableArray', getFilters());
+            let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
             DataPie();
 
-            Controller.instance.core.datalists.forEach(datalist => {
+            Storage.core.datalists.forEach(datalist => {
                for (let option of datalist.children)
                   option.value = '';
 
@@ -240,7 +242,7 @@ file.onchange = () => {
 
             values = null;
 
-            Controller.instance.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Controller.instance.core.changableArray.length;
+            Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
          }
       }
    }
@@ -251,7 +253,7 @@ file.onchange = () => {
 filters.addEventListener('click', e => {
    if (e.target.id.substring(0, 6) === 'eraser') {
       const targetId = e.target.id.slice(7);
-      const targetInputField = Controller.instance.core.inputFields[targetId - 1];
+      const targetInputField = Storage.core.inputFields[targetId - 1];
 
       targetInputField.value = '';
    }
@@ -303,9 +305,9 @@ inputForm.addEventListener("submit", (e) => {
          dataTable.innerHTML = '';
       }
 
-      Controller.instance.editCore('changableArray', getFilters(Controller.instance.core.tableHeaders));
+      Storage.editCore('changableArray', getFilters());
 
-      if (Controller.instance.core.changableArray.length > 8000) {
+      if (Storage.core.changableArray.length > 8000) {
          dataTable.innerHTML = '';
 
          emptyMessage.innerHTML = 'Table is too big. Please add dates or filters';
@@ -327,7 +329,7 @@ inputForm.addEventListener("submit", (e) => {
 
          const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
 
-         if (Controller.instance.core.inputTextLength.length === 0) {
+         if (Storage.core.inputTextLength.length === 0) {
             if (file.DOCUMENT_NODE > 0) {
                dataTable.innerHTML = '';
                table.innerHTML = '';
@@ -353,13 +355,13 @@ inputForm.addEventListener("submit", (e) => {
             clickToggler.style.display = 'block';
             saveButton.style.display = 'block';
 
-            let limiter = Controller.instance.core.changableArray.length
+            let limiter = Storage.core.changableArray.length
             shownRowsCounter.innerHTML = `${limiter}`;
 
             filters.addEventListener('click', e => {
                if (e.target.id.substring(0, 6) === 'eraser') {
                   const targetId = e.target.id.slice(7);
-                  const targetInputField = Controller.instance.core.inputFields[targetId - 1];
+                  const targetInputField = Storage.core.inputFields[targetId - 1];
 
                   targetInputField.value = '';
                }
@@ -371,20 +373,20 @@ inputForm.addEventListener("submit", (e) => {
             /*----------------------------------------------------------------------------------------------------------------*/
             /*----------------------------------------------------------------------------------------------------------------*/
 
-            Controller.instance.editCore('changableArray', getFilters(Controller.instance.core.tableHeaders));
+            Storage.editCore('changableArray', getFilters());
 
-            const filtersFromCsvFile = Controller.instance.core.filters;
+            const filtersFromCsvFile = Storage.core.filters;
             const filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '');
 
             filtersFromCsvFileSplitted.forEach((value, index) => {
-               Controller.instance.core.inputFields[index].setAttribute('placeholder', value);
+               Storage.core.inputFields[index].setAttribute('placeholder', value);
             })
 
-            Controller.instance.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Controller.instance.core.changableArray.length;
+            Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
 
-            let values = getAllValues(Controller.instance.core.changableArray, Controller.instance.core.tableHeaders);
+            let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
-            Controller.instance.core.datalists.forEach(datalist => {
+            Storage.core.datalists.forEach(datalist => {
                for (let option of datalist.children)
                   option.value = '';
 
@@ -397,33 +399,64 @@ inputForm.addEventListener("submit", (e) => {
             })
 
             values = null;
-            let dataForCsv = getFilters(Controller.instance.core.headers);
 
-            saveButton.onclick = () => {
-               let refinedData = [];
+            /* ----------------------------------- SAVE CURRENT STATE FILE SECTION -------------------------------- */
+
+            saveButton.addEventListener('click', () => {
+               MinorStorage.editCore('CsvData', getFilters());
+               MinorStorage.editCore('RefinedData', [[...Storage.core.allHeaders]]);
+
+               console.log(MinorStorage.core.RefinedData);
 
                if (saveFiltersOption.checked === true) {
                   let filtersValues = [];
 
-                  filtersValues = Controller.instance.core.inputFields.map(field => field.value);
+                  filtersValues = Storage.core.inputFields.map(field => field.value);
                   filtersValues = filtersValues.filter(value => value !== '');
 
-                  dataForCsv[0].unshift('#');
+                  let headers = MinorStorage.core.RefinedData[0];
+                  let arr = MinorStorage.core.CsvData;
+
+                  if (!headers.includes('#'));
+                     headers.unshift('#');
+
                   if (filtersValues.length > 0)
-                     dataForCsv[0].unshift(filtersValues);
+                     headers.unshift(filtersValues);
 
-                  dataForCsv[0] = dataForCsv[0].flat(Infinity);
+                  headers = headers.flat(Infinity);
 
+                  arr[0] = headers;
+
+                  MinorStorage.editCore('CsvData', arr);
+
+                  arr = null;
+                  headers = null;
                   filtersValues = null;
                }
 
-               dataForCsv.forEach(obj => {
-                  refinedData.push(Object.values(obj));
+               MinorStorage.core.CsvData.forEach(obj => {
+                  let arr = MinorStorage.core.RefinedData;
+                  arr.push(obj);
+
+                  MinorStorage.editCore('RefinedData', arr);
+                  arr = null;
                })
 
+               if (JSON.stringify(MinorStorage.core.RefinedData[0]) === JSON.stringify(MinorStorage.core.RefinedData[1])) {
+                  let arr = MinorStorage.core.RefinedData;
+
+                  arr.shift();
+
+                  MinorStorage.editCore('RefinedData', arr);
+
+                  arr = null;
+               }
+
                let csvContent = '';
-               refinedData.forEach(row => {
-                  csvContent += row.join(',') + '\n';
+               MinorStorage.core.RefinedData.forEach(row => {
+                  typeof(row) === 'object'
+                  ? csvContent += Object.values(row).join(',') + '\n'
+                  : csvContent += row.join(',') + '\n';
                })
 
                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8,' });
@@ -433,14 +466,14 @@ inputForm.addEventListener("submit", (e) => {
                const dateNow = new Date();
                saveButton.setAttribute('download', `Filtered-table-${dateNow.getDate()}-${dateNow.getMonth()}-${dateNow.getFullYear()}-${dateNow.getHours()}-${dateNow.getMinutes()}-${dateNow.getSeconds()}`);
 
-               refinedData = null;
-            }
-            dataForCsv = null;
+               delete MinorStorage.core.RefinedData;
+               delete MinorStorage.core.CsvData;
+            })
 
             summaryRowToggle();
             DataPie();
 
-            if (Controller.instance.core.changableArray.length === 0) {
+            if (Storage.core.changableArray.length === 0) {
                emptyMessage.innerHTML = "Bitte fügen Sie Filter hinzu";
 
                document.body.append(emptyMessage);
@@ -465,11 +498,11 @@ inputForm.addEventListener("submit", (e) => {
             loadingMessage.style.opacity = '0';
 
             if (rowLimiter.value !== '')
-               if (Controller.instance.core.changableArray.length > +rowLimiter.value)
+               if (Storage.core.changableArray.length > +rowLimiter.value)
                   limiter = +rowLimiter.value;
 
-            if (+rowLimiter.value > Controller.instance.core.changableArray.length)
-               shownRowsCounter.innerHTML = Controller.instance.core.changableArray.length;
+            if (+rowLimiter.value > Storage.core.changableArray.length)
+               shownRowsCounter.innerHTML = Storage.core.changableArray.length;
             else
                shownRowsCounter.innerHTML = +rowLimiter.value;
 
@@ -477,7 +510,7 @@ inputForm.addEventListener("submit", (e) => {
             for (let i = 0; i < 16; i++) {
                let theader = document.createElement('th');
 
-               theader.innerHTML = Controller.instance.core.tableHeaders[i];
+               theader.innerHTML = Storage.core.tableHeaders[i];
                hrow.appendChild(theader);
             }
             thead.appendChild(hrow);
@@ -486,15 +519,15 @@ inputForm.addEventListener("submit", (e) => {
             for (let i = 0; i < limiter; i++) {
                let body_row = document.createElement('tr');
 
-               Controller.instance.core.tableHeaders.forEach((header, j) => {
+               Storage.core.tableHeaders.forEach((header, j) => {
                   let table_data = document.createElement('td');
 
                   table_data.setAttribute('id', `cell ${i}${j}`);
 
                   if (header === 'FPY')
-                     table_data.innerHTML = `${Controller.instance.core.changableArray[i][header]}%`;
+                     table_data.innerHTML = `${Storage.core.changableArray[i][header]}%`;
                   else
-                     table_data.innerHTML = Controller.instance.core.changableArray[i][header];
+                     table_data.innerHTML = Storage.core.changableArray[i][header];
 
                   body_row.appendChild(table_data);
                })
@@ -516,19 +549,19 @@ inputForm.addEventListener("submit", (e) => {
                if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
                   const targetCellValue = e.target.innerHTML;
 
-                  const emptyFieldIndexes = Controller.instance.core.inputFields.map((filter, index) => {
+                  const emptyFieldIndexes = Storage.core.inputFields.map((filter, index) => {
                      if (filter.value === '')
                         return index;
                   }).filter(filter => filter !== undefined);
 
                   if (emptyFieldIndexes.length !== 0) {
-                     const targetInputField = Controller.instance.core.inputFields[emptyFieldIndexes[0]];
+                     const targetInputField = Storage.core.inputFields[emptyFieldIndexes[0]];
                      targetInputField.value = targetCellValue;
                   }
 
-                  Controller.instance.editCore('changableArray', getFilters(Controller.instance.core.tableHeaders));
+                  Storage.editCore('changableArray', getFilters());
 
-                  Controller.instance.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Controller.instance.core.changableArray.length;
+                  Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
                }
 
                else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
@@ -545,7 +578,7 @@ inputForm.addEventListener("submit", (e) => {
 
                   const row = +splittedTargetId[0];
 
-                  const object = Controller.instance.core.changableArray[row];
+                  const object = Storage.core.changableArray[row];
 
                   dataTable.innerHTML = '';
                   table.innerHTML = '';
