@@ -50,14 +50,13 @@ export default function DataPie() {
             const radius = 150;
 
             const arcGenerator = d3.arc()
-                .innerRadius(100)
+                .innerRadius(0)
                 .outerRadius(radius);
 
             const pieGenerator = d3.pie()
                 .value(function (d) {
                     return d.value;
-                })
-                .padAngle(0.04);
+                });
 
             const svg = d3.select("svg");
 
@@ -77,8 +76,12 @@ export default function DataPie() {
                 .style("fill", function (d) {
                     return d.data.color;
                 })
-                .style("stroke", '#000000')
-                .style("stroke-width", "1px")
+
+            const blackCircle = circleDiagram.append("circle")
+                .attr("r", radius / 1.5)
+                .style("fill", "#313038")
+                .style("pointer-events", "none")
+                .raise();
 
             data.forEach((elem, index) => {
                 const html = `
@@ -95,6 +98,7 @@ export default function DataPie() {
             svgDiv.style.display = 'none';
             svgElem.style.display = 'none';
             labels.innerHTML = '';
+            svgElem.innerHTML = '';
             diagrammDescriptionLabel.style.display = 'none';
         }
     })
