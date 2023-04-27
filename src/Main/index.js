@@ -51,6 +51,7 @@ const summaryRowToggleInput = document.querySelector('#summary-row-toggler-input
 const pieDiagrammInput = document.querySelector('#pie-diagramm-checkbox');
 const svgDiv = document.querySelector('#svg-div');
 const diagrammDescription = document.querySelector("#diagramm-description");
+const svgElement = document.querySelector('#svg-element');
 
 const modeLabel = document.querySelector('#mode-label');
 
@@ -256,6 +257,10 @@ filters.addEventListener('click', e => {
 
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault();
+
+   svgElement.innerHTML = '';
+
+
 
    svgDiv.style.display = 'none';
    diagrammDescription.style.display = 'none';
