@@ -57,18 +57,22 @@ export default function datePlusMinus() {
     leftDateMinusInput.addEventListener('change', () => {
         leftDateMinusDays = +leftDateMinusInput.value;
     })
+    leftDateMinusInput.removeEventListener('change', () => {});
 
     leftDatePlusInput.addEventListener('change', () => {
         leftDatePlusDays = +leftDatePlusInput.value;
     })
+    leftDatePlusInput.removeEventListener('change', () => {});
 
     rightDateMinusInput.addEventListener('change', () => {
         rightDateMinusDays = +rightDateMinusInput.value;
     })
+    rightDateMinusInput.removeEventListener('change', () => {});
 
     rightDatePlusInput.addEventListener('change', () => {
         rightDatePlusDays = +rightDatePlusInput.value;
     })
+    rightDatePlusInput.removeEventListener('change', () => {});
 
     if (leftDateInput.value !== '' || rightDateInput.value !== '') {
 
@@ -80,28 +84,32 @@ export default function datePlusMinus() {
             rightDate = new Date(rightDateInput.value);
         }
 
-        leftDateButtonMinus.onclick = () => {
+        leftDateButtonMinus.addEventListener('click', () => {
             leftDate.subtractDays(leftDate, leftDateMinusDays);
             console.log('left-minus');
             leftDateInput.value = convertFullDateToDate(leftDate);
-        }
+        });
+        leftDateButtonMinus.removeEventListener('click', () => {});
 
-        leftDateButtonPlus.onclick = () => {
+        leftDateButtonPlus.addEventListener('click', () => {
             leftDate.addDays(leftDate, leftDatePlusDays);
             console.log('left-plus');
             leftDateInput.value = convertFullDateToDate(leftDate);
-        }
+        });
+        leftDateButtonPlus.removeEventListener('click', () => {});
 
-        rightDateButtonMinus.onclick = () => {
+        rightDateButtonMinus.addEventListener('click', () => {
             rightDate.subtractDays(rightDate, rightDateMinusDays);
             console.log('right-minus');
             rightDateInput.value = convertFullDateToDate(rightDate);
-        }
+        });
+        rightDateButtonMinus.removeEventListener('click', () => {});
 
-        rightDateButtonPlus.onclick = () => {
+        rightDateButtonPlus.addEventListener('click', () => {
             rightDate.addDays(rightDate, rightDatePlusDays);
             console.log('right-plus');
             rightDateInput.value = convertFullDateToDate(rightDate);
-        }
+        });
+        rightDateButtonPlus.removeEventListener('click', () => {});
     }
 }

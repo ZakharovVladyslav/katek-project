@@ -11,10 +11,6 @@ export const getAllValues = (array, headers) => {
       const valuesMap = new Map();
 
       const mapHeaders = headers.filter(header => !timeKeys.includes(header));
-      const busyInputs = filters.map(filter => {
-            if (filter.value !== '')
-                  return filter.value
-      }).filter(filter => filter !== undefined)
 
       mapHeaders.forEach(header => {
             valuesMap.set(`${header}`, [`---- ${header} ----`])

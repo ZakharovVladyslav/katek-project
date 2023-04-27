@@ -80,4 +80,6 @@ export default function summaryRowToggle() {;
             table.style.maxWidth = '0';
         }
     })
+
+    toggleCheckboxInput.removeEventListener('change', e => {});
 }

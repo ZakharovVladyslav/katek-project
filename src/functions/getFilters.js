@@ -8,7 +8,7 @@ export default function getFilters() {
     Storage.editCore('firstDate', document.querySelector('#left-date-inp'));
     Storage.editCore('secondDate', document.querySelector('#right-date-inp'));
 
-    let data = [...Storage.core.changableArray];
+    let data = [...Storage.core.staticDataArray];
 
     if (Storage.core.firstDate.value.length !== 0 && Storage.core.secondDate.value.length !== 0) {
         const select = document.getElementById('date-params');

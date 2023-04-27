@@ -76,7 +76,7 @@ document.querySelector('#left-date-inp').value = '2022-01-01'
 document.querySelector('#right-date-inp').value = '2022-01-03'
 */
 
-file.oninput = (e) => {
+file.addEventListener('input', e => {
    e.preventDefault();
 
    submitBtn.disabled = false;
@@ -88,7 +88,7 @@ file.oninput = (e) => {
    const fileReader = new FileReader();
    const inputFileData = file.files[0];
 
-   fileReader.onload = (e) => {
+   fileReader.addEventListener('load', (e) => {
       datePlusMinus();
 
       let text = e.target.result;
@@ -158,6 +158,7 @@ file.oninput = (e) => {
             })
          })
       })
+      reset.removeEventListener('click', e => {});
 
       filters.addEventListener('click', e => {
          if (e.target.id.substring(0, 6) === 'eraser') {
@@ -183,18 +184,21 @@ file.oninput = (e) => {
             })
          }
       })
-   }
+      filters.removeEventListener('click', e => {});
+   })
+   fileReader.removeEventListener('load', (e) => {});
 
    fileReader.readAsText(inputFileData);
-}
+})
+file.removeEventListener('input', (e) => {});
 
-file.onchange = () => {
+file.addEventListener('change', () => {
    datePlusMinus();
 
    const fileReader = new FileReader();
    const inputFileData = file.files[0];
 
-   fileReader.onload = (e) => {
+   fileReader.addEventListener('load', (e) => {
       datePlusMinus();
 
       if (Storage.core.changableArray.length > 8000) {
@@ -217,13 +221,13 @@ file.onchange = () => {
 
       rowsAmount.innerHTML = Storage.core.staticDataArray.length;
 
-      filters.onclick = (e) => {
+      filters.addEventListener('click', (e) => {
          const targetId = e.target.id;
          const targetNumber = targetId.slice(-1);
 
          const targetField = document.querySelector(`#filter-input-${targetNumber}`);
 
-         targetField.onchange = () => {
+         targetField.addEventListener('change', () => {
             Storage.editCore('changableArray', getFilters());
             let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
@@ -242,14 +246,18 @@ file.onchange = () => {
             })
 
             values = null;
-
             Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
-         }
-      }
-   }
+         })
+      })
+
+      filters.removeEventListener('click', (e) => {});
+   })
+
+   fileReader.removeEventListener('load', (e) => {});
 
    fileReader.readAsText(inputFileData);
-}
+})
+file.removeEventListener('change', () => {});
 
 filters.addEventListener('click', e => {
    if (e.target.id.substring(0, 6) === 'eraser') {
@@ -259,13 +267,12 @@ filters.addEventListener('click', e => {
       targetInputField.value = '';
    }
 })
+filters.removeEventListener('click', e => {});
 
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault();
 
    svgElement.innerHTML = '';
-
-
 
    svgDiv.style.display = 'none';
    diagrammDescription.style.display = 'none';
@@ -302,7 +309,7 @@ inputForm.addEventListener("submit", (e) => {
    const input = file.files[0];
    const reader = new FileReader();
 
-   reader.onload = e => {
+   reader.addEventListener('load', e => {
 
       if (file.value == '') {
          emptyMessage.innerHTML = "Datei nicht ausgewählt";
@@ -371,6 +378,7 @@ inputForm.addEventListener("submit", (e) => {
                   targetInputField.value = '';
                }
             })
+            filters.removeEventListener('click', e => {});
 
             /*----------------------------------------------------------------------------------------------------------------*/
             /*----------------------------------------------------------------------------------------------------------------*/
@@ -475,14 +483,10 @@ inputForm.addEventListener("submit", (e) => {
                delete MinorStorage.core.CsvData;
             })
 
+            saveButton.removeEventListener('click', () => {});
+
             summaryRowToggle();
             DataPie();
-
-            if (Storage.core.changableArray.length === 0) {
-               emptyMessage.innerHTML = "Bitte fügen Sie Filter hinzu";
-
-               document.body.append(emptyMessage);
-            }
 
             dataTable.innerHTML = '';
             table.innerHTML = '';
@@ -637,9 +641,14 @@ inputForm.addEventListener("submit", (e) => {
                }
 
             })
+
+            table.removeEventListener('click', e => {});
          }
       }
-   }
+   });
+
+   reader.removeEventListener('load', e => {});
 
    reader.readAsText(input);
 })
+inputForm.removeEventListener('submit', (e) => {})

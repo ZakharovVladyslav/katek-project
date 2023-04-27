@@ -1,4 +1,4 @@
-import { CustomStorage } from "./CustomStorage.js"
+import { CustomStorage } from "./CustomStorage.js";
 
 const Storage = new CustomStorage();
 
@@ -13,6 +13,8 @@ export default function DataPie() {
     diagrammLabel.addEventListener('click', () => {
         svgDiv.style.display = 'flex';
     })
+
+    diagrammLabel.removeEventListener('click', () => {});
 
     dataPieInput.addEventListener('change', () => {
         diagrammDescriptionLabel.style.display = 'block';
@@ -50,13 +52,16 @@ export default function DataPie() {
             const radius = 150;
 
             const arcGenerator = d3.arc()
-                .innerRadius(0)
-                .outerRadius(radius);
+                .innerRadius(100)
+                .outerRadius(radius)
+                .padAngle(0.03);
 
             const pieGenerator = d3.pie()
                 .value(function (d) {
                     return d.value;
-                });
+                })
+                .padAngle(0.03);
+
 
             const svg = d3.select("svg");
 
@@ -76,12 +81,8 @@ export default function DataPie() {
                 .style("fill", function (d) {
                     return d.data.color;
                 })
-
-            const blackCircle = circleDiagram.append("circle")
-                .attr("r", radius / 1.5)
-                .style("fill", "#313038")
-                .style("pointer-events", "none")
-                .raise();
+                .style('stroke', '#000000')
+                .style('stroke-width', '1.35px');
 
             data.forEach((elem, index) => {
                 const html = `
@@ -102,4 +103,6 @@ export default function DataPie() {
             diagrammDescriptionLabel.style.display = 'none';
         }
     })
+
+    dataPieInput.removeEventListener('click', () => {});
 }
