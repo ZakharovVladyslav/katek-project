@@ -76,6 +76,75 @@ document.querySelector('#left-date-inp').value = '2022-01-01'
 document.querySelector('#right-date-inp').value = '2022-01-03'
 */
 
+saveButton.addEventListener('click', () => {
+   MinorStorage.editCore('CsvData', getFilters());
+   MinorStorage.editCore('RefinedData', [[...Storage.core.allHeaders]]);
+
+   if (saveFiltersOption.checked === true) {
+      let filtersValues = [];
+
+      filtersValues = Storage.core.inputFields.map(field => field.value);
+      filtersValues = filtersValues.filter(value => value !== '');
+
+      let headers = MinorStorage.core.RefinedData[0];
+      let arr = MinorStorage.core.CsvData;
+
+      if (!headers.includes('#'));
+      headers.unshift('#');
+
+      if (filtersValues.length > 0)
+         headers.unshift(filtersValues);
+
+      headers = headers.flat(Infinity);
+
+      arr[0] = headers;
+
+      MinorStorage.editCore('CsvData', arr);
+
+      arr = null;
+      headers = null;
+      filtersValues = null;
+   }
+
+   MinorStorage.core.CsvData.forEach(obj => {
+      let arr = MinorStorage.core.RefinedData;
+      arr.push(obj);
+
+      MinorStorage.editCore('RefinedData', arr);
+      arr = null;
+   })
+
+   if (JSON.stringify(MinorStorage.core.RefinedData[0]) === JSON.stringify(MinorStorage.core.RefinedData[1])) {
+      let arr = MinorStorage.core.RefinedData;
+
+      arr.shift();
+
+      MinorStorage.editCore('RefinedData', arr);
+
+      arr = null;
+   }
+
+   let csvContent = '';
+   MinorStorage.core.RefinedData.forEach(row => {
+      typeof (row) === 'object'
+         ? csvContent += Object.values(row).join(',') + '\n'
+         : csvContent += row.join(',') + '\n';
+   })
+
+   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8,' });
+   const objUrl = URL.createObjectURL(blob);
+   saveButton.setAttribute('href', objUrl);
+
+   const dateNow = new Date();
+   saveButton.setAttribute('download', `Filtered-table-${dateNow.getDate()}-${dateNow.getMonth()}-${dateNow.getFullYear()}-${dateNow.getHours()}-${dateNow.getMinutes()}-${dateNow.getSeconds()}`);
+
+   csvContent = '';
+   delete MinorStorage.core.RefinedData;
+   delete MinorStorage.core.CsvData;
+})
+saveButton.removeEventListener('click', () => { });
+
+
 file.addEventListener('input', e => {
    e.preventDefault();
 
@@ -89,8 +158,6 @@ file.addEventListener('input', e => {
    const inputFileData = file.files[0];
 
    fileReader.addEventListener('load', (e) => {
-      datePlusMinus();
-
       let text = e.target.result;
       Storage.editCore('inputText', text);
 
@@ -128,90 +195,87 @@ file.addEventListener('input', e => {
          document.querySelector('#datalist-5')
       ]);
 
+      rowsAmount.innerHTML = Storage.core.changableArray.length;
+
       delete Storage.core.inputText;
 
-      reset.addEventListener('click', e => {
-         e.preventDefault();
 
-         document.querySelector('#filter-input-1').value = '';
-         document.querySelector('#filter-input-2').value = '';
-         document.querySelector('#filter-input-3').value = '';
-         document.querySelector('#filter-input-4').value = '';
-         document.querySelector('#filter-input-5').value = '';
-         rowLimiter.value = '';
-         Storage.core.firstDate.value = '';
-         Storage.core.secondDate.value = '';
-
-         Storage.editCore('changableArray', [...Storage.core.staticDataArray]);
-
-         rowsAmount.innerHTML = Storage.core.staticDataArrayLength;
-
-         Storage.core.datalists.forEach(datalist => {
-            for (let option of datalist.children)
-               option.value = '';
-
-            Storage.core.allValues.forEach(value => {
-               const option = document.createElement('option');
-               option.className = 'datalist-option';
-               option.value = value;
-               datalist.appendChild(option);
-            })
-         })
-      })
-      reset.removeEventListener('click', e => {});
-
-      filters.addEventListener('click', e => {
-         if (e.target.id.substring(0, 6) === 'eraser') {
-            Storage.editCore('changableArray', getFilters());
-
-            const targetId = e.target.id.slice(7);
-
-            Storage.core.inputFields[targetId - 1].value = '';
-            Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
-
-            const values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
-
-            Storage.core.datalists.forEach(datalist => {
-               for (let option of datalist.children)
-                  option.value = '';
-
-               values.forEach(value => {
-                  const option = document.createElement('option');
-                  option.className = 'datalist-option';
-                  option.value = value;
-                  datalist.appendChild(option);
-               })
-            })
-         }
-      })
-      filters.removeEventListener('click', e => {});
    })
-   fileReader.removeEventListener('load', (e) => {});
+   fileReader.removeEventListener('load', (e) => { });
 
    fileReader.readAsText(inputFileData);
 })
-file.removeEventListener('input', (e) => {});
+file.removeEventListener('input', (e) => { });
 
-file.addEventListener('change', () => {
-   datePlusMinus();
+reset.addEventListener('click', e => {
+   e.preventDefault();
 
-   const fileReader = new FileReader();
-   const inputFileData = file.files[0];
+   document.querySelector('#filter-input-1').value = '';
+   document.querySelector('#filter-input-2').value = '';
+   document.querySelector('#filter-input-3').value = '';
+   document.querySelector('#filter-input-4').value = '';
+   document.querySelector('#filter-input-5').value = '';
+   rowLimiter.value = '';
+   Storage.core.firstDate.value = '';
+   Storage.core.secondDate.value = '';
 
-   fileReader.addEventListener('load', (e) => {
-      datePlusMinus();
+   Storage.editCore('changableArray', [...Storage.core.staticDataArray]);
 
-      if (Storage.core.changableArray.length > 8000) {
-         dataTable.innerHTML = '';
+   rowsAmount.innerHTML = Storage.core.staticDataArrayLength;
 
-         emptyMessage.innerHTML = 'Table is too big. Please add dates or filters';
-      }
+   Storage.core.datalists.forEach(datalist => {
+      for (let option of datalist.children)
+         option.value = '';
+
+      Storage.core.allValues.forEach(value => {
+         const option = document.createElement('option');
+         option.className = 'datalist-option';
+         option.value = value;
+         datalist.appendChild(option);
+      })
+   })
+})
+reset.removeEventListener('click', e => { });
+
+filters.addEventListener('click', e => {
+   if (e.target.id.substring(0, 6) === 'eraser') {
+      const targetId = e.target.id.slice(7);
+      Storage.core.inputFields[targetId - 1].value = '';
+
+      Storage.editCore('changableArray', getFilters());
+      Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
+
+      const values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          for (let option of datalist.children)
             option.value = '';
 
-         Storage.core.allValues.forEach(value => {
+         values.forEach(value => {
+            const option = document.createElement('option');
+            option.className = 'datalist-option';
+            option.value = value;
+            datalist.appendChild(option);
+         })
+      })
+   }
+})
+filters.removeEventListener('click', e => { });
+
+filters.addEventListener('click', (e) => {
+   const targetId = e.target.id;
+   const targetNumber = targetId.slice(-1);
+   const targetField = document.querySelector(`#filter-input-${targetNumber}`);
+
+   targetField.addEventListener('change', () => {
+      Storage.editCore('changableArray', getFilters());
+      let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
+
+      Storage.core.datalists.forEach(datalist => {
+         for (let option of datalist.children)
+            option.value = '';
+
+         values.forEach(value => {
             const option = document.createElement('option');
             option.className = 'datalist-option';
             option.value = value;
@@ -219,58 +283,19 @@ file.addEventListener('change', () => {
          })
       })
 
-      rowsAmount.innerHTML = Storage.core.staticDataArray.length;
-
-      filters.addEventListener('click', (e) => {
-         const targetId = e.target.id;
-         const targetNumber = targetId.slice(-1);
-
-         const targetField = document.querySelector(`#filter-input-${targetNumber}`);
-
-         targetField.addEventListener('change', () => {
-            Storage.editCore('changableArray', getFilters());
-            let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
-
-            DataPie();
-
-            Storage.core.datalists.forEach(datalist => {
-               for (let option of datalist.children)
-                  option.value = '';
-
-               values.forEach(value => {
-                  const option = document.createElement('option');
-                  option.className = 'datalist-option';
-                  option.value = value;
-                  datalist.appendChild(option);
-               })
-            })
-
-            values = null;
-            Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
-         })
-      })
-
-      filters.removeEventListener('click', (e) => {});
+      values = null;
+      Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
    })
-
-   fileReader.removeEventListener('load', (e) => {});
-
-   fileReader.readAsText(inputFileData);
 })
-file.removeEventListener('change', () => {});
 
-filters.addEventListener('click', e => {
-   if (e.target.id.substring(0, 6) === 'eraser') {
-      const targetId = e.target.id.slice(7);
-      const targetInputField = Storage.core.inputFields[targetId - 1];
-
-      targetInputField.value = '';
-   }
-})
-filters.removeEventListener('click', e => {});
+filters.removeEventListener('click', (e) => { });
 
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault();
+
+   DataPie();
+   summaryRowToggle();
+   datePlusMinus();
 
    svgElement.innerHTML = '';
 
@@ -306,349 +331,254 @@ inputForm.addEventListener("submit", (e) => {
    clickToggler.style.display = 'none';
    saveButton.style.display = 'none';
 
-   const input = file.files[0];
-   const reader = new FileReader();
+   if (file.value == '') {
+      emptyMessage.innerHTML = "Datei nicht ausgewählt";
 
-   reader.addEventListener('load', e => {
+      dataTable.innerHTML = '';
+   }
 
-      if (file.value == '') {
-         emptyMessage.innerHTML = "Datei nicht ausgewählt";
+   Storage.editCore('changableArray', getFilters());
 
-         dataTable.innerHTML = '';
-      }
+   if (Storage.core.changableArray.length > 8000) {
+      dataTable.innerHTML = '';
 
-      Storage.editCore('changableArray', getFilters());
+      emptyMessage.innerHTML = 'Table is too big. Please add dates or filters';
+   }
 
-      if (Storage.core.changableArray.length > 8000) {
-         dataTable.innerHTML = '';
+   else {
+      load.style.opacity = '1';
+      loadingMessage.style.opacity = '1';
+      load.style.transition = '0.2s';
+      loadingMessage.style.transition = '0.2s';
 
-         emptyMessage.innerHTML = 'Table is too big. Please add dates or filters';
-      }
+      reloadTable.disabled = true;
 
-      else {
-         load.style.opacity = '1';
-         loadingMessage.style.opacity = '1';
-         load.style.transition = '0.2s';
-         loadingMessage.style.transition = '0.2s';
+      let table = document.createElement("table");
+      let thead = document.createElement("thead");
+      let tbody = document.createElement("tbody");
 
-         datePlusMinus();
+      const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
 
-         reloadTable.disabled = true;
-
-         let table = document.createElement("table");
-         let thead = document.createElement("thead");
-         let tbody = document.createElement("tbody");
-
-         const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
-
-         if (Storage.core.inputTextLength.length === 0) {
-            if (file.DOCUMENT_NODE > 0) {
-               dataTable.innerHTML = '';
-               table.innerHTML = '';
-               thead.innerHTML = '';
-               tbody.innerHTML = '';
-            }
-
-            emptyMessage.innerHTML = `Datei <span>${arrFromFileName[arrFromFileName.length - 1]}</span> ist leer`;
-         }
-
-         else {
-            if (emptyMessage.value != 0)
-               emptyMessage.innerHTML = '';
-
-            load.style.transition = '0.2s';
-            loadingMessage.style.transition = '0.2s';
-            load.style.opacity = '1';
-            loadingMessage.style.opacity = '1';
-            realRowsNumber.style.opacity = '1';
-            shownRowsCounter.style.opacity = '1';
-            shownRowsCounterDiv.style.opacity = '1';
-            modeLabel.style.opacity = '1';
-            clickToggler.style.display = 'block';
-            saveButton.style.display = 'block';
-
-            let limiter = Storage.core.changableArray.length
-            shownRowsCounter.innerHTML = `${limiter}`;
-
-            filters.addEventListener('click', e => {
-               if (e.target.id.substring(0, 6) === 'eraser') {
-                  const targetId = e.target.id.slice(7);
-                  const targetInputField = Storage.core.inputFields[targetId - 1];
-
-                  targetInputField.value = '';
-               }
-            })
-            filters.removeEventListener('click', e => {});
-
-            /*----------------------------------------------------------------------------------------------------------------*/
-            /*----------------------------------------------------------------------------------------------------------------*/
-            /*---------------------------------------    PROGRAM ENTRY POINT    ----------------------------------------------*/
-            /*----------------------------------------------------------------------------------------------------------------*/
-            /*----------------------------------------------------------------------------------------------------------------*/
-
-            Storage.editCore('changableArray', getFilters());
-
-            const filtersFromCsvFile = Storage.core.filters;
-            const filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '');
-
-            filtersFromCsvFileSplitted.forEach((value, index) => {
-               Storage.core.inputFields[index].setAttribute('placeholder', value);
-            })
-
-            Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
-
-            let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
-
-            Storage.core.datalists.forEach(datalist => {
-               for (let option of datalist.children)
-                  option.value = '';
-
-               values.forEach(value => {
-                  const option = document.createElement('option');
-                  option.className = 'datalist-option';
-                  option.value = value;
-                  datalist.appendChild(option);
-               })
-            })
-
-            values = null;
-
-            /* ----------------------------------- SAVE CURRENT STATE FILE SECTION -------------------------------- */
-
-            saveButton.addEventListener('click', () => {
-               MinorStorage.editCore('CsvData', getFilters());
-               MinorStorage.editCore('RefinedData', [[...Storage.core.allHeaders]]);
-
-               console.log(MinorStorage.core.RefinedData);
-
-               if (saveFiltersOption.checked === true) {
-                  let filtersValues = [];
-
-                  filtersValues = Storage.core.inputFields.map(field => field.value);
-                  filtersValues = filtersValues.filter(value => value !== '');
-
-                  let headers = MinorStorage.core.RefinedData[0];
-                  let arr = MinorStorage.core.CsvData;
-
-                  if (!headers.includes('#'));
-                     headers.unshift('#');
-
-                  if (filtersValues.length > 0)
-                     headers.unshift(filtersValues);
-
-                  headers = headers.flat(Infinity);
-
-                  arr[0] = headers;
-
-                  MinorStorage.editCore('CsvData', arr);
-
-                  arr = null;
-                  headers = null;
-                  filtersValues = null;
-               }
-
-               MinorStorage.core.CsvData.forEach(obj => {
-                  let arr = MinorStorage.core.RefinedData;
-                  arr.push(obj);
-
-                  MinorStorage.editCore('RefinedData', arr);
-                  arr = null;
-               })
-
-               if (JSON.stringify(MinorStorage.core.RefinedData[0]) === JSON.stringify(MinorStorage.core.RefinedData[1])) {
-                  let arr = MinorStorage.core.RefinedData;
-
-                  arr.shift();
-
-                  MinorStorage.editCore('RefinedData', arr);
-
-                  arr = null;
-               }
-
-               let csvContent = '';
-               MinorStorage.core.RefinedData.forEach(row => {
-                  typeof(row) === 'object'
-                  ? csvContent += Object.values(row).join(',') + '\n'
-                  : csvContent += row.join(',') + '\n';
-               })
-
-               const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8,' });
-               const objUrl = URL.createObjectURL(blob);
-               saveButton.setAttribute('href', objUrl);
-
-               const dateNow = new Date();
-               saveButton.setAttribute('download', `Filtered-table-${dateNow.getDate()}-${dateNow.getMonth()}-${dateNow.getFullYear()}-${dateNow.getHours()}-${dateNow.getMinutes()}-${dateNow.getSeconds()}`);
-
-               delete MinorStorage.core.RefinedData;
-               delete MinorStorage.core.CsvData;
-            })
-
-            saveButton.removeEventListener('click', () => {});
-
-            summaryRowToggle();
-            DataPie();
-
+      if (Storage.core.inputTextLength.length === 0) {
+         if (file.DOCUMENT_NODE > 0) {
             dataTable.innerHTML = '';
             table.innerHTML = '';
             thead.innerHTML = '';
             tbody.innerHTML = '';
-
-            const innerTable = document.createElement('table');
-            innerTable.innerHTML = '';
-
-            table.appendChild(thead);
-            table.appendChild(tbody);
-
-            document.getElementById('data-table').appendChild(table);
-
-            load.style.transition = '0s';
-            loadingMessage.style.transition = '0s';
-            load.style.opacity = '0';
-            loadingMessage.style.opacity = '0';
-
-            if (rowLimiter.value !== '')
-               if (Storage.core.changableArray.length > +rowLimiter.value)
-                  limiter = +rowLimiter.value;
-
-            if (+rowLimiter.value > Storage.core.changableArray.length)
-               shownRowsCounter.innerHTML = Storage.core.changableArray.length;
-            else
-               shownRowsCounter.innerHTML = +rowLimiter.value;
-
-            let hrow = document.createElement('tr');
-            for (let i = 0; i < 16; i++) {
-               let theader = document.createElement('th');
-
-               theader.innerHTML = Storage.core.tableHeaders[i];
-               hrow.appendChild(theader);
-            }
-            thead.appendChild(hrow);
-
-
-            for (let i = 0; i < limiter; i++) {
-               let body_row = document.createElement('tr');
-
-               Storage.core.tableHeaders.forEach((header, j) => {
-                  let table_data = document.createElement('td');
-
-                  table_data.setAttribute('id', `cell ${i}${j}`);
-
-                  if (header === 'FPY')
-                     table_data.innerHTML = `${Storage.core.changableArray[i][header]}%`;
-                  else
-                     table_data.innerHTML = Storage.core.changableArray[i][header];
-
-                  body_row.appendChild(table_data);
-               })
-               tbody.appendChild(body_row);
-            }
-
-            table.appendChild(thead);
-            table.appendChild(tbody);
-            dataTable.appendChild(table);
-
-            saveDiv.style.opacity = '1';
-            saveDiv.style.transition = '0.2s';
-
-            showFullTable();
-
-            table.addEventListener('click', e => {
-               const clickOption = cellSelect.options[cellSelect.selectedIndex].value;
-
-               if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
-                  const targetCellValue = e.target.innerHTML;
-
-                  const emptyFieldIndexes = Storage.core.inputFields.map((filter, index) => {
-                     if (filter.value === '')
-                        return index;
-                  }).filter(filter => filter !== undefined);
-
-                  if (emptyFieldIndexes.length !== 0) {
-                     const targetInputField = Storage.core.inputFields[emptyFieldIndexes[0]];
-                     targetInputField.value = targetCellValue;
-                  }
-
-                  Storage.editCore('changableArray', getFilters());
-
-                  Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
-               }
-
-               else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
-                  reloadTable.disabled = false;
-                  submitBtn.disabled = true;
-                  resetBtn.disabled = true;
-                  fullTableBtn.disabled = true;
-                  summaryRowToggleInput.disabled = true;
-                  pieDiagrammInput.disabled = true;
-
-                  const targetId = e.target.id;
-                  const splittedTargetId = targetId.split('');
-                  splittedTargetId.splice(0, 5);
-
-                  const row = +splittedTargetId[0];
-
-                  const object = Storage.core.changableArray[row];
-
-                  dataTable.innerHTML = '';
-                  table.innerHTML = '';
-                  thead.innerHTML = '';
-                  tbody.innerHTML = '';
-
-                  const rowTable = document.createElement('table');
-                  rowTable.setAttribute('id', 'rowTable');
-
-                  const allHeaders = [];
-                  const allValues = [];
-
-                  for (let [key, value] of Object.entries(object)) {
-                     allHeaders.push(key);
-                     allValues.push(value);
-                  }
-
-                  const divideArrByNine = (arr) => {
-                     const resultArr = [];
-
-                     for (let i = 0; i < 3; i++) {
-                        const innerArr = [];
-                        for (let j = 0; j < 9; j++) {
-                           innerArr.push(arr[i * 9 + j])
-                        }
-                        resultArr.push(innerArr);
-                     }
-
-                     return resultArr;
-                  }
-
-                  const resArr = [];
-                  for (let i = 0; i < 3; i++)
-                     resArr.push(divideArrByNine(allHeaders)[i], divideArrByNine(allValues)[i]);
-
-                  for (let i = 0; i < 6; i++) {
-                     const tr = document.createElement('tr');
-                     for (let j = 0; j < 9; j++) {
-                        const td = document.createElement('td');
-                        td.innerHTML = resArr[i][j];
-                        tr.appendChild(td);
-                     }
-                     tbody.appendChild(tr);
-                  }
-
-                  rowTable.append(tbody);
-                  dataTable.append(rowTable);
-
-                  object.length = 0;
-                  splittedTargetId.length = 0;
-               }
-
-            })
-
-            table.removeEventListener('click', e => {});
          }
+
+         emptyMessage.innerHTML = `Datei <span>${arrFromFileName[arrFromFileName.length - 1]}</span> ist leer`;
       }
-   });
 
-   reader.removeEventListener('load', e => {});
+      else {
+         if (emptyMessage.value != 0)
+            emptyMessage.innerHTML = '';
 
-   reader.readAsText(input);
+         load.style.transition = '0.2s';
+         loadingMessage.style.transition = '0.2s';
+         load.style.opacity = '1';
+         loadingMessage.style.opacity = '1';
+         realRowsNumber.style.opacity = '1';
+         shownRowsCounter.style.opacity = '1';
+         shownRowsCounterDiv.style.opacity = '1';
+         modeLabel.style.opacity = '1';
+         clickToggler.style.display = 'block';
+         saveButton.style.display = 'block';
+
+         let limiter = Storage.core.changableArray.length
+         shownRowsCounter.innerHTML = `${limiter}`;
+
+         /*----------------------------------------------------------------------------------------------------------------*/
+         /*----------------------------------------------------------------------------------------------------------------*/
+         /*---------------------------------------    PROGRAM ENTRY POINT    ----------------------------------------------*/
+         /*----------------------------------------------------------------------------------------------------------------*/
+         /*----------------------------------------------------------------------------------------------------------------*/
+
+         Storage.editCore('changableArray', getFilters());
+
+         let filtersFromCsvFile = Storage.core.filters;
+         let filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '');
+
+         filtersFromCsvFileSplitted.forEach((value, index) => {
+            Storage.core.inputFields[index].setAttribute('placeholder', value);
+         })
+
+         Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
+
+         let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
+
+         Storage.core.datalists.forEach(datalist => {
+            for (let option of datalist.children)
+               option.value = '';
+
+            values.forEach(value => {
+               const option = document.createElement('option');
+               option.className = 'datalist-option';
+               option.value = value;
+               datalist.appendChild(option);
+            })
+         })
+
+         filtersFromCsvFile = null;
+         filtersFromCsvFileSplitted = null;
+         values = null;
+
+         dataTable.innerHTML = '';
+         table.innerHTML = '';
+         thead.innerHTML = '';
+         tbody.innerHTML = '';
+
+         const innerTable = document.createElement('table');
+         innerTable.innerHTML = '';
+
+         table.appendChild(thead);
+         table.appendChild(tbody);
+
+         document.getElementById('data-table').appendChild(table);
+
+         load.style.transition = '0s';
+         loadingMessage.style.transition = '0s';
+         load.style.opacity = '0';
+         loadingMessage.style.opacity = '0';
+
+         if (rowLimiter.value !== '')
+            if (Storage.core.changableArray.length > +rowLimiter.value)
+               limiter = +rowLimiter.value;
+
+         if (+rowLimiter.value > Storage.core.changableArray.length)
+            shownRowsCounter.innerHTML = Storage.core.changableArray.length;
+         else
+            shownRowsCounter.innerHTML = +rowLimiter.value;
+
+         let hrow = document.createElement('tr');
+         for (let i = 0; i < 16; i++) {
+            let theader = document.createElement('th');
+
+            theader.innerHTML = Storage.core.tableHeaders[i];
+            hrow.appendChild(theader);
+         }
+         thead.appendChild(hrow);
+
+
+         for (let i = 0; i < limiter; i++) {
+            let body_row = document.createElement('tr');
+
+            Storage.core.tableHeaders.forEach((header, j) => {
+               let table_data = document.createElement('td');
+
+               table_data.setAttribute('id', `cell ${i}${j}`);
+
+               if (header === 'FPY')
+                  table_data.innerHTML = `${Storage.core.changableArray[i][header]}%`;
+               else
+                  table_data.innerHTML = Storage.core.changableArray[i][header];
+
+               body_row.appendChild(table_data);
+            })
+            tbody.appendChild(body_row);
+         }
+
+         table.appendChild(thead);
+         table.appendChild(tbody);
+         dataTable.appendChild(table);
+
+         saveDiv.style.opacity = '1';
+         saveDiv.style.transition = '0.2s';
+
+         showFullTable();
+
+         table.addEventListener('click', e => {
+            const clickOption = cellSelect.options[cellSelect.selectedIndex].value;
+
+            if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
+               const targetCellValue = e.target.innerHTML;
+
+               const emptyFieldIndexes = Storage.core.inputFields.map((filter, index) => {
+                  if (filter.value === '')
+                     return index;
+               }).filter(filter => filter !== undefined);
+
+               if (emptyFieldIndexes.length !== 0) {
+                  const targetInputField = Storage.core.inputFields[emptyFieldIndexes[0]];
+                  targetInputField.value = targetCellValue;
+               }
+
+               Storage.editCore('changableArray', getFilters());
+
+               Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
+            }
+
+            else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
+               reloadTable.disabled = false;
+               submitBtn.disabled = true;
+               resetBtn.disabled = true;
+               fullTableBtn.disabled = true;
+               summaryRowToggleInput.disabled = true;
+               pieDiagrammInput.disabled = true;
+
+               const targetId = e.target.id;
+               const splittedTargetId = targetId.split('');
+               splittedTargetId.splice(0, 5);
+
+               const row = +splittedTargetId[0];
+
+               const object = Storage.core.changableArray[row];
+
+               dataTable.innerHTML = '';
+               table.innerHTML = '';
+               thead.innerHTML = '';
+               tbody.innerHTML = '';
+
+               const rowTable = document.createElement('table');
+               rowTable.setAttribute('id', 'rowTable');
+
+               const allHeaders = [];
+               const allValues = [];
+
+               for (let [key, value] of Object.entries(object)) {
+                  allHeaders.push(key);
+                  allValues.push(value);
+               }
+
+               const divideArrByNine = (arr) => {
+                  const resultArr = [];
+
+                  for (let i = 0; i < 3; i++) {
+                     const innerArr = [];
+                     for (let j = 0; j < 9; j++) {
+                        innerArr.push(arr[i * 9 + j])
+                     }
+                     resultArr.push(innerArr);
+                  }
+
+                  return resultArr;
+               }
+
+               const resArr = [];
+               for (let i = 0; i < 3; i++)
+                  resArr.push(divideArrByNine(allHeaders)[i], divideArrByNine(allValues)[i]);
+
+               for (let i = 0; i < 6; i++) {
+                  const tr = document.createElement('tr');
+                  for (let j = 0; j < 9; j++) {
+                     const td = document.createElement('td');
+                     td.innerHTML = resArr[i][j];
+                     tr.appendChild(td);
+                  }
+                  tbody.appendChild(tr);
+               }
+
+               rowTable.append(tbody);
+               dataTable.append(rowTable);
+
+               object.length = 0;
+               splittedTargetId.length = 0;
+            }
+
+         })
+
+         table.removeEventListener('click', e => { });
+      }
+   }
 })
-inputForm.removeEventListener('submit', (e) => {})
+inputForm.removeEventListener('submit', (e) => { })

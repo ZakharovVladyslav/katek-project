@@ -53,6 +53,8 @@ export default function getFilters() {
 
     inputFields = inputFields.filter(field => field.value !== '');
 
+    console.log(inputFields);
+
     const values = inputFields.map(filter => {
         if (filter.value !== '')
             return filter.value;
@@ -63,7 +65,7 @@ export default function getFilters() {
     data.forEach(obj => {
         values.forEach(value => {
             Object.keys(obj).forEach(key => {
-                if (obj[key] === value) {
+                if (obj[key] === value && key !== 'tLatenz' && key !== 'tLatenzSumme') {
                     keys.push(key);
                 }
             })
@@ -78,5 +80,8 @@ export default function getFilters() {
         })
     })
 
+    data = null;
+
+    console.log(filteredArray);
     return filteredArray;
 }

@@ -8,9 +8,9 @@ export default function summaryRowToggle() {;
     const thead = document.createElement('thead');
     const tbody = document.createElement('tbody');
 
-    const array = [...Storage.core.changableArray];
-
     toggleCheckboxInput.addEventListener('change', e => {
+        let array = [...Storage.core.changableArray];
+
         if (!toggleCheckboxInput.checked) {
             table.style.maxWidth = '100px';
             table.innerHTML = '';
@@ -79,7 +79,8 @@ export default function summaryRowToggle() {;
             tbody.innerHTML = '';
             table.style.maxWidth = '0';
         }
-    })
 
+        array = null;
+    })
     toggleCheckboxInput.removeEventListener('change', e => {});
 }
