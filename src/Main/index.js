@@ -1,14 +1,14 @@
 'use strict';
 
-import { showFullTable } from '../functions/ShowFullTable.js';
-import csvToArray from '../functions/CsvConvert.js';
-import getFilters from '../functions/GetFilters.js';
-import datePlusMinus from '../functions/DatePlusMinus.js';
-import summaryRowToggle from '../functions/SummaryRow.js';
-import { getAllValues } from '../functions/GetAllValues.js';
-import DataPie from '../functions/DataPie.js';
+import { showFullTable } from '../Functions/ShowFullTable.js';
+import csvToArray from '../Functions/CsvConvert.js';
+import getFilters from '../Functions/GetFilters.js';
+import datePlusMinus from '../Functions/DatePlusMinus.js';
+import summaryRowToggle from '../Functions/SummaryRow.js';
+import { getAllValues } from '../Functions/GetAllValues.js';
+import DataPie from '../Functions/DataPie.js';
 
-import { CustomStorage, SecondaryStorage } from '../functions/CustomStorage.js';
+import { CustomStorage, SecondaryStorage } from '../Functions/CustomStorage.js';
 const Storage = new CustomStorage();
 const MinorStorage = new SecondaryStorage();
 
@@ -224,8 +224,7 @@ reset.addEventListener('click', e => {
    rowsAmount.innerHTML = Storage.core.staticDataArrayLength;
 
    Storage.core.datalists.forEach(datalist => {
-      for (let option of datalist.children)
-         option.value = '';
+      datalist.innerHTML = '';
 
       Storage.core.allValues.forEach(value => {
          const option = document.createElement('option');
@@ -248,8 +247,7 @@ filters.addEventListener('click', e => {
       const values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
-         for (let option of datalist.children)
-            option.value = '';
+         datalist.innerHTML = '';
 
          values.forEach(value => {
             const option = document.createElement('option');
@@ -272,8 +270,7 @@ filters.addEventListener('click', (e) => {
       let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
-         for (let option of datalist.children)
-            option.value = '';
+         datalist.innerHTML = '';
 
          values.forEach(value => {
             const option = document.createElement('option');
@@ -408,8 +405,7 @@ inputForm.addEventListener("submit", (e) => {
          let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
          Storage.core.datalists.forEach(datalist => {
-            for (let option of datalist.children)
-               option.value = '';
+            datalist.innerHTML = '';
 
             values.forEach(value => {
                const option = document.createElement('option');

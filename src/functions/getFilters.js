@@ -53,8 +53,6 @@ export default function getFilters() {
 
     inputFields = inputFields.filter(field => field.value !== '');
 
-    console.log(inputFields);
-
     const values = inputFields.map(filter => {
         if (filter.value !== '')
             return filter.value;
@@ -82,6 +80,5 @@ export default function getFilters() {
 
     data = null;
 
-    console.log(filteredArray);
     return filteredArray;
 }
