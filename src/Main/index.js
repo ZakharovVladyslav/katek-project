@@ -335,14 +335,14 @@ inputForm.addEventListener("submit", (e) => {
    }
 
    Storage.editCore('changableArray', getFilters());
-
+   /*
    if (Storage.core.changableArray.length > 8000) {
       dataTable.innerHTML = '';
 
       emptyMessage.innerHTML = 'Table is too big. Please add dates or filters';
    }
-
-   else {
+   */
+   //else {
       load.style.opacity = '1';
       loadingMessage.style.opacity = '1';
       load.style.transition = '0.2s';
@@ -382,7 +382,7 @@ inputForm.addEventListener("submit", (e) => {
          clickToggler.style.display = 'block';
          saveButton.style.display = 'block';
 
-         let limiter = Storage.core.changableArray.length
+         let limiter = 100;
          shownRowsCounter.innerHTML = `${limiter}`;
 
          /*----------------------------------------------------------------------------------------------------------------*/
@@ -437,42 +437,37 @@ inputForm.addEventListener("submit", (e) => {
          load.style.opacity = '0';
          loadingMessage.style.opacity = '0';
 
-         if (rowLimiter.value !== '')
-            if (Storage.core.changableArray.length > +rowLimiter.value)
-               limiter = +rowLimiter.value;
-
          if (+rowLimiter.value > Storage.core.changableArray.length)
             shownRowsCounter.innerHTML = Storage.core.changableArray.length;
          else
             shownRowsCounter.innerHTML = +rowLimiter.value;
 
          let hrow = document.createElement('tr');
-         for (let i = 0; i < 16; i++) {
+         for (let i = 0, len = Storage.core.tableHeaders.length; i < len; i++) {
             let theader = document.createElement('th');
-
             theader.innerHTML = Storage.core.tableHeaders[i];
             hrow.appendChild(theader);
          }
          thead.appendChild(hrow);
 
-
-         for (let i = 0; i < limiter; i++) {
+         let fragment = document.createDocumentFragment();
+         for (let i = 0, len = limiter; i < len; i++) {
             let body_row = document.createElement('tr');
-
-            Storage.core.tableHeaders.forEach((header, j) => {
+            for (let j = 0, len = Storage.core.tableHeaders.length; j < len; j++) {
                let table_data = document.createElement('td');
-
                table_data.setAttribute('id', `cell ${i}${j}`);
 
-               if (header === 'FPY')
-                  table_data.innerHTML = `${Storage.core.changableArray[i][header]}%`;
-               else
-                  table_data.innerHTML = Storage.core.changableArray[i][header];
+               if (Storage.core.tableHeaders[j] === 'FPY') {
+                  table_data.innerHTML = `${Storage.core.changableArray[i][Storage.core.tableHeaders[j]]}%`;
+               } else {
+                  table_data.innerHTML = Storage.core.changableArray[i][Storage.core.tableHeaders[j]];
+               }
 
                body_row.appendChild(table_data);
-            })
-            tbody.appendChild(body_row);
+            }
+            fragment.appendChild(body_row);
          }
+         tbody.appendChild(fragment);
 
          table.appendChild(thead);
          table.appendChild(tbody);
@@ -575,6 +570,6 @@ inputForm.addEventListener("submit", (e) => {
 
          table.removeEventListener('click', e => { });
       }
-   }
+   //}
 })
 inputForm.removeEventListener('submit', (e) => { })
