@@ -71,10 +71,107 @@ clickToggler.style.display = 'none';
 saveButton.style.display = 'none';
 
 submitBtn.disabled = true;
-/*
-document.querySelector('#left-date-inp').value = '2022-01-01'
-document.querySelector('#right-date-inp').value = '2022-01-03'
-*/
+
+file.addEventListener('input', e => {
+   e.preventDefault();
+
+   submitBtn.disabled = false;
+
+   const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
+
+   chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1];
+
+   const fileReader = new FileReader();
+   const inputFileData = file.files[0];
+
+   fileReader.addEventListener('load', (e) => {
+      let text = e.target.result;
+      Storage.editCore('inputText', text);
+
+      const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
+      Storage.editCore('tableHeaders', tableHeaders)
+
+      const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value;
+
+      Storage.editCore('changableArray', csvToArray(Storage.core.inputText, delimiterOption)[0].filter((obj, index) => {
+         return !Object.values(obj).includes(undefined);
+      }));
+
+      Storage.editCore('staticDataArray', Storage.core.changableArray);
+      Storage.editCore('allHeaders', Object.keys(Storage.core.staticDataArray[0]));
+      Storage.editCore('staticDataArrayLength', Storage.core.staticDataArray.length);
+      Storage.editCore('headers', csvToArray(Storage.core.inputText, delimiterOption)[1]);
+      Storage.editCore('filters', csvToArray(Storage.core.inputText, delimiterOption)[2]);
+      Storage.editCore('allValues', getAllValues(Storage.core.staticDataArray, Storage.core.tableHeaders));
+      Storage.editCore('inputTextLength', Storage.core.inputText.length);
+      Storage.editCore('firstDate', document.querySelector('#left-date-inp'));
+      Storage.editCore('secondDate', document.querySelector('#right-date-inp'));
+
+      Storage.editCore('inputFields', [
+         document.querySelector('#filter-input-1'),
+         document.querySelector('#filter-input-2'),
+         document.querySelector('#filter-input-3'),
+         document.querySelector('#filter-input-4'),
+         document.querySelector('#filter-input-5')
+      ]);
+      Storage.editCore('datalists', [
+         document.querySelector('#datalist-1'),
+         document.querySelector('#datalist-2'),
+         document.querySelector('#datalist-3'),
+         document.querySelector('#datalist-4'),
+         document.querySelector('#datalist-5')
+      ]);
+
+      const dbSelects = [
+         document.querySelector('#db-select-1'),
+         document.querySelector('#db-select-2'),
+         document.querySelector('#db-select-3'),
+         document.querySelector('#db-select-4'),
+         document.querySelector('#db-select-5'),
+      ]
+
+      dbSelects.forEach(select => {
+         select.innerHTML = ''
+
+         const option = document.createElement('option')
+         option.className = 'database-option';
+         option.value = 'Select';
+         option.innerHTML = 'Select';
+         select.appendChild(option)
+
+         Storage.core.allHeaders.forEach(header => {
+            const option = document.createElement('option');
+            option.className = 'database-option';
+            option.value = header;
+            option.innerHTML = header;
+            select.appendChild(option);
+         })
+      })
+
+      rowsAmount.innerHTML = Storage.core.changableArray.length;
+
+      delete Storage.core.inputText;
+
+      let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
+
+      Storage.core.datalists.forEach(datalist => {
+         datalist.innerHTML = '';
+
+         values.forEach(value => {
+            const option = document.createElement('option');
+            option.className = 'datalist-option';
+            option.value = value;
+            datalist.appendChild(option);
+         })
+      })
+
+      values = '';
+   })
+   fileReader.removeEventListener('load', (e) => { });
+
+   fileReader.readAsText(inputFileData);
+})
+file.removeEventListener('input', (e) => { });
 
 saveButton.addEventListener('click', () => {
    MinorStorage.editCore('CsvData', getFilters());
@@ -143,69 +240,6 @@ saveButton.addEventListener('click', () => {
    delete MinorStorage.core.CsvData;
 })
 saveButton.removeEventListener('click', () => { });
-
-
-file.addEventListener('input', e => {
-   e.preventDefault();
-
-   submitBtn.disabled = false;
-
-   const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
-
-   chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1];
-
-   const fileReader = new FileReader();
-   const inputFileData = file.files[0];
-
-   fileReader.addEventListener('load', (e) => {
-      let text = e.target.result;
-      Storage.editCore('inputText', text);
-
-      const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
-      Storage.editCore('tableHeaders', tableHeaders)
-
-      const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value;
-
-      Storage.editCore('changableArray', csvToArray(Storage.core.inputText, delimiterOption)[0].filter((obj, index) => {
-         return !Object.values(obj).includes(undefined);
-      }));
-
-      Storage.editCore('staticDataArray', Storage.core.changableArray);
-      Storage.editCore('allHeaders', Object.keys(Storage.core.staticDataArray[0]));
-      Storage.editCore('staticDataArrayLength', Storage.core.staticDataArray.length);
-      Storage.editCore('headers', csvToArray(Storage.core.inputText, delimiterOption)[1]);
-      Storage.editCore('filters', csvToArray(Storage.core.inputText, delimiterOption)[2]);
-      Storage.editCore('allValues', getAllValues(Storage.core.staticDataArray, Storage.core.tableHeaders));
-      Storage.editCore('inputTextLength', Storage.core.inputText.length);
-      Storage.editCore('firstDate', document.querySelector('#left-date-inp'));
-      Storage.editCore('secondDate', document.querySelector('#right-date-inp'));
-
-      Storage.editCore('inputFields', [
-         document.querySelector('#filter-input-1'),
-         document.querySelector('#filter-input-2'),
-         document.querySelector('#filter-input-3'),
-         document.querySelector('#filter-input-4'),
-         document.querySelector('#filter-input-5')
-      ]);
-      Storage.editCore('datalists', [
-         document.querySelector('#datalist-1'),
-         document.querySelector('#datalist-2'),
-         document.querySelector('#datalist-3'),
-         document.querySelector('#datalist-4'),
-         document.querySelector('#datalist-5')
-      ]);
-
-      rowsAmount.innerHTML = Storage.core.changableArray.length;
-
-      delete Storage.core.inputText;
-
-
-   })
-   fileReader.removeEventListener('load', (e) => { });
-
-   fileReader.readAsText(inputFileData);
-})
-file.removeEventListener('input', (e) => { });
 
 reset.addEventListener('click', e => {
    e.preventDefault();
@@ -335,241 +369,238 @@ inputForm.addEventListener("submit", (e) => {
    }
 
    Storage.editCore('changableArray', getFilters());
-   /*
-   if (Storage.core.changableArray.length > 8000) {
-      dataTable.innerHTML = '';
+   load.style.opacity = '1';
+   loadingMessage.style.opacity = '1';
+   load.style.transition = '0.2s';
+   loadingMessage.style.transition = '0.2s';
 
-      emptyMessage.innerHTML = 'Table is too big. Please add dates or filters';
-   }
-   */
-   //else {
-      load.style.opacity = '1';
-      loadingMessage.style.opacity = '1';
-      load.style.transition = '0.2s';
-      loadingMessage.style.transition = '0.2s';
+   reloadTable.disabled = true;
 
-      reloadTable.disabled = true;
+   let table = document.createElement("table");
+   let thead = document.createElement("thead");
+   let tbody = document.createElement("tbody");
 
-      let table = document.createElement("table");
-      let thead = document.createElement("thead");
-      let tbody = document.createElement("tbody");
+   const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
 
-      const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
-
-      if (Storage.core.inputTextLength.length === 0) {
-         if (file.DOCUMENT_NODE > 0) {
-            dataTable.innerHTML = '';
-            table.innerHTML = '';
-            thead.innerHTML = '';
-            tbody.innerHTML = '';
-         }
-
-         emptyMessage.innerHTML = `Datei <span>${arrFromFileName[arrFromFileName.length - 1]}</span> ist leer`;
-      }
-
-      else {
-         if (emptyMessage.value != 0)
-            emptyMessage.innerHTML = '';
-
-         load.style.transition = '0.2s';
-         loadingMessage.style.transition = '0.2s';
-         load.style.opacity = '1';
-         loadingMessage.style.opacity = '1';
-         realRowsNumber.style.opacity = '1';
-         shownRowsCounter.style.opacity = '1';
-         shownRowsCounterDiv.style.opacity = '1';
-         modeLabel.style.opacity = '1';
-         clickToggler.style.display = 'block';
-         saveButton.style.display = 'block';
-
-         let limiter = 100;
-         shownRowsCounter.innerHTML = `${limiter}`;
-
-         /*----------------------------------------------------------------------------------------------------------------*/
-         /*----------------------------------------------------------------------------------------------------------------*/
-         /*---------------------------------------    PROGRAM ENTRY POINT    ----------------------------------------------*/
-         /*----------------------------------------------------------------------------------------------------------------*/
-         /*----------------------------------------------------------------------------------------------------------------*/
-
-         Storage.editCore('changableArray', getFilters());
-
-         let filtersFromCsvFile = Storage.core.filters;
-         let filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '');
-
-         filtersFromCsvFileSplitted.forEach((value, index) => {
-            Storage.core.inputFields[index].setAttribute('placeholder', value);
-         })
-
-         Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
-
-         let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
-
-         Storage.core.datalists.forEach(datalist => {
-            datalist.innerHTML = '';
-
-            values.forEach(value => {
-               const option = document.createElement('option');
-               option.className = 'datalist-option';
-               option.value = value;
-               datalist.appendChild(option);
-            })
-         })
-
-         filtersFromCsvFile = null;
-         filtersFromCsvFileSplitted = null;
-         values = null;
-
+   if (Storage.core.inputTextLength.length === 0) {
+      if (file.DOCUMENT_NODE > 0) {
          dataTable.innerHTML = '';
          table.innerHTML = '';
          thead.innerHTML = '';
          tbody.innerHTML = '';
-
-         const innerTable = document.createElement('table');
-         innerTable.innerHTML = '';
-
-         table.appendChild(thead);
-         table.appendChild(tbody);
-
-         document.getElementById('data-table').appendChild(table);
-
-         load.style.transition = '0s';
-         loadingMessage.style.transition = '0s';
-         load.style.opacity = '0';
-         loadingMessage.style.opacity = '0';
-
-         if (+rowLimiter.value > Storage.core.changableArray.length)
-            shownRowsCounter.innerHTML = Storage.core.changableArray.length;
-         else
-            shownRowsCounter.innerHTML = +rowLimiter.value;
-
-         let hrow = document.createElement('tr');
-         for (let i = 0, len = Storage.core.tableHeaders.length; i < len; i++) {
-            let theader = document.createElement('th');
-            theader.innerHTML = Storage.core.tableHeaders[i];
-            hrow.appendChild(theader);
-         }
-         thead.appendChild(hrow);
-
-         let fragment = document.createDocumentFragment();
-         for (let i = 0, len = limiter; i < len; i++) {
-            let body_row = document.createElement('tr');
-            for (let j = 0, len = Storage.core.tableHeaders.length; j < len; j++) {
-               let table_data = document.createElement('td');
-               table_data.setAttribute('id', `cell ${i}${j}`);
-
-               if (Storage.core.tableHeaders[j] === 'FPY') {
-                  table_data.innerHTML = `${Storage.core.changableArray[i][Storage.core.tableHeaders[j]]}%`;
-               } else {
-                  table_data.innerHTML = Storage.core.changableArray[i][Storage.core.tableHeaders[j]];
-               }
-
-               body_row.appendChild(table_data);
-            }
-            fragment.appendChild(body_row);
-         }
-         tbody.appendChild(fragment);
-
-         table.appendChild(thead);
-         table.appendChild(tbody);
-         dataTable.appendChild(table);
-
-         saveDiv.style.opacity = '1';
-         saveDiv.style.transition = '0.2s';
-
-         showFullTable();
-
-         table.addEventListener('click', e => {
-            const clickOption = cellSelect.options[cellSelect.selectedIndex].value;
-
-            if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
-               const targetCellValue = e.target.innerHTML;
-
-               const emptyFieldIndexes = Storage.core.inputFields.map((filter, index) => {
-                  if (filter.value === '')
-                     return index;
-               }).filter(filter => filter !== undefined);
-
-               if (emptyFieldIndexes.length !== 0) {
-                  const targetInputField = Storage.core.inputFields[emptyFieldIndexes[0]];
-                  targetInputField.value = targetCellValue;
-               }
-
-               Storage.editCore('changableArray', getFilters());
-
-               Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
-            }
-
-            else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
-               reloadTable.disabled = false;
-               submitBtn.disabled = true;
-               resetBtn.disabled = true;
-               fullTableBtn.disabled = true;
-               summaryRowToggleInput.disabled = true;
-               pieDiagrammInput.disabled = true;
-
-               const targetId = e.target.id;
-               const splittedTargetId = targetId.split('');
-               splittedTargetId.splice(0, 5);
-
-               const row = +splittedTargetId[0];
-
-               const object = Storage.core.changableArray[row];
-
-               dataTable.innerHTML = '';
-               table.innerHTML = '';
-               thead.innerHTML = '';
-               tbody.innerHTML = '';
-
-               const rowTable = document.createElement('table');
-               rowTable.setAttribute('id', 'rowTable');
-
-               const allHeaders = [];
-               const allValues = [];
-
-               for (let [key, value] of Object.entries(object)) {
-                  allHeaders.push(key);
-                  allValues.push(value);
-               }
-
-               const divideArrByNine = (arr) => {
-                  const resultArr = [];
-
-                  for (let i = 0; i < 3; i++) {
-                     const innerArr = [];
-                     for (let j = 0; j < 9; j++) {
-                        innerArr.push(arr[i * 9 + j])
-                     }
-                     resultArr.push(innerArr);
-                  }
-
-                  return resultArr;
-               }
-
-               const resArr = [];
-               for (let i = 0; i < 3; i++)
-                  resArr.push(divideArrByNine(allHeaders)[i], divideArrByNine(allValues)[i]);
-
-               for (let i = 0; i < 6; i++) {
-                  const tr = document.createElement('tr');
-                  for (let j = 0; j < 9; j++) {
-                     const td = document.createElement('td');
-                     td.innerHTML = resArr[i][j];
-                     tr.appendChild(td);
-                  }
-                  tbody.appendChild(tr);
-               }
-
-               rowTable.append(tbody);
-               dataTable.append(rowTable);
-
-               object.length = 0;
-               splittedTargetId.length = 0;
-            }
-
-         })
-
-         table.removeEventListener('click', e => { });
       }
-   //}
+
+      emptyMessage.innerHTML = `Datei <span>${arrFromFileName[arrFromFileName.length - 1]}</span> ist leer`;
+   }
+
+   else {
+      if (emptyMessage.value != 0)
+         emptyMessage.innerHTML = '';
+
+      load.style.transition = '0.2s';
+      loadingMessage.style.transition = '0.2s';
+      load.style.opacity = '1';
+      loadingMessage.style.opacity = '1';
+      realRowsNumber.style.opacity = '1';
+      shownRowsCounter.style.opacity = '1';
+      shownRowsCounterDiv.style.opacity = '1';
+      modeLabel.style.opacity = '1';
+      clickToggler.style.display = 'block';
+      saveButton.style.display = 'block';
+
+      /*----------------------------------------------------------------------------------------------------------------*/
+      /*----------------------------------------------------------------------------------------------------------------*/
+      /*---------------------------------------    PROGRAM ENTRY POINT    ----------------------------------------------*/
+      /*----------------------------------------------------------------------------------------------------------------*/
+      /*----------------------------------------------------------------------------------------------------------------*/
+
+      Storage.editCore('changableArray', getFilters());
+
+      let filtersFromCsvFile = Storage.core.filters;
+      let filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '');
+
+      filtersFromCsvFileSplitted.forEach((value, index) => {
+         Storage.core.inputFields[index].setAttribute('placeholder', value);
+      })
+
+      Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
+
+      let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
+
+      Storage.core.datalists.forEach(datalist => {
+         datalist.innerHTML = '';
+
+         values.forEach(value => {
+            const option = document.createElement('option');
+            option.className = 'datalist-option';
+            option.value = value;
+            datalist.appendChild(option);
+         })
+      })
+
+      filtersFromCsvFile = null;
+      filtersFromCsvFileSplitted = null;
+      values = null;
+
+      dataTable.innerHTML = '';
+      table.innerHTML = '';
+      thead.innerHTML = '';
+      tbody.innerHTML = '';
+
+      const innerTable = document.createElement('table');
+      innerTable.innerHTML = '';
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+
+      document.getElementById('data-table').appendChild(table);
+
+      load.style.transition = '0s';
+      loadingMessage.style.transition = '0s';
+      load.style.opacity = '0';
+      loadingMessage.style.opacity = '0';
+
+      let hrow = document.createElement('tr');
+      for (let i = 0; i < 16; i++) {
+         let theader = document.createElement('th');
+
+         theader.innerHTML = Storage.core.tableHeaders[i];
+         hrow.appendChild(theader);
+      }
+      thead.appendChild(hrow);
+
+      let outputLimiter;
+
+      if (rowLimiter.value !== '') {
+         Storage.core.changableArray.length > +rowLimiter.value
+            ? outputLimiter = +rowLimiter.value
+            : outputLimiter = Storage.core.changableArray.length;
+      }
+      else
+         outputLimiter = Storage.core.changableArray.length;
+
+      shownRowsCounter.innerHTML = `${outputLimiter}`;
+
+      for (let i = 0; i < outputLimiter; i++) {
+         let body_row = document.createElement('tr');
+
+         Storage.core.tableHeaders.forEach((header, j) => {
+            let table_data = document.createElement('td');
+
+            table_data.setAttribute('id', `cell ${i}${j}`);
+
+            if (Storage.core.changableArray[i][header] !== 'NULL') {
+               if (header === 'FPY')
+                  table_data.innerHTML = `${Storage.core.changableArray[i][header]}%`;
+               else
+                  table_data.innerHTML = `${Storage.core.changableArray[i][header]}`;
+            }
+
+            body_row.appendChild(table_data);
+         })
+         tbody.appendChild(body_row);
+      }
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+      dataTable.appendChild(table);
+
+      saveDiv.style.opacity = '1';
+      saveDiv.style.transition = '0.2s';
+
+      showFullTable();
+
+      table.addEventListener('click', e => {
+         const clickOption = cellSelect.options[cellSelect.selectedIndex].value;
+
+         if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
+            const targetCellValue = e.target.innerHTML;
+
+            const emptyFieldIndexes = Storage.core.inputFields.map((filter, index) => {
+               if (filter.value === '')
+                  return index;
+            }).filter(filter => filter !== undefined);
+
+            if (emptyFieldIndexes.length !== 0) {
+               const targetInputField = Storage.core.inputFields[emptyFieldIndexes[0]];
+               targetInputField.value = targetCellValue;
+            }
+
+            Storage.editCore('changableArray', getFilters());
+
+            Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
+         }
+
+         else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
+            reloadTable.disabled = false;
+            submitBtn.disabled = true;
+            resetBtn.disabled = true;
+            fullTableBtn.disabled = true;
+            summaryRowToggleInput.disabled = true;
+            pieDiagrammInput.disabled = true;
+
+            const targetId = e.target.id;
+            const splittedTargetId = targetId.split('');
+            splittedTargetId.splice(0, 5);
+
+            const row = +splittedTargetId[0];
+
+            const object = Storage.core.changableArray[row];
+
+            dataTable.innerHTML = '';
+            table.innerHTML = '';
+            thead.innerHTML = '';
+            tbody.innerHTML = '';
+
+            const rowTable = document.createElement('table');
+            rowTable.setAttribute('id', 'rowTable');
+
+            const allHeaders = [];
+            const allValues = [];
+
+            for (let [key, value] of Object.entries(object)) {
+               allHeaders.push(key);
+               allValues.push(value);
+            }
+
+            const divideArrByNine = (arr) => {
+               const resultArr = [];
+
+               for (let i = 0; i < 3; i++) {
+                  const innerArr = [];
+                  for (let j = 0; j < 9; j++) {
+                     innerArr.push(arr[i * 9 + j])
+                  }
+                  resultArr.push(innerArr);
+               }
+
+               return resultArr;
+            }
+
+            const resArr = [];
+            for (let i = 0; i < 3; i++)
+               resArr.push(divideArrByNine(allHeaders)[i], divideArrByNine(allValues)[i]);
+
+            for (let i = 0; i < 6; i++) {
+               const tr = document.createElement('tr');
+               for (let j = 0; j < 9; j++) {
+                  const td = document.createElement('td');
+                  td.innerHTML = resArr[i][j];
+                  tr.appendChild(td);
+               }
+               tbody.appendChild(tr);
+            }
+
+            rowTable.append(tbody);
+            dataTable.append(rowTable);
+
+            object.length = 0;
+            splittedTargetId.length = 0;
+         }
+
+      })
+
+      table.removeEventListener('click', e => { });
+   }
 })
 inputForm.removeEventListener('submit', (e) => { })

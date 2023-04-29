@@ -500,6 +500,10 @@ span {
    cursor: pointer;
 }
 
+.filters .database-select {
+   max-width: 130px;
+}
+
 .rows-amount {
    margin: 0;
    margin-left: 10px;
@@ -1018,12 +1022,12 @@ span {
 
 #data-table #rowTable tbody tr {
    border-bottom: 1px solid #464646;
-   background-color: rgba(0, 255, 255, 0.5);
+   background-color: #00788b;
 }
 
 #data-table #rowTable tbody tr:nth-child(even) {
    transition: background-color ease 0.1s;
-   background-color: #a2a2a2;
+   background-color: #cacaca;
    margin-bottom: 15px;
 }
 
@@ -1039,9 +1043,13 @@ span {
 }
 
 #data-table #rowTable td:hover {
-   cursor: pointer;
-   background-color: #6f6e6e;
-   transition: background-color ease 0.1s;
+   cursor: default;
+   background-color: #cacaca;
+}
+
+#data-table #rowTable tr:nth-child(odd) td:hover {
+   cursor: default;
+   background-color: #00788b;
 }
 
 /*-------------------------------------------------------------------------------------*/

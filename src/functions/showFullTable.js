@@ -12,6 +12,7 @@ export const showFullTable = (inputArray) => {
       const arrows = document.querySelector('#index-arrows');
       const fullTableSection = document.querySelector('#full-table-section');
       const fullTableButton = document.querySelector('#full-table-button');
+      const rowLimiter = document.querySelector('#row-limiter');
 
       fullTableButton.addEventListener('click', () => {
             document.querySelector('#submit-button').disabled = true;
@@ -63,16 +64,28 @@ export const showFullTable = (inputArray) => {
                   })
                   thead.appendChild(headerRow);
 
-                  arr.forEach(obj => {
+                  let outputLimiter;
+
+                  if (rowLimiter.value !== '') {
+                     Storage.core.changableArray.length > +rowLimiter.value
+                        ? outputLimiter = +rowLimiter.value
+                        : outputLimiter = Storage.core.changableArray.length;
+                  }
+                  else
+                     outputLimiter = Storage.core.changableArray.length;
+
+                  console.log(outputLimiter);
+
+                  for (let i = 0; i < outputLimiter; i++) {
                         const dataRow = document.createElement('tr');
 
                         keys[index].forEach(key => {
                               const dataRowCell = document.createElement('td');
 
                               if (key === 'FPY')
-                                    dataRowCell.innerHTML = `${obj[key]}%`;
+                                    dataRowCell.innerHTML = `${Storage.core.changableArray[i][key]}%`;
                               else
-                                    dataRowCell.innerHTML = obj[key];
+                                    dataRowCell.innerHTML = Storage.core.changableArray[i][key];
 
                               dataRowCell.style.minHeight = '30px';
                               dataRowCell.style.minWidth = '30px';
@@ -81,7 +94,7 @@ export const showFullTable = (inputArray) => {
                         })
 
                         tbody.appendChild(dataRow);
-                  })
+                  }
 
                   fullTable.appendChild(tbody);
                   fullTable.appendChild(thead);
