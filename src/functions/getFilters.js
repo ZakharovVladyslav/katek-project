@@ -59,11 +59,12 @@ export default function getFilters() {
     }).filter(filter => filter !== undefined);
 
     let keys = [];
+    let avoidableKeys = ['tLatenz', 'tLatenzSumme', 'tCycle', 'CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
 
     data.forEach(obj => {
         values.forEach(value => {
             Object.keys(obj).forEach(key => {
-                if (obj[key] === value && key !== 'tLatenz' && key !== 'tLatenzSumme') {
+                if (obj[key] === value && !avoidableKeys.includes(key)) {
                     keys.push(key);
                 }
             })

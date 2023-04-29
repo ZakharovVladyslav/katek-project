@@ -41,6 +41,12 @@ export default function DataPie() {
                 if (values[i][j] !== undefined && values[i][j] != 0)
                     zeros[j] += parseFloat(values[i][j]);
 
+        zeros = zeros.map(zero => {
+            return parseInt(zero) === zero
+            ? zero = `${zero}`
+            : zero = `${zero.toFixed(2)}`;
+        })
+
         const data = [
             { label: "CountPass", value: zeros[0], color: "#00FF00", stroke: "#396E28" },
             { label: "CountFail", value: zeros[1], color: "#FF0000", stroke: "#900606" },
