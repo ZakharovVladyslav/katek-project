@@ -161,7 +161,7 @@
 
 
    <div class="over-tables">
-      <p id="mode-label" style="opacity: 0;">Cell click mode: </p>
+      <p id="mode-label" style="opacity: 0;">Zellenklickmodus: </p>
       <select id="click-toggler" style="display: none;">
          <option id="opt1" class="ct-option">Zum Filtern hinzufügen</option>
          <option id="opt2" class="ct-option">Zeile anzeigen</option>
@@ -213,6 +213,8 @@
       const rightDateLabel = document.querySelector('#right-date-label')
       const cellModeSelection = document.querySelector('#click-toggler')
       const diagrammLabel = document.querySelector('#pie-diagramm-label')
+      const diagramDesc = document.querySelector("#diagramm-description")
+      const cellMode = document.querySelector('#mode-label')
 
       function chooseLang() {
          if (option.value === 'GE') {
@@ -230,6 +232,8 @@
             leftDateLabel.innerHTML = 'Erstes Datum '
             rightDateLabel.innerHTML = 'Zweites Datum'
             diagrammLabel.innerHTML = 'Kuchendiagramm'
+            diagramDesc.innerHTML = 'Hier kannst du die Prozessfähigkeit in einem Diagramm (pro Prozent) ein einsehen/beobachten.'
+            cellMode.innerHTML = 'Zellenklickmodus:'
          }
 
          else if (option.value === 'EN') {
@@ -247,6 +251,8 @@
             leftDateLabel.innerHTML = 'First date'
             rightDateLabel.innerHTML = 'Second date'
             diagrammLabel.innerHTML = 'Diagramm'
+            diagramDesc.innerHTML = 'Here you can observe the percentage of production process via diagramm'
+            cellMode.innerHTML = 'Cell click mode:'
          }
       }
    </script>

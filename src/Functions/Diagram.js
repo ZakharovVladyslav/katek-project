@@ -71,24 +71,28 @@ export default function Diagram() {
 
             const svg = d3.select("svg");
 
+            svgElem.innerHTML = '';
+
             const center = { x: 200, y: 200 };
 
             const circleDiagram = svg.append("g")
                 .attr("transform", "translate(" + center.x + "," + center.y + ")");
 
-            const arcs = circleDiagram.selectAll("arc")
+                const arcs = circleDiagram.selectAll("arc")
                 .data(pieGenerator(data))
                 .enter()
                 .append("g")
                 .attr("class", "arc");
-
-            arcs.append("path")
+              
+              arcs.filter(d => d.value !== 0)
+                .append("path")
                 .attr("d", arcGenerator)
                 .style("fill", function (d) {
-                    return d.data.color;
+                  return d.data.color;
                 })
                 .style('stroke', '#000000')
                 .style('stroke-width', '1.35px');
+              
 
             data.forEach((elem, index) => {
                 const html = `
