@@ -6,56 +6,43 @@ import getFilters from '../Functions/Data-filtering.js';
 import SummaryTable from '../Functions/Summary-table.js';
 import DropdownValues from '../Functions/Dropdown-values.js';
 import Diagram from '../Functions/Diagram.js';
-
 import { CustomStorage, SecondaryStorage } from '../Functions/Local-Storage.js';
+
+import moment from 'moment';
+
 const Storage = new CustomStorage();
 const MinorStorage = new SecondaryStorage();
-
 const inputForm = document.querySelector('#input-form');
 const file = document.querySelector('#file-choose');
-
 const submitBtn = document.querySelector('#submit-button');
 const resetBtn = document.querySelector('#reset');
-
 const dataTable = document.querySelector('#data-table');
-
 const emptyMessage = document.querySelector('#empty-message');
-
 const rowLimiter = document.querySelector('#row-limiter');
-
 const chosenFile = document.querySelector('#chosen-file');
 const reloadTable = document.querySelector('#reload-table');
 const cellSelect = document.querySelector('#click-toggler');
-
 const filters = document.querySelector('#filters');
-
 const clickToggler = document.querySelector('#click-toggler');
 const saveButton = document.querySelector('#save');
 const load = document.querySelector('#load');
 const loadingMessage = document.querySelector('#loading-table');
-
 const rowsAmount = document.querySelector('#rows-amount');
-
 const fullTable = document.querySelector('#full-table');
 const fullTableBtn = document.querySelector('#full-table-button');
 const arrows = document.querySelector('#index-arrows');
-
 const saveFiltersOption = document.querySelector('#save-filter-option');
 const saveDiv = document.querySelector('#save-div');
-
 const delimiterSelection = document.querySelector('#delimiter-selection');
-
 const realRowsNumber = document.querySelector('#real-rows-number');
 const shownRowsCounter = document.querySelector('#shown-rows-counter');
 const shownRowsCounterDiv = document.querySelector('.shown-rows-counter-div');
 const fullTableSection = document.querySelector('#full-table-section');
-
 const SummaryTableInput = document.querySelector('#summary-row-toggler-input');
 const pieDiagrammInput = document.querySelector('#pie-diagramm-checkbox');
 const svgDiv = document.querySelector('#svg-div');
 const diagrammDescription = document.querySelector("#diagramm-description");
 const svgElement = document.querySelector('#svg-element');
-
 const modeLabel = document.querySelector('#mode-label');
 
 fullTableSection.style.opacity = '0';
