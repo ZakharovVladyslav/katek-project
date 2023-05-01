@@ -1,11 +1,4 @@
-export const getAllValues = (array, headers) => {
-      const filters = [
-            document.querySelector('#filter-input-1'),
-            document.querySelector('#filter-input-2'),
-            document.querySelector('#filter-input-3'),
-            document.querySelector('#filter-input-4'),
-            document.querySelector('#filter-input-5')
-      ];
+export default function DropdownValues (array, headers) {
       const resultArray = [];
       const timeKeys = ['tLogIn', 'tLogOut', 'tLastAcc'];
       const valuesMap = new Map();

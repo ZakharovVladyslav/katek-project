@@ -1,8 +1,8 @@
-import { CustomStorage } from "./CustomStorage.js"
+import { CustomStorage } from "./Local-Storage.js"
 
 const Storage = new CustomStorage();
 
-export default function summaryRowToggle() {;
+export default function SummaryTable() {;
     const toggleCheckboxInput = document.querySelector('#summary-row-toggler-input');
     const table = document.querySelector('#summary-table');
     const thead = document.createElement('thead');

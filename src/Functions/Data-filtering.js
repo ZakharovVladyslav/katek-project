@@ -1,6 +1,6 @@
 'use strict'
 
-import { CustomStorage } from "./CustomStorage.js";
+import { CustomStorage } from "./Local-Storage.js";
 
 const Storage = new CustomStorage();
 

@@ -1,14 +1,13 @@
 'use strict';
 
-import { showFullTable } from '../Functions/ShowFullTable.js';
-import csvToArray from '../Functions/CsvConvert.js';
-import getFilters from '../Functions/GetFilters.js';
-import datePlusMinus from '../Functions/DatePlusMinus.js';
-import summaryRowToggle from '../Functions/SummaryRow.js';
-import { getAllValues } from '../Functions/GetAllValues.js';
-import DataPie from '../Functions/DataPie.js';
+import CompleteTable from '../Functions/Complete-table.js';
+import CsvToArray from '../Functions/Convert-csv.js';
+import getFilters from '../Functions/Data-filtering.js';
+import SummaryTable from '../Functions/Summary-table.js';
+import DropdownValues from '../Functions/Dropdown-values.js';
+import Diagram from '../Functions/Diagram.js';
 
-import { CustomStorage, SecondaryStorage } from '../Functions/CustomStorage.js';
+import { CustomStorage, SecondaryStorage } from '../Functions/Local-Storage.js';
 const Storage = new CustomStorage();
 const MinorStorage = new SecondaryStorage();
 
@@ -51,7 +50,7 @@ const shownRowsCounter = document.querySelector('#shown-rows-counter');
 const shownRowsCounterDiv = document.querySelector('.shown-rows-counter-div');
 const fullTableSection = document.querySelector('#full-table-section');
 
-const summaryRowToggleInput = document.querySelector('#summary-row-toggler-input');
+const SummaryTableInput = document.querySelector('#summary-row-toggler-input');
 const pieDiagrammInput = document.querySelector('#pie-diagramm-checkbox');
 const svgDiv = document.querySelector('#svg-div');
 const diagrammDescription = document.querySelector("#diagramm-description");
@@ -93,16 +92,16 @@ file.addEventListener('input', e => {
 
       const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value;
 
-      Storage.editCore('changableArray', csvToArray(Storage.core.inputText, delimiterOption)[0].filter((obj, index) => {
+      Storage.editCore('changableArray', CsvToArray(Storage.core.inputText, delimiterOption)[0].filter((obj, index) => {
          return !Object.values(obj).includes(undefined);
       }));
 
       Storage.editCore('staticDataArray', Storage.core.changableArray);
       Storage.editCore('allHeaders', Object.keys(Storage.core.staticDataArray[0]));
       Storage.editCore('staticDataArrayLength', Storage.core.staticDataArray.length);
-      Storage.editCore('headers', csvToArray(Storage.core.inputText, delimiterOption)[1]);
-      Storage.editCore('filters', csvToArray(Storage.core.inputText, delimiterOption)[2]);
-      Storage.editCore('allValues', getAllValues(Storage.core.staticDataArray, Storage.core.tableHeaders));
+      Storage.editCore('headers', CsvToArray(Storage.core.inputText, delimiterOption)[1]);
+      Storage.editCore('filters', CsvToArray(Storage.core.inputText, delimiterOption)[2]);
+      Storage.editCore('allValues', DropdownValues(Storage.core.staticDataArray, Storage.core.tableHeaders));
       Storage.editCore('inputTextLength', Storage.core.inputText.length);
       Storage.editCore('firstDate', document.querySelector('#left-date-inp'));
       Storage.editCore('secondDate', document.querySelector('#right-date-inp'));
@@ -152,7 +151,7 @@ file.addEventListener('input', e => {
 
       delete Storage.core.inputText;
 
-      let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
+      let values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
@@ -249,7 +248,6 @@ reset.addEventListener('click', e => {
    document.querySelector('#filter-input-3').value = '';
    document.querySelector('#filter-input-4').value = '';
    document.querySelector('#filter-input-5').value = '';
-   rowLimiter.value = '';
    Storage.core.firstDate.value = '';
    Storage.core.secondDate.value = '';
 
@@ -278,7 +276,7 @@ filters.addEventListener('click', e => {
       Storage.editCore('changableArray', getFilters());
       Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
 
-      const values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
+      const values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
@@ -301,7 +299,7 @@ filters.addEventListener('click', (e) => {
 
    targetField.addEventListener('change', () => {
       Storage.editCore('changableArray', getFilters());
-      let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
+      let values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
@@ -324,9 +322,8 @@ filters.removeEventListener('click', (e) => { });
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault();
 
-   DataPie();
-   summaryRowToggle();
-   datePlusMinus();
+   Diagram();
+   SummaryTable();
 
    svgElement.innerHTML = '';
 
@@ -335,7 +332,7 @@ inputForm.addEventListener("submit", (e) => {
 
    resetBtn.disabled = false;
    fullTableBtn.disabled = false;
-   summaryRowToggleInput.disabled = false;
+   SummaryTableInput.disabled = false;
    pieDiagrammInput.disabled = false;
 
    pieDiagrammInput.checked = true;
@@ -425,7 +422,7 @@ inputForm.addEventListener("submit", (e) => {
 
       Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
 
-      let values = getAllValues(Storage.core.changableArray, Storage.core.tableHeaders);
+      let values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
@@ -508,7 +505,7 @@ inputForm.addEventListener("submit", (e) => {
       saveDiv.style.opacity = '1';
       saveDiv.style.transition = '0.2s';
 
-      showFullTable();
+      CompleteTable();
 
       table.addEventListener('click', e => {
          const clickOption = cellSelect.options[cellSelect.selectedIndex].value;
@@ -536,7 +533,7 @@ inputForm.addEventListener("submit", (e) => {
             submitBtn.disabled = true;
             resetBtn.disabled = true;
             fullTableBtn.disabled = true;
-            summaryRowToggleInput.disabled = true;
+            SummaryTableInput.disabled = true;
             pieDiagrammInput.disabled = true;
 
             const targetId = e.target.id;

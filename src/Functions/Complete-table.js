@@ -1,8 +1,8 @@
-import { CustomStorage } from "./CustomStorage.js";
+import { CustomStorage } from "./Local-Storage.js";
 
 const Storage = new CustomStorage();
 
-export const showFullTable = (inputArray) => {
+export default function CompleteTable (inputArray) {
       let arr = [...Storage.core.changableArray];
       const remove = arr.shift();
 
@@ -67,14 +67,12 @@ export const showFullTable = (inputArray) => {
                   let outputLimiter;
 
                   if (rowLimiter.value !== '') {
-                     Storage.core.changableArray.length > +rowLimiter.value
-                        ? outputLimiter = +rowLimiter.value
-                        : outputLimiter = Storage.core.changableArray.length;
+                        Storage.core.changableArray.length > +rowLimiter.value
+                              ? outputLimiter = +rowLimiter.value
+                              : outputLimiter = Storage.core.changableArray.length;
                   }
                   else
-                     outputLimiter = Storage.core.changableArray.length;
-
-                  console.log(outputLimiter);
+                        outputLimiter = Storage.core.changableArray.length;
 
                   for (let i = 0; i < outputLimiter; i++) {
                         const dataRow = document.createElement('tr');
@@ -113,7 +111,7 @@ export const showFullTable = (inputArray) => {
                   renderTable(index, separatedKeys);
             })
 
-            leftArrow.removeEventListener('click', () => {})
+            leftArrow.removeEventListener('click', () => { })
 
             rightArrow.addEventListener('click', () => {
                   fullTable.innerHTML = '';
@@ -126,8 +124,8 @@ export const showFullTable = (inputArray) => {
                   renderTable(index, separatedKeys);
             })
 
-            rightArrow.removeEventListener('click', () => {});
+            rightArrow.removeEventListener('click', () => { });
       })
 
-      fullTableButton.removeEventListener('click', () => {});
+      fullTableButton.removeEventListener('click', () => { });
 }

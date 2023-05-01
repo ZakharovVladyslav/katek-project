@@ -1,4 +1,4 @@
-export default function csvToArray(str, delimiter = ',') {
+export default function CsvToArray(str, delimiter = ',') {
    if (!str.includes('#') || (str.indexOf('ProdCode') - 2 !== str.indexOf('#')))
       str = '#,' + str
 

@@ -1,8 +1,8 @@
-import { CustomStorage } from "./CustomStorage.js";
+import { CustomStorage } from "./Local-Storage.js";
 
 const Storage = new CustomStorage();
 
-export default function DataPie() {
+export default function Diagram() {
     const dataPieInput = document.querySelector("#pie-diagramm-checkbox");
     const svgElem = document.querySelector('#svg-element');
     const labels = document.querySelector('#labels');
