@@ -208,7 +208,7 @@ file.addEventListener('input', () => {
 
       values = '';
    })
-   fileReader.removeEventListener('load', (e) => {});
+   fileReader.removeEventListener('load', (e) => { });
 
    // Set fileReader to read data from .csv file as text
    fileReader.readAsText(inputFileData);
@@ -263,7 +263,7 @@ document.querySelector('#right-date-inp').addEventListener('change', () => {
       const earliestDate = Storage.core.data.reduce((earliest, current) => {
          const currentDate = new Date(current[opt]);
          return currentDate < earliest ? currentDate : earliest;
-       }, new Date(Storage.core.data[0][opt]));
+      }, new Date(Storage.core.data[0][opt]));
 
       document.querySelector('#left-date-inp').value = earliestDate.toISOString().slice(0, 16);
    }
@@ -733,7 +733,7 @@ inputForm.addEventListener("submit", (e) => {
             let table_data = document.createElement('td');
 
             // Setting id to each of the cells where first digit stands for row and the second for column
-            table_data.setAttribute('id', `cell ${i}${j}`);
+            table_data.setAttribute('id', `cell row${i}col${j}`);
 
             // Check if value is not NULL so it won't be printed
             if (Storage.core.data[i][header] !== 'NULL') {
@@ -763,6 +763,7 @@ inputForm.addEventListener("submit", (e) => {
        * This event handler allows user to check the whole row OR to add filters to the input field
        */
       table.addEventListener('click', e => {
+
          const clickOption = cellSelect.options[cellSelect.selectedIndex].value;
 
          /**
@@ -775,19 +776,58 @@ inputForm.addEventListener("submit", (e) => {
             const targetCellValue = e.target.innerHTML;
 
             /**
-             * emptyFieldIndexes checks THE FIRST EMPTY input fields
-             *
-             * F.e. if IF1 and IF3 are used, the first empty will be IF2, so value from the cell will be added there
-             * If IF1 empty, value will be added there
+             * Receiving target column by slicing from col + 3 to the end of the string
+             * as our cell id has a look like `cell row0col0`
              */
-            const emptyFieldIndexes = Storage.core.inputFields.map((filter, index) => {
-               if (filter.value === '')
-                  return index;
-            }).filter(filter => filter !== undefined);
+            const targetCol = e.target.id.slice(e.target.id.indexOf('col') + 3, e.target.id.length);
 
-            if (emptyFieldIndexes.length !== 0) {
-               const targetInputField = Storage.core.inputFields[emptyFieldIndexes[0]];
-               targetInputField.value = targetCellValue;
+            /**
+             * Columns 13, 14 and 15 are datetime-local columns for tLogIn, tLogOut, tLastAcc
+             * So if user pressed on the date cell, it has to be added to the right place
+             */
+            if (targetCol === '13' || targetCol === '14' || targetCol === '15') {
+               const select = document.getElementById('date-params');
+
+               const indexMap = {
+                  '13': 0,
+                  '14': 1,
+                  '15': 2,
+               };
+
+               /**
+                * col 13 - tLogIn (selectedIndex 0 in select),
+                * col 14 - tLogOut (selectedIndex 1 in select),
+                * col 15 - tLastAcc (selectedIndex 2 in select),
+                *
+                * If user presses on the date of other key, it will change select's selectedIndex (option)
+                */
+               if (targetCol in indexMap) {
+                  select.selectedIndex = indexMap[targetCol];
+               }
+
+               /**
+                * Check which one of the date inputs empty first, so date will be added there
+                */
+               Storage.core.firstDate.value === ''
+                  ? Storage.core.firstDate.value = new Date(targetCellValue).toISOString().slice(0, 16)
+                  : Storage.core.secondDate.value = new Date(targetCellValue).toISOString().slice(0, 16);
+            }
+            else {
+               /**
+                * emptyFieldIndexes checks THE FIRST EMPTY input fields
+                *
+                * F.e. if IF1 and IF3 are used, the first empty will be IF2, so value from the cell will be added there
+                * If IF1 empty, value will be added there
+                */
+               const emptyFieldIndexes = Storage.core.inputFields.map((filter, index) => {
+                  if (filter.value === '')
+                     return index;
+               }).filter(filter => filter !== undefined);
+
+               if (emptyFieldIndexes.length !== 0) {
+                  const targetInputField = Storage.core.inputFields[emptyFieldIndexes[0]];
+                  targetInputField.value = targetCellValue;
+               }
             }
 
             Storage.editCore('data', getFilters());
@@ -809,16 +849,11 @@ inputForm.addEventListener("submit", (e) => {
             pieDiagrammInput.disabled = true;
 
             /**
-             * splittedTargetId will receive cell id
-             *
-             * Cell has id `cell 14`, then splittedTargetId will be 14 which stands for 2nd row, 4th column
+             * As we have id on each of the cells as `cell row0col0`,
+             * we can find out target id by slicing from w + 1 to col, to receive just a number
              */
             const targetId = e.target.id;
-            const splittedTargetId = targetId.split('');
-            splittedTargetId.splice(0, 5);
-
-            // And here receive row number by taking first digit from the id which stands for row
-            const row = +splittedTargetId[0];
+            const row = targetId.slice(targetId.indexOf('w') + 1, targetId.indexOf('col'));
 
             // Recive the whole object by row number
             const object = Storage.core.data[row];
@@ -878,7 +913,6 @@ inputForm.addEventListener("submit", (e) => {
             dataTable.append(rowTable);
 
             object.length = 0;
-            splittedTargetId.length = 0;
          }
 
       })
