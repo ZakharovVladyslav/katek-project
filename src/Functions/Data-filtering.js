@@ -10,35 +10,17 @@ export default function getFilters() {
 
     let data = [...Storage.core.staticDataArray];
 
-    if (Storage.core.firstDate.value.length !== 0 && Storage.core.secondDate.value.length !== 0) {
-        const select = document.getElementById('date-params');
-        const opt = select.options[select.selectedIndex].value;
+    const select = document.getElementById('date-params');
+    const opt = select.options[select.selectedIndex].value;
 
-        const revertDate = (date) => {
-            const arr = date.split('-').reverse();
+    const startDate = new Date(Storage.core.firstDate.value);
+    const finishDate = new Date(Storage.core.secondDate.value);
 
-            return `${+arr[1]}/${+arr[0]}/${+arr[2]}`;
-        }
+    if (Storage.core.firstDate.value !== '' && Storage.core.secondDate.value !== '') {
+        data = data.filter(object => {
+            const objectDate = new Date(object[opt]);
 
-        const leftDateArr = revertDate(Storage.core.firstDate.value);
-        const rigthDateArr = revertDate(Storage.core.secondDate.value);
-
-        data = data.filter(elem => {
-            if (elem[opt] !== undefined) {
-                let targetDate = elem[opt].split('');
-
-                if (targetDate.length > 10) {
-                    targetDate.length = 10;
-
-                    targetDate = targetDate.join('').split('.');
-
-                    let date = `${+targetDate[0]}/${+targetDate[1]}/${+targetDate[2]}`;
-
-                    if (new Date(leftDateArr) <= new Date(date) && new Date(date) <= new Date(rigthDateArr)) {
-                        return elem;
-                    }
-                }
-            }
+            return objectDate >= startDate && objectDate < finishDate;
         })
     }
 

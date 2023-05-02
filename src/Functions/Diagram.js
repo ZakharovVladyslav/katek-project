@@ -48,8 +48,8 @@ export default function Diagram() {
         })
 
         const data = [
-            { label: "CountPass", value: zeros[0], color: "#00FF00", stroke: "#396E28" },
-            { label: "CountFail", value: zeros[1], color: "#FF0000", stroke: "#900606" },
+            { label: "CountPass", value: zeros[0], color: "#20D300", stroke: "#396E28" },
+            { label: "CountFail", value: zeros[1], color: "#D30000", stroke: "#900606" },
             { label: "CountPass_Retest", value: zeros[2], color: "#C47A00", stroke: "#877E00" },
             { label: "CountFail_Retest", value: zeros[3], color: "#00FFEC", stroke: "#041A4C" },
         ];
@@ -83,7 +83,7 @@ export default function Diagram() {
                 .enter()
                 .append("g")
                 .attr("class", "arc");
-              
+
               arcs.filter(d => d.value !== 0)
                 .append("path")
                 .attr("d", arcGenerator)
@@ -92,7 +92,7 @@ export default function Diagram() {
                 })
                 .style('stroke', '#000000')
                 .style('stroke-width', '1.35px');
-              
+
 
             data.forEach((elem, index) => {
                 const html = `

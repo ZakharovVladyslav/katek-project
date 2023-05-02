@@ -8,8 +8,6 @@ import DropdownValues from '../Functions/Dropdown-values.js';
 import Diagram from '../Functions/Diagram.js';
 import { CustomStorage, SecondaryStorage } from '../Functions/Local-Storage.js';
 
-import moment from 'moment';
-
 const Storage = new CustomStorage();
 const MinorStorage = new SecondaryStorage();
 const inputForm = document.querySelector('#input-form');
@@ -57,6 +55,10 @@ clickToggler.style.display = 'none';
 saveButton.style.display = 'none';
 
 submitBtn.disabled = true;
+
+/*****************************************************************************************************************/
+/*----------------------------------------- SEPARATE EVENT LISTENERS --------------------------------------------*/
+/*****************************************************************************************************************/
 
 file.addEventListener('input', e => {
    e.preventDefault();
@@ -159,6 +161,78 @@ file.addEventListener('input', e => {
 })
 file.removeEventListener('input', (e) => { });
 
+document.querySelector('#left-date-inp').addEventListener('change', () => {
+   const select = document.getElementById('date-params');
+   const opt = select.options[select.selectedIndex].value;
+
+   if (Storage.core.secondDate.value === '') {
+      const latestDate = Storage.core.changableArray.reduce((latest, current) => {
+         const currentDate = new Date(current[opt]);
+         return currentDate > latest ? currentDate : latest;
+      }, new Date(Storage.core.changableArray[0][opt]));
+
+      document.querySelector('#right-date-inp').value = latestDate.toISOString().slice(0, 16);
+   }
+
+   Storage.editCore('changableArray', getFilters());
+
+   rowsAmount.innerHTML = Storage.core.changableArray.length;
+
+   let values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
+
+   Storage.core.datalists.forEach(datalist => {
+      datalist.innerHTML = '';
+
+      values.forEach(value => {
+         const option = document.createElement('option');
+         option.className = 'datalist-option';
+         option.value = value;
+         datalist.appendChild(option);
+      })
+   })
+
+   values = '';
+})
+
+document.querySelector('#right-date-inp').addEventListener('change', () => {
+   const select = document.getElementById('date-params');
+   const opt = select.options[select.selectedIndex].value;
+
+   if (Storage.core.firstDate.value === '') {
+      const earliestDate = Storage.core.changableArray.reduce((earliest, current) => {
+         const currentDate = new Date(current[opt]);
+         return currentDate < earliest ? currentDate : earliest;
+       }, new Date(Storage.core.changableArray[0][opt]));
+
+      document.querySelector('#left-date-inp').value = earliestDate.toISOString().slice(0, 16);
+   }
+
+   Storage.editCore('changableArray', getFilters());
+
+   rowsAmount.innerHTML = Storage.core.changableArray.length;
+
+   let values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
+
+   Storage.core.datalists.forEach(datalist => {
+      datalist.innerHTML = '';
+
+      values.forEach(value => {
+         /*
+         if (value.slice(0, 4) === '----') {
+            const option = document.createElement('option');
+         }
+         */
+
+         const option = document.createElement('option');
+         option.className = 'datalist-option';
+         option.value = value;
+         datalist.appendChild(option);
+      })
+   })
+
+   values = '';
+})
+
 saveButton.addEventListener('click', () => {
    MinorStorage.editCore('CsvData', getFilters());
    MinorStorage.editCore('RefinedData', [[...Storage.core.allHeaders]]);
@@ -255,9 +329,41 @@ reset.addEventListener('click', e => {
 })
 reset.removeEventListener('click', e => { });
 
+document.querySelector('#date-input').addEventListener('click', e => {
+   if (e.target.id.substring(0, 6) === 'eraser') {
+      const targetId = e.target.id.slice(7);
+
+      (targetId);
+
+      parseInt(targetId) === 6
+         ? document.querySelector('#left-date-inp').value = ''
+         : document.querySelector('#right-date-inp').value = '';
+
+      Storage.editCore('changableArray', getFilters());
+      Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
+
+      const values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
+
+      Storage.core.datalists.forEach(datalist => {
+         datalist.innerHTML = '';
+
+         values.forEach(value => {
+            const option = document.createElement('option');
+            option.className = 'datalist-option';
+            option.value = value;
+            datalist.appendChild(option);
+         })
+      })
+
+      values = null;
+   }
+})
+document.querySelector("#date-input").removeEventListener('click', e => { });
+
 filters.addEventListener('click', e => {
    if (e.target.id.substring(0, 6) === 'eraser') {
       const targetId = e.target.id.slice(7);
+
       Storage.core.inputFields[targetId - 1].value = '';
 
       Storage.editCore('changableArray', getFilters());
@@ -305,6 +411,10 @@ filters.addEventListener('click', (e) => {
 })
 
 filters.removeEventListener('click', (e) => { });
+
+/*****************************************************************************************************************/
+/*****************************************************************************************************************/
+/*****************************************************************************************************************/
 
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault();
@@ -399,6 +509,28 @@ inputForm.addEventListener("submit", (e) => {
       /*----------------------------------------------------------------------------------------------------------------*/
 
       Storage.editCore('changableArray', getFilters());
+
+      const select = document.getElementById('date-params');
+      const opt = select.options[select.selectedIndex].value;
+
+      if (Storage.core.firstDate.value !== '' && Storage.core.secondDate.value === '') {
+         const latestDate = Storage.core.changableArray.reduce((latest, current) => {
+            const currentDate = new Date(current[opt]);
+
+            return currentDate > latest.date ? { [`${opt}`]: currentDate } : latest;
+         }, Storage.core.changableArray[0]);
+
+         document.querySelector('#right-date-inp').value = new Date(latestDate[opt]).toISOString().slice(0, 16);
+      }
+      else if (Storage.core.firstDate.value === '' && Storage.core.secondDate.value !== '') {
+         const earliestDate = Storage.core.changableArray.reduce((earliest, current) => {
+            const currentDate = new Date(current[opt]);
+
+            return currentDate < earliest.date ? { [`${opt}`]: currentDate } : earliest;
+         }, { [`${opt}`]: new Date(Storage.core.changableArray[0][opt]) });
+
+         document.querySelector('#left-date-inp').value = new Date(earliestDate[opt]).toISOString().slice(0, 16);
+      }
 
       let filtersFromCsvFile = Storage.core.filters;
       let filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '');
