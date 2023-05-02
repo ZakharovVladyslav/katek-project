@@ -9,7 +9,7 @@ export default function SummaryTable() {;
     const tbody = document.createElement('tbody');
 
     toggleCheckboxInput.addEventListener('change', e => {
-        let array = [...Storage.core.changableArray];
+        let array = [...Storage.core.data];
 
         if (!toggleCheckboxInput.checked) {
             table.style.maxWidth = '100px';

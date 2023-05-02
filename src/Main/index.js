@@ -1,5 +1,6 @@
 'use strict';
 
+/* Functions import from other files */
 import CompleteTable from '../Functions/Complete-table.js';
 import CsvToArray from '../Functions/Convert-csv.js';
 import getFilters from '../Functions/Data-filtering.js';
@@ -8,8 +9,11 @@ import DropdownValues from '../Functions/Dropdown-values.js';
 import Diagram from '../Functions/Diagram.js';
 import { CustomStorage, SecondaryStorage } from '../Functions/Local-Storage.js';
 
+/* Defining storage classes instances */
 const Storage = new CustomStorage();
 const MinorStorage = new SecondaryStorage();
+
+/* HTML Elements import */
 const inputForm = document.querySelector('#input-form');
 const file = document.querySelector('#file-choose');
 const submitBtn = document.querySelector('#submit-button');
@@ -43,6 +47,7 @@ const diagrammDescription = document.querySelector("#diagramm-description");
 const svgElement = document.querySelector('#svg-element');
 const modeLabel = document.querySelector('#mode-label');
 
+/* Initial styles changes for HTML Elements that will appear only after submit */
 fullTableSection.style.opacity = '0';
 load.style.opacity = '0';
 loadingMessage.style.opacity = '0';
@@ -54,44 +59,83 @@ modeLabel.style.opacity = '0';
 clickToggler.style.display = 'none';
 saveButton.style.display = 'none';
 
+/* If file is not inputted, submit button is not able to be pressed */
 submitBtn.disabled = true;
 
 /*****************************************************************************************************************/
 /*----------------------------------------- SEPARATE EVENT LISTENERS --------------------------------------------*/
 /*****************************************************************************************************************/
 
-file.addEventListener('input', e => {
-   e.preventDefault();
-
+/**
+ * Event listens file on input to receive input data from the file
+ */
+file.addEventListener('input', () => {
+   // As file inputted, submit button become active and clickable
    submitBtn.disabled = false;
 
+   /**
+    * Receive file name and put it to the site
+    */
    const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
 
    chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1];
 
+   // FileReader will read file data as text
    const fileReader = new FileReader();
+
+   /**
+    *  file.files - object that contains data about the file from input
+    *  file.files[0] - file name
+   */
    const inputFileData = file.files[0];
 
    fileReader.addEventListener('load', (e) => {
+      /**
+       * e.target.result returns the whole data from the file. In this case in text
+       * After text received, it stores in the Storage as inputText
+       */
       let text = e.target.result;
       Storage.editCore('inputText', text);
 
+      /**
+       * TableHeaders - needed for the table to print only exact columns
+       * Also stores into the Storage to be able to be called later
+       */
       const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
       Storage.editCore('tableHeaders', tableHeaders)
 
+      /**
+       * delimiterOption - in Convert-csv delimiter has delimiter by default ','
+       * If selected delimiterOption will be different from the default, it will be overwritten
+      */
       const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value;
 
-      Storage.editCore('changableArray', CsvToArray(Storage.core.inputText, delimiterOption)[0].filter((obj, index) => {
+      /**
+       * Data will be stored as a result object[] from .csv text
+       */
+      Storage.editCore('data', CsvToArray(Storage.core.inputText, delimiterOption)[0].filter((obj, index) => {
          return !Object.values(obj).includes(undefined);
       }));
 
-      Storage.editCore('staticDataArray', Storage.core.changableArray);
-      Storage.editCore('allHeaders', Object.keys(Storage.core.staticDataArray[0]));
-      Storage.editCore('staticDataArrayLength', Storage.core.staticDataArray.length);
+      // StaticData - stored to be a full version of initial array
+      Storage.editCore('staticData', Storage.core.data);
+
+      // AllHeaders - needs for reset listener to fill dropdown immediately
+      Storage.editCore('allHeaders', Object.keys(Storage.core.staticData[0]));
+
+      // StaticDataLength - stored, not to calculate length later
+      Storage.editCore('staticDataLength', Storage.core.staticData.length);
       Storage.editCore('headers', CsvToArray(Storage.core.inputText, delimiterOption)[1]);
+
+      // Filters - to let know by which keys this file has been sorted
       Storage.editCore('filters', CsvToArray(Storage.core.inputText, delimiterOption)[2]);
-      Storage.editCore('allValues', DropdownValues(Storage.core.staticDataArray, Storage.core.tableHeaders));
+
+      // AllValues - as same as allHeaders. not to calculate later. Receives all present value from the static data
+      Storage.editCore('allValues', DropdownValues(Storage.core.staticData, Storage.core.tableHeaders));
+
+      // Stored not to keep text present as it takes lot of memory
       Storage.editCore('inputTextLength', Storage.core.inputText.length);
+
       Storage.editCore('firstDate', document.querySelector('#left-date-inp'));
       Storage.editCore('secondDate', document.querySelector('#right-date-inp'));
 
@@ -118,6 +162,12 @@ file.addEventListener('input', e => {
          document.querySelector('#db-select-5'),
       ]
 
+      /**
+       * dbSelects - select html elements near to input field
+       * needed for db connection to define by which key database will be stored
+       *
+       * Is fullfilled with all column names (headers) from the file
+       */
       dbSelects.forEach(select => {
          select.innerHTML = ''
 
@@ -136,11 +186,14 @@ file.addEventListener('input', e => {
          })
       })
 
-      rowsAmount.innerHTML = Storage.core.changableArray.length;
+      // Number of rows of the updated array will be outputted
+      rowsAmount.innerHTML = Storage.core.data.length;
 
+      // Text will be deleted not to take memory for no reason
       delete Storage.core.inputText;
 
-      let values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
+      // Values from updated file data to fullfill dropdowns only with actual values
+      let values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
@@ -155,30 +208,37 @@ file.addEventListener('input', e => {
 
       values = '';
    })
-   fileReader.removeEventListener('load', (e) => { });
+   fileReader.removeEventListener('load', (e) => {});
 
+   // Set fileReader to read data from .csv file as text
    fileReader.readAsText(inputFileData);
 })
 file.removeEventListener('input', (e) => { });
 
+// listens to the first date change to change number of rows that will be outputed
 document.querySelector('#left-date-inp').addEventListener('change', () => {
+   // opt - one of the keys [tLogIn, tLogOut, tLastAcc]
    const select = document.getElementById('date-params');
    const opt = select.options[select.selectedIndex].value;
 
    if (Storage.core.secondDate.value === '') {
-      const latestDate = Storage.core.changableArray.reduce((latest, current) => {
+      /**
+       * Looks for the latest date
+       * takes first object's key opt as initial value and checks if next is bigger or not
+       */
+      const latestDate = Storage.core.data.reduce((latest, current) => {
          const currentDate = new Date(current[opt]);
          return currentDate > latest ? currentDate : latest;
-      }, new Date(Storage.core.changableArray[0][opt]));
+      }, new Date(Storage.core.data[0][opt]));
 
       document.querySelector('#right-date-inp').value = latestDate.toISOString().slice(0, 16);
    }
 
-   Storage.editCore('changableArray', getFilters());
+   Storage.editCore('data', getFilters());
 
-   rowsAmount.innerHTML = Storage.core.changableArray.length;
+   rowsAmount.innerHTML = Storage.core.data.length;
 
-   let values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
+   let values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
    Storage.core.datalists.forEach(datalist => {
       datalist.innerHTML = '';
@@ -194,24 +254,25 @@ document.querySelector('#left-date-inp').addEventListener('change', () => {
    values = '';
 })
 
+// Logic as same as first date, but looks for the earliest date
 document.querySelector('#right-date-inp').addEventListener('change', () => {
    const select = document.getElementById('date-params');
    const opt = select.options[select.selectedIndex].value;
 
    if (Storage.core.firstDate.value === '') {
-      const earliestDate = Storage.core.changableArray.reduce((earliest, current) => {
+      const earliestDate = Storage.core.data.reduce((earliest, current) => {
          const currentDate = new Date(current[opt]);
          return currentDate < earliest ? currentDate : earliest;
-       }, new Date(Storage.core.changableArray[0][opt]));
+       }, new Date(Storage.core.data[0][opt]));
 
       document.querySelector('#left-date-inp').value = earliestDate.toISOString().slice(0, 16);
    }
 
-   Storage.editCore('changableArray', getFilters());
+   Storage.editCore('data', getFilters());
 
-   rowsAmount.innerHTML = Storage.core.changableArray.length;
+   rowsAmount.innerHTML = Storage.core.data.length;
 
-   let values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
+   let values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
    Storage.core.datalists.forEach(datalist => {
       datalist.innerHTML = '';
@@ -233,10 +294,15 @@ document.querySelector('#right-date-inp').addEventListener('change', () => {
    values = '';
 })
 
+/**
+ * Save button needs to save current object[]/table state to the file
+ * Storage.core.filters will mean filters that sorted initial array to the current state
+ */
 saveButton.addEventListener('click', () => {
    MinorStorage.editCore('CsvData', getFilters());
    MinorStorage.editCore('RefinedData', [[...Storage.core.allHeaders]]);
 
+   // 'Save filters' - checkbox, whether to save filters or not
    if (saveFiltersOption.checked === true) {
       let filtersValues = [];
 
@@ -246,6 +312,7 @@ saveButton.addEventListener('click', () => {
       let headers = MinorStorage.core.RefinedData[0];
       let arr = MinorStorage.core.CsvData;
 
+      // # - is a delimiter for filters as they inputted to the headers row
       if (!headers.includes('#'));
       headers.unshift('#');
 
@@ -258,6 +325,7 @@ saveButton.addEventListener('click', () => {
 
       MinorStorage.editCore('CsvData', arr);
 
+      // Clearing memory
       arr = null;
       headers = null;
       filtersValues = null;
@@ -281,6 +349,7 @@ saveButton.addEventListener('click', () => {
       arr = null;
    }
 
+   // csvContext - text for blob
    let csvContent = '';
    MinorStorage.core.RefinedData.forEach(row => {
       typeof (row) === 'object'
@@ -301,6 +370,9 @@ saveButton.addEventListener('click', () => {
 })
 saveButton.removeEventListener('click', () => { });
 
+/**
+ * On click reset all input fields will be cleared and number of rows will be static data length
+ */
 reset.addEventListener('click', e => {
    e.preventDefault();
 
@@ -312,9 +384,9 @@ reset.addEventListener('click', e => {
    Storage.core.firstDate.value = '';
    Storage.core.secondDate.value = '';
 
-   Storage.editCore('changableArray', [...Storage.core.staticDataArray]);
+   Storage.editCore('data', [...Storage.core.staticData]);
 
-   rowsAmount.innerHTML = Storage.core.staticDataArrayLength;
+   rowsAmount.innerHTML = Storage.core.staticDataLength;
 
    Storage.core.datalists.forEach(datalist => {
       datalist.innerHTML = '';
@@ -329,20 +401,22 @@ reset.addEventListener('click', e => {
 })
 reset.removeEventListener('click', e => { });
 
+/**
+ * Eraser for dates input fields
+ * On click will erase value from the date input fields and calculate amount of rows that will be outputted
+ */
 document.querySelector('#date-input').addEventListener('click', e => {
    if (e.target.id.substring(0, 6) === 'eraser') {
       const targetId = e.target.id.slice(7);
-
-      (targetId);
 
       parseInt(targetId) === 6
          ? document.querySelector('#left-date-inp').value = ''
          : document.querySelector('#right-date-inp').value = '';
 
-      Storage.editCore('changableArray', getFilters());
-      Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
+      Storage.editCore('data', getFilters());
+      Storage.core.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.data.length;
 
-      const values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
+      const values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
@@ -360,16 +434,22 @@ document.querySelector('#date-input').addEventListener('click', e => {
 })
 document.querySelector("#date-input").removeEventListener('click', e => { });
 
+/**
+ * Erasers for filters
+ * Will erase value from the input field next to the eraser that has been pressed
+ * + Will calculate amount of rows that will be outputted
+ * + Will update array and fill dropdowns with values from the updated array
+ */
 filters.addEventListener('click', e => {
    if (e.target.id.substring(0, 6) === 'eraser') {
       const targetId = e.target.id.slice(7);
 
       Storage.core.inputFields[targetId - 1].value = '';
 
-      Storage.editCore('changableArray', getFilters());
-      Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
+      Storage.editCore('data', getFilters());
+      Storage.core.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.data.length;
 
-      const values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
+      const values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
@@ -390,9 +470,14 @@ filters.addEventListener('click', (e) => {
    const targetNumber = targetId.slice(-1);
    const targetField = document.querySelector(`#filter-input-${targetNumber}`);
 
+   /**
+    * On input field text input array will be updated with new filters
+    * after text inputted dropdown values will be updated
+    * + amount of outputted rows will be updated
+    */
    targetField.addEventListener('change', () => {
-      Storage.editCore('changableArray', getFilters());
-      let values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
+      Storage.editCore('data', getFilters());
+      let values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
@@ -406,7 +491,7 @@ filters.addEventListener('click', (e) => {
       })
 
       values = null;
-      Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
+      Storage.core.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.data.length;
    })
 })
 
@@ -416,12 +501,19 @@ filters.removeEventListener('click', (e) => { });
 /*****************************************************************************************************************/
 /*****************************************************************************************************************/
 
+/**
+ * Main listener
+ */
 inputForm.addEventListener("submit", (e) => {
    e.preventDefault();
 
+   // Call Diagram and Summary Table functions to be able to use it
    Diagram();
    SummaryTable();
 
+   /**
+    * Big part to change html elements opacity, disabled state, etc.
+    */
    svgElement.innerHTML = '';
 
    svgDiv.style.display = 'none';
@@ -456,13 +548,6 @@ inputForm.addEventListener("submit", (e) => {
    clickToggler.style.display = 'none';
    saveButton.style.display = 'none';
 
-   if (file.value == '') {
-      emptyMessage.innerHTML = "Datei nicht ausgewählt";
-
-      dataTable.innerHTML = '';
-   }
-
-   Storage.editCore('changableArray', getFilters());
    load.style.opacity = '1';
    loadingMessage.style.opacity = '1';
    load.style.transition = '0.2s';
@@ -470,12 +555,15 @@ inputForm.addEventListener("submit", (e) => {
 
    reloadTable.disabled = true;
 
+   // After submit, data array will be updated and prepared to the future use
+   Storage.editCore('data', getFilters());
+
+   // Creating table, thead and tbody for the main data table
    let table = document.createElement("table");
    let thead = document.createElement("thead");
    let tbody = document.createElement("tbody");
 
-   const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
-
+   // Let user know if file is empty
    if (Storage.core.inputTextLength.length === 0) {
       if (file.DOCUMENT_NODE > 0) {
          dataTable.innerHTML = '';
@@ -508,40 +596,52 @@ inputForm.addEventListener("submit", (e) => {
       /*----------------------------------------------------------------------------------------------------------------*/
       /*----------------------------------------------------------------------------------------------------------------*/
 
-      Storage.editCore('changableArray', getFilters());
+      Storage.editCore('data', getFilters());
 
       const select = document.getElementById('date-params');
       const opt = select.options[select.selectedIndex].value;
 
+      /**
+       * Check if one the datetime-local input field is empty, second datetime-local input field will be filled
+       * with the earliest or the latest date
+       *
+       * toISOString() is a method in JavaScript that is used to convert a date object to a string in ISO format.
+       * The term "ISO" stands for "International Organization for Standardization,"
+       */
+
       if (Storage.core.firstDate.value !== '' && Storage.core.secondDate.value === '') {
-         const latestDate = Storage.core.changableArray.reduce((latest, current) => {
+         const latestDate = Storage.core.data.reduce((latest, current) => {
             const currentDate = new Date(current[opt]);
 
             return currentDate > latest.date ? { [`${opt}`]: currentDate } : latest;
-         }, Storage.core.changableArray[0]);
+         }, Storage.core.data[0]);
 
          document.querySelector('#right-date-inp').value = new Date(latestDate[opt]).toISOString().slice(0, 16);
       }
       else if (Storage.core.firstDate.value === '' && Storage.core.secondDate.value !== '') {
-         const earliestDate = Storage.core.changableArray.reduce((earliest, current) => {
+         const earliestDate = Storage.core.data.reduce((earliest, current) => {
             const currentDate = new Date(current[opt]);
 
             return currentDate < earliest.date ? { [`${opt}`]: currentDate } : earliest;
-         }, { [`${opt}`]: new Date(Storage.core.changableArray[0][opt]) });
+         }, { [`${opt}`]: new Date(Storage.core.data[0][opt]) });
 
          document.querySelector('#left-date-inp').value = new Date(earliestDate[opt]).toISOString().slice(0, 16);
       }
 
+      // Here site receives filters from the file if they're present...
       let filtersFromCsvFile = Storage.core.filters;
       let filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '');
 
+      // ...and add them as placeholders
       filtersFromCsvFileSplitted.forEach((value, index) => {
          Storage.core.inputFields[index].setAttribute('placeholder', value);
       })
 
-      Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
+      // Number of the rows that will be outputted
+      Storage.core.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.data.length;
 
-      let values = DropdownValues(Storage.core.changableArray, Storage.core.tableHeaders);
+      // Fullfilling dropdowns
+      let values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
@@ -554,10 +654,14 @@ inputForm.addEventListener("submit", (e) => {
          })
       })
 
+      // Clearing memory
       filtersFromCsvFile = null;
       filtersFromCsvFileSplitted = null;
       values = null;
 
+      /**
+       * Building a table from the data array which is object[]
+       */
       dataTable.innerHTML = '';
       table.innerHTML = '';
       thead.innerHTML = '';
@@ -576,40 +680,68 @@ inputForm.addEventListener("submit", (e) => {
       load.style.opacity = '0';
       loadingMessage.style.opacity = '0';
 
+      /**
+       * Building a header row
+       * hrow - header row, creates once as there is only 1 header row
+       * theaderCell - 'th' html element that will contain header string
+       * theaderCell.innerHTML will write header into 'th' html element as <th>header</th>
+       */
       let hrow = document.createElement('tr');
       for (let i = 0; i < 16; i++) {
-         let theader = document.createElement('th');
+         let theaderCell = document.createElement('th');
 
-         theader.innerHTML = Storage.core.tableHeaders[i];
-         hrow.appendChild(theader);
+         theaderCell.innerHTML = Storage.core.tableHeaders[i];
+         hrow.appendChild(theaderCell);
       }
       thead.appendChild(hrow);
 
+      // OutputLimiter - defines how many table rows will be printed
       let outputLimiter;
 
+      /**
+       * IF rowLimiter input field IS NOT empty, then outputLimiter will be checked:
+       *    whether it is smaller than input data size or not:
+       *       if yes: outputLimiter will be size of limiter value from input field
+       *       if no: outputLimiter will be sized as input data array
+       * ELSE if rowLimiter input field is empty, then outputLimiter will have size of the input array
+       *
+       */
       if (rowLimiter.value !== '') {
-         Storage.core.changableArray.length > +rowLimiter.value
+         Storage.core.data.length > +rowLimiter.value
             ? outputLimiter = +rowLimiter.value
-            : outputLimiter = Storage.core.changableArray.length;
+            : outputLimiter = Storage.core.data.length;
       }
       else
-         outputLimiter = Storage.core.changableArray.length;
+         outputLimiter = Storage.core.data.length;
 
       shownRowsCounter.innerHTML = `${outputLimiter}`;
 
+      /**
+       * Building a table
+       *
+       * Number of rows is limited by the outputLimiter (described above)
+       */
       for (let i = 0; i < outputLimiter; i++) {
+         // body_row --- <tr> in <tbody> that contains info from object
          let body_row = document.createElement('tr');
 
+         /**
+          * Iterating through tableHeaders to print only headers that were specified
+          */
          Storage.core.tableHeaders.forEach((header, j) => {
+            // Table cell <td> to write object[header] into it
             let table_data = document.createElement('td');
 
+            // Setting id to each of the cells where first digit stands for row and the second for column
             table_data.setAttribute('id', `cell ${i}${j}`);
 
-            if (Storage.core.changableArray[i][header] !== 'NULL') {
+            // Check if value is not NULL so it won't be printed
+            if (Storage.core.data[i][header] !== 'NULL') {
+               // If header is FPY then this value will be printed with %
                if (header === 'FPY')
-                  table_data.innerHTML = `${Storage.core.changableArray[i][header]}%`;
+                  table_data.innerHTML = `${Storage.core.data[i][header]}%`;
                else
-                  table_data.innerHTML = `${Storage.core.changableArray[i][header]}`;
+                  table_data.innerHTML = `${Storage.core.data[i][header]}`;
             }
 
             body_row.appendChild(table_data);
@@ -624,14 +756,30 @@ inputForm.addEventListener("submit", (e) => {
       saveDiv.style.opacity = '1';
       saveDiv.style.transition = '0.2s';
 
+      // Calling full table function
       CompleteTable();
 
+      /**
+       * This event handler allows user to check the whole row OR to add filters to the input field
+       */
       table.addEventListener('click', e => {
          const clickOption = cellSelect.options[cellSelect.selectedIndex].value;
 
+         /**
+          * ClickOption is select html elment placed left-top from the table
+          *
+          * If clickOption is add to filters , so by clicking on any of the cells,
+          * value from the cell will be added to the input field
+          */
          if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
             const targetCellValue = e.target.innerHTML;
 
+            /**
+             * emptyFieldIndexes checks THE FIRST EMPTY input fields
+             *
+             * F.e. if IF1 and IF3 are used, the first empty will be IF2, so value from the cell will be added there
+             * If IF1 empty, value will be added there
+             */
             const emptyFieldIndexes = Storage.core.inputFields.map((filter, index) => {
                if (filter.value === '')
                   return index;
@@ -642,11 +790,16 @@ inputForm.addEventListener("submit", (e) => {
                targetInputField.value = targetCellValue;
             }
 
-            Storage.editCore('changableArray', getFilters());
+            Storage.editCore('data', getFilters());
 
-            Storage.core.changableArray.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.changableArray.length;
+            Storage.core.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.data.length;
          }
 
+         /**
+          * If clickOption is show row, then clicking on any of the cells in one row,
+          * the full row will be opened that contains more than 16 columns.
+          * They are divided by 5 columns each
+          */
          else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
             reloadTable.disabled = false;
             submitBtn.disabled = true;
@@ -655,13 +808,20 @@ inputForm.addEventListener("submit", (e) => {
             SummaryTableInput.disabled = true;
             pieDiagrammInput.disabled = true;
 
+            /**
+             * splittedTargetId will receive cell id
+             *
+             * Cell has id `cell 14`, then splittedTargetId will be 14 which stands for 2nd row, 4th column
+             */
             const targetId = e.target.id;
             const splittedTargetId = targetId.split('');
             splittedTargetId.splice(0, 5);
 
+            // And here receive row number by taking first digit from the id which stands for row
             const row = +splittedTargetId[0];
 
-            const object = Storage.core.changableArray[row];
+            // Recive the whole object by row number
+            const object = Storage.core.data[row];
 
             dataTable.innerHTML = '';
             table.innerHTML = '';
@@ -674,11 +834,18 @@ inputForm.addEventListener("submit", (e) => {
             const allHeaders = [];
             const allValues = [];
 
+            /**
+             * allHeaders will contain ALL headers from the object
+             * allValues will contain ALL values from the object
+             */
             for (let [key, value] of Object.entries(object)) {
                allHeaders.push(key);
                allValues.push(value);
             }
 
+            /**
+             * Table divides columns by 9
+             */
             const divideArrByNine = (arr) => {
                const resultArr = [];
 

@@ -3,7 +3,7 @@ import { CustomStorage } from "./Local-Storage.js";
 const Storage = new CustomStorage();
 
 export default function CompleteTable (inputArray) {
-      let arr = [...Storage.core.changableArray];
+      let arr = [...Storage.core.data];
       const remove = arr.shift();
 
       const leftArrow = document.querySelector('#left-arrow');
@@ -67,12 +67,12 @@ export default function CompleteTable (inputArray) {
                   let outputLimiter;
 
                   if (rowLimiter.value !== '') {
-                        Storage.core.changableArray.length > +rowLimiter.value
+                        Storage.core.data.length > +rowLimiter.value
                               ? outputLimiter = +rowLimiter.value
-                              : outputLimiter = Storage.core.changableArray.length;
+                              : outputLimiter = Storage.core.data.length;
                   }
                   else
-                        outputLimiter = Storage.core.changableArray.length;
+                        outputLimiter = Storage.core.data.length;
 
                   for (let i = 0; i < outputLimiter; i++) {
                         const dataRow = document.createElement('tr');
@@ -81,9 +81,9 @@ export default function CompleteTable (inputArray) {
                               const dataRowCell = document.createElement('td');
 
                               if (key === 'FPY')
-                                    dataRowCell.innerHTML = `${Storage.core.changableArray[i][key]}%`;
+                                    dataRowCell.innerHTML = `${Storage.core.data[i][key]}%`;
                               else
-                                    dataRowCell.innerHTML = Storage.core.changableArray[i][key];
+                                    dataRowCell.innerHTML = Storage.core.data[i][key];
 
                               dataRowCell.style.minHeight = '30px';
                               dataRowCell.style.minWidth = '30px';

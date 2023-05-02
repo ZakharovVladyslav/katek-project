@@ -18,6 +18,7 @@ export default function CsvToArray(str, delimiter = ',') {
       return element
    })
 
+   str = '';
    rows = null;
 
    return [arr, headers, filters]

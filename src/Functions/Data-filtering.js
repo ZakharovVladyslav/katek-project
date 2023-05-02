@@ -8,7 +8,7 @@ export default function getFilters() {
     Storage.editCore('firstDate', document.querySelector('#left-date-inp'));
     Storage.editCore('secondDate', document.querySelector('#right-date-inp'));
 
-    let data = [...Storage.core.staticDataArray];
+    let inputData = [...Storage.core.staticData];
 
     const select = document.getElementById('date-params');
     const opt = select.options[select.selectedIndex].value;
@@ -17,7 +17,7 @@ export default function getFilters() {
     const finishDate = new Date(Storage.core.secondDate.value);
 
     if (Storage.core.firstDate.value !== '' && Storage.core.secondDate.value !== '') {
-        data = data.filter(object => {
+        inputData = inputData.filter(object => {
             const objectDate = new Date(object[opt]);
 
             return objectDate >= startDate && objectDate < finishDate;
@@ -43,7 +43,7 @@ export default function getFilters() {
     let keys = [];
     let avoidableKeys = ['tLatenz', 'tLatenzSumme', 'tCycle', 'CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
 
-    data.forEach(obj => {
+    inputData.forEach(obj => {
         values.forEach(value => {
             Object.keys(obj).forEach(key => {
                 if (obj[key] === value && !avoidableKeys.includes(key)) {
@@ -55,13 +55,13 @@ export default function getFilters() {
 
     keys = Array.from(new Set(keys));
 
-    filteredArray = data.filter(obj => {
+    filteredArray = inputData.filter(obj => {
         return keys.every(key => {
             return values.includes(obj[key]);
         })
     })
 
-    data = null;
+    inputData= null;
 
     return filteredArray;
 }

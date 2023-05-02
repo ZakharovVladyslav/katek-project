@@ -14,7 +14,7 @@ export default function Diagram() {
         svgDiv.style.display = 'flex';
     })
 
-    diagrammLabel.removeEventListener('click', () => {});
+    diagrammLabel.removeEventListener('click', () => { });
 
     dataPieInput.addEventListener('change', () => {
         diagrammDescriptionLabel.style.display = 'block';
@@ -24,7 +24,7 @@ export default function Diagram() {
 
         const keys = ['CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
 
-        const values = Storage.core.changableArray.map(object => {
+        const values = Storage.core.data.map(object => {
             const objectValues = [];
 
             keys.forEach(key => {
@@ -43,11 +43,11 @@ export default function Diagram() {
 
         zeros = zeros.map(zero => {
             return parseInt(zero) === zero
-            ? zero = `${zero}`
-            : zero = `${zero.toFixed(2)}`;
+                ? zero = `${zero}`
+                : zero = `${zero.toFixed(2)}`;
         })
 
-        const data = [
+        const inputData = [
             { label: "CountPass", value: zeros[0], color: "#20D300", stroke: "#396E28" },
             { label: "CountFail", value: zeros[1], color: "#D30000", stroke: "#900606" },
             { label: "CountPass_Retest", value: zeros[2], color: "#C47A00", stroke: "#877E00" },
@@ -78,23 +78,23 @@ export default function Diagram() {
             const circleDiagram = svg.append("g")
                 .attr("transform", "translate(" + center.x + "," + center.y + ")");
 
-                const arcs = circleDiagram.selectAll("arc")
-                .data(pieGenerator(data))
+            const arcs = circleDiagram.selectAll("arc")
+                .data(pieGenerator(inputData))
                 .enter()
                 .append("g")
                 .attr("class", "arc");
 
-              arcs.filter(d => d.value !== 0)
+            arcs.filter(d => d.value !== 0)
                 .append("path")
                 .attr("d", arcGenerator)
                 .style("fill", function (d) {
-                  return d.data.color;
+                    return d.data.color;
                 })
                 .style('stroke', '#000000')
                 .style('stroke-width', '1.35px');
 
 
-            data.forEach((elem, index) => {
+            inputData.forEach((elem, index) => {
                 const html = `
                         <div id='color-${index + 1}' style="display: flex; flex-direction: row; gap: 10px;">
                             <span id='square' style="width: 40px; height: 40px; background-color: ${elem.color}; display: block; "></span>
@@ -114,5 +114,5 @@ export default function Diagram() {
         }
     })
 
-    dataPieInput.removeEventListener('click', () => {});
+    dataPieInput.removeEventListener('click', () => { });
 }
