@@ -157,7 +157,7 @@ file.addEventListener('input', () => {
          document.querySelector('#datalist-5')
       ]);
 
-      const dbSelects = [
+      const dbSelectors = [
          document.querySelector('#db-select-1'),
          document.querySelector('#db-select-2'),
          document.querySelector('#db-select-3'),
@@ -165,13 +165,15 @@ file.addEventListener('input', () => {
          document.querySelector('#db-select-5'),
       ]
 
+      Storage.editCore('dbSelects', [...dbSelectors]);
+
       /**
        * dbSelects - select html elements near to input field
        * needed for db connection to define by which key database will be stored
        *
        * Is fullfilled with all column names (headers) from the file
        */
-      dbSelects.forEach(select => {
+      dbSelectors.forEach(select => {
          select.innerHTML = ''
 
          const option = document.createElement('option')
@@ -384,8 +386,15 @@ reset.addEventListener('click', e => {
    document.querySelector('#filter-input-3').value = '';
    document.querySelector('#filter-input-4').value = '';
    document.querySelector('#filter-input-5').value = '';
+
    Storage.core.firstDate.value = '';
    Storage.core.secondDate.value = '';
+
+   document.querySelector('#db-select-1').selectedIndex = 0;
+   document.querySelector('#db-select-2').selectedIndex = 0;
+   document.querySelector('#db-select-3').selectedIndex = 0;
+   document.querySelector('#db-select-4').selectedIndex = 0;
+   document.querySelector('#db-select-5').selectedIndex = 0;
 
    Storage.editCore('data', [...Storage.core.staticData]);
 
@@ -788,6 +797,10 @@ inputForm.addEventListener("submit", (e) => {
             const blockquotes = document.querySelectorAll('td blockquote');
             blockquotes.forEach(blockquote => blockquote.contentEditable = false);
 
+            const id = e.target.id;
+            const colId = id.slice(id.indexOf('col') + 3, id.length);
+            const header = Storage.core.objectKeysMap.get(`${colId}`);
+
             /**
              * As we have <blockquote> inside of <td>, then we need to check
              * either we clicked on <td> or <blockquote> because if we click on
@@ -804,7 +817,7 @@ inputForm.addEventListener("submit", (e) => {
              * Receiving target column by slicing from col + 3 to the end of the string
              * as our cell id has a look like `cell row0col0`
              */
-            const targetCol = e.target.id.slice(e.target.id.indexOf('col') + 3, e.target.id.length);
+            const targetCol = e.target.id.slice(e.target.id.indexOf('col') + 2, e.target.id.length);
 
             /**
              * Columns 13, 14 and 15 are datetime-local columns for tLogIn, tLogOut, tLastAcc
@@ -852,6 +865,19 @@ inputForm.addEventListener("submit", (e) => {
                if (emptyFieldIndexes.length !== 0) {
                   const targetInputField = Storage.core.inputFields[emptyFieldIndexes[0]];
                   targetInputField.value = targetCellValue;
+                  const targetInputFieldId = targetInputField.id.slice(-1);
+
+                  const targetHeader = Storage.core.objectKeysMap.get(`${colId}`);
+
+                  let targetIndex = -1;
+                  for (let i = 0; i < Storage.core.dbSelects[targetInputFieldId].length; i++) {
+                     if (Storage.core.dbSelects[targetInputFieldId].options[i].value === targetHeader) {
+                        targetIndex = i;
+                        break;
+                     }
+                  }
+
+                  Storage.core.dbSelects[targetInputFieldId - 1].selectedIndex = targetIndex;
                }
             }
 
@@ -866,6 +892,9 @@ inputForm.addEventListener("submit", (e) => {
           * They are divided by 5 columns each
           */
          else if (clickOption === "Show row" || clickOption == 'Zeile anzeigen') {
+            const blockquotes = document.querySelectorAll('td blockquote');
+            blockquotes.forEach(blockquote => blockquote.contentEditable = false);
+
             reloadTable.disabled = false;
             submitBtn.disabled = true;
             resetBtn.disabled = true;
