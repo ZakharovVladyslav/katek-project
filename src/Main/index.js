@@ -27,8 +27,6 @@ const cellSelect = document.querySelector('#click-toggler');
 const filters = document.querySelector('#filters');
 const clickToggler = document.querySelector('#click-toggler');
 const saveButton = document.querySelector('#save');
-const load = document.querySelector('#load');
-const loadingMessage = document.querySelector('#loading-table');
 const rowsAmount = document.querySelector('#rows-amount');
 const fullTable = document.querySelector('#full-table');
 const fullTableBtn = document.querySelector('#full-table-button');
@@ -49,8 +47,6 @@ const modeLabel = document.querySelector('#mode-label');
 
 /* Initial styles changes for HTML Elements that will appear only after submit */
 fullTableSection.style.opacity = '0';
-load.style.opacity = '0';
-loadingMessage.style.opacity = '0';
 saveDiv.style.opacity = '0';
 realRowsNumber.style.opacity = '0';
 shownRowsCounter.style.opacity = '0';
@@ -138,6 +134,13 @@ file.addEventListener('input', () => {
 
       Storage.editCore('firstDate', document.querySelector('#left-date-inp'));
       Storage.editCore('secondDate', document.querySelector('#right-date-inp'));
+
+      const headersMap = new Map();
+      Storage.core.tableHeaders.forEach((header, index) => {
+         headersMap.set(`${index}`, `${header}`);
+      })
+
+      Storage.editCore('objectKeysMap', headersMap);
 
       Storage.editCore('inputFields', [
          document.querySelector('#filter-input-1'),
@@ -534,10 +537,6 @@ inputForm.addEventListener("submit", (e) => {
    shownRowsCounter.style.opacity = '0';
    shownRowsCounterDiv.style.opacity = '0';
    modeLabel.style.opacity = '0';
-   load.style.opacity = '1';
-   loadingMessage.style.opacity = '1';
-   load.style.transition = '0.2s';
-   loadingMessage.style.transition = '0.2s';
    saveDiv.style.transition = '0.2s';
 
    fullTable.innerHTML = '';
@@ -547,11 +546,6 @@ inputForm.addEventListener("submit", (e) => {
    dataTable.innerHTML = '';
    clickToggler.style.display = 'none';
    saveButton.style.display = 'none';
-
-   load.style.opacity = '1';
-   loadingMessage.style.opacity = '1';
-   load.style.transition = '0.2s';
-   loadingMessage.style.transition = '0.2s';
 
    reloadTable.disabled = true;
 
@@ -579,10 +573,6 @@ inputForm.addEventListener("submit", (e) => {
       if (emptyMessage.value != 0)
          emptyMessage.innerHTML = '';
 
-      load.style.transition = '0.2s';
-      loadingMessage.style.transition = '0.2s';
-      load.style.opacity = '1';
-      loadingMessage.style.opacity = '1';
       realRowsNumber.style.opacity = '1';
       shownRowsCounter.style.opacity = '1';
       shownRowsCounterDiv.style.opacity = '1';
@@ -675,11 +665,6 @@ inputForm.addEventListener("submit", (e) => {
 
       document.getElementById('data-table').appendChild(table);
 
-      load.style.transition = '0s';
-      loadingMessage.style.transition = '0s';
-      load.style.opacity = '0';
-      loadingMessage.style.opacity = '0';
-
       /**
        * Building a header row
        * hrow - header row, creates once as there is only 1 header row
@@ -731,46 +716,47 @@ inputForm.addEventListener("submit", (e) => {
          Storage.core.tableHeaders.forEach((header, j) => {
             let tableDataHTML = '';
 
+            /**
+             * Checks if value is NULL, then it hasn't to be printed
+             */
             if (Storage.core.data[i][header] !== 'NULL') {
+               // If header is FPY then value has to be printed with % sign
+               // Here using blockquote to be able to change its value later
+
                if (header === 'FPY') {
                   tableDataHTML = `
-                     <td id='cell row${i}col${j}'>
-                        <input
-                           type='text'
-                           class='td-input'
-                           id='input row${i}col${j}'
-                           value='${Storage.core.data[i][header]}%'
-                        >
-                     </td>
+                  <td id='cell-row${i}col${j}'>
+                     <blockquote
+                        contenteditable='true'
+                        id='blockquote-row${i}col${j}'
+                     >${Storage.core.data[i][header]}%</blockquote>
+                  </td>
                   `;
                }
                else {
                   tableDataHTML = `
-                     <td id='cell row${i}col${j}'>
-                        <input
-                           type='text'
-                           class='td-input'
-                           id='input row${i}col${j}'
-                           value='${Storage.core.data[i][header]}'
-                        >
-                     </td>
+                  <td id='cell-row${i}col${j}'>
+                     <blockquote
+                        contenteditable='true'
+                        id='blockquote-row${i}col${j}'
+                     >${Storage.core.data[i][header]}</blockquote>
+                  </td>
                   `;
                }
 
             }
             else {
                tableDataHTML = `
-                  <td id='cell row${i}col${j}'>
-                     <input
-                        type='text'
-                        class='td-input'
-                        id='input row${i}col${j}'
-                        value=' '
-                     >
+                  <td id='cell-row${i}col${j}'>
+                     <blockquote
+                        contenteditable='true'
+                        id='blockquote-row${i}col${j}'
+                     >${Storage.core.data[i][header]}</blockquote>
                   </td>
                `;
             }
 
+            // Appending element to tbody row
             body_row.insertAdjacentHTML('beforeend', tableDataHTML);
          })
          tbody.appendChild(body_row);
@@ -790,7 +776,6 @@ inputForm.addEventListener("submit", (e) => {
        * This event handler allows user to check the whole row OR to add filters to the input field
        */
       table.addEventListener('click', e => {
-
          const clickOption = cellSelect.options[cellSelect.selectedIndex].value;
 
          /**
@@ -800,7 +785,20 @@ inputForm.addEventListener("submit", (e) => {
           * value from the cell will be added to the input field
           */
          if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
-            const targetCellValue = e.target.innerHTML;
+            const blockquotes = document.querySelectorAll('td blockquote');
+            blockquotes.forEach(blockquote => blockquote.contentEditable = false);
+
+            /**
+             * As we have <blockquote> inside of <td>, then we need to check
+             * either we clicked on <td> or <blockquote> because if we click on
+             * <td> - we will receive innerHTML as <blockquote>...</blockquote>,
+             * but if we clicked on blockquote directly, we will receive a cell value
+             */
+            let targetCellValue = '';
+            e.target.id.includes('blockquote')
+               ? targetCellValue = e.target.innerHTML
+               // here if we click on cell we need additionaly to slice <blockquote></blockquote> to receive its innerHTML
+               : targetCellValue = e.target.innerHTML.slice(e.target.innerHTML.indexOf('>') + 1, e.target.innerHTML.indexOf('</'));
 
             /**
              * Receiving target column by slicing from col + 3 to the end of the string
@@ -940,6 +938,28 @@ inputForm.addEventListener("submit", (e) => {
             dataTable.append(rowTable);
 
             object.length = 0;
+         }
+         else if (clickOption === 'Change cell value' || clickOption === 'Den Wert einer Zelle ändern') {
+            //const blockquotes = document.querySelectorAll('td blockquote');
+            //blockquotes.forEach(blockquote => blockquote.contentEditable = true);
+            Storage.editCore('blockquoteEditValue', '');
+
+            const blockquoteId = e.target.id.slice(e.target.id.indexOf('r'), e.target.id.length);
+            const rowId = blockquoteId.slice(blockquoteId.indexOf('w') + 1, blockquoteId.indexOf('c'));
+            const colId = blockquoteId.slice(blockquoteId.indexOf('col') + 3, blockquoteId.length);
+            const targetLogID = Storage.core.data[rowId]['LogID'];
+            const blockquote = document.querySelector(`#blockquote-${blockquoteId}`);
+
+            blockquote.addEventListener('focusout', e => {
+               Storage.editCore('blockquoteEditValue', blockquote.textContent);
+
+               const targetObject = Storage.core.staticData.find(obj => obj['LogID'] === targetLogID);
+               const targetKey = Storage.core.objectKeysMap.get(`${colId}`);
+
+               Storage.core.staticData[Storage.core.staticData.indexOf(targetObject)][targetKey] = Storage.core.blockquoteEditValue;
+
+               delete Storage.core.blockquoteEditValue;
+            });
          }
 
       })
