@@ -729,22 +729,49 @@ inputForm.addEventListener("submit", (e) => {
           * Iterating through tableHeaders to print only headers that were specified
           */
          Storage.core.tableHeaders.forEach((header, j) => {
-            // Table cell <td> to write object[header] into it
-            let table_data = document.createElement('td');
+            let tableDataHTML = '';
 
-            // Setting id to each of the cells where first digit stands for row and the second for column
-            table_data.setAttribute('id', `cell row${i}col${j}`);
-
-            // Check if value is not NULL so it won't be printed
             if (Storage.core.data[i][header] !== 'NULL') {
-               // If header is FPY then this value will be printed with %
-               if (header === 'FPY')
-                  table_data.innerHTML = `${Storage.core.data[i][header]}%`;
-               else
-                  table_data.innerHTML = `${Storage.core.data[i][header]}`;
+               if (header === 'FPY') {
+                  tableDataHTML = `
+                     <td id='cell row${i}col${j}'>
+                        <input
+                           type='text'
+                           class='td-input'
+                           id='input row${i}col${j}'
+                           value='${Storage.core.data[i][header]}%'
+                        >
+                     </td>
+                  `;
+               }
+               else {
+                  tableDataHTML = `
+                     <td id='cell row${i}col${j}'>
+                        <input
+                           type='text'
+                           class='td-input'
+                           id='input row${i}col${j}'
+                           value='${Storage.core.data[i][header]}'
+                        >
+                     </td>
+                  `;
+               }
+
+            }
+            else {
+               tableDataHTML = `
+                  <td id='cell row${i}col${j}'>
+                     <input
+                        type='text'
+                        class='td-input'
+                        id='input row${i}col${j}'
+                        value=' '
+                     >
+                  </td>
+               `;
             }
 
-            body_row.appendChild(table_data);
+            body_row.insertAdjacentHTML('beforeend', tableDataHTML);
          })
          tbody.appendChild(body_row);
       }

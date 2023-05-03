@@ -174,6 +174,7 @@
       <select id="click-toggler" style="display: none;">
          <option id="opt1" class="ct-option">Zum Filtern hinzufügen</option>
          <option id="opt2" class="ct-option">Zeile anzeigen</option>
+         <option id="opt3" class="ct-option">Den Wert einer Zelle ändern</option>
       </select>
 
       <div class="shown-rows-counter-div" id="shown-rows-counter-div">
@@ -205,65 +206,68 @@
    <table id="data-table"></table>
 
    <script>
-      const option = document.getElementById('chooseLangId')
+      const option = document.getElementById('chooseLangId');
 
-      const fileChoose = document.querySelector('#fc')
-      const rowLimiter = document.querySelector('#row-counter-label')
-      const submitBtn = document.querySelector('#submit-button')
-      const initialTableBtn = document.querySelector('#reload-table')
-      const resetBtn = document.querySelector('#reset')
-      const fullTableBtn = document.querySelector('#full-table-button')
-      const summaryRow = document.querySelector('#summary-row-toggler-label')
-      const saveFilters = document.querySelector('#save-filter-option-label')
-      const realRowsNumber = document.querySelector('#real-rows-number')
-      const addToFilterOption = document.querySelector('#opt1')
-      const showRowOption = document.querySelector('#opt2')
-      const leftDateLabel = document.querySelector('#left-date-label')
-      const rightDateLabel = document.querySelector('#right-date-label')
-      const cellModeSelection = document.querySelector('#click-toggler')
-      const diagrammLabel = document.querySelector('#pie-diagramm-label')
-      const diagramDesc = document.querySelector("#diagramm-description")
-      const cellMode = document.querySelector('#mode-label')
+      const fileChoose = document.querySelector('#fc');
+      const rowLimiter = document.querySelector('#row-counter-label');
+      const submitBtn = document.querySelector('#submit-button');
+      const initialTableBtn = document.querySelector('#reload-table');
+      const resetBtn = document.querySelector('#reset');
+      const fullTableBtn = document.querySelector('#full-table-button');
+      const summaryRow = document.querySelector('#summary-row-toggler-label');
+      const saveFilters = document.querySelector('#save-filter-option-label');
+      const realRowsNumber = document.querySelector('#real-rows-number');
+      const addToFilterOption = document.querySelector('#opt1');
+      const showRowOption = document.querySelector('#opt2');
+      const addToCellOption = document.querySelector('#opt3');
+      const leftDateLabel = document.querySelector('#left-date-label');
+      const rightDateLabel = document.querySelector('#right-date-label');
+      const cellModeSelection = document.querySelector('#click-toggler');
+      const diagrammLabel = document.querySelector('#pie-diagramm-label');
+      const diagramDesc = document.querySelector("#diagramm-description");
+      const cellMode = document.querySelector('#mode-label');
 
       function chooseLang() {
          if (option.value === 'GE') {
-            fileChoose.innerHTML = 'Datei öffnen'
-            rowLimiter.innerHTML = 'Anzahl der Zeilen begrenzen:'
-            submitBtn.innerHTML = 'Bestätigen '
-            initialTableBtn.innerHTML = 'Ursprüngliche Tabelle'
-            resetBtn.innerHTML = 'Reset'
-            fullTableBtn.innerHTML = 'Komplette Tabelle'
-            summaryRow.innerHTML = 'Ergebnis'
-            saveFilters.innerHTML = `Filter speichern`
-            realRowsNumber.innerHTML = 'Anzahl der angezeigten Zeilen:'
-            addToFilterOption.innerHTML = 'Zum Filtern hinzufügen'
-            showRowOption.innerHTML = 'Zeile anzeigen'
-            leftDateLabel.innerHTML = 'Erstes Datum '
-            rightDateLabel.innerHTML = 'Zweites Datum'
-            diagrammLabel.innerHTML = 'Kuchendiagramm'
-            diagramDesc.innerHTML = 'Hier kannst du die Prozessfähigkeit in einem Diagramm (pro Prozent) ein einsehen/beobachten.'
-            cellMode.innerHTML = 'Zellenklickmodus:'
+            fileChoose.innerHTML = 'Datei öffnen';
+            rowLimiter.innerHTML = 'Anzahl der Zeilen begrenzen:';
+            submitBtn.innerHTML = 'Bestätigen ';
+            initialTableBtn.innerHTML = 'Ursprüngliche Tabelle';
+            resetBtn.innerHTML = 'Reset';
+            fullTableBtn.innerHTML = 'Komplette Tabelle';
+            summaryRow.innerHTML = 'Ergebnis';
+            saveFilters.innerHTML = `Filter speichern`;
+            realRowsNumber.innerHTML = 'Anzahl der angezeigten Zeilen:';
+            addToFilterOption.innerHTML = 'Zum Filtern hinzufügen';
+            showRowOption.innerHTML = 'Zeile anzeigen';
+            addToCellOption.innerHTML = 'Den Wert einer Zelle ändern';
+            leftDateLabel.innerHTML = 'Erstes Datum ';
+            rightDateLabel.innerHTML = 'Zweites Datum';
+            diagrammLabel.innerHTML = 'Kuchendiagramm';
+            diagramDesc.innerHTML = 'Hier kannst du die Prozessfähigkeit in einem Diagramm (pro Prozent) ein einsehen/beobachten.';
+            cellMode.innerHTML = 'Zellenklickmodus:';
          }
 
          else if (option.value === 'EN') {
-            fileChoose.innerHTML = 'Choose file'
-            rowLimiter.innerHTML = 'Row limiter: '
-            submitBtn.innerHTML = 'Submit'
-            initialTableBtn.innerHTML = 'Initial table'
-            resetBtn.innerHTML = 'Reset'
-            fullTableBtn.innerHTML = 'Full table'
-            summaryRow.innerHTML = 'Summary row'
-            saveFilters.innerHTML = 'Save filters'
-            realRowsNumber.innerHTML = 'Number of shown rows:'
-            addToFilterOption.innerHTML = 'Add to filters'
-            showRowOption.innerHTML = 'Show row'
-            leftDateLabel.innerHTML = 'First date'
-            rightDateLabel.innerHTML = 'Second date'
-            diagrammLabel.innerHTML = 'Diagramm'
-            diagramDesc.innerHTML = 'Here you can observe the percentage of production process via diagramm'
-            cellMode.innerHTML = 'Cell click mode:'
+            fileChoose.innerHTML = 'Choose file';
+            rowLimiter.innerHTML = 'Row limiter: ';
+            submitBtn.innerHTML = 'Submit';
+            initialTableBtn.innerHTML = 'Initial table';
+            resetBtn.innerHTML = 'Reset';
+            fullTableBtn.innerHTML = 'Full table';
+            summaryRow.innerHTML = 'Summary row';
+            saveFilters.innerHTML = 'Save filters';
+            realRowsNumber.innerHTML = 'Number of shown rows:';
+            addToFilterOption.innerHTML = 'Add to filters';
+            showRowOption.innerHTML = 'Show row';
+            addToCellOption.innerHTML = 'Change cell value';
+            leftDateLabel.innerHTML = 'First date';
+            rightDateLabel.innerHTML = 'Second date';
+            diagrammLabel.innerHTML = 'Diagramm';
+            diagramDesc.innerHTML = 'Here you can observe the percentage of production process via diagramm';
+            cellMode.innerHTML = 'Cell click mode:';
          }
-      }
+      };
    </script>
 </body>
 
