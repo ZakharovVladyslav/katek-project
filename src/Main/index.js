@@ -198,12 +198,12 @@ file.addEventListener('input', () => {
       delete Storage.core.inputText;
 
       // Values from updated file data to fullfill dropdowns only with actual values
-      let values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
+      let dropdownValues = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
 
-         values.forEach(value => {
+         dropdownValues.values.forEach(value => {
             const option = document.createElement('option');
             option.className = 'datalist-option';
             option.value = value;
@@ -211,7 +211,7 @@ file.addEventListener('input', () => {
          })
       })
 
-      values = '';
+      dropdownValues = null;
    })
    fileReader.removeEventListener('load', (e) => { });
 
@@ -243,12 +243,12 @@ document.querySelector('#left-date-inp').addEventListener('change', () => {
 
    rowsAmount.innerHTML = Storage.core.data.length;
 
-   let values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
+   let dropdownValues = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
    Storage.core.datalists.forEach(datalist => {
       datalist.innerHTML = '';
 
-      values.forEach(value => {
+      dropdownValues.values.forEach(value => {
          const option = document.createElement('option');
          option.className = 'datalist-option';
          option.value = value;
@@ -256,7 +256,7 @@ document.querySelector('#left-date-inp').addEventListener('change', () => {
       })
    })
 
-   values = '';
+   dropdownValues = null;
 })
 
 // Logic as same as first date, but looks for the earliest date
@@ -277,12 +277,12 @@ document.querySelector('#right-date-inp').addEventListener('change', () => {
 
    rowsAmount.innerHTML = Storage.core.data.length;
 
-   let values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
+   let dropdownValues = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
    Storage.core.datalists.forEach(datalist => {
       datalist.innerHTML = '';
 
-      values.forEach(value => {
+      dropdownValues.values.forEach(value => {
          /*
          if (value.slice(0, 4) === '----') {
             const option = document.createElement('option');
@@ -296,7 +296,7 @@ document.querySelector('#right-date-inp').addEventListener('change', () => {
       })
    })
 
-   values = '';
+   dropdownValues = null;
 })
 
 /**
@@ -344,8 +344,12 @@ saveButton.addEventListener('click', () => {
       arr = null;
    })
 
-   if (JSON.stringify(MinorStorage.core.RefinedData[0]) === JSON.stringify(MinorStorage.core.RefinedData[1])) {
+   console.log(MinorStorage.core.RefinedData);
+
+   if (JSON.stringify(MinorStorage.core.RefinedData[0].flat(Infinity)) === JSON.stringify(MinorStorage.core.RefinedData[1].flat(Infinity))) {
       let arr = MinorStorage.core.RefinedData;
+
+      console.log(arr);
 
       arr.shift();
 
@@ -353,6 +357,8 @@ saveButton.addEventListener('click', () => {
 
       arr = null;
    }
+
+   console.log(MinorStorage.core.RefinedData);
 
    // csvContext - text for blob
    let csvContent = '';
@@ -428,12 +434,12 @@ document.querySelector('#date-input').addEventListener('click', e => {
       Storage.editCore('data', getFilters());
       Storage.core.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.data.length;
 
-      const values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
+      let dropdownValues = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
 
-         values.forEach(value => {
+         dropdownValues.values.forEach(value => {
             const option = document.createElement('option');
             option.className = 'datalist-option';
             option.value = value;
@@ -441,7 +447,7 @@ document.querySelector('#date-input').addEventListener('click', e => {
          })
       })
 
-      values = null;
+      dropdownValues = null;
    }
 })
 document.querySelector("#date-input").removeEventListener('click', e => { });
@@ -457,22 +463,25 @@ filters.addEventListener('click', e => {
       const targetId = e.target.id.slice(7);
 
       Storage.core.inputFields[targetId - 1].value = '';
+      Storage.core.dbSelects[targetId - 1].selectedIndex = 0;
 
       Storage.editCore('data', getFilters());
       Storage.core.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.data.length;
 
-      const values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
+      let dropdownValues = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
 
-         values.forEach(value => {
+         dropdownValues.values.forEach(value => {
             const option = document.createElement('option');
             option.className = 'datalist-option';
             option.value = value;
             datalist.appendChild(option);
          })
       })
+
+      dropdownValues = null;
    }
 })
 filters.removeEventListener('click', e => { });
@@ -489,22 +498,35 @@ filters.addEventListener('click', (e) => {
     */
    targetField.addEventListener('change', () => {
       Storage.editCore('data', getFilters());
-      let values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
+
+      let dropdownValues = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
+      const selectedValue = targetField.value;
+      const selectedValueHeader = dropdownValues.valueToHeaderMap[selectedValue];
+
+      let targetIndex = -1;
+      for (let i = 0; i < Storage.core.dbSelects[targetNumber].length; i++) {
+         if (Storage.core.dbSelects[targetNumber].options[i].value === selectedValueHeader) {
+            targetIndex = i;
+         }
+      }
+
+      Storage.core.dbSelects[targetNumber - 1].selectedIndex = targetIndex;
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
 
-         values.forEach(value => {
+         dropdownValues.values.forEach(value => {
             const option = document.createElement('option');
             option.className = 'datalist-option';
             option.value = value;
             datalist.appendChild(option);
-         })
-      })
+         });
+      });
 
-      values = null;
+      dropdownValues = null;
+
       Storage.core.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.data.length;
-   })
+   });
 })
 
 filters.removeEventListener('click', (e) => { });
@@ -640,12 +662,12 @@ inputForm.addEventListener("submit", (e) => {
       Storage.core.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.core.data.length;
 
       // Fullfilling dropdowns
-      let values = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
+      let dropdownValues = DropdownValues(Storage.core.data, Storage.core.tableHeaders);
 
       Storage.core.datalists.forEach(datalist => {
          datalist.innerHTML = '';
 
-         values.forEach(value => {
+         dropdownValues.values.forEach(value => {
             const option = document.createElement('option');
             option.className = 'datalist-option';
             option.value = value;
@@ -656,7 +678,7 @@ inputForm.addEventListener("submit", (e) => {
       // Clearing memory
       filtersFromCsvFile = null;
       filtersFromCsvFileSplitted = null;
-      values = null;
+      dropdownValues = null;
 
       /**
        * Building a table from the data array which is object[]
