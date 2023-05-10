@@ -669,6 +669,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
    cursor: pointer;
 }
 
+#left-date-inp, #right-date-inp {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+}
+
 /* -------------------------------------------------------------------------------------------*/
 /* -------------------------------------------------------------------------------------------*/
 
