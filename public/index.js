@@ -1,5 +1,7 @@
 'use strict';
 
+import axios from 'axios';
+
 /* Functions import from other files */
 import CompleteTable from './src/Complete-table.js';
 import CsvToArray from './src/Convert-csv.js';
@@ -31,7 +33,6 @@ const rowsAmount = document.querySelector('#rows-amount');
 const fullTable = document.querySelector('#full-table');
 const fullTableBtn = document.querySelector('#full-table-button');
 const arrows = document.querySelector('#index-arrows');
-const saveFiltersOption = document.querySelector('#save-filter-option');
 const saveDiv = document.querySelector('#save-div');
 const delimiterSelection = document.querySelector('#delimiter-selection');
 const realRowsNumber = document.querySelector('#real-rows-number');
@@ -62,6 +63,17 @@ submitBtn.disabled = true;
 /*----------------------------------------- SEPARATE EVENT LISTENERS --------------------------------------------*/
 /*****************************************************************************************************************/
 
+const fetchData = async (url) => {
+   try {
+       const response = await fetch(url)
+       const data = await response.json()
+
+       return data
+   } catch (error) {
+       throw error
+   }
+}
+
 /**
  * Event listens file on input to receive input data from the file
  */
@@ -85,7 +97,11 @@ file.addEventListener('input', () => {
    */
    const inputFileData = file.files[0];
 
-   fileReader.addEventListener('load', (e) => {
+   fileReader.addEventListener('load', async (e) => {
+      Storage.setItem('dbData', await fetchData('/load-fetch'));
+
+      console.log(Storage.items.dbData);
+
       /**
        * e.target.result returns the whole data from the file. In this case in text
        * After text received, it stores in the Storage as inputText
@@ -307,35 +323,6 @@ saveButton.addEventListener('click', () => {
    MinorStorage.setItem('CsvData', getFilters());
    MinorStorage.setItem('RefinedData', [[...Storage.items.allHeaders]]);
 
-   // 'Save filters' - checkbox, whether to save filters or not
-   if (saveFiltersOption.checked === true) {
-      let filtersValues = [];
-
-      filtersValues = Storage.items.inputFields.map(field => field.value);
-      filtersValues = filtersValues.filter(value => value !== '');
-
-      let headers = MinorStorage.items.RefinedData[0];
-      let arr = MinorStorage.items.CsvData;
-
-      // # - is a delimiter for filters as they inputted to the headers row
-      if (!headers.includes('#'));
-      headers.unshift('#');
-
-      if (filtersValues.length > 0)
-         headers.unshift(filtersValues);
-
-      headers = headers.flat(Infinity);
-
-      arr[0] = headers;
-
-      MinorStorage.setItem('CsvData', arr);
-
-      // Clearing memory
-      arr = null;
-      headers = null;
-      filtersValues = null;
-   }
-
    MinorStorage.items.CsvData.forEach(obj => {
       let arr = MinorStorage.items.RefinedData;
       arr.push(obj);
@@ -343,19 +330,6 @@ saveButton.addEventListener('click', () => {
       MinorStorage.setItem('RefinedData', arr);
       arr = null;
    })
-
-
-   if (JSON.stringify(MinorStorage.items.RefinedData[0].flat(Infinity)) === JSON.stringify(MinorStorage.items.RefinedData[1].flat(Infinity))) {
-      let arr = MinorStorage.items.RefinedData;
-
-      console.log(arr);
-
-      arr.shift();
-
-      MinorStorage.setItem('RefinedData', arr);
-
-      arr = null;
-   }
 
    // csvContext - text for blob
    let csvContent = '';

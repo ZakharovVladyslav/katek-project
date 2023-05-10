@@ -33,7 +33,7 @@ export default function SummaryTable() {;
 
             for (let i = 0; i < values.length; i++)
                 for (let j = 0; j < values[i].length; j++)
-                    if (values[i][j] !== undefined && values[i][j] != 0)
+                    if (values[i][j] !== undefined && values[i][j] !== 0 && values[i][j] !== 'NULL')
                         zeros[j] += parseFloat(values[i][j]);
 
             const countPass = zeros[5];

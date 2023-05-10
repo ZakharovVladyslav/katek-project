@@ -1,0 +1,52 @@
+{
+  "name": "convert-csv-to-array",
+  "version": "1.0.3",
+  "description": "Convert a csv formatted string to an array",
+  "main": "./lib/index.js",
+  "repository": "https://www.github.com/aichbauer/node-convert-csv-to-array",
+  "author": "Lukas Aichbauer <l.aichbauer@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "pretest": "yarn run build && yarn run lint",
+    "lint": "eslint src",
+    "test": "jest --coverage",
+    "build": "babel src --out-dir lib",
+    "prepush": "yarn run test",
+    "prepare": "yarn run build"
+  },
+  "keywords": [
+    "csv",
+    "array",
+    "list",
+    "convert",
+    "comma-separated",
+    "values",
+    "convert-csv-to-array"
+  ],
+  "jest": {
+    "globals": {
+      "__DEV__": true
+    },
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-core": "^7.0.0-0",
+    "babel-jest": "^23.4.2",
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "husky": "^0.14.3",
+    "jest": "^23.5.0",
+    "regenerator-runtime": "^0.12.1"
+  },
+  "dependencies": {
+    "convert-string-to-number": "^1.0.3"
+  }
+}
