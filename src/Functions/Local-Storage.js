@@ -7,11 +7,11 @@ export class CustomStorage {
         window.CustomStorage = this;
     }
 
-    get core() {
+    get items() {
         return this._core;
     }
 
-    editCore(prop, value) {
+    setItem(prop, value) {
         this._core[prop] = value;
     }
 }

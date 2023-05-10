@@ -5,18 +5,18 @@ import { CustomStorage } from "./Local-Storage.js";
 const Storage = new CustomStorage();
 
 export default function getFilters() {
-    Storage.editCore('firstDate', document.querySelector('#left-date-inp'));
-    Storage.editCore('secondDate', document.querySelector('#right-date-inp'));
+    Storage.setItem('firstDate', document.querySelector('#left-date-inp'));
+    Storage.setItem('secondDate', document.querySelector('#right-date-inp'));
 
-    let inputData = [...Storage.core.staticData];
+    let inputData = [...Storage.items.staticData];
 
     const select = document.getElementById('date-params');
     const opt = select.options[select.selectedIndex].value;
 
-    const startDate = new Date(Storage.core.firstDate.value);
-    const finishDate = new Date(Storage.core.secondDate.value);
+    const startDate = new Date(Storage.items.firstDate.value);
+    const finishDate = new Date(Storage.items.secondDate.value);
 
-    if (Storage.core.firstDate.value !== '' && Storage.core.secondDate.value !== '') {
+    if (Storage.items.firstDate.value !== '' && Storage.items.secondDate.value !== '') {
         inputData = inputData.filter(object => {
             const objectDate = new Date(object[opt]);
 
