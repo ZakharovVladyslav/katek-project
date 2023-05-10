@@ -24,7 +24,7 @@ export default function Diagram() {
 
         const keys = ['CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
 
-        const values = Storage.core.data.map(object => {
+        const values = Storage.items.data.map(object => {
             const objectValues = [];
 
             keys.forEach(key => {
