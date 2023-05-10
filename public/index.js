@@ -406,7 +406,9 @@ reset.addEventListener('click', e => {
    Storage.items.datalists.forEach(datalist => {
       datalist.innerHTML = '';
 
-      Storage.items.allValues.forEach(value => {
+      console.log(Storage.items.allValues);
+
+      Storage.items.allValues.values.forEach(value => {
          const option = document.createElement('option');
          option.className = 'datalist-option';
          option.value = value;
