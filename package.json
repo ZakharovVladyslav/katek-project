@@ -1,0 +1,27 @@
+{
+  "name": "katek-csv-manager",
+  "version": "1.0.0",
+  "description": "This project is created for managing csv file: opening, re-writing, saving, etc.",
+  "main": "./server/server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZakharovVladyslav/KATEK-Project.git"
+  },
+  "author": "Syrota Mykhailo Serhiiyovich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZakharovVladyslav/KATEK-Project/issues"
+  },
+  "homepage": "https://github.com/ZakharovVladyslav/KATEK-Project#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "type": "module"
+}
