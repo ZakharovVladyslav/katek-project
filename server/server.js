@@ -8,8 +8,8 @@ app.use(express.static('public'));
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'lcashe',
-    password: '135794ee497531E@',
-    database: 'katek'
+    password: 'password',
+    database: 'db'
 })
 
 connection.connect();
