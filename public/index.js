@@ -1,15 +1,15 @@
 'use strict';
 
 /* Functions import from other files */
-import CompleteTable from './src/Complete-table.js';
-import getFilters from './src/Data-filtering.js';
+import CompleteTable from './src/Table/Complete-table.js';
+import getFilters from './src/DB/Data-filtering.js';
 import CsvToArray from './src/Convert-csv.js';
-import SummaryTable from './src/Summary-table.js';
+import SummaryTable from './src/Table/Summary-table.js';
 import DropdownValues from './src/Dropdown-values.js';
 import Diagram from './src/Diagram.js';
-import { CustomStorage, SecondaryStorage } from './src/Local-Storage.js';
-import fillStorage from './src/FillStorage.js';
-import fetchData from './src/FetchDbJSON.js';
+import { CustomStorage, SecondaryStorage } from './src/Storage/Local-Storage.js';
+import fillStorage from './src/Storage/FillStorage.js';
+import fetchData from './src/DB/FetchDbJSON.js';
 
 /* Defining storage classes instances */
 const Storage = new CustomStorage();
@@ -287,12 +287,6 @@ document.querySelector('#right-date-inp').addEventListener('change', () => {
       datalist.innerHTML = '';
 
       dropdownValues.values.forEach(value => {
-         /*
-         if (value.slice(0, 4) === '----') {
-            const option = document.createElement('option');
-         }
-         */
-
          const option = document.createElement('option');
          option.className = 'datalist-option';
          option.value = value;

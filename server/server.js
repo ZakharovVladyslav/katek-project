@@ -25,6 +25,10 @@ app.get('/:action', (req, res) => {
             res.send(results);
         })
     }
+
+    else if (req.params.action === 'fetch-query') {
+
+    }
 })
 
 app.get('/')
