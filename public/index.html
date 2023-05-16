@@ -22,22 +22,20 @@
       <article>
          <img src="./assets/Katek-Logosvg.png">
          <h1>This website was made for filtering information in excel files with sorting and checking functions</h1>
-         <p>Made by <a target="_blank" href="https://katek-group.de/?doing_wp_cron=1682963448.8188540935516357421875">Katek GmBH</a></p>
+         <p>Made by <a target="_blank"
+               href="https://katek-group.de/?doing_wp_cron=1682963448.8188540935516357421875">Katek GmBH</a></p>
       </article>
 
       <form id="input-form">
 
          <section id="input-section">
-            <div class="file-input-section">
+            <select id="input-data-select" class="input-data-select">
+               <option value="Datenbank">Datenbank</option>
+               <option value="Datei">Datei</option>
+            </select>
 
-               <select id="delimiter-selection">
-                  <option id="delimiter-selection-option">,</option>
-                  <option id="delimiter-selection-option">;</option>
-               </select>
-
-               <label id="fc" for="file-choose">Datei öffnen</label>
-               <input type="file" id="file-choose"><br>
-               <p id="chosen-file"></p>
+            <div class="file-input-section" id="file-input-section">
+               <button type="button" id="db-connect" class='db-connect'>Connect database</button>
             </div>
 
             <div class="row-counter-div">
@@ -131,7 +129,8 @@
 
                <button type="button" id="reset" disabled>Reset</button>
 
-               <button type="button" id="full-table-button" class="full-table-button" disabled>Komplette Tabelle</button>
+               <button type="button" id="full-table-button" class="full-table-button" disabled>Komplette
+                  Tabelle</button>
 
                <div class="summary-row-toggler-il">
                   <input type="checkbox" id="summary-row-toggler-input" checked="false" disabled>
@@ -149,9 +148,11 @@
 
    <table id="summary-table"></table>
 
-   <p id="diagramm-description" style="display: none;">Hier kannst du die Prozessfähigkeit in einem Diagramm (pro Prozent) ein einsehen/beobachten.</p>
+   <p id="diagramm-description" style="display: none;">Hier kannst du die Prozessfähigkeit in einem Diagramm (pro
+      Prozent) ein einsehen/beobachten.</p>
    <div id="svg-div">
-      <svg id='svg-element' width="400" height="400" style="display: none; margin: auto; transform: scale(1.5); margin-top: 50px;"></svg>
+      <svg id='svg-element' width="400" height="400"
+         style="display: none; margin: auto; transform: scale(1.5); margin-top: 50px;"></svg>
       <div id="labels">
          <p id="date-range">Range</p>
       </div>
@@ -183,10 +184,6 @@
       </div>
 
       <div id="save-div" style="opacity: 0;">
-         <label id="save-filter-option-label" for="save-filter-option">
-            Filter speichern
-         </label>
-         <input type="checkbox" id='save-filter-option'>
          <a id="save" class="save" type="download" style="display: none;"><i class="fa-solid fa-download"></i></a>
       </div>
    </div>

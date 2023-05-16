@@ -6,21 +6,18 @@ export default function CsvToArray(str, delimiter = ',') {
    let headers = str.slice(str.indexOf('#') + 2, str.indexOf('\n')).split(delimiter)
    let rows = str.slice(str.indexOf("\n")).split("\n")
 
-   if (headers.includes('#'))
-      headers.splice(headers.indexOf('#'), 1)
-
    const arr = rows.map((row) => {
-      const values = row.split(delimiter)
+      const values = row.split(delimiter);
       const element = headers.reduce((object, header, index) => {
          object[header] = values[index]
          return object
-      }, {})
-      return element
+      }, {});
+      return element;
    })
 
    str = '';
    rows = null;
 
-   return [arr, headers, filters]
+   return arr;
 }
 

@@ -7,16 +7,18 @@ app.use(express.static('public'));
 
 const connection = mysql.createConnection({
     host: 'localhost',
-    user: 'lcashe',
-    password: '135794ee497531E@',
+    user: 'root',
+    password: '135794ee497531E',
     database: 'katek'
 })
 
 connection.connect();
 
-app.get('/:fetch-action', (req, res) => {
-    if (req.params['fetch-action'] === 'fetch') {
-        connection.query(`SELECT * FROM \`katek\`.\`10k lines v.2\``, (error, results, fields) => {
+app.get('/:action', (req, res) => {
+    console.log(req.params);
+
+    if (req.params.action === 'db-fetch') {
+        connection.query(`SELECT * FROM \`katek\`.\`10k_lines\``, (error, results, fields) => {
             if (error)
                 throw error;
 
@@ -25,6 +27,6 @@ app.get('/:fetch-action', (req, res) => {
     }
 })
 
-connection.end();
+app.get('/')
 
 app.listen(3000, () => console.log('Server started localhost:3000'));

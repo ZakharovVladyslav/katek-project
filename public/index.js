@@ -2,12 +2,14 @@
 
 /* Functions import from other files */
 import CompleteTable from './src/Complete-table.js';
-import CsvToArray from './src/Convert-csv.js';
 import getFilters from './src/Data-filtering.js';
+import CsvToArray from './src/Convert-csv.js';
 import SummaryTable from './src/Summary-table.js';
 import DropdownValues from './src/Dropdown-values.js';
 import Diagram from './src/Diagram.js';
 import { CustomStorage, SecondaryStorage } from './src/Local-Storage.js';
+import fillStorage from './src/FillStorage.js';
+import fetchData from './src/FetchDbJSON.js';
 
 /* Defining storage classes instances */
 const Storage = new CustomStorage();
@@ -15,13 +17,11 @@ const MinorStorage = new SecondaryStorage();
 
 /* HTML Elements import */
 const inputForm = document.querySelector('#input-form');
-const file = document.querySelector('#file-choose');
 const submitBtn = document.querySelector('#submit-button');
 const resetBtn = document.querySelector('#reset');
 const dataTable = document.querySelector('#data-table');
 const emptyMessage = document.querySelector('#empty-message');
 const rowLimiter = document.querySelector('#row-limiter');
-const chosenFile = document.querySelector('#chosen-file');
 const reloadTable = document.querySelector('#reload-table');
 const cellSelect = document.querySelector('#click-toggler');
 const filters = document.querySelector('#filters');
@@ -33,7 +33,6 @@ const fullTableBtn = document.querySelector('#full-table-button');
 const arrows = document.querySelector('#index-arrows');
 const saveFiltersOption = document.querySelector('#save-filter-option');
 const saveDiv = document.querySelector('#save-div');
-const delimiterSelection = document.querySelector('#delimiter-selection');
 const realRowsNumber = document.querySelector('#real-rows-number');
 const shownRowsCounter = document.querySelector('#shown-rows-counter');
 const shownRowsCounterDiv = document.querySelector('.shown-rows-counter-div');
@@ -62,163 +61,168 @@ submitBtn.disabled = true;
 /*----------------------------------------- SEPARATE EVENT LISTENERS --------------------------------------------*/
 /*****************************************************************************************************************/
 
-/**
- * Event listens file on input to receive input data from the file
- */
-file.addEventListener('input', () => {
-   // As file inputted, submit button become active and clickable
+const dbConnectBtn = document.querySelector('#db-connect');
+
+dbConnectBtn.addEventListener('click', async () => {
+   Storage.setItem('data', await fetchData('db-fetch'));
+
+   fillStorage();
+
    submitBtn.disabled = false;
+});
+dbConnectBtn.removeEventListener('click', () => { });
 
-   /**
-    * Receive file name and put it to the site
-    */
-   const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
+const dataTypeSelect = document.querySelector('#input-data-select');
 
-   chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1];
+dataTypeSelect.addEventListener('change', () => {
+   const option = dataTypeSelect.options[dataTypeSelect.selectedIndex].value;
+   const fileInputSection = document.querySelector('#file-input-section');
 
-   // FileReader will read file data as text
-   const fileReader = new FileReader();
+   if (option === 'Datei') {
+      fileInputSection.innerHTML = '';
 
-   /**
-    *  file.files - object that contains data about the file from input
-    *  file.files[0] - file name
-   */
-   const inputFileData = file.files[0];
+      const html = `
+         <select id="delimiter-selection">
+            <option id="delimiter-selection-option">,</option>
+            <option id="delimiter-selection-option">;</option>
+         </select>
 
-   fileReader.addEventListener('load', (e) => {
-      /**
-       * e.target.result returns the whole data from the file. In this case in text
-       * After text received, it stores in the Storage as inputText
-       */
-      let text = e.target.result;
-      Storage.setItem('inputText', text);
+         <label id="fc" for="file-choose">Datei öffnen</label>
+         <input type="file" id="file-choose"><br>
+         <p id="chosen-file"></p>
+      `
 
-      /**
-       * TableHeaders - needed for the table to print only exact columns
-       * Also stores into the Storage to be able to be called later
-       */
-      const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
-      Storage.setItem('tableHeaders', tableHeaders)
+      fileInputSection.insertAdjacentHTML('beforeend', html);
 
-      /**
-       * delimiterOption - in Convert-csv delimiter has delimiter by default ','
-       * If selected delimiterOption will be different from the default, it will be overwritten
-      */
-      const delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value;
+      const file = document.querySelector('#file-choose');
+      const chosenFile = document.querySelector('#chosen-file');
 
-      /**
-       * Data will be stored as a result object[] from .csv text
-       */
-      Storage.setItem('data', CsvToArray(Storage.items.inputText, delimiterOption)[0].filter((obj, index) => {
-         return !Object.values(obj).includes(undefined);
-      }));
+      console.log(file);
+      if (file) {
+         file.addEventListener('input', () => {
+            // As file inputted, submit button become active and clickable
+            submitBtn.disabled = false;
 
-      // StaticData - stored to be a full version of initial array
-      Storage.setItem('staticData', Storage.items.data);
+            /**
+             * Receive file name and put it to the site
+             */
+            const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
 
-      // AllHeaders - needs for reset listener to fill dropdown immediately
-      Storage.setItem('allHeaders', Object.keys(Storage.items.staticData[0]));
+            chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1];
 
-      // StaticDataLength - stored, not to calculate length later
-      Storage.setItem('staticDataLength', Storage.items.staticData.length);
-      Storage.setItem('headers', CsvToArray(Storage.items.inputText, delimiterOption)[1]);
+            // FileReader will read file data as text
+            const fileReader = new FileReader();
 
-      // Filters - to let know by which keys this file has been sorted
-      Storage.setItem('filters', CsvToArray(Storage.items.inputText, delimiterOption)[2]);
+            /**
+             *  file.files - object that contains data about the file from input
+             *  file.files[0] - file name
+            */
+            const inputFileData = file.files[0];
+            fileReader.addEventListener('load', (e) => {
+               /**
+                * e.target.result returns the whole data from the file. In this case in text
+                * After text received, it stores in the Storage as inputText
+                */
+               let text = e.target.result;
+               Storage.setItem('inputText', text);
 
-      // AllValues - as same as allHeaders. not to calculate later. Receives all present value from the static data
-      Storage.setItem('allValues', DropdownValues(Storage.items.staticData, Storage.items.tableHeaders));
+               const delimiterSelection = document.querySelector('#delimiter-selection');
 
-      // Stored not to keep text present as it takes lot of memory
-      Storage.setItem('inputTextLength', Storage.items.inputText.length);
+               let delimiterOption = null;
+               if (delimiterSelection)
+                   delimiterOption = delimiterSelection.options[delimiterSelection.selectedIndex].value;
 
-      Storage.setItem('firstDate', document.querySelector('#left-date-inp'));
-      Storage.setItem('secondDate', document.querySelector('#right-date-inp'));
+               /**
+                * Data will be stored as a result object[] from .csv text
+                */
+               Storage.setItem('data', CsvToArray(Storage.items.inputText, delimiterOption).filter((obj, index) => {
+                  return !Object.values(obj).includes(undefined);
+               }));
 
-      const headersMap = new Map();
-      Storage.items.tableHeaders.forEach((header, index) => {
-         headersMap.set(`${index}`, `${header}`);
-      })
+               fillStorage();
+            })
+            fileReader.removeEventListener('load', (e) => { });
 
-      Storage.setItem('objectKeysMap', headersMap);
-
-      Storage.setItem('inputFields', [
-         document.querySelector('#filter-input-1'),
-         document.querySelector('#filter-input-2'),
-         document.querySelector('#filter-input-3'),
-         document.querySelector('#filter-input-4'),
-         document.querySelector('#filter-input-5')
-      ]);
-      Storage.setItem('datalists', [
-         document.querySelector('#datalist-1'),
-         document.querySelector('#datalist-2'),
-         document.querySelector('#datalist-3'),
-         document.querySelector('#datalist-4'),
-         document.querySelector('#datalist-5')
-      ]);
-
-      const dbSelectors = [
-         document.querySelector('#db-select-1'),
-         document.querySelector('#db-select-2'),
-         document.querySelector('#db-select-3'),
-         document.querySelector('#db-select-4'),
-         document.querySelector('#db-select-5'),
-      ]
-
-      Storage.setItem('dbSelects', [...dbSelectors]);
-
-      /**
-       * dbSelects - select html elements near to input field
-       * needed for db connection to define by which key database will be stored
-       *
-       * Is fullfilled with all column names (headers) from the file
-       */
-      dbSelectors.forEach(select => {
-         select.innerHTML = ''
-
-         const option = document.createElement('option')
-         option.className = 'database-option';
-         option.value = 'Select';
-         option.innerHTML = 'Select';
-         select.appendChild(option)
-
-         Storage.items.allHeaders.forEach(header => {
-            const option = document.createElement('option');
-            option.className = 'database-option';
-            option.value = header;
-            option.innerHTML = header;
-            select.appendChild(option);
+            // Set fileReader to read data from .csv file as text
+            fileReader.readAsText(inputFileData);
          })
-      })
+         file.removeEventListener('input', (e) => { });
+      }
+   }
+   else if (option === 'Datenbank') {
+      fileInputSection.innerHTML = '';
+      dataTable.innerHTML = '';
 
-      // Number of rows of the updated array will be outputted
-      rowsAmount.innerHTML = Storage.items.data.length;
+      const html = `
+         <button
+            type="button"
+            id="db-connect"
+            class='db-connect'
+         >Connect</button>
+      `
 
-      // Text will be deleted not to take memory for no reason
-      delete Storage.items.inputText;
+      fileInputSection.insertAdjacentHTML('beforeend', html);
 
-      // Values from updated file data to fullfill dropdowns only with actual values
-      let dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+      const dbConnectBtn = document.querySelector('#db-connect');
 
-      Storage.items.datalists.forEach(datalist => {
-         datalist.innerHTML = '';
+      dbConnectBtn.addEventListener('click', async () => {
+         try {
+            Storage.setItem('data', await fetchData('db-fetch'));
+         } catch(err) {
+            console.log(err);
+         }
 
-         dropdownValues.values.forEach(value => {
-            const option = document.createElement('option');
-            option.className = 'datalist-option';
-            option.value = value;
-            datalist.appendChild(option);
-         })
-      })
+         submitBtn.disabled = false;
+      });
+      dbConnectBtn.removeEventListener('click', () => { });
 
-      dropdownValues = null;
-   })
-   fileReader.removeEventListener('load', (e) => { });
-
-   // Set fileReader to read data from .csv file as text
-   fileReader.readAsText(inputFileData);
+      fillStorage();
+   }
 })
-file.removeEventListener('input', (e) => { });
+
+const file = document.querySelector('#file-choose');
+const chosenFile = document.querySelector('#chosen-file');
+
+if (file) {
+   /**
+    * Event listens file on input to receive input data from the file
+    */
+   file.addEventListener('input', () => {
+      // As file inputted, submit button become active and clickable
+      submitBtn.disabled = false;
+
+      /**
+       * Receive file name and put it to the site
+       */
+      const arrFromFileName = file.value.replaceAll('\\', ',').split(',');
+
+      chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1];
+
+      // FileReader will read file data as text
+      const fileReader = new FileReader();
+
+      /**
+       *  file.files - object that contains data about the file from input
+       *  file.files[0] - file name
+      */
+      const inputFileData = file.files[0];
+      fileReader.addEventListener('load', (e) => {
+         /**
+          * e.target.result returns the whole data from the file. In this case in text
+          * After text received, it stores in the Storage as inputText
+          */
+         let text = e.target.result;
+         Storage.setItem('inputText', text);
+
+         fillStorage();
+      })
+      fileReader.removeEventListener('load', (e) => { });
+
+      // Set fileReader to read data from .csv file as text
+      fileReader.readAsText(inputFileData);
+   })
+   file.removeEventListener('input', (e) => { });
+}
 
 // listens to the first date change to change number of rows that will be outputed
 document.querySelector('#left-date-inp').addEventListener('change', () => {
@@ -348,8 +352,6 @@ saveButton.addEventListener('click', () => {
    if (JSON.stringify(MinorStorage.items.RefinedData[0].flat(Infinity)) === JSON.stringify(MinorStorage.items.RefinedData[1].flat(Infinity))) {
       let arr = MinorStorage.items.RefinedData;
 
-      console.log(arr);
-
       arr.shift();
 
       MinorStorage.setItem('RefinedData', arr);
@@ -405,8 +407,6 @@ reset.addEventListener('click', e => {
 
    Storage.items.datalists.forEach(datalist => {
       datalist.innerHTML = '';
-
-      console.log(Storage.items.allValues);
 
       Storage.items.allValues.values.forEach(value => {
          const option = document.createElement('option');
@@ -648,15 +648,6 @@ inputForm.addEventListener("submit", (e) => {
          document.querySelector('#left-date-inp').value = new Date(earliestDate[opt]).toISOString().slice(0, 16);
       }
 
-      // Here site receives filters from the file if they're present...
-      let filtersFromCsvFile = Storage.items.filters;
-      let filtersFromCsvFileSplitted = filtersFromCsvFile.split(',').filter(elem => elem !== '');
-
-      // ...and add them as placeholders
-      filtersFromCsvFileSplitted.forEach((value, index) => {
-         Storage.items.inputFields[index].setAttribute('placeholder', value);
-      })
-
       // Number of the rows that will be outputted
       Storage.items.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.items.data.length;
 
@@ -675,8 +666,6 @@ inputForm.addEventListener("submit", (e) => {
       })
 
       // Clearing memory
-      filtersFromCsvFile = null;
-      filtersFromCsvFileSplitted = null;
       dropdownValues = null;
 
       /**
