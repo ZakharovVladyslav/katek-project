@@ -1,7 +1,8 @@
-import { CustomStorage } from "../Storage/Local-Storage.js";
+import { CustomStorage, SecondaryStorage } from "../Storage/Local-Storage.js";
 import fetchData from "./FetchDbJSON.js";
 
 const Storage = new CustomStorage();
+const MinorStorage = new SecondaryStorage();
 
 export default async function DBQuery(e) {
     if (Storage.items.limiter === undefined)

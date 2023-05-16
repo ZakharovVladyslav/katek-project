@@ -387,12 +387,11 @@ document.querySelector('#right-date-inp').addEventListener('change', () => {
  * Save button needs to save current object[]/table state to the file
  * Storage.items.filters will mean filters that sorted initial array to the current state
  */
-saveButton.addEventListener('click', () => {
-   MinorStorage.setItem('CsvData', getFilters());
-   MinorStorage.setItem('RefinedData', [[...Storage.items.allHeaders]]);
+saveButton.addEventListener('click', async () => {
+   Storage.setItem('RefinedData', [[...Storage.items.allHeaders]]);
 
-   MinorStorage.items.CsvData.forEach(obj => {
-      let arr = MinorStorage.items.RefinedData;
+   Storage.items.data.forEach(obj => {
+      let arr = Storage.items.RefinedData;
       arr.push(obj);
 
       MinorStorage.setItem('RefinedData', arr);
@@ -401,7 +400,7 @@ saveButton.addEventListener('click', () => {
 
    // csvContext - text for blob
    let csvContent = '';
-   MinorStorage.items.RefinedData.forEach(row => {
+   Storage.items.RefinedData.forEach(row => {
       typeof (row) === 'object'
          ? csvContent += Object.values(row).join(',') + '\n'
          : csvContent += row.join(',') + '\n';
@@ -415,10 +414,9 @@ saveButton.addEventListener('click', () => {
    saveButton.setAttribute('download', `Filtered-table-${dateNow.getDate()}-${dateNow.getMonth()}-${dateNow.getFullYear()}-${dateNow.getHours()}-${dateNow.getMinutes()}-${dateNow.getSeconds()}`);
 
    csvContent = '';
-   delete MinorStorage.items.RefinedData;
-   delete MinorStorage.items.CsvData;
+   delete Storage.items.RefinedData;
 })
-saveButton.removeEventListener('click', () => { });
+saveButton.removeEventListener('click', async () => { });
 
 /**
  * On click reset all input fields will be cleared and number of rows will be static data length
