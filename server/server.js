@@ -15,7 +15,6 @@ const connection = mysql.createConnection({
 connection.connect();
 
 app.get('/:action', (req, res) => {
-
     let sqlQueryParams = null;
     sqlQueryParams = Object.entries(req.query).map(([key, value]) => {
         if (key !== 'limiter')
