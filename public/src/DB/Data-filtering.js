@@ -1,6 +1,6 @@
 'use strict'
 
-import { CustomStorage } from "../Storage/Local-Storage.js";
+import CustomStorage from "../Storage/Local-Storage.js";
 
 const Storage = new CustomStorage();
 
@@ -10,7 +10,7 @@ export default function getFilters() {
 
     let inputData = [...Storage.items.staticData];
 
-    const select = document.getElementById('date-params');
+    const select = document.getElementById(`date-params`);
     const opt = select.options[select.selectedIndex].value;
 
     const startDate = new Date(Storage.items.firstDate.value);

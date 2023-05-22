@@ -1,3 +1,7 @@
+import CustomStorage from "./Storage/Local-Storage.js";
+
+const Storage = new CustomStorage();
+
 export default function DropdownValues(array, headers) {
       const resultArray = [];
       const timeKeys = ['tLogIn', 'tLogOut', 'tLastAcc'];
