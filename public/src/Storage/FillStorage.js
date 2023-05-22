@@ -1,5 +1,5 @@
 import CsvToArray from "../Convert-csv.js";
-import { CustomStorage } from "./Local-Storage.js";
+import CustomStorage from "./Local-Storage.js";
 import DropdownValues from "../Dropdown-values.js";
 const rowsAmount = document.querySelector('#rows-amount');
 
