@@ -4,7 +4,7 @@
 }
 
 * {
-   font-family: 'Courier New', Courier, monospace;
+   font-family: 'Courier New', Courier, sans-serif;
    color: white;
 }
 
@@ -422,13 +422,15 @@ button[type="button"]:hover {
    margin-bottom: -30px;
 }
 
-#submit-button:hover, #reload-table:hover {
+#submit-button:hover,
+#reload-table:hover {
    background-color: #00788b;
 
    cursor: pointer;
 }
 
-#submit-button:disabled, #reload-table:disabled {
+#submit-button:disabled,
+#reload-table:disabled {
    border: 2px solid #222222;
 
    background-color: #444444;
@@ -443,7 +445,8 @@ button[type="button"]:hover {
    margin-bottom: -10px;
 }
 
-.summary-row-toggler-il input:disabled+label, .pie-diagramm-toggler input:disabled+label {
+.summary-row-toggler-il input:disabled+label,
+.pie-diagramm-toggler input:disabled+label {
    border: 2px solid #222222;
 
    background-color: #444444;
@@ -451,7 +454,8 @@ button[type="button"]:hover {
    cursor: not-allowed;
 }
 
-.summary-row-toggler-il label, .pie-diagramm-toggler label {
+.summary-row-toggler-il label,
+.pie-diagramm-toggler label {
    border: 1px solid var(--katek-blue);
    border-radius: 3px;
 
@@ -463,14 +467,16 @@ button[type="button"]:hover {
    transition: background-color ease 0.1s;
 }
 
-.summary-row-toggler-il label:hover, .pie-diagramm-toggler label:hover {
+.summary-row-toggler-il label:hover,
+.pie-diagramm-toggler label:hover {
    background-color: #00788b;
    transition: background-color ease 0.1s;
 
    cursor: pointer;
 }
 
-.summary-row-toggler-il input, .pie-diagramm-toggler input {
+.summary-row-toggler-il input,
+.pie-diagramm-toggler input {
    display: none;
 }
 
@@ -618,12 +624,12 @@ span {
 /* -------------------------------------------------------------------------------------------*/
 
 .date-input {
-   margin-top: -60px;
    margin-right: 20px;
+
+   max-height: fit-content;
 
    display: flex;
    flex-direction: column;
-   justify-content: center;
    align-items: center;
 }
 
@@ -647,14 +653,16 @@ span {
    transition: background-color ease 0.1s;
 }
 
-.right-date, .left-date {
+.right-date,
+.left-date {
    display: flex;
    flex-direction: column;
    align-items: center;
    justify-content: center;
 }
 
-.right-date div, .left-date div {
+.right-date div,
+.left-date div {
    display: flex;
    flex-direction: row;
    justify-content: center;
@@ -662,7 +670,8 @@ span {
    gap: 25px;
 }
 
-.right-date div button, .left-date div button {
+.right-date div button,
+.left-date div button {
    font-size: 20px;
 
    margin-top: 10px;
@@ -679,7 +688,8 @@ span {
    margin-top: 30px;
 }
 
-.left-date input, .right-date input {
+.left-date input,
+.right-date input {
    padding: 10px 10px;
    margin-top: 10px;
    margin-right: -20px;
@@ -692,13 +702,15 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
    filter: brightness(150%);
 }
 
-#left-date-inp:hover, #right-date-inp:hover {
+#left-date-inp:hover,
+#right-date-inp:hover {
    background-color: rgba(255, 255, 255, 0.1);
    transition: background-color ease 0.1s;
    cursor: pointer;
 }
 
-#left-date-inp, #right-date-inp {
+#left-date-inp,
+#right-date-inp {
    display: flex;
    flex-direction: row;
    justify-content: center;
@@ -804,7 +816,8 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
    align-items: center;
 }
 
-.over-tables div {
+.over-tables .mode-div,
+.over-tables .shown-rows-counter-div {
    display: flex;
    flex-direction: row;
    justify-content: center;
@@ -834,7 +847,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .over-tables .shown-rows-counter-div {
    min-width: fit-content;
 
-   margin-right: 45em;
+   margin-right: 20em;
 
    display: flex;
    flex-direction: row;
@@ -847,11 +860,17 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
    margin-left: 15px;
 }
 
+.over-tables .save-div {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   justify-content: center;
+   gap: 20px;
+}
+
 .over-tables .save {
    font-size: 50px;
    transition: 0.2s;
-
-   margin: 0 50px;
 }
 
 .over-tables .save i:hover {
@@ -861,122 +880,56 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
    cursor: pointer;
 }
 
+.over-tables .save-file-select {
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   padding: 5px 8px;
+
+   border-radius: 5px;
+
+   margin-left: -100px;
+   margin-right: -30px;
+}
+
+.over-tables .save-file-select:hover {
+   cursor: pointer;
+   background-color: rgb(122, 122, 122);
+   transition: background-color ease 0.1s;
+}
+
+.over-tables .save-file-select option {
+   background-color: #313038;
+
+   padding: 3px 5px;
+}
+
+.over-tables .save-file-select:active {
+   outline: none;
+}
+
+.over-tables .save-div {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+
+   gap: 60px;
+}
+
+.over-tables .save-div button {
+   padding: 5.5px 8px;
+   margin-left: -200px;
+}
+
+.over-tables .save-div button:disabled {
+   cursor: default;
+}
+
 /*---------------------------------------------------------------------------------------*/
 /*LOADING CIRCLE ANIMATION --------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------*/
 
-.loading-table {
-
-   min-width: 200px;
-
-   position: absolute;
-   right: 53%;
-   left: 47%;
-}
-
-.lds-roller {
-
-   display: inline-block;
-   transition: display ease 2s;
-
-   transition: 0.5s;
-
-   position: absolute;
-   margin-top: 100px;
-   right: 50%;
-   left: 50%;
-
-   width: 80px;
-   height: 80px;
-}
-
-.lds-roller div {
-   animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-   transform-origin: 40px 40px;
-}
-
-.lds-roller div:after {
-   content: " ";
-   display: block;
-   position: absolute;
-   width: 7px;
-   height: 7px;
-   border-radius: 50%;
-   background: #cef;
-   margin: -4px 0 0 -4px;
-}
-
-.lds-roller div:nth-child(1) {
-   animation-delay: -0.036s;
-}
-
-.lds-roller div:nth-child(1):after {
-   top: 63px;
-   left: 63px;
-}
-
-.lds-roller div:nth-child(2) {
-   animation-delay: -0.072s;
-}
-
-.lds-roller div:nth-child(2):after {
-   top: 68px;
-   left: 56px;
-}
-
-.lds-roller div:nth-child(3) {
-   animation-delay: -0.108s;
-}
-
-.lds-roller div:nth-child(3):after {
-   top: 71px;
-   left: 48px;
-}
-
-.lds-roller div:nth-child(4) {
-   animation-delay: -0.144s;
-}
-
-.lds-roller div:nth-child(4):after {
-   top: 72px;
-   left: 40px;
-}
-
-.lds-roller div:nth-child(5) {
-   animation-delay: -0.18s;
-}
-
-.lds-roller div:nth-child(5):after {
-   top: 71px;
-   left: 32px;
-}
-
-.lds-roller div:nth-child(6) {
-   animation-delay: -0.216s;
-}
-
-.lds-roller div:nth-child(6):after {
-   top: 68px;
-   left: 24px;
-}
-
-.lds-roller div:nth-child(7) {
-   animation-delay: -0.252s;
-}
-
-.lds-roller div:nth-child(7):after {
-   top: 63px;
-   left: 17px;
-}
-
-.lds-roller div:nth-child(8) {
-   animation-delay: -0.288s;
-}
-
-.lds-roller div:nth-child(8):after {
-   top: 56px;
-   left: 12px;
-}
 
 @keyframes lds-roller {
    0% {
@@ -997,7 +950,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 
 #data-table {
-
    margin: 40px auto;
 
    border-collapse: collapse;
