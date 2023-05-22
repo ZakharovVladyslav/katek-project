@@ -1,7 +1,14 @@
 import express from 'express';
 import mysql from 'mysql';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
+console.log(process.env);
+console.log(process.env.PORT);
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.use(express.static('public'));
 
@@ -15,19 +22,53 @@ const connection = mysql.createConnection({
 connection.connect();
 
 app.get('/:action', (req, res) => {
+    console.log(req.query);
+
+    let dateQuery = '';
+    let query = '';
+    const keysToAvoid = ['firstDate', 'secondDate', 'dateOption'];
+
     let sqlQueryParams = null;
     sqlQueryParams = Object.entries(req.query).map(([key, value]) => {
-        if (key !== 'limiter')
+        if (!keysToAvoid.includes(key))
             return `${key}='${value}'`;
     }).filter(param => param !== undefined);
 
-    let query = '';
-    sqlQueryParams.length === 0 ? query = '' : query = ` WHERE ${sqlQueryParams.join(' AND ')}`;
+    if (req.query.firstDate && req.query.secondDate)
+        dateQuery += `${req.query.dateOption}
+        BETWEEN STR_TO_DATE('${req.query.firstDate}', '%Y-%m-%d %H:%i.%s.%f')
+        AND STR_TO_DATE('${req.query.secondDate}', '%Y-%m-%d %H:%i.%s.%f')`;
 
-    const limiter = req.query.limiter ? ` LIMIT ${req.query.limiter}` : ' LIMIT 500';
+    if (sqlQueryParams.length === 0 && dateQuery !== '') {
+        console.log('case: sqlQueryParams.length === 0 && dateQuery !== ""');
+        query = ` WHERE ${dateQuery}`;
+    }
+    else if (sqlQueryParams.length !== 0 && dateQuery === '') {
+        console.log('case: sqlQueryParams.length !== 0 && dateQuery === ""');
+        query = ` WHERE ${sqlQueryParams.join(' AND ')}`;
+    }
+    else if (sqlQueryParams.length !== 0 && dateQuery !== '') {
+        console.log('case: sqlQueryParams.length !== 0 && dateQuery !== ""');
+        query = ` WHERE ${dateQuery} AND ${sqlQueryParams.join(' AND ')}`;
+    }
+
+    if (req.params.action === 'load-fetch') {
+        const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\` LIMIT 500`;
+
+        console.log(sql);
+
+        connection.query(sql, (err, results, fields) => {
+            if (err)
+                throw err;
+
+            res.send(results)
+        })
+    }
 
     if (req.params.action === 'db-fetch') {
-        const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\`${query}${limiter}`;
+        const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\`${query} LIMIT 500`;
+
+        console.log(sql);
 
         connection.query(sql, (error, results, fields) => {
             if (error)
@@ -44,4 +85,4 @@ app.get('/:action', (req, res) => {
 
 app.get('/')
 
-app.listen(3000, () => console.log('Server started localhost:3000'));
+app.listen(PORT, () => console.log(`Server started localhost:${PORT}`));
