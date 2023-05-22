@@ -7,14 +7,14 @@ import CsvToArray from './src/Convert-csv.js';
 import SummaryTable from './src/Table/Summary-table.js';
 import DropdownValues from './src/Dropdown-values.js';
 import Diagram from './src/Diagram.js';
-import { CustomStorage, SecondaryStorage } from './src/Storage/Local-Storage.js';
+import CustomStorage from './src/Storage/Local-Storage.js';
 import fillStorage from './src/Storage/FillStorage.js';
 import fetchData from './src/DB/FetchDbJSON.js';
 import DBQuery from './src/DB/DBQuery.js';
+import PopUpHeadersSelect from './src/PopUpHeadersSelect.js';
 
 /* Defining storage classes instances */
 const Storage = new CustomStorage();
-const MinorStorage = new SecondaryStorage();
 
 /* HTML Elements import */
 const inputForm = document.querySelector('#input-form');
@@ -44,7 +44,7 @@ const svgDiv = document.querySelector('#svg-div');
 const diagrammDescription = document.querySelector("#diagramm-description");
 const svgElement = document.querySelector('#svg-element');
 const modeLabel = document.querySelector('#mode-label');
-
+const saveSelector = document.querySelector('#save-file-select');
 const dataSource = document.querySelector('#input-data-select');
 
 Storage.setItem('dataSourceOption',
@@ -100,7 +100,7 @@ window.addEventListener('load', () => {
 
 dbConnectBtn.addEventListener('click', async () => {
    try {
-      await DBQuery();
+      Storage.setItem('data', await fetchData('/load-fetch'));
 
       submitBtn.disabled = false;
 
@@ -120,6 +120,8 @@ dbConnectBtn.addEventListener('click', async () => {
          dbConnectionDiv.insertAdjacentHTML('beforeend', connectionCheckHTML);
 
          fillStorage();
+
+         submitBtn.click();
       }
    } catch (err) {
       const dbConnectionDiv = document.querySelector('#db-connect-div');
@@ -250,7 +252,7 @@ dataSource.addEventListener('change', () => {
             submitBtn.disabled = false;
 
             const connectionCheckHTML = `
-               <i class="fa-solid fa-check" style="color: #00b336;" id="connection-check"></i>
+               <i class="fa-solid fa-check fa-2xl" style="color: #00b336;" id="connection-check"></i>
             `
 
             dbConnectionDiv.insertAdjacentHTML('beforeend', connectionCheckHTML);
@@ -311,7 +313,8 @@ if (file) {
 }
 
 // listens to the first date change to change number of rows that will be outputed
-document.querySelector('#left-date-inp').addEventListener('change', () => {
+document.querySelector('#left-date-inp').addEventListener('change', async (e) => {
+
    // opt - one of the keys [tLogIn, tLogOut, tLastAcc]
    const select = document.getElementById('date-params');
    const opt = select.options[select.selectedIndex].value;
@@ -350,7 +353,7 @@ document.querySelector('#left-date-inp').addEventListener('change', () => {
 })
 
 // Logic as same as first date, but looks for the earliest date
-document.querySelector('#right-date-inp').addEventListener('change', () => {
+document.querySelector('#right-date-inp').addEventListener('change', async (e) => {
    const select = document.getElementById('date-params');
    const opt = select.options[select.selectedIndex].value;
 
@@ -383,8 +386,14 @@ document.querySelector('#right-date-inp').addEventListener('change', () => {
    dropdownValues = null;
 })
 
+saveSelector.addEventListener('change', () => {
+   Storage.setItem('saveOption', saveSelector.options[saveSelector.selectedIndex].value);
+   PopUpHeadersSelect();
+});
+saveSelector.removeEventListener('change', () => {});
+
 /**
- * Save button needs to save current object[]/table state to the file
+ * Save button needs to save current object[]/table state / filters / headers / filters w/ headers to the file
  * Storage.items.filters will mean filters that sorted initial array to the current state
  */
 saveButton.addEventListener('click', async () => {
@@ -394,26 +403,72 @@ saveButton.addEventListener('click', async () => {
       let arr = Storage.items.RefinedData;
       arr.push(obj);
 
-      MinorStorage.setItem('RefinedData', arr);
+      Storage.setItem('RefinedData', arr);
       arr = null;
    })
 
-   // csvContext - text for blob
-   let csvContent = '';
-   Storage.items.RefinedData.forEach(row => {
-      typeof (row) === 'object'
-         ? csvContent += Object.values(row).join(',') + '\n'
-         : csvContent += row.join(',') + '\n';
-   })
+   if (Storage.items.saveOption === 'Table') {
+      let csvContent = '';
 
-   const blob = new Blob([csvContent], { type: 'text/csv; charset=utf-8,' });
-   const objUrl = URL.createObjectURL(blob);
+      Storage.items.RefinedData.forEach(row => {
+         typeof (row) === 'object'
+            ? csvContent += Object.values(row).join(',') + '\n'
+            : csvContent += row.join(',') + '\n';
+      })
+
+      Storage.setItem('csvContent', csvContent);
+      Storage.setItem('fileType', 'Table');
+
+      csvContent = null;
+   }
+
+   else if (Storage.items.saveOption === 'Headers') {
+      Storage.setItem('csvContent', '');
+      Storage.setItem('jsonContent', JSON.stringify(Storage.items.selectedHeaders, null, 4));
+      Storage.setItem('fileType', 'Headers');
+   }
+
+   else if (Storage.items.saveOption === 'Filters') {
+      Storage.setItem('csvContent', '');
+
+      const filters = Storage.items.inputFields.map(input => {
+         if (input.value !== '')
+            return input.value;
+      }).filter(input => input !== undefined);
+
+      Storage.setItem('jsonContent', JSON.stringify(filters, null, 4));
+      Storage.setItem('fileType', 'Filters');
+   }
+
+   else if (Storage.items.saveOption === 'Headers & Filters') {
+      Storage.setItem('csvContent', '');
+
+      const filters = Storage.items.inputFields.map(input => {
+         if (input.value !== '')
+            return input.value;
+      }).filter(input => input !== undefined);
+
+      let jsonContent = {};
+
+      jsonContent = {...jsonContent, headers: Storage.items.selectedHeaders};
+      jsonContent = {...jsonContent, filters: filters};
+
+      Storage.setItem('jsonContent', JSON.stringify(jsonContent, null, 4));
+      Storage.setItem('fileType', 'Headers-and-filters');
+   }
+
+
+   Storage.items.csvContent === ''
+   ? Storage.setItem('blob', new Blob([Storage.items.jsonContent], { type: 'application/json' }))
+   : Storage.setItem('blob', new Blob([Storage.items.csvContent], { type: 'text/csv; charset=utf-8' }));
+
+
+   const objUrl = URL.createObjectURL(Storage.items.blob);
    saveButton.setAttribute('href', objUrl);
 
    const dateNow = new Date();
-   saveButton.setAttribute('download', `Filtered-table-${dateNow.getDate()}-${dateNow.getMonth()}-${dateNow.getFullYear()}-${dateNow.getHours()}-${dateNow.getMinutes()}-${dateNow.getSeconds()}`);
+   saveButton.setAttribute('download', `${Storage.items.fileType}-${dateNow.getDate()}-${dateNow.getMonth()}-${dateNow.getFullYear()}-${dateNow.getHours()}-${dateNow.getMinutes()}-${dateNow.getSeconds()}`);
 
-   csvContent = '';
    delete Storage.items.RefinedData;
 })
 saveButton.removeEventListener('click', async () => { });
@@ -440,7 +495,7 @@ reset.addEventListener('click', async (e) => {
    document.querySelector('#db-select-5').selectedIndex = 0;
 
    Storage.items.dataSourceOption === 'Datenbank'
-   ? await DBQuery()
+   ? await fetchData('/load-fetch')
    : Storage.setItem('data', [...Storage.items.staticData]);
 
    rowsAmount.innerHTML = Storage.items.staticDataLength;
@@ -556,6 +611,8 @@ filters.addEventListener('click', async (e) => {
       ? await DBQuery()
       : Storage.setItem('data', getFilters());
 
+      dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+
       Storage.items.datalists.forEach(datalist => {
          datalist.innerHTML = '';
 
@@ -574,7 +631,7 @@ filters.addEventListener('click', async (e) => {
    targetField.removeEventListener('change', async (e) => {});
 })
 
-filters.removeEventListener('click', async (e) => { });
+filters.removeEventListener('click', async (e) => {});
 
 /*****************************************************************************************************************/
 /*****************************************************************************************************************/
@@ -662,10 +719,6 @@ inputForm.addEventListener("submit", async (e) => {
       const select = document.getElementById('date-params');
       const opt = select.options[select.selectedIndex].value;
 
-      Storage.items.dataSourceOption === 'Datenbank'
-      ? await DBQuery()
-      : Storage.setItem('data', getFilters());
-
       /**
        * Check if one the datetime-local input field is empty, second datetime-local input field will be filled
        * with the earliest or the latest date
@@ -692,6 +745,10 @@ inputForm.addEventListener("submit", async (e) => {
 
          document.querySelector('#left-date-inp').value = new Date(earliestDate[opt]).toISOString().slice(0, 16);
       }
+
+      Storage.items.dataSourceOption === 'Datenbank'
+      ? await DBQuery()
+      : Storage.setItem('data', getFilters());
 
       // Number of the rows that will be outputted
       Storage.items.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.items.data.length;
@@ -791,7 +848,7 @@ inputForm.addEventListener("submit", async (e) => {
                   tableDataHTML = `
                   <td id='cell-row${i}col${j}'>
                      <blockquote
-                        contenteditable='true'
+                        contenteditable='false'
                         id='blockquote-row${i}col${j}'
                      >${Storage.items.data[i][header]}%</blockquote>
                   </td>
@@ -801,7 +858,7 @@ inputForm.addEventListener("submit", async (e) => {
                   tableDataHTML = `
                   <td id='cell-row${i}col${j}'>
                      <blockquote
-                        contenteditable='true'
+                        contenteditable='false'
                         id='blockquote-row${i}col${j}'
                      >${Storage.items.data[i][header]}</blockquote>
                   </td>
@@ -813,7 +870,7 @@ inputForm.addEventListener("submit", async (e) => {
                tableDataHTML = `
                   <td id='cell-row${i}col${j}'>
                      <blockquote
-                        contenteditable='true'
+                        contenteditable='false'
                         id='blockquote-row${i}col${j}'
                      >${Storage.items.data[i][header]}</blockquote>
                   </td>
@@ -901,8 +958,8 @@ inputForm.addEventListener("submit", async (e) => {
                 * Check which one of the date inputs empty first, so date will be added there
                 */
                Storage.items.firstDate.value === ''
-                  ? Storage.items.firstDate.value = new Date(targetCellValue).toISOString().slice(0, 16)
-                  : Storage.items.secondDate.value = new Date(targetCellValue).toISOString().slice(0, 16);
+                  ? Storage.items.firstDate.value = targetCellValue.slice(0, 16)
+                  : Storage.items.secondDate.value = targetCellValue.slice(0, 16);
             }
             else {
                /**
@@ -940,6 +997,21 @@ inputForm.addEventListener("submit", async (e) => {
             : Storage.setItem('data', getFilters());
 
             Storage.items.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.items.data.length;
+
+            let dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+
+            Storage.items.datalists.forEach(datalist => {
+               datalist.innerHTML = '';
+
+               dropdownValues.values.forEach(value => {
+                  const option = document.createElement('option');
+                  option.className = 'datalist-option';
+                  option.value = value;
+                  datalist.appendChild(option);
+               })
+            })
+
+            dropdownValues = null;
          }
 
          /**
