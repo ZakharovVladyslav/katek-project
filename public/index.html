@@ -9,6 +9,8 @@
 
    <link rel="stylesheet" href="./styles/index.css">
    <link rel="stylesheet" href="./styles/media.css">
+   <link rel="stylesheet" href="./styles/popup.css">
+
    <link rel="icon" type="image/x-icon" href="./assets/katek-favicon.ico">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
       integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
@@ -46,7 +48,7 @@
 
             <div class="row-counter-div">
                <label id="row-counter-label">Anzahl der Zeilen begrenzen:</label>
-               <input type="number" id="row-limiter">
+               <input type="number" id="row-limiter" value="800">
             </div>
 
             <select id="chooseLangId" onchange="chooseLang()">
@@ -177,19 +179,33 @@
 
 
    <div class="over-tables">
-      <p id="mode-label" style="opacity: 0;">Zellenklickmodus: </p>
-      <select id="click-toggler" style="display: none;">
-         <option id="opt1" class="ct-option">Zum Filtern hinzufügen</option>
-         <option id="opt2" class="ct-option">Zeile anzeigen</option>
-         <option id="opt3" class="ct-option">Den Wert einer Zelle ändern</option>
-      </select>
+      <div class="mode-div">
+         <p id="mode-label" style="opacity: 0;">Zellenklickmodus: </p>
+         <select id="click-toggler" style="display: none;">
+            <option id="opt1" class="ct-option">Zum Filtern hinzufügen</option>
+            <option id="opt2" class="ct-option">Zeile anzeigen</option>
+            <option id="opt3" class="ct-option">Den Wert einer Zelle ändern</option>
+         </select>
+      </div>
 
       <div class="shown-rows-counter-div" id="shown-rows-counter-div">
          <p id="real-rows-number" style="opacity: 0;">Anzahl der angezeigten Zeilen:</p>
          <p id="shown-rows-counter"></p>
       </div>
 
-      <div id="save-div" style="opacity: 0;">
+      <div id="save-div" class="save-div" style="opacity: 0;">
+         <div id="select-headers-div" style="opacity: 0;">
+            <button type="button" id="call-popup" disabled>Select headers</button>
+            <div id="table-wrapper" class="table-wrapper">
+               <table id="select-headers-table"></table>
+            </div>
+         </div>
+         <select id="save-file-select" class="save-file-select">
+            <option value="Table">Table - .csv</option>
+            <option value="Headers & Filters">Headers & Filters - .json</option>
+            <option value="Headers">Headers - .json</option>
+            <option value="Filters">Filters - .json</option>
+         </select>
          <a id="save" class="save" type="download" style="display: none;"><i class="fa-solid fa-download"></i></a>
       </div>
    </div>
