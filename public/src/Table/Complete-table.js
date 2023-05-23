@@ -22,6 +22,7 @@ export default function CompleteTable (inputArray) {
             document.querySelector('#mode-label').style.opacity = '0';
             document.querySelector('#shown-rows-counter-div').style.opacity = '0';
             document.querySelector('#save-div').style.opacity = '0';
+            document.querySelector('#countpass-counter-div').style.opacity = '0';
 
             const dataTable = document.querySelector('#data-table');
             const clickToggler = document.querySelector('#click-toggler');

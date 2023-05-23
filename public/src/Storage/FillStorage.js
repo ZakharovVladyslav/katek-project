@@ -1,6 +1,6 @@
-import CsvToArray from "../Convert-csv.js";
+import CsvToArray from "../Data/Convert-csv.js";
 import CustomStorage from "./Local-Storage.js";
-import DropdownValues from "../Dropdown-values.js";
+import DropdownValues from "../Data/Dropdown-values.js";
 const rowsAmount = document.querySelector('#rows-amount');
 
 const Storage = new CustomStorage();
@@ -12,6 +12,8 @@ export default function fillStorage() {
     */
     const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
     Storage.setItem('tableHeaders', tableHeaders)
+
+    Storage.setItem('selectedHeaders', []);
 
     /**
      * delimiterOption - in Convert-csv delimiter has delimiter by default ','
