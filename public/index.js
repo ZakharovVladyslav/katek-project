@@ -13,6 +13,7 @@ import fetchData from './src/DB/FetchDbJSON.js';
 import DBQuery from './src/DB/DBQuery.js';
 import PopUpHeadersSelect from './src/Table/PopUpHeadersSelect.js';
 import CountpassCounter from './src/Data/CountpassCounter.js';
+import LoginWindow from './src/login-form/login-window.js';
 
 /* Defining storage classes instances */
 const Storage = new CustomStorage();
@@ -50,9 +51,6 @@ const dataSource = document.querySelector('#input-data-select');
 const tableWrapper = document.querySelector('#table-wrapper');
 const countpassCounter = document.querySelector('#countpass-counter');
 
-document.querySelector('#left-date-inp').value = '2023-05-15T06:00';
-document.querySelector('#right-date-inp').value = '2023-05-15T14:00';
-
 Storage.setItem('dataSourceOption',
    dataSource.options[dataSource.selectedIndex].value
 );
@@ -77,6 +75,8 @@ submitBtn.disabled = true;
 const dbConnectBtn = document.querySelector('#db-connect');
 
 window.addEventListener('load', () => {
+   LoginWindow();
+
    Storage.setItem('inputFields', [
       document.querySelector('#filter-input-1'),
       document.querySelector('#filter-input-2'),
