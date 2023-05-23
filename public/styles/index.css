@@ -825,7 +825,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 
 .over-tables #mode-label {
-   margin: 0 10px 0 100px;
+   margin: 0 10px 0 30px;
 
    min-width: fit-content;
 }
@@ -847,17 +847,42 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .over-tables .shown-rows-counter-div {
    min-width: fit-content;
 
-   margin-right: 20em;
-
    display: flex;
    flex-direction: row;
    justify-content: center;
    align-items: center;
    gap: 5px;
+
+   padding: 0 20px;
+   margin-left: -140px;
+
+   background-color: #3e3d42;
+   border-radius: 5px;
 }
 
 .over-tables .shown-rows-counter-div #shown-rows-counter {
    margin-left: 15px;
+}
+
+.over-tables .countpass-counter-div {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-self: center;
+
+   margin-left: -140px;
+   padding: 0 20px;
+
+   background-color: #3e3d42;
+   border-radius: 5px;
+}
+
+.over-tables .countpass-counter-div .countpass-counter-wrapper {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   gap: 10px;
 }
 
 .over-tables .save-div {

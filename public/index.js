@@ -3,15 +3,16 @@
 /* Functions import from other files */
 import CompleteTable from './src/Table/Complete-table.js';
 import getFilters from './src/DB/Data-filtering.js';
-import CsvToArray from './src/Convert-csv.js';
+import CsvToArray from './src/Data/Convert-csv.js';
 import SummaryTable from './src/Table/Summary-table.js';
-import DropdownValues from './src/Dropdown-values.js';
-import Diagram from './src/Diagram.js';
+import DropdownValues from './src/Data/Dropdown-values.js';
+import Diagram from './src/Data/Diagram.js';
 import CustomStorage from './src/Storage/Local-Storage.js';
 import fillStorage from './src/Storage/FillStorage.js';
 import fetchData from './src/DB/FetchDbJSON.js';
 import DBQuery from './src/DB/DBQuery.js';
-import PopUpHeadersSelect from './src/PopUpHeadersSelect.js';
+import PopUpHeadersSelect from './src/Table/PopUpHeadersSelect.js';
+import CountpassCounter from './src/Data/CountpassCounter.js';
 
 /* Defining storage classes instances */
 const Storage = new CustomStorage();
@@ -46,6 +47,11 @@ const svgElement = document.querySelector('#svg-element');
 const modeLabel = document.querySelector('#mode-label');
 const saveSelector = document.querySelector('#save-file-select');
 const dataSource = document.querySelector('#input-data-select');
+const tableWrapper = document.querySelector('#table-wrapper');
+const countpassCounter = document.querySelector('#countpass-counter');
+
+document.querySelector('#left-date-inp').value = '2023-05-15T06:00';
+document.querySelector('#right-date-inp').value = '2023-05-15T14:00';
 
 Storage.setItem('dataSourceOption',
    dataSource.options[dataSource.selectedIndex].value
@@ -77,25 +83,25 @@ window.addEventListener('load', () => {
       document.querySelector('#filter-input-3'),
       document.querySelector('#filter-input-4'),
       document.querySelector('#filter-input-5')
-  ]);
+   ]);
 
-  Storage.setItem('datalists', [
+   Storage.setItem('datalists', [
       document.querySelector('#datalist-1'),
       document.querySelector('#datalist-2'),
       document.querySelector('#datalist-3'),
       document.querySelector('#datalist-4'),
       document.querySelector('#datalist-5')
-  ]);
+   ]);
 
-  const dbSelectors = [
+   const dbSelectors = [
       document.querySelector('#db-select-1'),
       document.querySelector('#db-select-2'),
       document.querySelector('#db-select-3'),
       document.querySelector('#db-select-4'),
       document.querySelector('#db-select-5'),
-  ];
+   ];
 
-  Storage.setItem('dbSelects', [...dbSelectors]);
+   Storage.setItem('dbSelects', [...dbSelectors]);
 })
 
 dbConnectBtn.addEventListener('click', async () => {
@@ -127,7 +133,7 @@ dbConnectBtn.addEventListener('click', async () => {
       const dbConnectionDiv = document.querySelector('#db-connect-div');
 
       if (document.querySelector('#connection-check'))
-            document.querySelector('#connection-check').remove();
+         document.querySelector('#connection-check').remove();
 
       if (document.querySelector('#connection-error'))
          document.querySelector('#connection-error').remove();
@@ -390,7 +396,7 @@ saveSelector.addEventListener('change', () => {
    Storage.setItem('saveOption', saveSelector.options[saveSelector.selectedIndex].value);
    PopUpHeadersSelect();
 });
-saveSelector.removeEventListener('change', () => {});
+saveSelector.removeEventListener('change', () => { });
 
 /**
  * Save button needs to save current object[]/table state / filters / headers / filters w/ headers to the file
@@ -450,8 +456,8 @@ saveButton.addEventListener('click', async () => {
 
       let jsonContent = {};
 
-      jsonContent = {...jsonContent, headers: Storage.items.selectedHeaders};
-      jsonContent = {...jsonContent, filters: filters};
+      jsonContent = { ...jsonContent, headers: Storage.items.selectedHeaders };
+      jsonContent = { ...jsonContent, filters: filters };
 
       Storage.setItem('jsonContent', JSON.stringify(jsonContent, null, 4));
       Storage.setItem('fileType', 'Headers-and-filters');
@@ -459,8 +465,8 @@ saveButton.addEventListener('click', async () => {
 
 
    Storage.items.csvContent === ''
-   ? Storage.setItem('blob', new Blob([Storage.items.jsonContent], { type: 'application/json' }))
-   : Storage.setItem('blob', new Blob([Storage.items.csvContent], { type: 'text/csv; charset=utf-8' }));
+      ? Storage.setItem('blob', new Blob([Storage.items.jsonContent], { type: 'application/json' }))
+      : Storage.setItem('blob', new Blob([Storage.items.csvContent], { type: 'text/csv; charset=utf-8' }));
 
 
    const objUrl = URL.createObjectURL(Storage.items.blob);
@@ -495,8 +501,8 @@ reset.addEventListener('click', async (e) => {
    document.querySelector('#db-select-5').selectedIndex = 0;
 
    Storage.items.dataSourceOption === 'Datenbank'
-   ? await fetchData('/load-fetch')
-   : Storage.setItem('data', [...Storage.items.staticData]);
+      ? await fetchData('/load-fetch')
+      : Storage.setItem('data', [...Storage.items.staticData]);
 
    rowsAmount.innerHTML = Storage.items.staticDataLength;
 
@@ -526,8 +532,8 @@ document.querySelector('#date-input').addEventListener('click', async (e) => {
          : document.querySelector('#right-date-inp').value = '';
 
       Storage.items.dataSourceOption === 'Datenbank'
-      ? await DBQuery()
-      : Storage.setItem('data', getFilters());
+         ? await DBQuery()
+         : Storage.setItem('data', getFilters());
 
       Storage.items.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.items.data.length;
 
@@ -563,8 +569,8 @@ filters.addEventListener('click', async (e) => {
       Storage.items.dbSelects[targetId - 1].selectedIndex = 0;
 
       Storage.items.dataSourceOption === 'Datenbank'
-      ? await DBQuery()
-      : Storage.setItem('data', getFilters());
+         ? await DBQuery()
+         : Storage.setItem('data', getFilters());
       Storage.items.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.items.data.length;
 
       let dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
@@ -590,48 +596,50 @@ filters.addEventListener('click', async (e) => {
    const targetNumber = targetId.slice(-1);
    const targetField = document.querySelector(`#filter-input-${targetNumber}`);
 
-   /**
-    * On input field text input array will be updated with new filters
-    * after text inputted dropdown values will be updated
-    * + amount of outputted rows will be updated
-    */
-   targetField.addEventListener('change', async (e) => {
-      let dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
-      const selectedValue = targetField.value;
-      const selectedValueHeader = dropdownValues.valueToHeaderMap[selectedValue];
+   if (targetField) {
+      /**
+       * On input field text input array will be updated with new filters
+       * after text inputted dropdown values will be updated
+       * + amount of outputted rows will be updated
+       */
+      targetField.addEventListener('change', async (e) => {
+         let dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+         const selectedValue = targetField.value;
+         const selectedValueHeader = dropdownValues.valueToHeaderMap[selectedValue];
 
-      let targetIndex = -1;
-      for (let i = 0; i < Storage.items.dbSelects[targetNumber - 1].length; i++)
-         if (Storage.items.dbSelects[targetNumber - 1].options[i].value === selectedValueHeader)
-            targetIndex = i;
+         let targetIndex = -1;
+         for (let i = 0; i < Storage.items.dbSelects[targetNumber - 1].length; i++)
+            if (Storage.items.dbSelects[targetNumber - 1].options[i].value === selectedValueHeader)
+               targetIndex = i;
 
-      Storage.items.dbSelects[targetNumber - 1].selectedIndex = targetIndex;
+         Storage.items.dbSelects[targetNumber - 1].selectedIndex = targetIndex;
 
-      Storage.items.dataSourceOption === 'Datenbank'
-      ? await DBQuery()
-      : Storage.setItem('data', getFilters());
+         Storage.items.dataSourceOption === 'Datenbank'
+            ? await DBQuery()
+            : Storage.setItem('data', getFilters());
 
-      dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+         dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 
-      Storage.items.datalists.forEach(datalist => {
-         datalist.innerHTML = '';
+         Storage.items.datalists.forEach(datalist => {
+            datalist.innerHTML = '';
 
-         dropdownValues.values.forEach(value => {
-            const option = document.createElement('option');
-            option.className = 'datalist-option';
-            option.value = value;
-            datalist.appendChild(option);
+            dropdownValues.values.forEach(value => {
+               const option = document.createElement('option');
+               option.className = 'datalist-option';
+               option.value = value;
+               datalist.appendChild(option);
+            });
          });
+
+         dropdownValues = null;
+
+         Storage.items.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.items.data.length;
       });
-
-      dropdownValues = null;
-
-      Storage.items.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.items.data.length;
-   });
-   targetField.removeEventListener('change', async (e) => {});
+      targetField.removeEventListener('change', async (e) => { });
+   }
 })
 
-filters.removeEventListener('click', async (e) => {});
+filters.removeEventListener('click', async (e) => { });
 
 /*****************************************************************************************************************/
 /*****************************************************************************************************************/
@@ -710,6 +718,8 @@ inputForm.addEventListener("submit", async (e) => {
       clickToggler.style.display = 'block';
       saveButton.style.display = 'block';
 
+      countpassCounter.innerHTML = '0';
+
       /*----------------------------------------------------------------------------------------------------------------*/
       /*----------------------------------------------------------------------------------------------------------------*/
       /*---------------------------------------    PROGRAM ENTRY POINT    ----------------------------------------------*/
@@ -747,8 +757,8 @@ inputForm.addEventListener("submit", async (e) => {
       }
 
       Storage.items.dataSourceOption === 'Datenbank'
-      ? await DBQuery()
-      : Storage.setItem('data', getFilters());
+         ? await DBQuery()
+         : Storage.setItem('data', getFilters());
 
       // Number of the rows that will be outputted
       Storage.items.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.items.data.length;
@@ -899,119 +909,126 @@ inputForm.addEventListener("submit", async (e) => {
       table.addEventListener('click', async (e) => {
          const clickOption = cellSelect.options[cellSelect.selectedIndex].value;
 
-         /**
-          * ClickOption is select html elment placed left-top from the table
-          *
-          * If clickOption is add to filters , so by clicking on any of the cells,
-          * value from the cell will be added to the input field
-          */
-         if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
-            const blockquotes = document.querySelectorAll('td blockquote');
-            blockquotes.forEach(blockquote => blockquote.contentEditable = false);
-
-            const id = e.target.id;
-            const colId = id.slice(id.indexOf('col') + 3, id.length);
-
+         if (e.target.tagName === 'BLOCKQUOTE' || e.target.tagName === 'TD') {
             /**
-             * As we have <blockquote> inside of <td>, then we need to check
-             * either we clicked on <td> or <blockquote> because if we click on
-             * <td> - we will receive innerHTML as <blockquote>...</blockquote>,
-             * but if we clicked on blockquote directly, we will receive a cell value
+             * ClickOption is select html elment placed left-top from the table
+             *
+             * If clickOption is add to filters , so by clicking on any of the cells,
+             * value from the cell will be added to the input field
              */
-            let targetCellValue = '';
-            e.target.id.includes('blockquote')
-               ? targetCellValue = e.target.innerHTML
-               // here if we click on cell we need additionaly to slice <blockquote></blockquote> to receive its innerHTML
-               : targetCellValue = e.target.innerHTML.slice(e.target.innerHTML.indexOf('>') + 1, e.target.innerHTML.indexOf('</'));
+            if (clickOption === "Add to filters" || clickOption === 'Zum Filtern hinzufügen') {
+               if (e.target.innerHTML.slice(e.target.innerHTML.indexOf('>') + 1, e.target.innerHTML.indexOf('</')) !== '') {
+                  const blockquotes = document.querySelectorAll('td blockquote');
+                  blockquotes.forEach(blockquote => blockquote.contentEditable = false);
 
-            /**
-             * Receiving target column by slicing from col + 3 to the end of the string
-             * as our cell id has a look like `cell row0col0`
-             */
-            const targetCol = e.target.id.slice(e.target.id.indexOf('col') + 3, e.target.id.length);
+                  const id = e.target.id;
+                  const colId = id.slice(id.indexOf('col') + 3, id.length);
 
-            /**
-             * Columns 13, 14 and 15 are datetime-local columns for tLogIn, tLogOut, tLastAcc
-             * So if user pressed on the date cell, it has to be added to the right place
-             */
-            if (targetCol === '13' || targetCol === '14' || targetCol === '15') {
-               const select = document.getElementById('date-params');
+                  /**
+                   * As we have <blockquote> inside of <td>, then we need to check
+                   * either we clicked on <td> or <blockquote> because if we click on
+                   * <td> - we will receive innerHTML as <blockquote>...</blockquote>,
+                   * but if we clicked on blockquote directly, we will receive a cell value
+                  */
+                  let targetCellValue = '';
+                  e.target.id.includes('blockquote')
+                     ? targetCellValue = e.target.innerHTML
+                     // here if we click on cell we need additionaly to slice <blockquote></blockquote> to receive its innerHTML
+                     : targetCellValue = e.target.innerHTML.slice(e.target.innerHTML.indexOf('>') + 1, e.target.innerHTML.indexOf('</'));
 
-               const indexMap = {
-                  '13': 0,
-                  '14': 1,
-                  '15': 2,
-               };
+                  /**
+                   * Receiving target column by slicing from col + 3 to the end of the string
+                   * as our cell id has a look like `cell row0col0`
+                  */
+                  const targetCol = e.target.id.slice(e.target.id.indexOf('col') + 3, e.target.id.length);
 
-               /**
-                * col 13 - tLogIn (selectedIndex 0 in select),
-                * col 14 - tLogOut (selectedIndex 1 in select),
-                * col 15 - tLastAcc (selectedIndex 2 in select),
-                *
-                * If user presses on the date of other key, it will change select's selectedIndex (option)
-                */
-               if (targetCol in indexMap) {
-                  select.selectedIndex = indexMap[targetCol];
-               }
+                  /**
+                   * Columns 13, 14 and 15 are datetime-local columns for tLogIn, tLogOut, tLastAcc
+                   * So if user pressed on the date cell, it has to be added to the right place
+                   */
+                  if (targetCol === '13' || targetCol === '14' || targetCol === '15') {
+                     const select = document.getElementById('date-params');
 
-               /**
-                * Check which one of the date inputs empty first, so date will be added there
-                */
-               Storage.items.firstDate.value === ''
-                  ? Storage.items.firstDate.value = targetCellValue.slice(0, 16)
-                  : Storage.items.secondDate.value = targetCellValue.slice(0, 16);
-            }
-            else {
-               /**
-                * emptyFieldIndexes checks THE FIRST EMPTY input fields
-                *
-                * F.e. if IF1 and IF3 are used, the first empty will be IF2, so value from the cell will be added there
-                * If IF1 empty, value will be added there
-                */
-               const emptyFieldIndexes = Storage.items.inputFields.map((filter, index) => {
-                  if (filter.value === '')
-                     return index;
-               }).filter(filter => filter !== undefined);
+                     const indexMap = {
+                        '13': 0,
+                        '14': 1,
+                        '15': 2,
+                     };
 
-               if (emptyFieldIndexes.length !== 0) {
-                  const targetInputField = Storage.items.inputFields[emptyFieldIndexes[0]];
-                  targetInputField.value = targetCellValue;
-                  const targetInputFieldId = targetInputField.id.slice(-1);
+                     /**
+                      * col 13 - tLogIn (selectedIndex 0 in select),
+                      * col 14 - tLogOut (selectedIndex 1 in select),
+                      * col 15 - tLastAcc (selectedIndex 2 in select),
+                      *
+                      * If user presses on the date of other key, it will change select's selectedIndex (option)
+                      */
+                     if (targetCol in indexMap) {
+                        select.selectedIndex = indexMap[targetCol];
+                     }
 
-                  const targetHeader = Storage.items.objectKeysMap.get(`${colId}`);
+                     /**
+                      * Check which one of the date inputs empty first, so date will be added there
+                      */
+                     Storage.items.firstDate.value === ''
+                        ? Storage.items.firstDate.value = targetCellValue.slice(0, 16)
+                        : Storage.items.secondDate.value = targetCellValue.slice(0, 16);
+                  }
+                  else if (targetCol === '11') {
+                     CountpassCounter(targetCellValue);
+                  }
+                  else {
+                     /**
+                      * emptyFieldIndexes checks THE FIRST EMPTY input fields
+                      *
+                      * F.e. if IF1 and IF3 are used, the first empty will be IF2, so value from the cell will be added there
+                      * If IF1 empty, value will be added there
+                      */
+                     const emptyFieldIndexes = Storage.items.inputFields.map((filter, index) => {
+                        if (filter.value === '')
+                           return index;
+                     }).filter(filter => filter !== undefined);
 
-                  let targetIndex = -1;
-                  for (let i = 0; i < Storage.items.dbSelects[targetInputFieldId].length; i++) {
-                     if (Storage.items.dbSelects[targetInputFieldId].options[i].value === targetHeader) {
-                        targetIndex = i;
-                        break;
+                     if (emptyFieldIndexes.length !== 0) {
+                        const targetInputField = Storage.items.inputFields[emptyFieldIndexes[0]];
+                        targetInputField.value = targetCellValue;
+                        const targetInputFieldId = targetInputField.id.slice(-1);
+
+                        const targetHeader = Storage.items.objectKeysMap.get(`${colId}`);
+
+                        let targetIndex = -1;
+                        for (let i = 0; i < Storage.items.dbSelects[targetInputFieldId].length; i++) {
+                           if (Storage.items.dbSelects[targetInputFieldId].options[i].value === targetHeader) {
+                              targetIndex = i;
+                              break;
+                           }
+                        }
+
+                        Storage.items.dbSelects[targetInputFieldId - 1].selectedIndex = targetIndex;
                      }
                   }
 
-                  Storage.items.dbSelects[targetInputFieldId - 1].selectedIndex = targetIndex;
+                  Storage.items.dataSourceOption === 'Datenbank'
+                     ? await DBQuery()
+                     : Storage.setItem('data', getFilters());
+
+                  Storage.items.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.items.data.length;
+
+                  let dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+
+                  Storage.items.datalists.forEach(datalist => {
+                     datalist.innerHTML = '';
+
+                     dropdownValues.values.forEach(value => {
+                        const option = document.createElement('option');
+                        option.className = 'datalist-option';
+                        option.value = value;
+                        datalist.appendChild(option);
+                     })
+                  })
+
+                  dropdownValues = null;
                }
             }
-
-            Storage.items.dataSourceOption === 'Datenbank'
-            ? await DBQuery()
-            : Storage.setItem('data', getFilters());
-
-            Storage.items.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.items.data.length;
-
-            let dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
-
-            Storage.items.datalists.forEach(datalist => {
-               datalist.innerHTML = '';
-
-               dropdownValues.values.forEach(value => {
-                  const option = document.createElement('option');
-                  option.className = 'datalist-option';
-                  option.value = value;
-                  datalist.appendChild(option);
-               })
-            })
-
-            dropdownValues = null;
          }
 
          /**
@@ -1097,8 +1114,8 @@ inputForm.addEventListener("submit", async (e) => {
             object.length = 0;
          }
          else if (clickOption === 'Change cell value' || clickOption === 'Den Wert einer Zelle ändern') {
-            //const blockquotes = document.querySelectorAll('td blockquote');
-            //blockquotes.forEach(blockquote => blockquote.contentEditable = true);
+            const blockquotes = document.querySelectorAll('td blockquote');
+            blockquotes.forEach(blockquote => blockquote.contentEditable = true);
             Storage.setItem('blockquoteEditValue', '');
 
             const blockquoteId = e.target.id.slice(e.target.id.indexOf('r'), e.target.id.length);
