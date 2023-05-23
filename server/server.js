@@ -4,9 +4,6 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-console.log(process.env);
-console.log(process.env.PORT);
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -22,8 +19,6 @@ const connection = mysql.createConnection({
 connection.connect();
 
 app.get('/:action', (req, res) => {
-    console.log(req.query);
-
     let dateQuery = '';
     let query = '';
     const keysToAvoid = ['firstDate', 'secondDate', 'dateOption'];
@@ -53,7 +48,7 @@ app.get('/:action', (req, res) => {
     }
 
     if (req.params.action === 'load-fetch') {
-        const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\` LIMIT 500`;
+        const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\` LIMIT 1000`;
 
         console.log(sql);
 
@@ -63,10 +58,8 @@ app.get('/:action', (req, res) => {
 
             res.send(results)
         })
-    }
-
-    if (req.params.action === 'db-fetch') {
-        const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\`${query} LIMIT 500`;
+    } else if (req.params.action === 'db-fetch') {
+        const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\`${query} LIMIT 1000`;
 
         console.log(sql);
 
@@ -76,10 +69,17 @@ app.get('/:action', (req, res) => {
 
             res.send(results);
         })
-    }
+    } else if (req.params.action === 'get-countpass') {
+        const sql = `SELECT \`CountPass\` from \`katek\`.\`test-500k-limes\`${query}`;
 
-    else if (req.params.action === 'fetch-query') {
+        console.log(sql);
 
+        connection.query(sql, (error, results, fields) => {
+            if (error)
+                throw error
+
+            res.send(results);
+        })
     }
 })
 
