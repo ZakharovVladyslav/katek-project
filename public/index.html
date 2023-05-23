@@ -178,7 +178,7 @@
    </section>
 
 
-   <div class="over-tables" id="over-tables">
+   <div class="over-tables">
       <div class="mode-div">
          <p id="mode-label" style="opacity: 0;">Zellenklickmodus: </p>
          <select id="click-toggler" style="display: none;">
@@ -191,13 +191,6 @@
       <div class="shown-rows-counter-div" id="shown-rows-counter-div">
          <p id="real-rows-number" style="opacity: 0;">Anzahl der angezeigten Zeilen:</p>
          <p id="shown-rows-counter"></p>
-      </div>
-
-      <div id="countpass-counter-div" class="countpass-counter-div" style="opacity: 0;">
-         <div id="countpass-counter-wrapper" class="countpass-counter-wrapper">
-            <p id="countpass-label">CountPass: <p id="countpass-counter">0</p><p id="distract-procent" style="display: none"></p></p>
-         </div>
-         <p id="countpass-error-message" style="display: none">Error</p>
       </div>
 
       <div id="save-div" class="save-div" style="opacity: 0;">
@@ -220,7 +213,8 @@
    <table id="data-table"></table>
 
    <script>
-      const optionSelector = document.getElementById('chooseLangId');
+      const option = document.getElementById('chooseLangId');
+
       const fileChoose = document.querySelector('#fc');
       const rowLimiter = document.querySelector('#row-counter-label');
       const submitBtn = document.querySelector('#submit-button');
@@ -228,6 +222,7 @@
       const resetBtn = document.querySelector('#reset');
       const fullTableBtn = document.querySelector('#full-table-button');
       const summaryRow = document.querySelector('#summary-row-toggler-label');
+      const saveFilters = document.querySelector('#save-filter-option-label');
       const realRowsNumber = document.querySelector('#real-rows-number');
       const addToFilterOption = document.querySelector('#opt1');
       const showRowOption = document.querySelector('#opt2');
@@ -240,18 +235,15 @@
       const cellMode = document.querySelector('#mode-label');
 
       function chooseLang() {
-         const option = optionSelector.options[optionSelector.selectedIndex];
-
          if (option.value === 'GE') {
-            if (fileChoose)
-               fileChoose.innerHTML = 'Datei öffnen';
-
+            fileChoose.innerHTML = 'Datei öffnen';
             rowLimiter.innerHTML = 'Anzahl der Zeilen begrenzen:';
             submitBtn.innerHTML = 'Bestätigen ';
             initialTableBtn.innerHTML = 'Ursprüngliche Tabelle';
             resetBtn.innerHTML = 'Reset';
             fullTableBtn.innerHTML = 'Komplette Tabelle';
             summaryRow.innerHTML = 'Ergebnis';
+            saveFilters.innerHTML = `Filter speichern`;
             realRowsNumber.innerHTML = 'Anzahl der angezeigten Zeilen:';
             addToFilterOption.innerHTML = 'Zum Filtern hinzufügen';
             showRowOption.innerHTML = 'Zeile anzeigen';
@@ -264,15 +256,14 @@
          }
 
          else if (option.value === 'EN') {
-            if (fileChoose)
-               fileChoose.innerHTML = 'Choose file';
-
+            fileChoose.innerHTML = 'Choose file';
             rowLimiter.innerHTML = 'Row limiter: ';
             submitBtn.innerHTML = 'Submit';
             initialTableBtn.innerHTML = 'Initial table';
             resetBtn.innerHTML = 'Reset';
             fullTableBtn.innerHTML = 'Full table';
             summaryRow.innerHTML = 'Summary row';
+            saveFilters.innerHTML = 'Save filters';
             realRowsNumber.innerHTML = 'Number of shown rows:';
             addToFilterOption.innerHTML = 'Add to filters';
             showRowOption.innerHTML = 'Show row';
@@ -285,6 +276,24 @@
          }
       };
    </script>
+      <div class="login-overlay">
+         <div class="login-modal">
+   
+            <h1 id="login-window-desc">Sign in</h1>
+   
+            <div class="login-input">
+               <label id="login">Login</label>
+               <input type="text" id="login-input">
+               <p id="password">Password</p>
+               <input type="text" id="password-input">
+   
+               <button type="button" id="login-button">Log In</button>
+            </div>
+   
+            <p id="error-login">If you have some mistakes with login, please contact administrator</p>
+   
+         </div>
+         <script src="../public/src/Login-Form/login-window.js"></script>
 </body>
 
 </html>
