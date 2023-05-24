@@ -2,7 +2,11 @@ import CustomStorage from "../Storage/Local-Storage.js";
 
 const Storage = new CustomStorage();
 
+const fullTableSection = document.querySelector('#full-table-section');
+
 export default function CompleteTable (inputArray) {
+      fullTableSection.style.display = 'block';
+
       let arr = [...Storage.items.data];
       const remove = arr.shift();
 
@@ -10,7 +14,6 @@ export default function CompleteTable (inputArray) {
       const rightArrow = document.querySelector('#right-arrow');
       const fullTable = document.querySelector('#full-table');
       const arrows = document.querySelector('#index-arrows');
-      const fullTableSection = document.querySelector('#full-table-section');
       const fullTableButton = document.querySelector('#full-table-button');
       const rowLimiter = document.querySelector('#row-limiter');
 

@@ -601,20 +601,19 @@ filters.addEventListener('click', async (e) => {
    const targetField = document.querySelector(`#filter-input-${targetNumber}`);
 
    if (targetField) {
-      /**
-       * On input field text input array will be updated with new filters
-       * after text inputted dropdown values will be updated
-       * + amount of outputted rows will be updated
-       */
-      targetField.addEventListener('change', async (e) => {
+      // Attach the 'change' listener to the targetField
+      targetField.addEventListener('change', async () => {
          let dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
          const selectedValue = targetField.value;
          const selectedValueHeader = dropdownValues.valueToHeaderMap[selectedValue];
 
          let targetIndex = -1;
-         for (let i = 0; i < Storage.items.dbSelects[targetNumber - 1].length; i++)
-            if (Storage.items.dbSelects[targetNumber - 1].options[i].value === selectedValueHeader)
+         for (let i = 0; i < Storage.items.dbSelects[targetNumber - 1].length; i++) {
+            if (Storage.items.dbSelects[targetNumber - 1].options[i].value === selectedValueHeader) {
                targetIndex = i;
+               break;
+            }
+         }
 
          Storage.items.dbSelects[targetNumber - 1].selectedIndex = targetIndex;
 
@@ -622,7 +621,11 @@ filters.addEventListener('click', async (e) => {
             ? await DBQuery()
             : Storage.setItem('data', getFilters());
 
+         console.log(dropdownValues);
+
          dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+
+         console.log(dropdownValues);
 
          Storage.items.datalists.forEach(datalist => {
             datalist.innerHTML = '';
@@ -639,11 +642,13 @@ filters.addEventListener('click', async (e) => {
 
          Storage.items.data.length === 0 ? rowsAmount.innerHTML = 0 : rowsAmount.innerHTML = Storage.items.data.length;
       });
-      targetField.removeEventListener('change', async (e) => { });
+      targetField.removeEventListener('change', async () => {});
    }
-})
+});
 
 filters.removeEventListener('click', async (e) => { });
+
+
 
 /*****************************************************************************************************************/
 /*****************************************************************************************************************/

@@ -1,6 +1,33 @@
 import CustomStorage from "../Storage/Local-Storage.js";
 
-const Storage = new CustomStorage();
+function removeSingleValues(arr) {
+      let result = [];
+      let currentHeader = null;
+      let currentValues = [];
+
+      for (let i = 0; i < arr.length; i++) {
+        let currentItem = arr[i];
+
+        if (typeof currentItem === 'string' && currentItem.startsWith('----')) {
+          // Save the current header and values
+          if (currentHeader !== null && currentValues.length > 1) {
+            result.push(currentHeader, ...currentValues);
+          }
+
+          currentHeader = currentItem;
+          currentValues = [];
+        } else {
+          currentValues.push(currentItem);
+        }
+      }
+
+      // Add the last header and values
+      if (currentHeader !== null && currentValues.length > 1) {
+        result.push(currentHeader, ...currentValues);
+      }
+
+      return result;
+}
 
 export default function DropdownValues(array, headers) {
       const resultArray = [];
@@ -31,7 +58,7 @@ export default function DropdownValues(array, headers) {
             valuesMap.set(header, arr.slice(1)); // Remove header from the array
       })
 
-      const flattenedArray = Array.from(new Set(resultArray.flat(Infinity)));
+      let flattenedArray = Array.from(new Set(resultArray.flat(Infinity)));
 
       const valueToHeaderMap = new Map();
       array.forEach(obj => {
@@ -42,6 +69,8 @@ export default function DropdownValues(array, headers) {
                   }
             }
       })
+
+      flattenedArray = removeSingleValues(flattenedArray);
 
       return {
             values: flattenedArray,
