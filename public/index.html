@@ -9,7 +9,8 @@
 
    <link rel="stylesheet" href="./styles/index.css">
    <link rel="stylesheet" href="./styles/media.css">
-   <link rel="stylesheet" href="./styles/popup.css">
+   <link rel="stylesheet" href="src/login-form/login-window.css">
+   <link rel="stylesheet" href="./src/Table/PopUpHeadersSelect.css">
 
    <link rel="icon" type="image/x-icon" href="./assets/katek-favicon.ico">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
@@ -20,21 +21,37 @@
 </head>
 
 <body>
-   <div class="login-overlay">
-      <div class="login-modal">
+   <div class="login-overlay" id="login-overlay" style="display: none;">
+      <div class="login-modal" id="login-modal">
 
-         <h1 id="login-window-desc">Sign in</h1>
+         <!--
+         <div class="profile-icon-wrapper">
+            <p class="profile-icon"><i class="fa-solid fa-user" style="color: #ffffff;"></i></p>
+         </div>
+         -->
+         <h1 id="login-window-desc">Sign in as user</h1>
 
          <div class="login-input">
-            <label id="login">Login</label>
-            <input type="text" id="login-input">
-            <p id="password">Password</p>
-            <input type="text" id="password-input">
+            <div class="login-wrapper" id="login-wrapper">
+               <i class="fa-solid fa-user" style="color: #ffffff;"></i>
+               <input type="text" id="login-input" class="login-input">
+            </div>
 
-            <button type="button" id="login-button">Log In</button>
+            <div class="password-wrapper" id="password-wrapper">
+               <i class="fa-solid fa-lock"></i>
+               <input type="text" id="password-input" class="password-input">
+            </div>
+
+            <button type="button" class="login-button" id="login-button">Log In</button>
          </div>
 
-         <p id="error-login">If you have some mistakes with login, please contact administrator</p>
+         <div id="footer" class="footer">
+            <div id="save-password-checkbox-div" class="save-password-checkbox-div">
+               <input type="checkbox" id="save-password-checkbox-input">
+               <label for="save-password-checkbox-input">Save password</label>
+            </div>
+            <p id="error-login">Forgot password?</p>
+         </div>
       </div>
    </div>
       <section class="main">
@@ -146,6 +163,7 @@
 
                <div class="submit-section">
                   <button type="submit" value="Bestätigen" id="submit-button" disabled>Bestätigen</button>
+
                   <button type="submit" value="Ursprüngliche" id="reload-table" disabled>Ursprüngliche Tabelle</button>
 
                   <button type="button" id="reset" disabled>Reset</button>
@@ -175,22 +193,10 @@
          <svg id='svg-element' width="400" height="400"
             style="display: none; margin: auto; transform: scale(1.5); margin-top: 50px;"></svg>
          <div id="labels">
-            <p id="date-range">Range</p>
          </div>
       </div>
 
       <p id="empty-message"></p>
-
-      <section id="full-table-section" class="full-table-section">
-         <div id="index-arrows" class="index-arrows" style="opacity: 0;">
-            <button type="button" id="left-arrow" class="left-arrow"><i class="fa-solid fa-chevron-left"></i></button>
-            <button type="button" id="right-arrow" class="right-arrow"><i
-                  class="fa-solid fa-chevron-right"></i></button>
-         </div>
-
-         <table id="full-table" class="full-table"></table>
-      </section>
-
 
       <div class="over-tables">
          <div class="mode-div">
@@ -215,8 +221,8 @@
          </div>
 
          <div id="save-div" class="save-div" style="opacity: 0;">
-            <div id="select-headers-div" style="opacity: 0;">
-               <button type="button" id="call-popup" disabled>Select headers</button>
+            <div id="select-headers-div" class="select-headers-div" style="opacity: 0;">
+               <button type="button" id="call-popup" class="call-popup" disabled>Select headers</button>
                <div id="table-wrapper" class="table-wrapper">
                   <table id="select-headers-table"></table>
                </div>
@@ -230,6 +236,17 @@
             <a id="save" class="save" type="download" style="display: none;"><i class="fa-solid fa-download"></i></a>
          </div>
       </div>
+
+      <section id="full-table-section" class="full-table-section">
+         <div id="index-arrows" class="index-arrows" style="opacity: 0;">
+            <button type="button" id="left-arrow" class="left-arrow"><i class="fa-solid fa-chevron-left"></i></button>
+            <button type="button" id="right-arrow" class="right-arrow"><i
+                  class="fa-solid fa-chevron-right"></i>
+            </button>
+         </div>
+
+         <table id="full-table" class="full-table"></table>
+      </section>
 
       <table id="data-table"></table>
 
@@ -297,7 +314,6 @@
             }
          };
       </script>
-
 </body>
 
 </html>

@@ -122,8 +122,6 @@ article a {
 
 #diagramm-description {
    text-align: center;
-
-   margin-top: 100px;
 }
 
 #svg-div {
@@ -226,7 +224,20 @@ article a {
 }
 
 #input-section .db-connect {
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+
    padding: 7px 15px;
+
+   cursor: pointer;
+}
+
+#input-section .db-connect:hover {
+   background-color: #00788b;
+   transition: background-color ease 0.1s;
 }
 
 #input-section #fc {
@@ -280,6 +291,7 @@ article a {
 /* ----------------------------------------------------------------------------------------------------------- */
 /* ----------------------------------------------------------------------------------------------------------- */
 
+/*
 button[type="button"] {
    border: 1px solid #00ffff;
    border-radius: 3px;
@@ -296,6 +308,7 @@ button[type="button"]:hover {
    background-color: #00788b;
    transition: background-color ease 0.2s;
 }
+*/
 
 /* ------------------------------------------------------------------------------------------------------------ */
 /* INPUT FORM - MAIN FORM ATTRIBUTE --------------------------------------------------------------------------- */
@@ -384,15 +397,27 @@ button[type="button"]:hover {
 }
 
 #reset {
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+
    padding: 10px 15px;
-   margin-top: -5px;
-   margin-bottom: -400px;
 
    min-height: 30px;
+
+   cursor: pointer;
+}
+
+#reset:hover {
+   background-color: #00ffff;
+   transition: background-color ease 0.1s;
 }
 
 #reset:disabled {
    border: 2px solid #222222;
+   border-radius: 3px;
 
    background-color: #444444;
 
@@ -409,17 +434,19 @@ button[type="button"]:hover {
    max-width: fit-content;
 }
 
-#reload-table {
-   margin-top: 13px;
+.submit-section .full-table-button {
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+
+   cursor: pointer;
 }
 
-.full-table-button {
-   margin-top: 20px;
-   margin-bottom: 0px;
-}
-
-#submit-button {
-   margin-bottom: -30px;
+.submit-section .full-table-button:hover {
+   background-color: #00788b;
+   transition: background-color ease 0.1s;
 }
 
 #submit-button:hover,
@@ -438,11 +465,9 @@ button[type="button"]:hover {
    cursor: not-allowed;
 }
 
-.summary-row-toggler-il {
+.summary-row-toggler-il,
+.pie-diagramm-toggler {
    padding: 7px 10px;
-
-   margin-top: -30px;
-   margin-bottom: -10px;
 }
 
 .summary-row-toggler-il input:disabled+label,
@@ -597,17 +622,20 @@ span {
 
 .filters div button {
    background-color: transparent;
+   transition: background-color ease 0.1s;
 
    font-size: 20px;
    height: 38px;
    width: 40px;
 
    border: 1px solid var(--border-grey);
-
+   border-radius: 3px;
+   cursor: pointer;
 }
 
 .filters div button:hover {
    background-color: #009cb4;
+   transition: background-color ease 0.1s;
 }
 
 /* -------------------------------------------------------------------------------------------*/
@@ -674,6 +702,11 @@ span {
 .left-date div button {
    font-size: 20px;
 
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border-radius: 3px;
+
    margin-top: 10px;
 
    width: 40px;
@@ -682,6 +715,14 @@ span {
    padding: 0px 3px;
 
    border: 1px solid var(--border-grey);
+
+   cursor: pointer;
+}
+
+.right-date div button:hover,
+.left-date div button:hover {
+   background-color: #009cb4;
+   transition: background-color ease 0.1s;
 }
 
 .right-date {
@@ -905,6 +946,24 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
    cursor: pointer;
 }
 
+.over-tables .save-div .select-headers-div .call-popup {
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+
+   border-radius: 3px;
+   border: 1px solid #00ffff;
+
+   cursor: pointer;
+}
+
+.over-tables .save-div .select-headers-div .call-popup:hover {
+   background-color: #00788b;
+   transition: background-color ease 0.1s;
+
+   border-radius: 3px;
+   border: 1px solid #00ffff;
+}
+
 .over-tables .save-file-select {
    background-color: transparent;
    transition: background-color ease 0.1s;
@@ -949,21 +1008,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 .over-tables .save-div button:disabled {
    cursor: default;
-}
-
-/*---------------------------------------------------------------------------------------*/
-/*LOADING CIRCLE ANIMATION --------------------------------------------------------------*/
-/*---------------------------------------------------------------------------------------*/
-
-
-@keyframes lds-roller {
-   0% {
-      transform: rotate(0deg);
-   }
-
-   100% {
-      transform: rotate(360deg);
-   }
 }
 
 /*---------------------------------------------------------------------------------------*/
@@ -1120,152 +1164,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 .full-table tbody tr:nth-child(even) {
    background-color: #cacaca;
-}
-
-.login-overlay {
-   position: absolute;
-   top: 0;
-   left: 0;
-   width: 100%;
-   height: 100%;
-   background-color: rgba(0, 0, 0, 0.5);
-   /* Semi-transparent background */
-   z-index: 999;
-   /* Adjust as needed to make it appear above other elements */
-   display: flex;
-   align-items: center;
-   justify-content: center;
-}
-
-.login-modal {
-
-   /* Style your login modal here */
-
-   background-color: #333236;
-   padding: 20px;
-   border-radius: 8px;
-   backdrop-filter: blur(500px);
-   /* Applies a blur effect to the background elements */
-
-   min-width: 500px;
-   min-height: 350px;
-}
-
-#login-window-desc {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-
-   color: #fff;
-   font-family: sans-serif;
-}
-
-#login {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-
-   color: #fff;
-   font-family: sans-serif;
-
-   position: relative;
-   right: 100px;
-   bottom: 5px;
-}
-
-
-#password {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-
-   color: #fff;
-   font-family: sans-serif;
-
-   position: relative;
-   right: 85px;
-   top: 10px;
-}
-
-#login-input {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-
-   position: relative;
-   width: 200px;
-   height: 30px;
-   left: 210px;
-
-   border: 1px solid var(--border-grey);
-   border-radius: 3px;
-}
-
-#password-input {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-
-   position: relative;
-   width: 200px;
-   height: 30px;
-   left: 210px;
-
-   border: 1px solid var(--border-grey);
-   border-radius: 3px;
-}
-
-#error-login {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-
-   padding: 10px 13px;
-
-   position: relative;
-   top: 50px;
-}
-
-#login-button {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   padding: 10px 13px;
-
-   position: relative;
-   left: 280px;
-   top: 50px;
-}
-
-#error-msg {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-
-   position: relative;
-   top: 30px;
-   padding: 5px 10px;
-
-   color: #D17711;
-   font-size: x-large;
-}
-
-.shake-animation {
-   animation: shake 0.3s ease-in-out infinite;
-}
-
-@keyframes shake {
-   25% {
-      transform: translateX(4px);
-   }
-
-   50% {
-      transform: translateX(-4px);
-   }
-
-   75% {
-      transform: translateX(4px);
-   }
 }
 
 /*-------------------------------------------------------------------------------------*/

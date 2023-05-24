@@ -50,6 +50,8 @@ const saveSelector = document.querySelector('#save-file-select');
 const dataSource = document.querySelector('#input-data-select');
 const tableWrapper = document.querySelector('#table-wrapper');
 const countpassCounter = document.querySelector('#countpass-counter');
+const logInfield = document.querySelector('#login-input');
+const passwordField = document.querySelector('#password-input');
 
 Storage.setItem('dataSourceOption',
    dataSource.options[dataSource.selectedIndex].value
@@ -75,7 +77,9 @@ submitBtn.disabled = true;
 const dbConnectBtn = document.querySelector('#db-connect');
 
 window.addEventListener('load', () => {
-   LoginWindow();
+   if (sessionStorage.getItem('login') === null) {
+      LoginWindow();
+   }
 
    Storage.setItem('inputFields', [
       document.querySelector('#filter-input-1'),
