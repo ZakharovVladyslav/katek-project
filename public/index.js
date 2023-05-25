@@ -1,19 +1,21 @@
 'use strict';
 
+import axios from 'axios';
+
 /* Functions import from other files */
-import CompleteTable from './src/Table/Complete-table.js';
-import getFilters from './src/DB/Data-filtering.js';
-import CsvToArray from './src/Data/Convert-csv.js';
-import SummaryTable from './src/Table/Summary-table.js';
-import DropdownValues from './src/Data/Dropdown-values.js';
-import Diagram from './src/Data/Diagram.js';
-import CustomStorage from './src/Storage/Local-Storage.js';
-import fillStorage from './src/Storage/FillStorage.js';
-import fetchData from './src/DB/FetchDbJSON.js';
-import DBQuery from './src/DB/DBQuery.js';
-import PopUpHeadersSelect from './src/Table/PopUpHeadersSelect.js';
-import CountpassCounter from './src/Data/CountpassCounter.js';
-import LoginWindow from './src/login-form/login-window.js';
+import CompleteTable from 'http://localhost:5173/src/Table/Complete-table.js';
+import getFilters from 'http://localhost:5173/src/DB/Data-filtering.js';
+import CsvToArray from 'http://localhost:5173/src/Data/Convert-csv.js';
+import SummaryTable from 'http://localhost:5173/src/Table/Summary-table.js';
+import DropdownValues from 'http://localhost:5173/src/Data/Dropdown-values.js';
+import Diagram from 'http://localhost:5173/src/Data/Diagram.js';
+import CustomStorage from 'http://localhost:5173/src/Storage/Local-Storage.js';
+import fillStorage from 'http://localhost:5173/src/Storage/FillStorage.js';
+import fetchData from 'http://localhost:5173/src/DB/FetchDbJSON.js';
+import DBQuery from 'http://localhost:5173/src/DB/DBQuery.js';
+import PopUpHeadersSelect from 'http://localhost:5173/src/Table/PopUpHeadersSelect.js';
+import CountpassCounter from 'http://localhost:5173/src/Data/CountpassCounter.js';
+import LoginWindow from 'http://localhost:5173/src/login-form/login-window.js';
 
 /* Defining storage classes instances */
 const Storage = new CustomStorage();
