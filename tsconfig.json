@@ -1,0 +1,43 @@
+{
+    "compilerOptions": {
+        "noEmit": true,
+        "allowImportingTsExtensions": true,
+        "outDir": "dist",
+        "target": "es2021",
+        "module": "esnext",
+        "moduleResolution": "nodenext",
+        "strict": false,
+        "noImplicitAny": false,
+        "noImplicitThis": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "allowJs": true,
+        "checkJs": true,
+        "emitDeclarationOnly": false,
+        "declaration": false,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "useDefineForClassFields": true,
+        "downlevelIteration": true,
+        "noFallthroughCasesInSwitch": true,
+        "strictPropertyInitialization": false,
+        "strictNullChecks": false,
+        "strictFunctionTypes": false,
+        "strictBindCallApply": false,
+        "noImplicitReturns": false,
+        "allowUnreachableCode": true
+    },
+    "include": [
+        "src",
+        "server"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ],
+    "ts-node": {
+        "esm": true,
+        "experimentalSpecifierResolution": "node"
+    }
+}
