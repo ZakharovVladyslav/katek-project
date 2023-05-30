@@ -37,11 +37,11 @@ export default function DropdownValues(array: object[], headers: string[]) {
 		valuesMap.set(`${header}`, [`---- ${header} ----`]);
 	});
 
-	array.forEach((obj: object) => {
+	array.forEach((obj: Record<string, any>) => {
 		for (const key of Object.keys(obj)) {
 			if (headers.includes(key) && !timeKeys.includes(key)) {
 				const arr = valuesMap.get(`${key}`);
-				arr.push(obj[key]);
+				arr?.push(obj[key]);
 			}
 		}
 	});
@@ -58,7 +58,7 @@ export default function DropdownValues(array: object[], headers: string[]) {
 	let flattenedArray: string[] = Array.from(new Set(resultArray.flat(Infinity)));
 
 	const valueToHeaderMap: Map<string | number, string | number> = new Map();
-	array.forEach((obj: object) => {
+	array.forEach((obj: Record<string, any>) => {
 		for (const key of Object.keys(obj)) {
 			if (headers.includes(key) && !timeKeys.includes(key)) {
 				const value: string | number = obj[key];

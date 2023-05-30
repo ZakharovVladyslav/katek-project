@@ -1,87 +1,84 @@
-import CustomStorage from "../Storage/Local-Storage.js"
+import CustomStorage from '../Storage/Local-Storage.js';
 
 const Storage = new CustomStorage();
 
 export default function SummaryTable() {
-    ;
-    const toggleCheckboxInput: HTMLInputElement | null = document.querySelector('#summary-row-toggler-input');
-    const table: HTMLTableElement | null = document.querySelector('#summary-table');
-    const thead: HTMLTableSectionElement = document.createElement('thead');
-    const tbody: HTMLTableSectionElement = document.createElement('tbody');
 
-    toggleCheckboxInput?.addEventListener('change', e => {
-        let array: object[] = [...Storage.items.data];
+	const toggleCheckboxInput: HTMLInputElement | null = document.querySelector('#summary-row-toggler-input');
+	const table: HTMLTableElement | null = document.querySelector('#summary-table');
+	const thead: HTMLTableSectionElement = document.createElement('thead');
+	const tbody: HTMLTableSectionElement = document.createElement('tbody');
 
-        if (!toggleCheckboxInput.checked) {
-            table.style.maxWidth = '100px';
-            table.innerHTML = '';
-            thead.innerHTML = '';
-            tbody.innerHTML = '';
+	const handleToggleCheckboxInputChange = () => {
+		let array: object[] | null = [...Storage.items.data];
 
-            const keys: string[] = ['tLatenz', 'tLatenzSumme', 'tCycle', 'tProc', 'FPY', 'CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
+		if (!toggleCheckboxInput?.checked) {
+			table?.setAttribute('style', 'max-widht: 100px;');
+			table?.setAttribute('innerHTML', '');
 
-            const values: string[][] = array.map((object: object) => {
-                const objectValues: string[] = [];
+			const keys: string[] = ['tLatenz', 'tLatenzSumme', 'tCycle', 'tProc', 'FPY', 'CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
 
-                keys.forEach((key: string) => {
-                    objectValues.push(object[key]);
-                })
+			const values: string[][] = array.map((object: { [key: string]: any }) => {
+				const objectValues: string[] = [];
 
-                return objectValues;
-            })
+				keys.forEach((key: string) => {
+					objectValues.push(object[key]);
+				});
 
-            let zeros: any[] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+				return objectValues;
+			});
 
-            for (let i = 0; i < values.length; i++)
-                for (let j = 0; j < values[i].length; j++)
-                    if (values[i][j] !== undefined && values[i][j] != '0')
-                        zeros[j] += parseFloat(values[i][j]);
+			const zeros: any[] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-            const countPass: number = zeros[5];
-            const countFail: number = zeros[6];
+			for (let i = 0; i < values.length; i++)
+				for (let j = 0; j < values[i].length; j++)
+					if (values[i][j] !== undefined && values[i][j] != '0')
+						zeros[j] += parseFloat(values[i][j]);
 
-            const FPY: string = `${((countPass * 100) / (countPass + countFail)).toPrecision(5)}%`;
+			const countPass: number = zeros[5];
+			const countFail: number = zeros[6];
 
-            zeros[4] = FPY;
+			const FPY = `${((countPass * 100) / (countPass + countFail)).toPrecision(5)}%`;
 
-            const keysRow: HTMLTableRowElement = document.createElement('tr');
-            keys.forEach((key: string) => {
-                let keyHeader: HTMLTableCellElement = document.createElement('th');
+			zeros[4] = FPY;
 
-                keyHeader.innerHTML = key;
+			const keysRow: HTMLTableRowElement = document.createElement('tr');
+			keys.forEach((key: string) => {
+				const keyHeader: HTMLTableCellElement = document.createElement('th');
 
-                keysRow.appendChild(keyHeader);
-            })
+				keyHeader.innerHTML = key;
 
-            const valuesRow: HTMLTableRowElement = document.createElement('tr');
-            zeros.forEach((value: any) => {
-                const valueCell: HTMLTableCellElement = document.createElement('td');
+				keysRow.appendChild(keyHeader);
+			});
 
-                if (typeof value === 'number' && Number.isInteger(value))
-                    valueCell.innerHTML = value.toString();
-                else if (typeof value === 'number')
-                    valueCell.innerHTML = value.toFixed(2);
-                else if (typeof value === 'string')
-                    valueCell.innerHTML = value;
+			const valuesRow: HTMLTableRowElement = document.createElement('tr');
+			zeros.forEach((value: any) => {
+				const valueCell: HTMLTableCellElement = document.createElement('td');
 
-                valuesRow.appendChild(valueCell);
-            })
+				if (typeof value === 'number' && Number.isInteger(value))
+					valueCell.innerHTML = value.toString();
+				else if (typeof value === 'number')
+					valueCell.innerHTML = value.toFixed(2);
+				else if (typeof value === 'string')
+					valueCell.innerHTML = value;
 
-            thead.appendChild(keysRow);
-            tbody.appendChild(valuesRow);
+				valuesRow.appendChild(valueCell);
+			});
 
-            table.appendChild(thead);
-            table.appendChild(tbody);
+			thead?.appendChild(keysRow);
+			tbody?.appendChild(valuesRow);
 
-        }
-        else {
-            table.innerHTML = '';
-            thead.innerHTML = '';
-            tbody.innerHTML = '';
-            table.style.maxWidth = '0';
-        }
+			table?.appendChild(thead);
+			table?.appendChild(tbody);
 
-        array = null;
-    })
-    toggleCheckboxInput?.removeEventListener('change', e => { });
+		}
+		else {
+			table?.setAttribute('innerHTML', '');
+			table?.setAttribute('style', 'max-width: 0;');
+		}
+
+		array = null;
+	};
+	toggleCheckboxInput?.addEventListener('change', handleToggleCheckboxInputChange);
+	toggleCheckboxInput?.removeEventListener('change', handleToggleCheckboxInputChange);
 }

@@ -9,7 +9,7 @@ export default async function DBQuery() {
 	if (Storage.items.limiter === undefined)
 		Storage.setItem('limiter', 1000);
 
-	let queryObjects: object[] = [];
+	let queryObjects: object[] | null = [];
 	let args = '';
 
 	const usedInputFields: HTMLSelectElement[] = Storage.items.inputFields.map((field: HTMLInputElement) => {
@@ -18,32 +18,30 @@ export default async function DBQuery() {
 	}).filter((field: HTMLSelectElement | undefined) => field !== undefined);
 
 	if (Storage.items.firstDate.value && Storage.items.secondDate.value) {
-		const dateOption: string = dateOptionSelector?.options[dateOptionSelector?.selectedIndex]?.value;
+		const dateOption: string | undefined = dateOptionSelector?.options[dateOptionSelector?.selectedIndex]?.value;
 
 		Storage.setItem('firstDateQuery', `${Storage.items.firstDate.value.replace('T', ' ')}.00.000`);
 		Storage.setItem('secondDateQuery', `${Storage.items.secondDate.value.replace('T', ' ')}.00.000`);
 
 		queryObjects.push(
-			{ dateOption: dateOption},
+			{ dateOption: dateOption },
 			{ firstDate: Storage.items.firstDateQuery },
 			{ secondDate: Storage.items.secondDateQuery }
 		);
 	}
 
 	if (usedInputFields.length > 0) {
-		const usedDbSelects: HTMLSelectElement[] = usedInputFields.map((_, index: number) => {
-			return document.querySelector(`#db-select-${index + 1}`);
-		});
+		const usedDbSelects: HTMLSelectElement[] = Array.from(document.querySelectorAll<HTMLSelectElement>('[id^="db-select-"]'));
 
 		usedInputFields.forEach((field: HTMLSelectElement | null, index: number) => {
 			const dbSelectOptionValue: string = usedDbSelects[index].options[usedDbSelects[index].selectedIndex].value;
 
-			queryObjects.push({ [`${dbSelectOptionValue}`]: field.value });
+			queryObjects?.push({ [`${dbSelectOptionValue}`]: field?.value });
 		});
 	}
 
 	queryObjects.forEach((object: object, index: number) => {
-		if (index !== queryObjects.length - 1) {
+		if (queryObjects && index !== queryObjects.length - 1) {
 			for (const [key, value] of Object.entries(object))
 				args += `${key}=${value}&`;
 		}

@@ -20,8 +20,8 @@ app.get('/:action', (req, res) => {
 	let query = '';
 	const keysToAvoid = ['firstDate', 'secondDate', 'dateOption'];
 
-	let sqlQueryParams: string[] | null = null;
-	sqlQueryParams = Object.entries(req.query).map(([key, value]) => {
+
+	const sqlQueryParams = Object.entries(req.query).map(([key, value]) => {
 		if (!keysToAvoid.includes(key))
 			return `${key}='${value}'`;
 	}).filter(param => param !== undefined);

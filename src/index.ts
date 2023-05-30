@@ -15,7 +15,8 @@ import fetchData from './DB/FetchDbJSON.ts';
 import DBQuery from './DB/DBQuery.ts';
 import PopUpHeadersSelect from './Table/PopUpHeadersSelect.ts';
 import CountpassCounter from './Data/CountpassCounter.ts';
-import LoginWindow from './Login-form/Login-window.ts';
+import LoginWindow from './login-form/Login-window.ts';
+import { FullDataInterface } from './types.ts';
 
 /* Defining storage classes instances */
 const Storage = new CustomStorage();
@@ -52,21 +53,21 @@ const dataSource: HTMLSelectElement | null = document.querySelector('#input-data
 const countpassCounter: HTMLParagraphElement | null = document.querySelector('#countpass-counter');
 
 Storage.setItem('dataSourceOption',
-	dataSource.options[dataSource.selectedIndex].value
+	dataSource?.options[dataSource?.selectedIndex]?.value
 );
 
 /* Initial styles changes for HTML Elements that will appear only after submit */
-fullTableSection.style.opacity = '0';
-saveDiv.style.opacity = '0';
-realRowsNumber.style.opacity = '0';
-shownRowsCounter.style.opacity = '0';
-shownRowsCounterDiv.style.opacity = '0';
-modeLabel.style.opacity = '0';
-clickToggler.style.display = 'none';
-saveButton.style.display = 'none';
+fullTableSection?.setAttribute('opacity', '0');
+saveDiv?.setAttribute('opacity', '0');
+realRowsNumber?.setAttribute('opacity', '0');
+shownRowsCounter?.setAttribute('opacity', '0');
+shownRowsCounterDiv?.setAttribute('opacity', '0');
+modeLabel?.setAttribute('opacity', '0');
+clickToggler?.setAttribute('display', 'none');
+saveButton?.setAttribute('display', 'none');
 
 /* If file is not inputted, submit button is not able to be pressed */
-submitBtn.disabled = true;
+submitBtn?.setAttribute('disabled', 'true');
 
 /*****************************************************************************************************************/
 /*----------------------------------------- SEPARATE EVENT LISTENERS --------------------------------------------*/
@@ -80,71 +81,71 @@ window.addEventListener('load', () => {
 	}
 
 	Storage.setItem('inputFields', [
-		document.querySelector('#filter-input-1'),
-		document.querySelector('#filter-input-2'),
-		document.querySelector('#filter-input-3'),
-		document.querySelector('#filter-input-4'),
-		document.querySelector('#filter-input-5')
+		document.querySelector('#filter-input-1') as HTMLInputElement,
+		document.querySelector('#filter-input-2') as HTMLInputElement,
+		document.querySelector('#filter-input-3') as HTMLInputElement,
+		document.querySelector('#filter-input-4') as HTMLInputElement,
+		document.querySelector('#filter-input-5') as HTMLInputElement
 	] as HTMLInputElement[]);
 
 	Storage.setItem('datalists', [
-		document.querySelector('#datalist-1'),
-		document.querySelector('#datalist-2'),
-		document.querySelector('#datalist-3'),
-		document.querySelector('#datalist-4'),
-		document.querySelector('#datalist-5')
+		document.querySelector('#datalist-1') as HTMLDataListElement,
+		document.querySelector('#datalist-2') as HTMLDataListElement,
+		document.querySelector('#datalist-3') as HTMLDataListElement,
+		document.querySelector('#datalist-4') as HTMLDataListElement,
+		document.querySelector('#datalist-5') as HTMLDataListElement
 	] as HTMLDataListElement[]);
 
 	const dbSelectors: HTMLSelectElement[] = [
-		document.querySelector('#db-select-1'),
-		document.querySelector('#db-select-2'),
-		document.querySelector('#db-select-3'),
-		document.querySelector('#db-select-4'),
-		document.querySelector('#db-select-5'),
+		document.querySelector('#db-select-1') as HTMLSelectElement,
+		document.querySelector('#db-select-2') as HTMLSelectElement,
+		document.querySelector('#db-select-3') as HTMLSelectElement,
+		document.querySelector('#db-select-4') as HTMLSelectElement,
+		document.querySelector('#db-select-5') as HTMLSelectElement,
 	];
 
 	Storage.setItem('dbSelects', [...dbSelectors]);
 });
 
-dbConnectBtn.addEventListener('click', async () => {
+dbConnectBtn?.addEventListener('click', async () => {
 	try {
 		Storage.setItem('data', await fetchData('/load-fetch') as object[]);
 
-		submitBtn.disabled = false;
+		submitBtn?.setAttribute('disabled', 'true');
 
 		if (Storage.items.data) {
 			const dbConnectionDiv: HTMLDivElement | null = document.querySelector('#db-connect-div');
 
 			if (document.querySelector('#connection-check'))
-				document.querySelector('#connection-check').remove();
+				document.querySelector('#connection-check')?.remove();
 
 			if (document.querySelector('#connection-error'))
-				document.querySelector('#connection-error').remove();
+				document.querySelector('#connection-error')?.remove();
 
 			const connectionCheckHTML = `
             <i class="fa-solid fa-check fa-2xl" style="color: #00b336;" id="connection-check"></i>
          `;
 
-			dbConnectionDiv.insertAdjacentHTML('beforeend', connectionCheckHTML);
+			dbConnectionDiv?.insertAdjacentHTML('beforeend', connectionCheckHTML);
 
 			fillStorage();
 
-			submitBtn.click();
+			submitBtn?.click();
 		}
 	} catch (err) {
 		const dbConnectionDiv: HTMLDivElement | null = document.querySelector('#db-connect-div');
 
 		if (document.querySelector('#connection-check'))
-			document.querySelector('#connection-check').remove();
+			document.querySelector('#connection-check')?.remove();
 
 		if (document.querySelector('#connection-error'))
-			document.querySelector('#connection-error').remove();
+			document.querySelector('#connection-error')?.remove();
 
 		const connectionCheckHTML = `
          <i class="fa-solid fa-xmark fa-2xl" style="color: #f00000;" id="connection-error"></i>
       `;
 
-		dbConnectionDiv.insertAdjacentHTML('beforeend', connectionCheckHTML);
+		dbConnectionDiv?.insertAdjacentHTML('beforeend', connectionCheckHTML);
 
 		setTimeout(() => {
 			const connectionCheckElement = document.getElementById('connection-error');
@@ -156,16 +157,16 @@ dbConnectBtn.addEventListener('click', async () => {
 		console.log(err);
 	}
 });
-dbConnectBtn.removeEventListener('click', () => { });
+dbConnectBtn?.removeEventListener('click', () => { });
 
 
-dataSource.addEventListener('change', () => {
+dataSource?.addEventListener('change', () => {
 	Storage.setItem('dataSourceOption', dataSource.options[dataSource.selectedIndex].value as string);
 
 	const fileInputSection: HTMLDivElement | null = document.querySelector('#file-input-section');
 
 	if (Storage.items.dataSourceOption === 'Datei') {
-		fileInputSection.innerHTML = '';
+		fileInputSection?.setAttribute('innerHTML', '');
 
 		const html = `
          <select id="delimiter-selection">
@@ -178,48 +179,47 @@ dataSource.addEventListener('change', () => {
          <p id="chosen-file"></p>
       `;
 
-		fileInputSection.insertAdjacentHTML('beforeend', html);
+		fileInputSection?.insertAdjacentHTML('beforeend', html);
 
-		const file: HTMLInputElement = document.querySelector('#file-choose');
-		const chosenFile: HTMLParagraphElement = document.querySelector('#chosen-file');
+		const file: HTMLInputElement | null = document.querySelector('#file-choose');
+		const chosenFile: HTMLParagraphElement | null = document.querySelector('#chosen-file');
 
-		if (file) {
+		if (file && file.files && file.files.length > 0) {
 			file?.addEventListener('input', () => {
 				// As file inputted, submit button become active and clickable
-				submitBtn.disabled = false;
+				submitBtn?.setAttribute('disabled', 'true');
 
 				/**
-             * Receive file name and put it to the site
-             */
+			 * Receive file name and put it to the site
+			 */
 				const arrFromFileName: string[] = file?.value.replaceAll('\\', ',').split(',');
 
-				chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1];
+				chosenFile?.setAttribute('innerHTML', arrFromFileName[arrFromFileName.length - 1]);
 
 				// FileReader will read file data as text
 				const fileReader: FileReader = new FileReader();
 
 				/**
-             *  file.files - object that contains data about the file from input
-             *  file.files[0] - file name
-            */
-				const inputFileData = file.files[0];
+			 *  file.files - object that contains data about the file from input
+			 *  file.files[0] - file name
+			*/
 				fileReader.addEventListener('load', (e) => {
 					/**
-                * e.target.result returns the whole data from the file. In this case in text
-                * After text received, it stores in the Storage as inputText
-                */
-					const text: string | ArrayBuffer = e.target.result;
+				* e.target.result returns the whole data from the file. In this case in text
+				* After text received, it stores in the Storage as inputText
+				*/
+					const target = e.target;
+
+					const text: string | ArrayBuffer | null | undefined = target?.result;
 					Storage.setItem('inputText', text as string | ArrayBuffer);
 
 					const delimiterSelection: HTMLSelectElement | null = document.querySelector('#delimiter-selection');
 
-					let delimiterOption: string | null = null;
-					if (delimiterSelection)
-						delimiterOption = delimiterSelection?.options[delimiterSelection?.selectedIndex]?.value;
+					const delimiterOption: string | undefined = delimiterSelection?.options[delimiterSelection?.selectedIndex]?.value;
 
 					/**
-                * Data will be stored as a result object[] from .csv text
-                */
+					* Data will be stored as a result object[] from .csv text
+					*/
 					Storage.setItem('data', CsvToArray(Storage.items.inputText, delimiterOption).filter((obj) => {
 						return !Object.values(obj).includes(undefined);
 					}));
@@ -229,14 +229,16 @@ dataSource.addEventListener('change', () => {
 				fileReader.removeEventListener('load', (e) => { });
 
 				// Set fileReader to read data from .csv file as text
-				fileReader.readAsText(inputFileData);
+				if (file.files)
+					fileReader.readAsText(file.files[0]);
 			});
 			file.removeEventListener('input', (e) => { });
 		}
 	}
 	else if (Storage.items.dataSourceOption === 'Datenbank') {
-		fileInputSection.innerHTML = '';
-		dataTable.innerHTML = '';
+		fileInputSection?.setAttribute('innerHTML', '');
+		dataTable?.setAttribute('innerHTML', '');
+
 
 		const html = `
          <div id="db-connect-div" class="db-connect-div">
@@ -248,66 +250,65 @@ dataSource.addEventListener('change', () => {
          </div>
       `;
 
-		fileInputSection.insertAdjacentHTML('beforeend', html);
+		fileInputSection?.insertAdjacentHTML('beforeend', html);
 
 		const dbConnectBtn: HTMLButtonElement | null = document.querySelector('#db-connect');
 		const dbConnectionDiv: HTMLDivElement | null = document.querySelector('#db-connect-div');
 
-		dbConnectBtn.addEventListener('click', async () => {
+		dbConnectBtn?.addEventListener('click', async () => {
 			try {
 				await DBQuery();
 
-				submitBtn.disabled = false;
+				submitBtn?.setAttribute('disabled', 'false');
 
 				const connectionCheckHTML = `
                <i class="fa-solid fa-check fa-2xl" style="color: #00b336;" id="connection-check"></i>
             `;
 
-				dbConnectionDiv.insertAdjacentHTML('beforeend', connectionCheckHTML);
+				dbConnectionDiv?.insertAdjacentHTML('beforeend', connectionCheckHTML);
 
 				fillStorage();
 			} catch (err) {
 				console.log(err);
 			}
 		});
-		dbConnectBtn.removeEventListener('click', () => { });
+		dbConnectBtn?.removeEventListener('click', () => { });
 	}
 });
 
-dataSource.removeEventListener('change', () => { });
+dataSource?.removeEventListener('change', () => { });
 
 const file: HTMLInputElement | null = document.querySelector('#file-choose');
 const chosenFile: HTMLParagraphElement | null = document.querySelector('#chosen-file');
 
 if (file) {
 	/**
-    * Event listens file on input to receive input data from the file
-    */
+	* Event listens file on input to receive input data from the file
+	*/
 	file.addEventListener('input', () => {
 		// As file inputted, submit button become active and clickable
-		submitBtn.disabled = false;
+		submitBtn?.setAttribute('disabled', 'false');
 
 		/**
-       * Receive file name and put it to the site
-       */
+	   * Receive file name and put it to the site
+	   */
 		const arrFromFileName: string[] = file.value.replaceAll('\\', ',').split(',');
 
-		chosenFile.innerHTML = arrFromFileName[arrFromFileName.length - 1];
+		chosenFile?.setAttribute('innerHTML', arrFromFileName[arrFromFileName.length - 1]);
 
 		// FileReader will read file data as text
 		const fileReader: FileReader = new FileReader();
 
 		/**
-       *  file.files - object that contains data about the file from input
-       *  file.files[0] - file name
-      */
-		const inputFileData = file.files[0];
+	   *  file.files - object that contains data about the file from input
+	   *  file.files[0] - file name
+	  */
 		fileReader.addEventListener('load', (e) => {
 			/**
-          * e.target.result returns the whole data from the file. In this case in text
-          * After text received, it stores in the Storage as inputText
-          */
-			const text: string | ArrayBuffer = e.target.result;
+		  * e.target.result returns the whole data from the file. In this case in text
+		  * After text received, it stores in the Storage as inputText
+		  */
+			const text: string | ArrayBuffer | null | undefined = e.target?.result;
 			Storage.setItem('inputText', text as string | ArrayBuffer);
 
 			fillStorage();
@@ -315,41 +316,50 @@ if (file) {
 		fileReader.removeEventListener('load', (e) => { });
 
 		// Set fileReader to read data from .csv file as text
-		fileReader.readAsText(inputFileData);
+		if (file.files)
+			fileReader.readAsText(file.files[0]);
 	});
 	file.removeEventListener('input', (e) => { });
 }
 
 // listens to the first date change to change number of rows that will be outputed
-document.querySelector<HTMLSelectElement | null>('#left-date-inp').addEventListener('change', async (e) => {
+document.querySelector<HTMLSelectElement>('#left-date-inp')?.addEventListener('change', async (e) => {
 
 	// opt - one of the keys [tLogIn, tLogOut, tLastAcc]
-	const select = document.querySelector<HTMLSelectElement | null>('#date-params');
-	const opt = select.options[select.selectedIndex].value;
+	const select: HTMLSelectElement | null = document?.querySelector('#date-params');
+	const opt: string | undefined = select?.options[select?.selectedIndex]?.value;
 
 	if (Storage.items.secondDate.value === '') {
 		/**
-       * Looks for the latest date
-       * takes first object's key opt as initial value and checks if next is bigger or not
-       */
-		const latestDate = Storage.items.data.reduce((latest: Date, current: Date) => {
-			const currentDate: Date = new Date(current[opt]);
-			return currentDate > latest ? currentDate : latest;
-		}, new Date(Storage.items.data[0][opt]));
+	   * Looks for the latest date
+	   * takes first object's key opt as initial value and checks if next is bigger or not
+	   */
+		if (Storage.items.secondDate.value === '') {
+			if (opt) {
+				const latestDate = Storage.items.data.reduce((latest: Date, current: Record<string, any>) => {
+					const currentDate: Date = new Date(current[opt]);
+					return currentDate > latest ? currentDate : latest;
+				}, new Date(Storage.items.data[0][opt]));
 
-		document.querySelector<HTMLInputElement | null>('#right-date-inp').value = latestDate.toISOString().slice(0, 16);
+				const rightDateInput = document.querySelector<HTMLInputElement>('#right-date-inp');
+				if (rightDateInput) {
+					rightDateInput.value = latestDate.toISOString().slice(0, 16);
+				}
+			}
+		}
+
 	}
 
 	Storage.setItem('data', getFilters() as object[]);
 
-	rowsAmount.innerHTML = Storage.items.data.length;
+	rowsAmount?.setAttribute('innerHTML', Storage.items.data.length);
 
-	let dropdownValues: { values: string[], valueToHeaderMap: object } = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+	let dropdownValues: { values: string[], valueToHeaderMap: object } | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 
 	Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
 		datalist.innerHTML = '';
 
-		dropdownValues.values.forEach((value: string) => {
+		dropdownValues?.values.forEach((value: string) => {
 			const option = document.createElement('option');
 			option.className = 'datalist-option';
 			option.value = value;
@@ -361,29 +371,35 @@ document.querySelector<HTMLSelectElement | null>('#left-date-inp').addEventListe
 });
 
 // Logic as same as first date, but looks for the earliest date
-document.querySelector('#right-date-inp').addEventListener('change', async (e) => {
-	const select = document.querySelector<HTMLSelectElement | null>('date-params');
+document.querySelector('#right-date-inp')?.addEventListener('change', async (e) => {
+	const select: HTMLSelectElement | null = document.querySelector('date-params');
 	const opt = select?.options[select?.selectedIndex]?.value;
 
-	if (Storage.items.firstDate.value === '') {
-		const earliestDate = Storage.items.data.reduce((earliest: Date, current: Date) => {
-			const currentDate = new Date(current[opt]);
-			return currentDate < earliest ? currentDate : earliest;
-		}, new Date(Storage.items.data[0][opt]));
+	if (Storage.items.secondDate.value === '') {
+		if (opt) {
+			const latestDate = Storage.items.data.reduce((latest: Date, current: Record<string, any>) => {
+				const currentDate: Date = new Date(current[opt]);
+				return currentDate < latest ? currentDate : latest;
+			}, new Date(Storage.items.data[0][opt]));
 
-		document.querySelector<HTMLInputElement | null>('#left-date-inp').value = earliestDate.toISOString().slice(0, 16);
+			const rightDateInput = document.querySelector<HTMLInputElement>('#left-date-inp');
+			if (rightDateInput) {
+				rightDateInput.value = latestDate.toISOString().slice(0, 16);
+			}
+		}
 	}
+
 
 	Storage.setItem('data', getFilters() as object[]);
 
-	rowsAmount.innerHTML = Storage.items.data.length;
+	rowsAmount?.setAttribute('innerHTML', Storage.items.data.length);
 
-	let dropdownValues: { values: string[], valueToHeaderMap: object } = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+	let dropdownValues: { values: string[], valueToHeaderMap: object } | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 
 	Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
 		datalist.innerHTML = '';
 
-		dropdownValues.values.forEach((value: string) => {
+		dropdownValues?.values.forEach((value: string) => {
 			const option = document.createElement('option');
 			option.className = 'datalist-option';
 			option.value = value;
@@ -394,29 +410,29 @@ document.querySelector('#right-date-inp').addEventListener('change', async (e) =
 	dropdownValues = null;
 });
 
-saveSelector.addEventListener('change', () => {
+saveSelector?.addEventListener('change', () => {
 	Storage.setItem('saveOption', saveSelector.options[saveSelector.selectedIndex].value as string);
 	PopUpHeadersSelect();
 });
-saveSelector.removeEventListener('change', () => { });
+saveSelector?.removeEventListener('change', () => { });
 
 /**
  * Save button needs to save current object[]/table state / filters / headers / filters w/ headers to the file
  * Storage.items.filters will mean filters that sorted initial array to the current state
  */
-saveButton.addEventListener('click', async () => {
+saveButton?.addEventListener('click', async () => {
 	Storage.setItem('RefinedData', [[...Storage.items.allHeaders]] as string[][]);
 
 	Storage.items.data.forEach((obj: object) => {
-		let arr: object[] = Storage.items.RefinedData;
-		arr.push(obj);
+		let arr: object[] | null = Storage.items.RefinedData;
+		arr?.push(obj);
 
 		Storage.setItem('RefinedData', arr as object[]);
 		arr = null;
 	});
 
 	if (Storage.items.saveOption === 'Table') {
-		let csvContent = '';
+		let csvContent: string | null = '';
 
 		Storage.items.RefinedData.forEach((row: object) => {
 			csvContent += Object.values(row).join(',') + '\n';
@@ -438,7 +454,7 @@ saveButton.addEventListener('click', async () => {
 		Storage.setItem('csvContent', '' as string);
 
 		const filters = Storage.items.inputFields.map((input: HTMLInputElement | null) => {
-			if (input.value !== '')
+			if (input && input.value !== '')
 				return input.value;
 		}).filter((input: HTMLInputElement) => input !== undefined);
 
@@ -477,34 +493,34 @@ saveButton.addEventListener('click', async () => {
 
 	delete Storage.items.RefinedData;
 });
-saveButton.removeEventListener('click', async () => { });
+saveButton?.removeEventListener('click', async () => { });
 
 /**
  * On click reset all input fields will be cleared and number of rows will be static data length
  */
-resetBtn.addEventListener('click', async (e) => {
+resetBtn?.addEventListener('click', async (e) => {
 	e.preventDefault();
 
-	document.querySelector<HTMLInputElement>('#filter-input-1').value = '';
-	document.querySelector<HTMLInputElement>('#filter-input-2').value = '';
-	document.querySelector<HTMLInputElement>('#filter-input-3').value = '';
-	document.querySelector<HTMLInputElement>('#filter-input-4').value = '';
-	document.querySelector<HTMLInputElement>('#filter-input-5').value = '';
+	document.querySelector<HTMLInputElement>('#filter-input-1')?.setAttribute('value', '');
+	document.querySelector<HTMLInputElement>('#filter-input-2')?.setAttribute('value', '');
+	document.querySelector<HTMLInputElement>('#filter-input-3')?.setAttribute('value', '');
+	document.querySelector<HTMLInputElement>('#filter-input-4')?.setAttribute('value', '');
+	document.querySelector<HTMLInputElement>('#filter-input-5')?.setAttribute('value', '');
 
 	Storage.items.firstDate.value = '';
 	Storage.items.secondDate.value = '';
 
-	document.querySelector<HTMLSelectElement>('#db-select-1').selectedIndex = 0;
-	document.querySelector<HTMLSelectElement>('#db-select-2').selectedIndex = 0;
-	document.querySelector<HTMLSelectElement>('#db-select-3').selectedIndex = 0;
-	document.querySelector<HTMLSelectElement>('#db-select-4').selectedIndex = 0;
-	document.querySelector<HTMLSelectElement>('#db-select-5').selectedIndex = 0;
+	document.querySelector<HTMLSelectElement>('#db-select-1')?.setAttribute('selectedIndex', '0');
+	document.querySelector<HTMLSelectElement>('#db-select-2')?.setAttribute('selectedIndex', '0');
+	document.querySelector<HTMLSelectElement>('#db-select-3')?.setAttribute('selectedIndex', '0');
+	document.querySelector<HTMLSelectElement>('#db-select-4')?.setAttribute('selectedIndex', '0');
+	document.querySelector<HTMLSelectElement>('#db-select-5')?.setAttribute('selectedIndex', '0');
 
 	Storage.items.dataSourceOption === 'Datenbank'
 		? await fetchData('/load-fetch')
 		: Storage.setItem('data', [...Storage.items.staticData] as object[]);
 
-	rowsAmount.innerHTML = Storage.items.staticDataLength;
+	rowsAmount?.setAttribute('innerHTML', Storage.items.staticDataLength);
 
 	Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
 		datalist.innerHTML = '';
@@ -517,34 +533,36 @@ resetBtn.addEventListener('click', async (e) => {
 		});
 	});
 });
-resetBtn.removeEventListener('click', async (e) => { });
+resetBtn?.removeEventListener('click', async (e) => { });
 
 /**
  * Eraser for dates input fields
  * On click will erase value from the date input fields and calculate amount of rows that will be outputted
  */
-document.querySelector<HTMLInputElement>('#date-input').addEventListener('click', async (e: MouseEvent) => {
+document?.querySelector<HTMLInputElement>('#date-input')?.addEventListener('click', async (e: MouseEvent) => {
 	const target = e.target as HTMLElement;
 
 	if (target.id.substring(0, 6) === 'eraser') {
 		const targetId: string = target.id.slice(7);
 
 		parseInt(targetId) === 6
-			? document.querySelector<HTMLInputElement>('#left-date-inp').value = ''
-			: document.querySelector<HTMLInputElement>('#right-date-inp').value = '';
+			? document.querySelector<HTMLInputElement>('#left-date-inp')?.setAttribute('value', '')
+			: document.querySelector<HTMLInputElement>('#right-date-inp')?.setAttribute('value', '');
 
 		Storage.items.dataSourceOption === 'Datenbank'
 			? await DBQuery()
 			: Storage.setItem('data', getFilters() as object[]);
 
-		Storage.items.data.length === 0 ? rowsAmount.innerHTML = '0' : rowsAmount.innerHTML = Storage.items.data.length;
+		Storage.items.data.length === 0
+			? rowsAmount?.setAttribute('innerHTML', '0')
+			: rowsAmount?.setAttribute('innerHTML', Storage.items.data.length);
 
-		let dropdownValues: { values: string[], valueToHeaderMap: object} = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+		let dropdownValues: { values: string[], valueToHeaderMap: object } | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 
 		Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
 			datalist.innerHTML = '';
 
-			dropdownValues.values.forEach((value: string) => {
+			dropdownValues?.values.forEach((value: string) => {
 				const option: HTMLOptionElement = document.createElement('option');
 				option.className = 'datalist-option';
 				option.value = value;
@@ -555,7 +573,7 @@ document.querySelector<HTMLInputElement>('#date-input').addEventListener('click'
 		dropdownValues = null;
 	}
 });
-document.querySelector<HTMLInputElement>('#date-input').removeEventListener('click', (e: MouseEvent) => {});
+document.querySelector<HTMLInputElement>('#date-input')?.removeEventListener('click', (e: MouseEvent) => { });
 
 /**
  * Erasers for filters
@@ -563,7 +581,7 @@ document.querySelector<HTMLInputElement>('#date-input').removeEventListener('cli
  * + Will calculate amount of rows that will be outputted
  * + Will update array and fill dropdowns with values from the updated array
  */
-filters.addEventListener('click', async (e: MouseEvent) => {
+filters?.addEventListener('click', async (e: MouseEvent) => {
 	const target = e.target as HTMLElement;
 
 	if (target?.id.substring(0, 6) === 'eraser') {
@@ -575,14 +593,16 @@ filters.addEventListener('click', async (e: MouseEvent) => {
 		Storage.items.dataSourceOption === 'Datenbank'
 			? await DBQuery()
 			: Storage.setItem('data', getFilters() as object[]);
-		Storage.items.data.length === 0 ? rowsAmount.innerHTML = '0' : rowsAmount.innerHTML = Storage.items.data.length;
+		Storage.items.data.length === 0
+			? rowsAmount?.setAttribute('innerHTML', '0')
+			: rowsAmount?.setAttribute('innerHTML', Storage.items.data.length);
 
-		let dropdownValues: { values: string[], valueToHeaderMap: object} = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+		let dropdownValues: { values: string[], valueToHeaderMap: object } | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 
 		Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
 			datalist.innerHTML = '';
 
-			dropdownValues.values.forEach((value: string) => {
+			dropdownValues?.values.forEach((value: string) => {
 				const option: HTMLOptionElement = document.createElement('option');
 				option.className = 'datalist-option';
 				option.value = value;
@@ -593,20 +613,24 @@ filters.addEventListener('click', async (e: MouseEvent) => {
 		dropdownValues = null;
 	}
 });
-filters.removeEventListener('click', async (e) => { });
+filters?.removeEventListener('click', async (e) => { });
 
-filters.addEventListener('click', async (e: MouseEvent) => {
+filters?.addEventListener('click', async (e: MouseEvent) => {
 	const target: HTMLElement = e.target as HTMLElement;
 	const targetId: string = target.id;
 	const targetNumber: string = targetId.slice(-1);
-	const targetField: HTMLInputElement = document.querySelector<HTMLInputElement>(`#filter-input-${targetNumber}`);
+	const targetField: HTMLInputElement | null = document.querySelector<HTMLInputElement>(`#filter-input-${targetNumber}`);
+
+	let dropdownValues: {
+		values: string[];
+		valueToHeaderMap: { [key: string]: any };
+	} | null;
 
 	if (targetField) {
-		// Attach the 'change' listener to the targetField
 		targetField.addEventListener('change', async () => {
-			let dropdownValues: { values: string[], valueToHeaderMap: object} = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+			dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 			const selectedValue: string = targetField.value;
-			const selectedValueHeader: string = dropdownValues.valueToHeaderMap[selectedValue];
+			const selectedValueHeader: string = dropdownValues?.valueToHeaderMap[selectedValue];
 
 			let targetIndex = -1;
 			for (let i = 0; i < Storage.items.dbSelects[+targetNumber - 1].length; i++) {
@@ -618,16 +642,18 @@ filters.addEventListener('click', async (e: MouseEvent) => {
 
 			Storage.items.dbSelects[+targetNumber - 1].selectedIndex = targetIndex;
 
-			Storage.items.dataSourceOption === 'Datenbank'
-				? await DBQuery()
-				: Storage.setItem('data', getFilters() as object[]);
+			if (Storage.items.dataSourceOption === 'Datenbank') {
+				await DBQuery();
+			} else {
+				Storage.setItem('data', getFilters() as object[]);
+			}
 
 			dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 
 			Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
 				datalist.innerHTML = '';
 
-				dropdownValues.values.forEach((value: string) => {
+				dropdownValues?.values.forEach((value: string) => {
 					const option: HTMLOptionElement = document.createElement('option');
 					option.className = 'datalist-option';
 					option.value = value;
@@ -637,13 +663,17 @@ filters.addEventListener('click', async (e: MouseEvent) => {
 
 			dropdownValues = null;
 
-			Storage.items.data.length === 0 ? rowsAmount.innerHTML = '0' : rowsAmount.innerHTML = Storage.items.data.length;
+			Storage.items.data.length === 0
+				? rowsAmount?.setAttribute('innerHTML', '0')
+				: rowsAmount?.setAttribute('innerHTML', String(Storage.items.data.length));
 		});
-		targetField.removeEventListener('change', async () => {});
+
+		targetField.removeEventListener('change', async () => { });
 	}
+
 });
 
-filters.removeEventListener('click', async (e: MouseEvent) => {});
+filters?.removeEventListener('click', async (e: MouseEvent) => { });
 
 
 
@@ -654,7 +684,7 @@ filters.removeEventListener('click', async (e: MouseEvent) => {});
 /**
  * Main listener
  */
-inputForm.addEventListener('submit', async (e: MouseEvent) => {
+inputForm?.addEventListener('submit', async (e) => {
 	e.preventDefault();
 
 	// Call Diagram and Summary Table functions to be able to use it
@@ -662,67 +692,60 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 	SummaryTable();
 
 	/**
-    * Big part to change html elements opacity, disabled state, etc.
-    */
-	svgElement.innerHTML = '';
+	* Big part to change html elements opacity, disabled state, etc.
+	*/
+	svgElement?.setAttribute('innerHTML', '');
 
-	svgDiv.style.display = 'none';
-	diagrammDescription.style.display = 'none';
+	svgDiv?.setAttribute('display', 'none');
+	diagrammDescription?.setAttribute('display', 'none');
 
-	resetBtn.disabled = false;
-	fullTableBtn.disabled = false;
-	SummaryTableInput.disabled = false;
-	pieDiagrammInput.disabled = false;
+	resetBtn?.setAttribute('style', 'display: none;');
+	fullTableBtn?.setAttribute('style', 'display: none;');
+	SummaryTableInput?.setAttribute('style', 'display: none;');
+	pieDiagrammInput?.setAttribute('style', 'display: none;');
+	submitBtn?.setAttribute('style', 'display: none;');
 
-	pieDiagrammInput.checked = true;
+	pieDiagrammInput?.setAttribute('checked', 'true');
 
-	if (submitBtn.disabled)
-		submitBtn.disabled = false;
+	saveDiv?.setAttribute('style', 'display: 0;');
+	realRowsNumber?.setAttribute('style', 'display: 0;');
+	shownRowsCounter?.setAttribute('style', 'display: 0;');
+	shownRowsCounterDiv?.setAttribute('style', 'display: 0;');
+	modeLabel?.setAttribute('style', 'display: 0;');
+	saveDiv?.setAttribute('style', 'transition: 0.2s;');
 
-	saveDiv.style.opacity = '0';
-	realRowsNumber.style.opacity = '0';
-	shownRowsCounter.style.opacity = '0';
-	shownRowsCounterDiv.style.opacity = '0';
-	modeLabel.style.opacity = '0';
-	saveDiv.style.transition = '0.2s';
+	fullTable?.setAttribute('innerHTML', '');
+	emptyMessage?.setAttribute('innerHTML', '');
 
-	fullTable.innerHTML = '';
-	arrows.style.opacity = '0';
-	emptyMessage.innerHTML = '';
+	arrows?.setAttribute('style', 'opacity: 0');
 
-	dataTable.innerHTML = '';
-	clickToggler.style.display = 'none';
-	saveButton.style.display = 'none';
+	clickToggler?.setAttribute('style', 'display: none');
+	saveButton?.setAttribute('style', 'display: none');
 
-	reloadTable.disabled = true;
+	dataTable?.setAttribute('innerHTML', '');
+
+	reloadTable?.setAttribute('disabled', 'true');
 
 	// Creating table, thead and tbody for the main data table
-	const table = document.createElement('table');
-	const thead = document.createElement('thead');
-	const tbody = document.createElement('tbody');
+	const table: HTMLTableElement = document.createElement('table');
+	const thead: HTMLTableSectionElement = document.createElement('thead');
+	const tbody: HTMLTableSectionElement = document.createElement('tbody');
 
 	// Let user know if file is empty
 	if (Storage.items.inputTextLength.length === 0) {
-		if (file.DOCUMENT_NODE > 0) {
-			dataTable.innerHTML = '';
-			table.innerHTML = '';
-			thead.innerHTML = '';
-			tbody.innerHTML = '';
-		}
+		if (file && file.DOCUMENT_NODE > 0)
+			dataTable?.setAttribute('innerHTML', '');
 	}
 
 	else {
-		if (emptyMessage.innerHTML.length != 0)
-			emptyMessage.innerHTML = '';
+		realRowsNumber?.setAttribute('style', 'opacity: 1;');
+		shownRowsCounter?.setAttribute('style', 'opacity: 1;');
+		shownRowsCounterDiv?.setAttribute('style', 'opacity: 1;');
+		modeLabel?.setAttribute('style', 'opacity: 1;');
+		clickToggler?.setAttribute('style', 'display: block;`');
+		saveButton?.setAttribute('style', 'display: block;');
 
-		realRowsNumber.style.opacity = '1';
-		shownRowsCounter.style.opacity = '1';
-		shownRowsCounterDiv.style.opacity = '1';
-		modeLabel.style.opacity = '1';
-		clickToggler.style.display = 'block';
-		saveButton.style.display = 'block';
-
-		countpassCounter.innerHTML = '0';
+		countpassCounter?.setAttribute('innerHTML', '0');
 
 		/*----------------------------------------------------------------------------------------------------------------*/
 		/*----------------------------------------------------------------------------------------------------------------*/
@@ -730,34 +753,42 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 		/*----------------------------------------------------------------------------------------------------------------*/
 		/*----------------------------------------------------------------------------------------------------------------*/
 
-		const select: HTMLSelectElement = document.querySelector<HTMLSelectElement>('#date-params');
-		const opt: string = select.options[select.selectedIndex].value;
+		const select: HTMLSelectElement | null = document.querySelector<HTMLSelectElement>('#date-params');
+		const opt: string | undefined = select?.options[select?.selectedIndex]?.value;
 
 		/**
-       * Check if one the datetime-local input field is empty, second datetime-local input field will be filled
-       * with the earliest or the latest date
-       *
-       * toISOString() is a method in JavaScript that is used to convert a date object to a string in ISO format.
-       * The term "ISO" stands for "International Organization for Standardization,"
-       */
+	   * Check if one the datetime-local input field is empty, second datetime-local input field will be filled
+	   * with the earliest or the latest date
+	   *
+	   * toISOString() is a method in JavaScript that is used to convert a date object to a string in ISO format.
+	   * The term "ISO" stands for "International Organization for Standardization,"
+	   */
 
 		if (Storage.items.firstDate.value !== '' && Storage.items.secondDate.value === '') {
-			const latestDate = Storage.items.data.reduce((latest, current) => {
-				const currentDate = new Date(current[opt]);
+			if (opt) {
+				const latestDate = Storage.items.data.reduce((latest: Date, current: Record<string, any>) => {
+					const currentDate: Date = new Date(current[opt]);
+					return currentDate > latest ? currentDate : latest;
+				}, new Date(Storage.items.data[0][opt]));
 
-				return currentDate > latest.date ? { [`${opt}`]: currentDate } : latest;
-			}, Storage.items.data[0]);
-
-			document.querySelector<HTMLInputElement>('#right-date-inp').value = new Date(latestDate[opt]).toISOString().slice(0, 16);
+				const rightDateInput = document.querySelector<HTMLInputElement>('#right-date-inp');
+				if (rightDateInput) {
+					rightDateInput.value = latestDate.toISOString().slice(0, 16);
+				}
+			}
 		}
 		else if (Storage.items.firstDate.value === '' && Storage.items.secondDate.value !== '') {
-			const earliestDate = Storage.items.data.reduce((earliest, current) => {
-				const currentDate = new Date(current[opt]);
+			if (opt) {
+				const latestDate = Storage.items.data.reduce((latest: Date, current: Record<string, any>) => {
+					const currentDate: Date = new Date(current[opt]);
+					return currentDate < latest ? currentDate : latest;
+				}, new Date(Storage.items.data[0][opt]));
 
-				return currentDate < earliest.date ? { [`${opt}`]: currentDate } : earliest;
-			}, { [`${opt}`]: new Date(Storage.items.data[0][opt]) });
-
-			document.querySelector<HTMLInputElement>('#left-date-inp').value = new Date(earliestDate[opt]).toISOString().slice(0, 16);
+				const rightDateInput = document.querySelector<HTMLInputElement>('#left-date-inp');
+				if (rightDateInput) {
+					rightDateInput.value = latestDate.toISOString().slice(0, 16);
+				}
+			}
 		}
 
 		Storage.items.dataSourceOption === 'Datenbank'
@@ -765,15 +796,20 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 			: Storage.setItem('data', getFilters() as object[]);
 
 		// Number of the rows that will be outputted
-		Storage.items.data.length === 0 ? rowsAmount.innerHTML = '0' : rowsAmount.innerHTML = Storage.items.data.length;
+		Storage.items.data.length === 0
+			? rowsAmount?.setAttribute('innerHTML', '0')
+			: rowsAmount?.setAttribute('innerHTML', Storage.items.data.length);
 
 		// Fullfilling dropdowns
-		let dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+		let dropdownValues: {
+			values: string[];
+			valueToHeaderMap: { [key: string]: any };
+		} | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 
 		Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
 			datalist.innerHTML = '';
 
-			dropdownValues.values.forEach((value: string) => {
+			dropdownValues?.values.forEach((value: string) => {
 				const option: HTMLOptionElement = document.createElement('option');
 				option.className = 'datalist-option';
 				option.value = value;
@@ -785,12 +821,9 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 		dropdownValues = null;
 
 		/**
-       * Building a table from the data array which is object[]
-       */
-		dataTable.innerHTML = '';
-		table.innerHTML = '';
-		thead.innerHTML = '';
-		tbody.innerHTML = '';
+	   * Building a table from the data array which is object[]
+	   */
+		dataTable?.setAttribute('innerHTML', '');
 
 		const innerTable = document.createElement('table');
 		innerTable.innerHTML = '';
@@ -798,14 +831,14 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 		table.appendChild(thead);
 		table.appendChild(tbody);
 
-		document.getElementById('data-table').appendChild(table);
+		document.querySelector<HTMLTableElement>('data-table')?.appendChild(table);
 
 		/**
-       * Building a header row
-       * hrow - header row, creates once as there is only 1 header row
-       * theaderCell - 'th' html element that will contain header string
-       * theaderCell.innerHTML will write header into 'th' html element as <th>header</th>
-       */
+	   * Building a header row
+	   * hrow - header row, creates once as there is only 1 header row
+	   * theaderCell - 'th' html element that will contain header string
+	   * theaderCell.innerHTML will write header into 'th' html element as <th>header</th>
+	   */
 		const hrow = document.createElement('tr');
 		for (let i = 0; i < 16; i++) {
 			const theaderCell = document.createElement('th');
@@ -816,16 +849,16 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 		thead.appendChild(hrow);
 
 		/**
-       * IF rowLimiter input field IS NOT empty, then outputLimiter will be checked:
-       *    whether it is smaller than input data size or not:
-       *       if yes: outputLimiter will be size of limiter value from input field
-       *       if no: outputLimiter will be sized as input data array
-       * ELSE if rowLimiter input field is empty, then outputLimiter will have size of the input array
-       *
-       */
-		if (rowLimiter.value !== '') {
-			Storage.items.data.length > +rowLimiter.value
-				? Storage.setItem('limiter', +rowLimiter.value)
+	   * IF rowLimiter input field IS NOT empty, then outputLimiter will be checked:
+	   *    whether it is smaller than input data size or not:
+	   *       if yes: outputLimiter will be size of limiter value from input field
+	   *       if no: outputLimiter will be sized as input data array
+	   * ELSE if rowLimiter input field is empty, then outputLimiter will have size of the input array
+	   *
+	   */
+		if (rowLimiter && rowLimiter?.value !== '') {
+			Storage.items.data.length > +rowLimiter?.value
+				? Storage.setItem('limiter', +rowLimiter?.value)
 				: Storage.setItem('limiter', Storage.items.data.length);
 		}
 		else
@@ -834,26 +867,26 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 		if (Storage.items.limiter > 1000)
 			Storage.setItem('limiter', 1000);
 
-		shownRowsCounter.innerHTML = `${Storage.items.limiter}`;
+		shownRowsCounter?.setAttribute('innerHTML', `${Storage.items.limiter}`);
 
 		/**
-       * Building a table
-       *
-       * Number of rows is limited by the outputLimiter (described above)
-       */
+	   * Building a table
+	   *
+	   * Number of rows is limited by the outputLimiter (described above)
+	   */
 		for (let i = 0; i < Storage.items.limiter; i++) {
 			// body_row --- <tr> in <tbody> that contains info from object
 			const body_row = document.createElement('tr');
 
 			/**
-          * Iterating through tableHeaders to print only headers that were specified
-          */
-			Storage.items.tableHeaders.forEach((header, j) => {
+		  * Iterating through tableHeaders to print only headers that were specified
+		  */
+			Storage.items.tableHeaders.forEach((header: string, j: number) => {
 				let tableDataHTML = '';
 
 				/**
-             * Checks if value is NULL, then it hasn't to be printed
-             */
+			 * Checks if value is NULL, then it hasn't to be printed
+			 */
 				if (Storage.items.data[i][header] !== 'NULL') {
 					// If header is FPY then value has to be printed with % sign
 					// Here using blockquote to be able to change its value later
@@ -899,60 +932,62 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 
 		table.appendChild(thead);
 		table.appendChild(tbody);
-		dataTable.appendChild(table);
+		dataTable?.appendChild(table);
 
-		saveDiv.style.opacity = '1';
-		saveDiv.style.transition = '0.2s';
+		saveDiv?.setAttribute('style', 'opacity: 1; transition: 0.2s');
 
 		// Calling full table function
 		CompleteTable();
 
 		/**
-       * This event handler allows user to check the whole row OR to add filters to the input field
-       */
+	   * This event handler allows user to check the whole row OR to add filters to the input field
+	   */
 		table.addEventListener('click', async (e: MouseEvent) => {
-			const clickOption: string = cellSelect.options[cellSelect.selectedIndex].value;
+			const clickOption: string | undefined = cellSelect?.options[cellSelect?.selectedIndex].value;
 			const target = e.target as HTMLElement;
 
 			if (target.tagName === 'BLOCKQUOTE' || target.tagName === 'TD') {
 				/**
-             * ClickOption is select html elment placed left-top from the table
-             *
-             * If clickOption is add to filters , so by clicking on any of the cells,
-             * value from the cell will be added to the input field
-             */
+			 * ClickOption is select html elment placed left-top from the table
+			 *
+			 * If clickOption is add to filters , so by clicking on any of the cells,
+			 * value from the cell will be added to the input field
+			 */
 				if (clickOption === 'Add to filters' || clickOption === 'Zum Filtern hinzufügen') {
 					if (target.innerHTML.slice(target.innerHTML.indexOf('>') + 1, target.innerHTML.indexOf('</')) !== '') {
 						const blockquotes = document.querySelectorAll('td blockquote');
-						blockquotes.forEach((blockquote: HTMLQuoteElement) => blockquote.contentEditable = 'false');
+						blockquotes?.forEach((blockquote: Element, key: number, parent: NodeListOf<Element>) => {
+							(blockquote as HTMLQuoteElement).contentEditable = 'false';
+						});
+
 
 						const id = target.id;
 						const colId = id.slice(id.indexOf('col') + 3, id.length);
 
 						/**
-                   * As we have <blockquote> inside of <td>, then we need to check
-                   * either we clicked on <td> or <blockquote> because if we click on
-                   * <td> - we will receive innerHTML as <blockquote>...</blockquote>,
-                   * but if we clicked on blockquote directly, we will receive a cell value
-                  */
+				   * As we have <blockquote> inside of <td>, then we need to check
+				   * either we clicked on <td> or <blockquote> because if we click on
+				   * <td> - we will receive innerHTML as <blockquote>...</blockquote>,
+				   * but if we clicked on blockquote directly, we will receive a cell value
+				  */
 						let targetCellValue = '';
 						target.id.includes('blockquote')
 							? targetCellValue = target.innerHTML
-						// here if we click on cell we need additionaly to slice <blockquote></blockquote> to receive its innerHTML
+							// here if we click on cell we need additionaly to slice <blockquote></blockquote> to receive its innerHTML
 							: targetCellValue = target.innerHTML.slice(target.innerHTML.indexOf('>') + 1, target.innerHTML.indexOf('</'));
 
 						/**
-                   * Receiving target column by slicing from col + 3 to the end of the string
-                   * as our cell id has a look like `cell row0col0`
-                  */
+				   * Receiving target column by slicing from col + 3 to the end of the string
+				   * as our cell id has a look like `cell row0col0`
+				  */
 						const targetCol = target.id.slice(target.id.indexOf('col') + 3, target.id.length);
 
 						/**
-                   * Columns 13, 14 and 15 are datetime-local columns for tLogIn, tLogOut, tLastAcc
-                   * So if user pressed on the date cell, it has to be added to the right place
-                   */
+				   * Columns 13, 14 and 15 are datetime-local columns for tLogIn, tLogOut, tLastAcc
+				   * So if user pressed on the date cell, it has to be added to the right place
+				   */
 						if (targetCol === '13' || targetCol === '14' || targetCol === '15') {
-							const select: HTMLSelectElement = document.querySelector<HTMLSelectElement>('#date-params');
+							const select: HTMLSelectElement | null = document.querySelector<HTMLSelectElement>('#date-params');
 
 							const indexMap = {
 								'13': 0,
@@ -961,19 +996,19 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 							};
 
 							/**
-                      * col 13 - tLogIn (selectedIndex 0 in select),
-                      * col 14 - tLogOut (selectedIndex 1 in select),
-                      * col 15 - tLastAcc (selectedIndex 2 in select),
-                      *
-                      * If user presses on the date of other key, it will change select's selectedIndex (option)
-                      */
-							if (targetCol in indexMap) {
+					  * col 13 - tLogIn (selectedIndex 0 in select),
+					  * col 14 - tLogOut (selectedIndex 1 in select),
+					  * col 15 - tLastAcc (selectedIndex 2 in select),
+					  *
+					  * If user presses on the date of other key, it will change select's selectedIndex (option)
+					  */
+							if (targetCol in indexMap && select) {
 								select.selectedIndex = indexMap[targetCol];
 							}
 
 							/**
-                      * Check which one of the date inputs empty first, so date will be added there
-                      */
+					  * Check which one of the date inputs empty first, so date will be added there
+					  */
 							Storage.items.firstDate.value === ''
 								? Storage.items.firstDate.value = targetCellValue.slice(0, 16)
 								: Storage.items.secondDate.value = targetCellValue.slice(0, 16);
@@ -983,15 +1018,15 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 						}
 						else {
 							/**
-                      * emptyFieldIndexes checks THE FIRST EMPTY input fields
-                      *
-                      * F.e. if IF1 and IF3 are used, the first empty will be IF2, so value from the cell will be added there
-                      * If IF1 empty, value will be added there
-                      */
-							const emptyFieldIndexes = Storage.items.inputFields.map((filter, index) => {
+					  * emptyFieldIndexes checks THE FIRST EMPTY input fields
+					  *
+					  * F.e. if IF1 and IF3 are used, the first empty will be IF2, so value from the cell will be added there
+					  * If IF1 empty, value will be added there
+					  */
+							const emptyFieldIndexes = Storage.items.inputFields.map((filter: HTMLInputElement, index: number) => {
 								if (filter.value === '')
 									return index;
-							}).filter(filter => filter !== undefined);
+							}).filter((filter: HTMLInputElement) => filter !== undefined);
 
 							if (emptyFieldIndexes.length !== 0) {
 								const targetInputField = Storage.items.inputFields[emptyFieldIndexes[0]];
@@ -1016,14 +1051,19 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 							? await DBQuery()
 							: Storage.setItem('data', getFilters());
 
-						Storage.items.data.length === 0 ? rowsAmount.innerHTML = '0' : rowsAmount.innerHTML = Storage.items.data.length;
+						Storage.items.data.length === 0
+							? rowsAmount?.setAttribute('innerHTML', '0')
+							: rowsAmount?.setAttribute('innerHTML', Storage.items.data.length);
 
-						let dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+						let dropdownValues: {
+							values: string[];
+							valueToHeaderMap: { [key: string]: any };
+						} | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 
-						Storage.items.datalists.forEach(datalist => {
+						Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
 							datalist.innerHTML = '';
 
-							dropdownValues.values.forEach(value => {
+							dropdownValues?.values.forEach(value => {
 								const option = document.createElement('option');
 								option.className = 'datalist-option';
 								option.value = value;
@@ -1037,35 +1077,34 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 			}
 
 			/**
-          * If clickOption is show row, then clicking on any of the cells in one row,
-          * the full row will be opened that contains more than 16 columns.
-          * They are divided by 5 columns each
-          */
+		  * If clickOption is show row, then clicking on any of the cells in one row,
+		  * the full row will be opened that contains more than 16 columns.
+		  * They are divided by 5 columns each
+		  */
 			else if (clickOption === 'Show row' || clickOption == 'Zeile anzeigen') {
 				const blockquotes = document.querySelectorAll('td blockquote');
-				blockquotes.forEach((blockquote: HTMLQuoteElement) => blockquote.contentEditable = 'false');
+				blockquotes?.forEach((blockquote: Element, key: number, parent: NodeListOf<Element>) => {
+					(blockquote as HTMLQuoteElement).contentEditable = 'false';
+				});
 
-				reloadTable.disabled = false;
-				submitBtn.disabled = true;
-				resetBtn.disabled = true;
-				fullTableBtn.disabled = true;
-				SummaryTableInput.disabled = true;
-				pieDiagrammInput.disabled = true;
+				reloadTable?.setAttribute('disabled', 'false');
+				submitBtn?.setAttribute('disabled', 'true');
+				resetBtn?.setAttribute('disabled', 'true');
+				fullTableBtn?.setAttribute('disabled', 'true');
+				SummaryTableInput?.setAttribute('disabled', 'true');
+				pieDiagrammInput?.setAttribute('disabled', 'true');
 
 				/**
-             * As we have id on each of the cells as `cell row0col0`,
-             * we can find out target id by slicing from w + 1 to col, to receive just a number
-             */
+			 * As we have id on each of the cells as `cell row0col0`,
+			 * we can find out target id by slicing from w + 1 to col, to receive just a number
+			 */
 				const targetId = target.id;
 				const row = targetId.slice(targetId.indexOf('w') + 1, targetId.indexOf('col'));
 
 				// Recive the whole object by row number
 				const object = Storage.items.data[row];
 
-				dataTable.innerHTML = '';
-				table.innerHTML = '';
-				thead.innerHTML = '';
-				tbody.innerHTML = '';
+				dataTable?.setAttribute('innerHTML', '');
 
 				const rowTable = document.createElement('table');
 				rowTable.setAttribute('id', 'rowTable');
@@ -1074,24 +1113,24 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 				const allValues = [];
 
 				/**
-             * allHeaders will contain ALL headers from the object
-             * allValues will contain ALL values from the object
-             */
+			 * allHeaders will contain ALL headers from the object
+			 * allValues will contain ALL values from the object
+			 */
 				for (const [key, value] of Object.entries(object)) {
 					allHeaders.push(key);
 					allValues.push(value);
 				}
 
 				/**
-             * Table divides columns by 9
-             */
-				const divideArrByNine = (arr) => {
-					const resultArr = [];
+			 * Table divides columns by 9
+			 */
+				const divideArrByNine = (arr: string[] | unknown[]) => {
+					const resultArr: string[][] = [];
 
 					for (let i = 0; i < 3; i++) {
-						const innerArr = [];
+						const innerArr: string[] = [];
 						for (let j = 0; j < 9; j++) {
-							innerArr.push(arr[i * 9 + j]);
+							innerArr.push(arr[i * 9 + j] as string);
 						}
 						resultArr.push(innerArr);
 					}
@@ -1099,9 +1138,13 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 					return resultArr;
 				};
 
-				const resArr = [];
-				for (let i = 0; i < 3; i++)
-					resArr.push(divideArrByNine(allHeaders)[i], divideArrByNine(allValues)[i]);
+				const resArr: string[][] = [];
+				for (let i = 0; i < 3; i++) {
+					resArr.push(
+						divideArrByNine(allHeaders as string[])[i],
+						divideArrByNine(allValues as string[])[i]
+					);
+				}
 
 				for (let i = 0; i < 6; i++) {
 					const tr = document.createElement('tr');
@@ -1113,14 +1156,17 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 					tbody.appendChild(tr);
 				}
 
+
 				rowTable.append(tbody);
-				dataTable.append(rowTable);
+				dataTable?.append(rowTable);
 
 				object.length = 0;
 			}
 			else if (clickOption === 'Change cell value' || clickOption === 'Den Wert einer Zelle ändern') {
 				const blockquotes = document.querySelectorAll('td blockquote');
-				blockquotes.forEach((blockquote: HTMLQuoteElement) => blockquote.contentEditable = 'true');
+				blockquotes?.forEach((blockquote: Element, key: number, parent: NodeListOf<Element>) => {
+					(blockquote as HTMLQuoteElement).contentEditable = 'false';
+				});
 				Storage.setItem('blockquoteEditValue', '');
 
 				const blockquoteId = target.id.slice(target.id.indexOf('r'), target.id.length);
@@ -1129,10 +1175,10 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 				const targetLogID = Storage.items.data[rowId]['LogID'];
 				const blockquote = document.querySelector(`#blockquote-${blockquoteId}`);
 
-				blockquote.addEventListener('focusout', e => {
+				blockquote?.addEventListener('focusout', e => {
 					Storage.setItem('blockquoteEditValue', blockquote.textContent);
 
-					const targetObject = Storage.items.staticData.find(obj => obj['LogID'] === targetLogID);
+					const targetObject = Storage.items.staticData.find((obj: FullDataInterface) => obj['LogID'] === targetLogID);
 					const targetKey = Storage.items.objectKeysMap.get(`${colId}`);
 
 					Storage.items.staticData[Storage.items.staticData.indexOf(targetObject)][targetKey] = Storage.items.blockquoteEditValue;
@@ -1146,4 +1192,4 @@ inputForm.addEventListener('submit', async (e: MouseEvent) => {
 		table.removeEventListener('click', async (e) => { });
 	}
 });
-inputForm.removeEventListener('submit', async (e) => { });
+inputForm?.removeEventListener('submit', async (e) => { });

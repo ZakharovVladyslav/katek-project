@@ -4,10 +4,10 @@ import * as d3 from 'd3';
 const Storage = new CustomStorage();
 
 interface Data {
-    label: string;
-    value: string;
-    color: string;
-    stroke: string;
+	label: string;
+	value: string;
+	color: string;
+	stroke: string;
 }
 
 export default function Diagram(): void {
@@ -18,16 +18,16 @@ export default function Diagram(): void {
 	const svgDiv: HTMLDivElement | null = document.querySelector('#svg-div');
 	const diagrammDescriptionLabel: HTMLParagraphElement | null = document.querySelector('#diagramm-description');
 
-	diagrammLabel?.addEventListener('click', () => {
+	const diagrammLabelClick = () => {
 		if (svgDiv) {
 			svgDiv.style.display = 'flex';
 		}
-	});
+	};
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	diagrammLabel?.removeEventListener('click', () => {});
+	diagrammLabel?.addEventListener('click', diagrammLabelClick);
+	diagrammLabel?.removeEventListener('click', diagrammLabelClick);
 
-	dataPieInput?.addEventListener('change', () => {
+	const handleDataPieInputChange = () => {
 		if (diagrammDescriptionLabel) {
 			diagrammDescriptionLabel.style.display = 'block';
 		}
@@ -79,7 +79,7 @@ export default function Diagram(): void {
 		if (dataPieInput && !dataPieInput.checked) {
 			const radius = 150;
 
-			const arcGenerator = d3.arc<Data, d3.DefaultArcObject>()
+			const arcGenerator = d3.arc<any, d3.DefaultArcObject>()
 				.innerRadius(100)
 				.outerRadius(radius)
 				.padAngle(0.03);
@@ -90,9 +90,7 @@ export default function Diagram(): void {
 
 			const svg = d3.select<SVGSVGElement, unknown>('svg');
 
-			if (svgElem) {
-				svgElem.innerHTML = '';
-			}
+			svgElem?.setAttribute('innerHTML', '');
 
 			const center = { x: 200, y: 200 };
 
@@ -107,19 +105,18 @@ export default function Diagram(): void {
 
 			arcs.filter(d => d.value !== 0)
 				.append('path')
-				.attr('d', function (d) { return arcGenerator.call(this, d) || ''; }) // Use .call(this) to set the context
+				//.attr('d', (d: d3.PieArcDatum<Data>) => arcGenerator(d) || '') // Use a custom value function
 				.style('fill', (d) => d.data.color)
 				.style('stroke', '#000000')
 				.style('stroke-width', '1.35px');
 
-
 			inputData.forEach((elem: Data, index: number) => {
 				const html = `
-                    <div id='color-${index + 1}' style="display: flex; flex-direction: row; gap: 10px;">
-                        <span id='square' style="width: 40px; height: 40px; background-color: ${elem.color}; display: block; "></span>
-                        <p>${elem.label} - ${elem.value}</p>
-                    </div>
-                `;
+				<div id='color-${index + 1}' style="display: flex; flex-direction: row; gap: 10px;">
+				  <span id='square' style="width: 40px; height: 40px; background-color: ${elem.color}; display: block; "></span>
+				  <p>${elem.label} - ${elem.value}</p>
+				</div>
+			  `;
 
 				if (labels) {
 					labels.insertAdjacentHTML('beforeend', html);
@@ -142,8 +139,7 @@ export default function Diagram(): void {
 				diagrammDescriptionLabel.style.display = 'none';
 			}
 		}
-	});
-
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	dataPieInput?.removeEventListener('click', () => {});
+	};
+	dataPieInput?.addEventListener('click', handleDataPieInputChange);
+	dataPieInput?.removeEventListener('click', handleDataPieInputChange);
 }

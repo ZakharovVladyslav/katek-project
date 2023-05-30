@@ -4,14 +4,11 @@
 <head>
    <title>Katek GmbH</title>
 
-   <script src="https://d3js.org/d3.v6.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
-   <link rel="stylesheet" href="http://localhost:5173/styles/index.css">
-   <link rel="stylesheet" href="http://localhost:5173/styles/media.css">
-   <link rel="stylesheet" href="http://localhost:5173/src/Login-form/Login-window.css">
-   <link rel="stylesheet" href="http://localhost:5173/src/Table/PopUpHeadersSelect.css">
-   <script type="module" src="http://localhost:5173/dist/src/index.js" defer></script>
+   <link rel="stylesheet" href="http://localhost:3001/styles/index.css">
+   <link rel="stylesheet" href="http://localhost:3001/styles/media.css">
+   <link rel="stylesheet" href="http://localhost:3001/src/Login-form/Login-window.css">
+   <link rel="stylesheet" href="http://localhost:3001/src/Table/PopUpHeadersSelect.css">
+   <script type="module" src="http://localhost:3001/dist/src/index.js" defer></script>
 
    <link rel="icon" type="image/x-icon" href="./assets/katek-favicon.ico">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
@@ -23,15 +20,9 @@
 <body>
    <div class="login-overlay" id="login-overlay" style="display: none;">
       <div class="login-modal" id="login-modal">
-
-         <!--
-         <div class="profile-icon-wrapper">
-            <p class="profile-icon"><i class="fa-solid fa-user" style="color: #ffffff;"></i></p>
-         </div>
-         -->
          <h1 id="login-window-desc">Sign in as user</h1>
 
-         <div class="login-input">
+         <div class="login-input-div">
             <div class="login-wrapper" id="login-wrapper">
                <i class="fa-solid fa-user" style="color: #ffffff;"></i>
                <input type="text" id="login-input" class="login-input">

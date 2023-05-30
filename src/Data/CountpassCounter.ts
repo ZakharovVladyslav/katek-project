@@ -21,15 +21,15 @@ const fetchCountPass = async (firstDate: string, secondDate: string) => {
 	if (secondDateQuery.includes('T'))
 		secondDateQuery = `${secondDate.replace('T', ' ')}.00.000}`;
 
-	let queryObjects: object[] = [];
+	let queryObjects: object[] | null = [];
 	let args = '';
 
 	const usedInputFields: HTMLInputElement[] | null[] = Storage.items.inputFields.map((field: HTMLInputElement | null) => {
-		if (field.value !== '')
+		if (field?.value !== '')
 			return field;
 	}).filter((field: HTMLInputElement) => field !== undefined);
 
-	const dateOption: string = dateOptionSelector.options[dateOptionSelector.selectedIndex].value;
+	const dateOption: string | undefined = dateOptionSelector?.options[dateOptionSelector?.selectedIndex]?.value;
 
 	queryObjects.push(
 		{ dateOption: dateOption },
@@ -45,12 +45,12 @@ const fetchCountPass = async (firstDate: string, secondDate: string) => {
 		usedInputFields.forEach((field: HTMLInputElement | null, index: number) => {
 			const dbSelectOptionValue: string = usedDbSelects[index]?.options[usedDbSelects[index]?.selectedIndex]?.value;
 
-			queryObjects.push({ [`${dbSelectOptionValue}`]: field.value });
+			queryObjects?.push({ [`${dbSelectOptionValue}`]: field?.value });
 		});
 	}
 
 	queryObjects.forEach((object: object, index: number) => {
-		if (index !== queryObjects.length - 1) {
+		if (queryObjects && index !== queryObjects.length - 1) {
 			for (const [key, value] of Object.entries(object) as [string, string][])
 				args += `${key}=${value}&`;
 		}
@@ -66,7 +66,7 @@ const fetchCountPass = async (firstDate: string, secondDate: string) => {
 };
 
 export default async function CountpassCounter(countpassValue: string) {
-	countpassDiv.style.opacity = '1';
+	countpassDiv?.setAttribute('style', 'opacity: 1;');
 
 	if (Storage.items.firstDate.value && Storage.items.secondDate.value) {
 		const startDateTime: number = new Date(Storage.items.firstDate.value).getTime();
@@ -83,34 +83,45 @@ export default async function CountpassCounter(countpassValue: string) {
 
 		// Check if the difference is within the acceptable range
 		if (Math.abs(differenceMinutes) <= acceptableRange) {
-			countpassCounter.innerHTML = `${countpassValue}`;
+			countpassCounter?.setAttribute('innerHTML', `${countpassValue}`);
 
-			if (LocalStack.peek('firstDateStack') !== null && LocalStack.peek('secondDateStack') !== null) {
+			if (
+				LocalStack.peek('firstDateStack') !== null &&
+				LocalStack.peek('secondDateStack') !== null
+			) {
+				const firstDateStack: string | null = LocalStack.peek('firstDateStack') as string | null;
+				const secondDateStack: string | null = LocalStack.peek('secondDateStack') as string | null;
+
 				if (
-					LocalStack.peek('firstDateStack') !== Storage.items.firstDate.value ||
-                    LocalStack.peek('secondDateStack') !== Storage.items.secondDate.value
+					firstDateStack !== Storage.items.firstDate.value ||
+					secondDateStack !== Storage.items.secondDate.value
 				) {
-					const previousCountPass: object[] = await fetchCountPass(
-						LocalStack.peek('firstDateStack').toString(), // Convert to string
-						LocalStack.peek('secondDateStack').toString() // Convert to string
-					);
-					const newCountPass: object[] = await fetchCountPass(Storage.items.firstDate.value, Storage.items.secondDate.value);
+					if (firstDateStack && secondDateStack) {
+						const previousCountPass: object[] = await fetchCountPass(
+							firstDateStack.toString(),
+							secondDateStack.toString()
+						);
+						const newCountPass: object[] = await fetchCountPass(
+							Storage.items.firstDate.value,
+							Storage.items.secondDate.value
+						);
 
-					const difference: number = previousCountPass.length - newCountPass.length;
-					const percentageDifference: number = (difference / previousCountPass.length) * 100;
+						const difference: number = previousCountPass.length - newCountPass.length;
+						const percentageDifference: number = (difference / previousCountPass.length) * 100;
 
-					const countPassDifference: string = percentageDifference.toFixed(2);
+						const countPassDifference: string = percentageDifference.toFixed(2);
 
-					const number: string = countpassCounter.innerHTML;
-					countpassCounter.innerHTML = `${((percentageDifference / 100) * +number).toFixed(2)}`;
+						const number: string | undefined = countpassCounter?.innerHTML;
+						if (number)
+							countpassCounter?.setAttribute('innerHTML', `${((percentageDifference / 100) * +number)}`);
 
-					distractProcentParag.innerHTML = `-${countPassDifference}%`;
-					distractProcentParag.style.display = 'block';
-					distractProcentParag.style.color = '#a80000';
+						distractProcentParag?.setAttribute('innerHTML', `-${countPassDifference}%`);
+						distractProcentParag?.setAttribute('style', 'display: block; color: #a80000;');
 
-					setTimeout(() => {
-						distractProcentParag.style.display = 'none';
-					}, 3000);
+						setTimeout(() => {
+							distractProcentParag?.setAttribute('style', 'display: none;');
+						}, 3000);
+					}
 				}
 			}
 
@@ -118,49 +129,49 @@ export default async function CountpassCounter(countpassValue: string) {
 			LocalStack.push('secondDateStack', Storage.items.secondDate.value);
 
 		} else {
-			countpassWrapper.style.display = 'none';
-			countpassErrorMsg.style.display = 'block';
-			countpassDiv.style.border = '1px solid #a80000';
-			countpassErrorMsg.innerHTML = 'Range is bigger than 8 hours';
+			countpassWrapper?.setAttribute('style', 'display: none;');
+			countpassErrorMsg?.setAttribute('innerHTML', 'Range is bigger than 8 hours');
+			countpassErrorMsg?.setAttribute('style', 'display: block;');
+			countpassDiv?.setAttribute('style', 'border: 1px solid #a80000;');
 
 			setTimeout(() => {
-				countpassErrorMsg.style.display = 'none';
-				countpassDiv.style.border = 'none';
-				countpassWrapper.style.display = 'flex';
+				countpassErrorMsg?.setAttribute('style', 'display: none;');
+				countpassDiv?.setAttribute('style', 'border: none;');
+				countpassWrapper?.setAttribute('style', 'display: flex');
 			}, 2000);
 		}
 	} else if (Storage.items.firstDate.value && !Storage.items.secondDate.value) {
-		countpassWrapper.style.display = 'none';
-		countpassErrorMsg.style.display = 'block';
-		countpassDiv.style.border = '1px solid #a80000';
-		countpassErrorMsg.innerHTML = 'Second date is missing';
+		countpassWrapper?.setAttribute('style', 'display: none;');
+		countpassErrorMsg?.setAttribute('style', 'display: block');
+		countpassErrorMsg?.setAttribute('innerHTML', 'Second date is missing');
+		countpassDiv?.setAttribute('style', 'border: 1px solid #a80000;');
 
 		setTimeout(() => {
-			countpassErrorMsg.style.display = 'none';
-			countpassDiv.style.border = 'none';
-			countpassWrapper.style.display = 'flex';
+			countpassErrorMsg?.setAttribute('style', 'display: none;');
+			countpassDiv?.setAttribute('style', 'border: none');
+			countpassWrapper?.setAttribute('style', 'display: flex');
 		}, 2000);
 	} else if (!Storage.items.firstDate.value && Storage.items.secondDate.value) {
-		countpassWrapper.style.display = 'none';
-		countpassErrorMsg.style.display = 'block';
-		countpassDiv.style.border = '1px solid #a80000';
-		countpassErrorMsg.innerHTML = 'First date is missing';
+		countpassWrapper?.setAttribute('style', 'display: none;');
+		countpassErrorMsg?.setAttribute('style', 'display: block');
+		countpassErrorMsg?.setAttribute('innerHTML', 'First date is missing');
+		countpassDiv?.setAttribute('style', 'border: 1px solid #a80000;');
 
 		setTimeout(() => {
-			countpassErrorMsg.style.display = 'none';
-			countpassDiv.style.border = 'none';
-			countpassWrapper.style.display = 'flex';
+			countpassErrorMsg?.setAttribute('style', 'display: none;');
+			countpassDiv?.setAttribute('style', 'border: none');
+			countpassWrapper?.setAttribute('style', 'display: flex');
 		}, 2000);
 	} else {
-		countpassWrapper.style.display = 'none';
-		countpassErrorMsg.style.display = 'block';
-		countpassDiv.style.border = '1px solid #a80000';
-		countpassErrorMsg.innerHTML = 'No date present';
+		countpassWrapper?.setAttribute('style', 'display: none;');
+		countpassErrorMsg?.setAttribute('style', 'display: block;');
+		countpassErrorMsg?.setAttribute('innerHTML', 'No date present');
+		countpassDiv?.setAttribute('style', 'border: 1px solid #a80000;');
 
 		setTimeout(() => {
-			countpassErrorMsg.style.display = 'none';
-			countpassDiv.style.border = 'none';
-			countpassWrapper.style.display = 'flex';
+			countpassErrorMsg?.setAttribute('style', 'display: none');
+			countpassDiv?.setAttribute('style', 'border: none;');
+			countpassWrapper?.setAttribute('style', 'display: flex;');
 		}, 2000);
 	}
 }

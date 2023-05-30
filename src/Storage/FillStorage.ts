@@ -71,20 +71,20 @@ export default function fillStorage() {
 			});
 		});
 		// Number of rows of the updated array will be outputted
-		rowsAmount.innerHTML = Storage.items.data.length;
+		rowsAmount?.setAttribute('innerHTML', Storage.items.data.length);
 
 		// Values from updated file data to fullfill dropdowns only with actual values
-		let dropdownValues: {values: string[], valueToHeaderMap: object } = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+		let dropdownValues: {values: string[], valueToHeaderMap: object } | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 
 		Storage.items.datalists.forEach((datalist: HTMLDataListElement | null) => {
 			if (datalist)
 				datalist.innerHTML = '';
 
-			dropdownValues.values.forEach((value: string | number) => {
+			dropdownValues?.values.forEach((value: string | number) => {
 				const option = document.createElement('option');
 				option.className = 'datalist-option';
 				option.value = `${value}`;
-				datalist.appendChild(option);
+				datalist?.appendChild(option);
 			});
 		});
 

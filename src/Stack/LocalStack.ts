@@ -2,6 +2,15 @@ interface Stack {
     [key: string]: Array<string | number | boolean>;
 }
 
+interface LocalStacksInterface {
+	push(stackName: string, element: string | number | boolean): void;
+	pop(stackName: string): string | number | boolean | null;
+	peek(stackName: string): string | number | boolean | null;
+	isEmpty(stackName: string): boolean;
+	size(stackName: string): number;
+	clear(stackName: string): void;
+}
+
 export default class LocalStacks {
 	private static stacks: Stack = {};
 
