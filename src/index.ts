@@ -3,20 +3,20 @@
 'use strict';
 
 /* Functions import from other files */
-import CompleteTable from './Table/Complete-table.ts';
-import getFilters from './DB/Data-filtering.ts';
-import CsvToArray from './Data/Convert-csv.ts';
-import SummaryTable from './Table/Summary-table.ts';
-import DropdownValues from './Data/Dropdown-values.js';
-import Diagram from './Data/Diagram.ts';
-import CustomStorage from './Storage/Local-Storage.ts';
-import fillStorage from './Storage/FillStorage.ts';
-import fetchData from './DB/FetchDbJSON.ts';
-import DBQuery from './DB/DBQuery.ts';
-import PopUpHeadersSelect from './Table/PopUpHeadersSelect.ts';
-import CountpassCounter from './Data/CountpassCounter.ts';
-import LoginWindow from './login-form/Login-window.ts';
-import { FullDataInterface } from './types.ts';
+import CompleteTable from './components/Table/Complete-table.js';
+import getFilters from './utils/Data-filtering.js';
+import CsvToArray from './utils/Convert-csv.js';
+import SummaryTable from './components/Table/Summary-table.js';
+import DropdownValues from './services/Data/Dropdown-values.js';
+import Diagram from './components/Diagram.js';
+import CustomStorage from './services/Storage/Local-Storage.js';
+import fillStorage from './services/Storage/FillStorage.js';
+import fetchData from './utils/FetchDbJSON.js';
+import DBQuery from './services/DB/DBQuery.js';
+import PopUpHeadersSelect from './components/Table/PopUpHeadersSelect.js';
+import CountpassCounter from './utils/CountpassCounter.js';
+import LoginWindow from './components/login-form/Login-window.js';
+import { FullDataInterface } from './utils/types.js';
 
 /* Defining storage classes instances */
 const Storage = new CustomStorage();
@@ -77,7 +77,7 @@ const dbConnectBtn = document.querySelector('#db-connect');
 
 window.addEventListener('load', () => {
 	if (sessionStorage.getItem('login') === null) {
-		LoginWindow();
+		//LoginWindow();
 	}
 
 	Storage.setItem('inputFields', [

@@ -1,11 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 class CustomStorage {
     constructor() {
-        Object.defineProperty(this, "_core", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
         if (!CustomStorage._core) {
             CustomStorage._core = {};
         }
@@ -22,10 +17,5 @@ class CustomStorage {
         this._core = {};
     }
 }
-Object.defineProperty(CustomStorage, "_core", {
-    enumerable: true,
-    configurable: true,
-    writable: true,
-    value: {}
-});
+CustomStorage._core = {};
 export default CustomStorage;

@@ -1,9 +1,9 @@
-import CustomStorage from "../Storage/Local-Storage.js";
+import CustomStorage from '../Storage/Local-Storage.js';
 const Storage = new CustomStorage();
 const fullTableSection = document.querySelector('#full-table-section');
 export default function CompleteTable() {
-    fullTableSection.style.display = 'block';
-    let arr = [...Storage.items.data];
+    fullTableSection?.setAttribute('style', 'display: block;');
+    const arr = [...Storage.items.data];
     const remove = arr.shift();
     const leftArrow = document.querySelector('#left-arrow');
     const rightArrow = document.querySelector('#right-arrow');
@@ -11,28 +11,26 @@ export default function CompleteTable() {
     const arrows = document.querySelector('#index-arrows');
     const fullTableButton = document.querySelector('#full-table-button');
     const rowLimiter = document.querySelector('#row-limiter');
-    fullTableButton.addEventListener('click', () => {
-        document.querySelector('#submit-button').disabled = true;
-        document.querySelector('#reset').disabled = true;
-        document.querySelector('#full-table-button').disabled = true;
-        document.querySelector('#summary-row-toggler-input').disabled = true;
-        document.querySelector('#mode-label').setAttribute('style', 'opacity: 0;');
-        document.querySelector('#shown-rows-counter-div').setAttribute('style', 'opacity: 0;');
-        document.querySelector('#save-div').setAttribute('style', 'opacity: 0;');
-        document.querySelector('#countpass-counter-div').setAttribute('style', 'opacity: 0;');
+    const handleFullTableButtonClick = () => {
+        document.querySelector('#submit-button')?.setAttribute('disabled', 'true');
+        document.querySelector('#reset')?.setAttribute('disabled', 'true');
+        document.querySelector('#full-table-button')?.setAttribute('disabled', 'true');
+        document.querySelector('#summary-row-toggler-input')?.setAttribute('disabled', 'true');
+        document.querySelector('#mode-label')?.setAttribute('style', 'opacity: 0;');
+        document.querySelector('#shown-rows-counter-div')?.setAttribute('style', 'opacity: 0;');
+        document.querySelector('#save-div')?.setAttribute('style', 'opacity: 0;');
+        document.querySelector('#countpass-counter-div')?.setAttribute('style', 'opacity: 0;');
         const dataTable = document.querySelector('#data-table');
         const clickToggler = document.querySelector('#click-toggler');
         const saveButton = document.querySelector('#save');
         const tableReload = document.querySelector('#reload-table');
-        dataTable.innerHTML = '';
-        fullTable.innerHTML = '';
-        clickToggler.style.display = 'none';
-        saveButton.style.display = 'none';
-        tableReload.disabled = false;
-        fullTableSection.style.opacity = '1';
-        fullTableSection.style.transition = '0.2s';
-        arrows.style.opacity = '1';
-        arrows.style.transition = '0.2s';
+        dataTable?.setAttribute('innerHTML', '');
+        fullTable?.setAttribute('innerHTML', '');
+        clickToggler?.setAttribute('style', 'display: none;');
+        saveButton?.setAttribute('style', 'display: none;');
+        tableReload?.setAttribute('disabled', 'false');
+        fullTableSection?.setAttribute('style', 'opacity: 1; transition: 0.2s;');
+        arrows?.setAttribute('style', 'opacity: 1; transition: 0.2s;');
         let index = 0;
         const allKeys = Object.keys(arr[0]);
         const separatedKeys = [];
@@ -52,7 +50,7 @@ export default function CompleteTable() {
             });
             thead.appendChild(headerRow);
             let outputLimiter;
-            if (rowLimiter?.value !== '') {
+            if (rowLimiter && rowLimiter?.value !== '') {
                 Storage.items.data.length > +rowLimiter?.value
                     ? outputLimiter = +rowLimiter?.value
                     : outputLimiter = Storage.items.data.length;
@@ -73,28 +71,33 @@ export default function CompleteTable() {
                 });
                 tbody.appendChild(dataRow);
             }
-            fullTable.appendChild(tbody);
-            fullTable.appendChild(thead);
+            fullTable?.appendChild(tbody);
+            fullTable?.appendChild(thead);
         };
         renderTable(index, separatedKeys);
-        leftArrow.addEventListener('click', () => {
-            fullTable.innerHTML = '';
+        const handleLeftArrowClick = () => {
+            fullTable?.setAttribute('innerHTML', '');
             if (index === 0)
+                // eslint-disable-next-line no-self-assign
                 index = index;
             else
                 index -= 1;
             renderTable(index, separatedKeys);
-        });
-        leftArrow.removeEventListener('click', () => { });
-        rightArrow.addEventListener('click', () => {
-            fullTable.innerHTML = '';
+        };
+        leftArrow?.addEventListener('click', handleLeftArrowClick);
+        leftArrow?.removeEventListener('click', handleLeftArrowClick);
+        const handleRightArrowClick = () => {
+            fullTable?.setAttribute('innerHTML', '');
             if (index === separatedKeys.length - 1)
+                // eslint-disable-next-line no-self-assign
                 index = index;
             else
                 index += 1;
             renderTable(index, separatedKeys);
-        });
-        rightArrow.removeEventListener('click', () => { });
-    });
-    fullTableButton.removeEventListener('click', () => { });
+        };
+        rightArrow?.addEventListener('click', handleRightArrowClick);
+        rightArrow?.removeEventListener('click', handleRightArrowClick);
+    };
+    fullTableButton?.addEventListener('click', handleFullTableButtonClick);
+    fullTableButton?.removeEventListener('click', handleFullTableButtonClick);
 }

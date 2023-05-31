@@ -1,4 +1,4 @@
-import CustomStorage from '../Storage/Local-Storage.js';
+import CustomStorage from '../services/Storage/Local-Storage.js';
 import * as d3 from 'd3';
 
 const Storage = new CustomStorage();

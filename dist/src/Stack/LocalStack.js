@@ -34,17 +34,6 @@ class LocalStacks {
         }
         return LocalStacks.stacks[stackName].length;
     }
-    // Clear a specific stack
-    clear(stackName) {
-        if (!LocalStacks.stacks[stackName])
-            return 0;
-        return LocalStacks.stacks[stackName] = [];
-    }
 }
-Object.defineProperty(LocalStacks, "stacks", {
-    enumerable: true,
-    configurable: true,
-    writable: true,
-    value: {}
-});
+LocalStacks.stacks = {};
 export default LocalStacks;

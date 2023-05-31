@@ -1,11 +1,13 @@
 import CustomStorage from '../Storage/Local-Storage.js';
-import fetchData from './FetchDbJSON.js';
+import fetchData from '../../utils/FetchDbJSON.js';
 
 const dateOptionSelector: HTMLSelectElement | null = document.querySelector('#date-params');
 
 const Storage = new CustomStorage();
 
 export default async function DBQuery() {
+	console.log('DBQuery');
+
 	if (Storage.items.limiter === undefined)
 		Storage.setItem('limiter', 1000);
 

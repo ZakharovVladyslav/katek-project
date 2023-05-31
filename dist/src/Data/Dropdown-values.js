@@ -1,9 +1,10 @@
 function removeSingleValues(arr) {
-    let result = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = [];
     let currentHeader = null;
     let currentValues = [];
     for (let i = 0; i < arr.length; i++) {
-        let currentItem = arr[i];
+        const currentItem = arr[i];
         if (typeof currentItem === 'string' && currentItem.startsWith('----')) {
             if (currentHeader !== null && currentValues.length > 1) {
                 result.push(currentHeader, ...currentValues);
@@ -21,6 +22,7 @@ function removeSingleValues(arr) {
     return result;
 }
 export default function DropdownValues(array, headers) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const resultArray = [];
     const timeKeys = ['tLogIn', 'tLogOut', 'tLastAcc'];
     const valuesMap = new Map();
@@ -29,10 +31,10 @@ export default function DropdownValues(array, headers) {
         valuesMap.set(`${header}`, [`---- ${header} ----`]);
     });
     array.forEach((obj) => {
-        for (let key of Object.keys(obj)) {
+        for (const key of Object.keys(obj)) {
             if (headers.includes(key) && !timeKeys.includes(key)) {
                 const arr = valuesMap.get(`${key}`);
-                arr.push(obj[key]);
+                arr?.push(obj[key]);
             }
         }
     });
@@ -45,7 +47,7 @@ export default function DropdownValues(array, headers) {
     let flattenedArray = Array.from(new Set(resultArray.flat(Infinity)));
     const valueToHeaderMap = new Map();
     array.forEach((obj) => {
-        for (let key of Object.keys(obj)) {
+        for (const key of Object.keys(obj)) {
             if (headers.includes(key) && !timeKeys.includes(key)) {
                 const value = obj[key];
                 valueToHeaderMap.set(value, key);

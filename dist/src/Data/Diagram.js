@@ -1,20 +1,21 @@
-import CustomStorage from "../Storage/Local-Storage.js";
+import CustomStorage from '../Storage/Local-Storage.js';
 import * as d3 from 'd3';
 const Storage = new CustomStorage();
 export default function Diagram() {
-    const dataPieInput = document.querySelector("#pie-diagramm-checkbox");
+    const dataPieInput = document.querySelector('#pie-diagramm-checkbox');
     const svgElem = document.querySelector('#svg-element');
     const labels = document.querySelector('#labels');
     const diagrammLabel = document.querySelector('#pie-diagramm-label');
     const svgDiv = document.querySelector('#svg-div');
     const diagrammDescriptionLabel = document.querySelector('#diagramm-description');
-    diagrammLabel?.addEventListener('click', () => {
+    const diagrammLabelClick = () => {
         if (svgDiv) {
             svgDiv.style.display = 'flex';
         }
-    });
-    diagrammLabel?.removeEventListener('click', () => { });
-    dataPieInput?.addEventListener('change', () => {
+    };
+    diagrammLabel?.addEventListener('click', diagrammLabelClick);
+    diagrammLabel?.removeEventListener('click', diagrammLabelClick);
+    const handleDataPieInputChange = () => {
         if (diagrammDescriptionLabel) {
             diagrammDescriptionLabel.style.display = 'block';
         }
@@ -49,10 +50,10 @@ export default function Diagram() {
                 : zero.toString();
         });
         const inputData = [
-            { label: "CountPass", value: zeros[0].toString(), color: "#20D300", stroke: "#396E28" },
-            { label: "CountFail", value: zeros[1].toString(), color: "#D30000", stroke: "#900606" },
-            { label: "CountPass_Retest", value: zeros[2].toString(), color: "#C47A00", stroke: "#877E00" },
-            { label: "CountFail_Retest", value: zeros[3].toString(), color: "#00FFEC", stroke: "#041A4C" },
+            { label: 'CountPass', value: zeros[0].toString(), color: '#20D300', stroke: '#396E28' },
+            { label: 'CountFail', value: zeros[1].toString(), color: '#D30000', stroke: '#900606' },
+            { label: 'CountPass_Retest', value: zeros[2].toString(), color: '#C47A00', stroke: '#877E00' },
+            { label: 'CountFail_Retest', value: zeros[3].toString(), color: '#00FFEC', stroke: '#041A4C' },
         ];
         if (dataPieInput && !dataPieInput.checked) {
             const radius = 150;
@@ -63,31 +64,29 @@ export default function Diagram() {
             const pieGenerator = d3.pie()
                 .value((d) => parseFloat(d.value))
                 .padAngle(0.03);
-            const svg = d3.select("svg");
-            if (svgElem) {
-                svgElem.innerHTML = '';
-            }
+            const svg = d3.select('svg');
+            svgElem?.setAttribute('innerHTML', '');
             const center = { x: 200, y: 200 };
-            const circleDiagram = svg.append("g")
-                .attr("transform", `translate(${center.x},${center.y})`);
-            const arcs = circleDiagram.selectAll("g.arc")
+            const circleDiagram = svg.append('g')
+                .attr('transform', `translate(${center.x},${center.y})`);
+            const arcs = circleDiagram.selectAll('g.arc')
                 .data(pieGenerator(inputData))
                 .enter()
-                .append("g")
-                .attr("class", "arc");
+                .append('g')
+                .attr('class', 'arc');
             arcs.filter(d => d.value !== 0)
-                .append("path")
-                .attr("d", function (d) { return arcGenerator.call(this, d) || ''; }) // Use .call(this) to set the context
-                .style("fill", (d) => d.data.color)
+                .append('path')
+                //.attr('d', (d: d3.PieArcDatum<Data>) => arcGenerator(d) || '') // Use a custom value function
+                .style('fill', (d) => d.data.color)
                 .style('stroke', '#000000')
                 .style('stroke-width', '1.35px');
             inputData.forEach((elem, index) => {
                 const html = `
-                    <div id='color-${index + 1}' style="display: flex; flex-direction: row; gap: 10px;">
-                        <span id='square' style="width: 40px; height: 40px; background-color: ${elem.color}; display: block; "></span>
-                        <p>${elem.label} - ${elem.value}</p>
-                    </div>
-                `;
+				<div id='color-${index + 1}' style="display: flex; flex-direction: row; gap: 10px;">
+				  <span id='square' style="width: 40px; height: 40px; background-color: ${elem.color}; display: block; "></span>
+				  <p>${elem.label} - ${elem.value}</p>
+				</div>
+			  `;
                 if (labels) {
                     labels.insertAdjacentHTML('beforeend', html);
                 }
@@ -110,6 +109,7 @@ export default function Diagram() {
                 diagrammDescriptionLabel.style.display = 'none';
             }
         }
-    });
-    dataPieInput?.removeEventListener('click', () => { });
+    };
+    dataPieInput?.addEventListener('click', handleDataPieInputChange);
+    dataPieInput?.removeEventListener('click', handleDataPieInputChange);
 }

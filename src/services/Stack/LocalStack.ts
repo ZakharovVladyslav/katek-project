@@ -56,10 +56,11 @@ export default class LocalStacks {
 	}
 
 	// Clear a specific stack
-	clear(stackName: string) {
+	/*clear(stackName: string) {
 		if (!LocalStacks.stacks[stackName])
 			return 0;
 
 		return LocalStacks.stacks[stackName] = [];
 	}
+	*/
 }

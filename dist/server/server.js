@@ -2,7 +2,6 @@ import express from 'express';
 import mysql from 'mysql';
 const app = express();
 const PORT = 3000;
-console.log(PORT);
 app.use(express.static('public'));
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -15,12 +14,10 @@ app.get('/:action', (req, res) => {
     let dateQuery = '';
     let query = '';
     const keysToAvoid = ['firstDate', 'secondDate', 'dateOption'];
-    let sqlQueryParams = null;
-    sqlQueryParams = Object.entries(req.query).map(([key, value]) => {
+    const sqlQueryParams = Object.entries(req.query).map(([key, value]) => {
         if (!keysToAvoid.includes(key))
             return `${key}='${value}'`;
     }).filter(param => param !== undefined);
-    console.log(typeof (sqlQueryParams));
     if (req.query.firstDate && req.query.secondDate)
         dateQuery += `${req.query.dateOption}
         BETWEEN STR_TO_DATE('${req.query.firstDate}', '%Y-%m-%d %H:%i.%s.%f')
@@ -38,9 +35,9 @@ app.get('/:action', (req, res) => {
         query = ` WHERE ${dateQuery} AND ${sqlQueryParams.join(' AND ')}`;
     }
     if (req.params.action === 'load-fetch') {
-        const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\` LIMIT 1000`;
+        const sql = 'SELECT * FROM `katek`.`test-500k-limes` LIMIT 1000';
         console.log(sql);
-        connection.query(sql, (err, results, fields) => {
+        connection.query(sql, (err, results) => {
             if (err)
                 throw err;
             res.send(results);
@@ -49,7 +46,7 @@ app.get('/:action', (req, res) => {
     else if (req.params.action === 'db-fetch') {
         const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\`${query} LIMIT 1000`;
         console.log(sql);
-        connection.query(sql, (error, results, fields) => {
+        connection.query(sql, (error, results) => {
             if (error)
                 throw error;
             res.send(results);
@@ -58,7 +55,7 @@ app.get('/:action', (req, res) => {
     else if (req.params.action === 'get-countpass') {
         const sql = `SELECT \`CountPass\` from \`katek\`.\`test-500k-limes\`${query}`;
         console.log(sql);
-        connection.query(sql, (error, results, fields) => {
+        connection.query(sql, (error, results) => {
             if (error)
                 throw error;
             res.send(results);

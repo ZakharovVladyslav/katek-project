@@ -55,10 +55,10 @@ export default class GlobalStacks {
 	}
 
 	// Clear a specific stack
-	clear(stackName: string) {
+	/*clear(stackName: string) {
 		if (!GlobalStacks.stacks[stackName])
 			return 0;
 
 		return GlobalStacks.stacks[stackName] = [];
-	}
+	}*/
 }

@@ -1,5 +1,5 @@
-import CustomStorage from "./Local-Storage.js";
-import DropdownValues from "../Data/Dropdown-values.js";
+import CustomStorage from './Local-Storage.js';
+import DropdownValues from '../Data/Dropdown-values.js';
 const rowsAmount = document.querySelector('#rows-amount');
 const Storage = new CustomStorage();
 export default function fillStorage() {
@@ -7,17 +7,9 @@ export default function fillStorage() {
      * TableHeaders - needed for the table to print only exact columns
      * Also stores into the Storage to be able to be called later
     */
-    const tableHeaders = ["ProdCode", "Customer", "ProdName", "HostName", "MatNum", "ArticleNum", "WkStNmae", "AdpNum", "ProcName", "AVO", 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
+    const tableHeaders = ['ProdCode', 'Customer', 'ProdName', 'HostName', 'MatNum', 'ArticleNum', 'WkStNmae', 'AdpNum', 'ProcName', 'AVO', 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
     Storage.setItem('tableHeaders', tableHeaders);
     Storage.setItem('selectedHeaders', []);
-    /**
-     * delimiterOption - in Convert-csv delimiter has delimiter by default ','
-     * If selected delimiterOption will be different from the default, it will be overwritten
-    */
-    const delimiterSelection = document.querySelector('#delimiter-selection');
-    let delimiterOption = null;
-    if (delimiterSelection)
-        delimiterOption = delimiterSelection?.options[delimiterSelection?.selectedIndex]?.value;
     if (Storage.items.data) {
         // StaticData - stored to be a full version of initial array
         Storage.setItem('staticData', Storage.items.data);
@@ -64,17 +56,17 @@ export default function fillStorage() {
             });
         });
         // Number of rows of the updated array will be outputted
-        rowsAmount.innerHTML = Storage.items.data.length;
+        rowsAmount?.setAttribute('innerHTML', Storage.items.data.length);
         // Values from updated file data to fullfill dropdowns only with actual values
         let dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
         Storage.items.datalists.forEach((datalist) => {
             if (datalist)
                 datalist.innerHTML = '';
-            dropdownValues.values.forEach((value) => {
+            dropdownValues?.values.forEach((value) => {
                 const option = document.createElement('option');
                 option.className = 'datalist-option';
                 option.value = `${value}`;
-                datalist.appendChild(option);
+                datalist?.appendChild(option);
             });
         });
         dropdownValues = null;

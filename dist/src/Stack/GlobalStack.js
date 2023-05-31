@@ -7,6 +7,7 @@ class GlobalStacks {
         // Class variable stacks will be overwritten with stacks from GlobalStacks
         // this.stacks = GlobalStacks.stacks; // Remove this line
         // Setting class to the global window
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         window.GlobalStacks = this;
     }
     // Add element to a specific stack
@@ -41,17 +42,6 @@ class GlobalStacks {
         }
         return GlobalStacks.stacks[stackName].length;
     }
-    // Clear a specific stack
-    clear(stackName) {
-        if (!GlobalStacks.stacks[stackName])
-            return 0;
-        return GlobalStacks.stacks[stackName] = [];
-    }
 }
-Object.defineProperty(GlobalStacks, "stacks", {
-    enumerable: true,
-    configurable: true,
-    writable: true,
-    value: {}
-});
+GlobalStacks.stacks = {};
 export default GlobalStacks;

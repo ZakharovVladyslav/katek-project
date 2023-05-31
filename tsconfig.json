@@ -1,17 +1,15 @@
 {
     "compilerOptions": {
-        "noEmit": true,
-        "allowImportingTsExtensions": true,
         "outDir": "dist",
         "target": "es2021",
-        "module": "esnext",
+        "module": "ESNext",
         "moduleResolution": "node",
-        "strict": true,
+        "allowJs": true,
+        "resolveJsonModule": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "resolveJsonModule": true,
         "isolatedModules": true,
-        "noImplicitAny": true,
+        "noImplicitAny": true
     },
     "include": [
         "src",
@@ -19,7 +17,7 @@
     ],
     "exclude": [
         "node_modules",
-        "dist",
+        "dist"
     ],
     "ts-node": {
         "esm": true,

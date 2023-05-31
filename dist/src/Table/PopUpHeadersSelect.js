@@ -1,4 +1,4 @@
-import CustomStorage from "../Storage/Local-Storage.js";
+import CustomStorage from '../Storage/Local-Storage.js';
 const Storage = new CustomStorage();
 const callPopupBtn = document.querySelector('#call-popup');
 const selectHeadersDiv = document.querySelector('#select-headers-div');
@@ -7,12 +7,12 @@ const tableWrapper = document.querySelector('#table-wrapper');
 let eventListenerAdded = false; // Variable to track if the event listener has been added
 export default function PopUpHeadersSelect() {
     if (Storage.items.saveOption === 'Headers' || Storage.items.saveOption === 'Headers & Filters') {
-        selectHeadersDiv.style.opacity = '1';
-        callPopupBtn.disabled = false;
-        headersTable.innerHTML = '';
+        selectHeadersDiv?.setAttribute('style', 'opacity: 1');
+        callPopupBtn?.setAttribute('disabled', 'false');
+        headersTable?.setAttribute('innerHTML', '');
         const headersTableBody = document.createElement('tbody');
-        let allHeaders = [...Storage.items.allHeaders];
-        let headers = [];
+        const allHeaders = [...Storage.items.allHeaders];
+        const headers = [];
         let selectedHeaders = [...Storage.items.selectedHeaders];
         while (allHeaders.length > 0)
             headers.push(allHeaders.splice(0, 5));
@@ -21,7 +21,7 @@ export default function PopUpHeadersSelect() {
             row.forEach((header, cellIndex) => {
                 const tableCell = document.createElement('td');
                 tableCell.innerHTML = header;
-                let pos = headers[rowIndex][cellIndex];
+                const pos = headers[rowIndex][cellIndex];
                 tableCell.classList.add('sqr');
                 tableCell.id = 'sqr';
                 if (Storage.items.selectedHeaders.includes(header))
@@ -35,13 +35,14 @@ export default function PopUpHeadersSelect() {
             });
             headersTableBody.appendChild(tableRow);
         });
-        headersTable.appendChild(headersTableBody);
+        headersTable?.appendChild(headersTableBody);
         if (!eventListenerAdded) {
-            callPopupBtn.addEventListener('click', (e) => {
-                tableWrapper.classList.toggle('show');
-            });
+            const handleCallPopupBtnClick = () => {
+                tableWrapper?.classList.toggle('show');
+            };
             eventListenerAdded = true;
-            callPopupBtn.removeEventListener('click', (e) => { });
+            callPopupBtn?.addEventListener('click', handleCallPopupBtnClick);
+            callPopupBtn?.removeEventListener('click', handleCallPopupBtnClick);
         }
     }
     else {
