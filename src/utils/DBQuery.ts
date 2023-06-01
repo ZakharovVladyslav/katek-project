@@ -1,4 +1,4 @@
-import CustomStorage from '../Storage/Local-Storage.js';
+import CustomStorage from '../services/Storage/Local-Storage.js';
 import fetchData from './FetchDbJSON.js';
 
 const dateOptionSelector: HTMLSelectElement | null = document.querySelector('#date-params');
@@ -6,18 +6,20 @@ const dateOptionSelector: HTMLSelectElement | null = document.querySelector('#da
 const Storage = new CustomStorage();
 
 export default async function DBQuery() {
+	console.log('DBQuery works');
+
 	if (Storage.items.limiter === undefined)
 		Storage.setItem('limiter', 1000);
 
 	let queryObjects: object[] | null = [];
 	let args = '';
 
-	const usedInputFields: HTMLSelectElement[] = Storage.items.inputFields.map((field: HTMLInputElement) => {
-		if (field.value !== '')
+	const usedInputFields: HTMLSelectElement[] = Storage.items.inputFields?.map((field: HTMLInputElement) => {
+		if (field?.value !== '')
 			return field;
 	}).filter((field: HTMLSelectElement | undefined) => field !== undefined);
 
-	if (Storage.items.firstDate.value && Storage.items.secondDate.value) {
+	if (Storage.items.firstDate?.value && Storage.items.secondDate?.value) {
 		const dateOption: string | undefined = dateOptionSelector?.options[dateOptionSelector?.selectedIndex]?.value;
 
 		Storage.setItem('firstDateQuery', `${Storage.items.firstDate.value.replace('T', ' ')}.00.000`);
@@ -30,7 +32,7 @@ export default async function DBQuery() {
 		);
 	}
 
-	if (usedInputFields.length > 0) {
+	if (usedInputFields?.length > 0) {
 		const usedDbSelects: HTMLSelectElement[] = Array.from(document.querySelectorAll<HTMLSelectElement>('[id^="db-select-"]'));
 
 		usedInputFields.forEach((field: HTMLSelectElement | null, index: number) => {

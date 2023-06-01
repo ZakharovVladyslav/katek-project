@@ -1,6 +1,6 @@
-import CustomStorage from '../Storage/Local-Storage.js';
-import LocalStacks from '../Stack/LocalStack.js';
-import fetchData from '../DB/FetchDbJSON.js';
+import CustomStorage from '../services/Storage/Local-Storage.js';
+import LocalStacks from '../services/Stack/LocalStack.js';
+import fetchData from './FetchDbJSON.js';
 
 const countpassDiv: HTMLDivElement | null = document.querySelector('#countpass-counter-div');
 const countpassCounter: HTMLParagraphElement | null = document.querySelector('#countpass-counter');
@@ -83,7 +83,8 @@ export default async function CountpassCounter(countpassValue: string) {
 
 		// Check if the difference is within the acceptable range
 		if (Math.abs(differenceMinutes) <= acceptableRange) {
-			countpassCounter?.setAttribute('innerHTML', `${countpassValue}`);
+			if (countpassCounter)
+				countpassCounter.innerHTML = `${countpassValue}`;
 
 			if (
 				LocalStack.peek('firstDateStack') !== null &&
@@ -112,10 +113,12 @@ export default async function CountpassCounter(countpassValue: string) {
 						const countPassDifference: string = percentageDifference.toFixed(2);
 
 						const number: string | undefined = countpassCounter?.innerHTML;
-						if (number)
-							countpassCounter?.setAttribute('innerHTML', `${((percentageDifference / 100) * +number)}`);
+						if (number && countpassCounter)
+							countpassCounter.innerHTML = `${((percentageDifference / 100) * +number)}`;
 
-						distractProcentParag?.setAttribute('innerHTML', `-${countPassDifference}%`);
+						if (distractProcentParag)
+							distractProcentParag.innerHTML = `-${countPassDifference}%`;
+
 						distractProcentParag?.setAttribute('style', 'display: block; color: #a80000;');
 
 						setTimeout(() => {
@@ -130,9 +133,11 @@ export default async function CountpassCounter(countpassValue: string) {
 
 		} else {
 			countpassWrapper?.setAttribute('style', 'display: none;');
-			countpassErrorMsg?.setAttribute('innerHTML', 'Range is bigger than 8 hours');
 			countpassErrorMsg?.setAttribute('style', 'display: block;');
 			countpassDiv?.setAttribute('style', 'border: 1px solid #a80000;');
+
+			if (countpassErrorMsg)
+				countpassErrorMsg.innerHTML = 'Range is bigger than 8 hours';
 
 			setTimeout(() => {
 				countpassErrorMsg?.setAttribute('style', 'display: none;');
@@ -143,8 +148,10 @@ export default async function CountpassCounter(countpassValue: string) {
 	} else if (Storage.items.firstDate.value && !Storage.items.secondDate.value) {
 		countpassWrapper?.setAttribute('style', 'display: none;');
 		countpassErrorMsg?.setAttribute('style', 'display: block');
-		countpassErrorMsg?.setAttribute('innerHTML', 'Second date is missing');
 		countpassDiv?.setAttribute('style', 'border: 1px solid #a80000;');
+
+		if (countpassErrorMsg)
+			countpassErrorMsg.innerHTML = 'Second date is missing';
 
 		setTimeout(() => {
 			countpassErrorMsg?.setAttribute('style', 'display: none;');
@@ -154,8 +161,10 @@ export default async function CountpassCounter(countpassValue: string) {
 	} else if (!Storage.items.firstDate.value && Storage.items.secondDate.value) {
 		countpassWrapper?.setAttribute('style', 'display: none;');
 		countpassErrorMsg?.setAttribute('style', 'display: block');
-		countpassErrorMsg?.setAttribute('innerHTML', 'First date is missing');
 		countpassDiv?.setAttribute('style', 'border: 1px solid #a80000;');
+
+		if (countpassErrorMsg)
+			countpassErrorMsg.innerHTML = 'First date is missing';
 
 		setTimeout(() => {
 			countpassErrorMsg?.setAttribute('style', 'display: none;');
@@ -165,8 +174,10 @@ export default async function CountpassCounter(countpassValue: string) {
 	} else {
 		countpassWrapper?.setAttribute('style', 'display: none;');
 		countpassErrorMsg?.setAttribute('style', 'display: block;');
-		countpassErrorMsg?.setAttribute('innerHTML', 'No date present');
 		countpassDiv?.setAttribute('style', 'border: 1px solid #a80000;');
+
+		if (countpassErrorMsg)
+			countpassErrorMsg.innerHTML = 'No date present';
 
 		setTimeout(() => {
 			countpassErrorMsg?.setAttribute('style', 'display: none');

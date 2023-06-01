@@ -1,4 +1,4 @@
-import CustomStorage from '../Storage/Local-Storage.js';
+import CustomStorage from '../../services/Storage/Local-Storage.js';
 
 const Storage = new CustomStorage();
 
@@ -12,8 +12,12 @@ let eventListenerAdded = false; // Variable to track if the event listener has b
 export default function PopUpHeadersSelect() {
 	if (Storage.items.saveOption === 'Headers' || Storage.items.saveOption === 'Headers & Filters') {
 		selectHeadersDiv?.setAttribute('style', 'opacity: 1');
-		callPopupBtn?.setAttribute('disabled', 'false');
-		headersTable?.setAttribute('innerHTML', '');
+
+		if (headersTable)
+			headersTable.innerHTML = '';
+
+		if (callPopupBtn)
+			callPopupBtn.disabled = false;
 
 		const headersTableBody: HTMLTableSectionElement | null = document.createElement('tbody');
 
@@ -59,10 +63,11 @@ export default function PopUpHeadersSelect() {
 			};
 			eventListenerAdded = true;
 			callPopupBtn?.addEventListener('click', handleCallPopupBtnClick);
-			callPopupBtn?.removeEventListener('click', handleCallPopupBtnClick);
 		}
 	} else {
 		document.querySelector<HTMLDivElement>('#select-headers-div')?.setAttribute('style', 'opacity: 0;');
-		document.querySelector<HTMLButtonElement>('#call-popup')?.setAttribute('disabled', 'true');
+		const callPopupBtn: HTMLButtonElement | null = document.querySelector('#call-popup');
+		if (callPopupBtn)
+			callPopupBtn.disabled = true;
 	}
 }

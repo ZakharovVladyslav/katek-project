@@ -1,4 +1,4 @@
-import CustomStorage from '../Storage/Local-Storage.js';
+import CustomStorage from '../services/Storage/Local-Storage.js';
 
 const Storage = new CustomStorage();
 
@@ -13,8 +13,10 @@ export default function SummaryTable() {
 		let array: object[] | null = [...Storage.items.data];
 
 		if (!toggleCheckboxInput?.checked) {
+			if (table)
+				table.innerHTML = '';
+
 			table?.setAttribute('style', 'max-widht: 100px;');
-			table?.setAttribute('innerHTML', '');
 
 			const keys: string[] = ['tLatenz', 'tLatenzSumme', 'tCycle', 'tProc', 'FPY', 'CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
 
@@ -73,7 +75,8 @@ export default function SummaryTable() {
 
 		}
 		else {
-			table?.setAttribute('innerHTML', '');
+			if (table)
+				table.innerHTML = '';
 			table?.setAttribute('style', 'max-width: 0;');
 		}
 

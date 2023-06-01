@@ -1,7 +1,7 @@
 'use strict';
 
 import ldap from 'ldapjs';
-import CustomStorage from '../Storage/Local-Storage.js';
+import CustomStorage from '../../services/Storage/Local-Storage.js';
 
 const Storage = new CustomStorage();
 
@@ -23,9 +23,9 @@ export default function LoginWindow() {
 		Storage.setItem('login', logInfield?.value);
 		Storage.setItem('password', passwordField?.value);
 
-		const client = ldap.createClient({
+		/*const client = ldap.createClient({
 			url: ldapServerURL,
-		});
+		});*/
 
 		const trimmedLoginValue = logInfield?.value.trim();
 
@@ -35,7 +35,7 @@ export default function LoginWindow() {
 			throw new Error('Password field is not available');
 		}
 
-		client.bind(ldapBaseDN, password, (error) => { // passwordField?.value occurs error - rgument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'.ts(2345)
+		/*client.bind(ldapBaseDN, password, (error) => { // passwordField?.value occurs error - rgument of type 'string | undefined' is not assignable to parameter of type 'string'. Type 'undefined' is not assignable to type 'string'.ts(2345)
 			if (error) {
 				const throwErr = document.createElement('p');
 
@@ -77,7 +77,7 @@ export default function LoginWindow() {
 			if (error) {
 				console.error('Error unbinding from LDAP server:', error);
 			}
-		});
+		});*/
 	};
 	logInBtn?.addEventListener('click', handleLoginBtnClick);
 	logInBtn?.removeEventListener('click', handleLoginBtnClick);

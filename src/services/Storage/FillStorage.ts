@@ -1,5 +1,5 @@
 import CustomStorage from './Local-Storage.js';
-import DropdownValues from '../Data/Dropdown-values.js';
+import DropdownValues from '../../utils/Dropdown-values.js';
 const rowsAmount = document.querySelector('#rows-amount');
 
 const Storage = new CustomStorage();
@@ -71,7 +71,10 @@ export default function fillStorage() {
 			});
 		});
 		// Number of rows of the updated array will be outputted
-		rowsAmount?.setAttribute('innerHTML', Storage.items.data.length);
+		//rowsAmount?.setAttribute('innerHTML', Storage.items.data.length);
+
+		if (rowsAmount)
+			rowsAmount.innerHTML = Storage.items.data.length;
 
 		// Values from updated file data to fullfill dropdowns only with actual values
 		let dropdownValues: {values: string[], valueToHeaderMap: object } | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);

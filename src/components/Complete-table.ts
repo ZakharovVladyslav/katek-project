@@ -1,4 +1,4 @@
-import CustomStorage from '../Storage/Local-Storage.js';
+import CustomStorage from '../services/Storage/Local-Storage.js';
 
 const Storage = new CustomStorage();
 
@@ -18,10 +18,20 @@ export default function CompleteTable() {
 	const rowLimiter: HTMLInputElement | null = document.querySelector('#row-limiter');
 
 	const handleFullTableButtonClick = () => {
-		document.querySelector<HTMLButtonElement>('#submit-button')?.setAttribute('disabled', 'true');
-		document.querySelector<HTMLButtonElement>('#reset')?.setAttribute('disabled', 'true');
-		document.querySelector<HTMLButtonElement>('#full-table-button')?.setAttribute('disabled', 'true');
-		document.querySelector<HTMLInputElement>('#summary-row-toggler-input')?.setAttribute('disabled', 'true');
+		const submitBtn: HTMLButtonElement | null = document.querySelector('#submit-button');
+		const resetBtn: HTMLButtonElement | null = document.querySelector('#reset');
+		const fullTableBtn: HTMLButtonElement | null = document.querySelector('#full-table-button');
+		const summaryRowTogglerInput: HTMLInputElement | null = document.querySelector('#summary-row-toggler-input');
+
+		if (submitBtn)
+			submitBtn.disabled = true;
+		if (resetBtn)
+			resetBtn.disabled = true;
+		if (fullTableBtn)
+			fullTableBtn.disabled = true;
+		if (summaryRowTogglerInput)
+			summaryRowTogglerInput.disabled = true;
+
 		document.querySelector<HTMLElement>('#mode-label')?.setAttribute('style', 'opacity: 0;');
 		document.querySelector<HTMLElement>('#shown-rows-counter-div')?.setAttribute('style', 'opacity: 0;');
 		document.querySelector<HTMLElement>('#save-div')?.setAttribute('style', 'opacity: 0;');
@@ -32,11 +42,16 @@ export default function CompleteTable() {
 		const saveButton: HTMLButtonElement | null = document.querySelector('#save');
 		const tableReload: HTMLButtonElement | null = document.querySelector('#reload-table');
 
-		dataTable?.setAttribute('innerHTML', '');
-		fullTable?.setAttribute('innerHTML', '');
+		if (dataTable)
+			dataTable.innerHTML = '';
+		if (fullTable)
+			fullTable.innerHTML = '';
+
 		clickToggler?.setAttribute('style', 'display: none;');
 		saveButton?.setAttribute('style', 'display: none;');
-		tableReload?.setAttribute('disabled', 'false');
+
+		if (tableReload)
+			tableReload.disabled = false;
 
 		fullTableSection?.setAttribute('style', 'opacity: 1; transition: 0.2s;');
 		arrows?.setAttribute('style','opacity: 1; transition: 0.2s;');
@@ -103,7 +118,8 @@ export default function CompleteTable() {
 		renderTable(index as number, separatedKeys as string[][]);
 
 		const handleLeftArrowClick = () => {
-			fullTable?.setAttribute('innerHTML', '');
+			if (fullTable)
+				fullTable.innerHTML = '';
 
 			if (index === 0)
 			// eslint-disable-next-line no-self-assign
@@ -118,7 +134,8 @@ export default function CompleteTable() {
 		leftArrow?.removeEventListener('click', handleLeftArrowClick);
 
 		const handleRightArrowClick = () => {
-			fullTable?.setAttribute('innerHTML', '');
+			if (fullTable)
+				fullTable.innerHTML = '';
 
 			if (index === separatedKeys.length - 1)
 			// eslint-disable-next-line no-self-assign

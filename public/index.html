@@ -6,9 +6,9 @@
 
    <link rel="stylesheet" href="http://localhost:3001/styles/index.css">
    <link rel="stylesheet" href="http://localhost:3001/styles/media.css">
-   <link rel="stylesheet" href="http://localhost:3001/src/Login-form/Login-window.css">
-   <link rel="stylesheet" href="http://localhost:3001/src/Table/PopUpHeadersSelect.css">
-   <script type="module" src="http://localhost:3001/dist/src/index.js" defer></script>
+   <link rel="stylesheet" href="http://localhost:3001/src/components/Login-form/Login-window.css">
+   <link rel="stylesheet" href="http://localhost:3001/src/components/PopupHeadersSelect/PopUpHeadersSelect.css">
+   <script type="module" src="http://localhost:3001/src/index.ts" defer></script>
 
    <link rel="icon" type="image/x-icon" href="./assets/katek-favicon.ico">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
@@ -72,7 +72,7 @@
                   <input type="number" id="row-limiter" value="800">
                </div>
 
-               <select id="chooseLangId" onchange="chooseLang()">
+               <select id="chooseLangId">
                   <option id="opt">GE</option>
                   <option id="opt">EN</option>
                </select>
@@ -192,9 +192,9 @@
          <div class="mode-div">
             <p id="mode-label" style="opacity: 0;">Zellenklickmodus: </p>
             <select id="click-toggler" style="display: none;">
-               <option id="opt1" class="ct-option">Zum Filtern hinzufügen</option>
-               <option id="opt2" class="ct-option">Zeile anzeigen</option>
-               <option id="opt3" class="ct-option">Den Wert einer Zelle ändern</option>
+               <option id="opt1" class="ct-option" value="add-to-filters">Zum Filtern hinzufügen</option>
+               <option id="opt2" class="ct-option" value="show-row">Zeile anzeigen</option>
+               <option id="opt3" class="ct-option" value="change-cell-content">Den Wert einer Zelle ändern</option>
             </select>
          </div>
 
@@ -241,7 +241,7 @@
       <table id="data-table"></table>
 
       <script>
-         const option = document.getElementById('chooseLangId');
+         const chooseLangSelect = document.getElementById('chooseLangId');
 
          const fileChoose = document.querySelector('#fc');
          const rowLimiter = document.querySelector('#row-counter-label');
@@ -262,8 +262,12 @@
          const diagramDesc = document.querySelector("#diagramm-description");
          const cellMode = document.querySelector('#mode-label');
 
-         function chooseLang() {
-            if (option.value === 'GE') {
+         chooseLangSelect.addEventListener('change', () => {
+            const option = chooseLangSelect.options[chooseLangSelect.selectedIndex].value;
+
+            console.log(option);
+
+            if (option === 'GE') {
                fileChoose.innerHTML = 'Datei öffnen';
                rowLimiter.innerHTML = 'Anzahl der Zeilen begrenzen:';
                submitBtn.innerHTML = 'Bestätigen ';
@@ -271,7 +275,6 @@
                resetBtn.innerHTML = 'Reset';
                fullTableBtn.innerHTML = 'Komplette Tabelle';
                summaryRow.innerHTML = 'Ergebnis';
-               saveFilters.innerHTML = `Filter speichern`;
                realRowsNumber.innerHTML = 'Anzahl der angezeigten Zeilen:';
                addToFilterOption.innerHTML = 'Zum Filtern hinzufügen';
                showRowOption.innerHTML = 'Zeile anzeigen';
@@ -283,15 +286,16 @@
                cellMode.innerHTML = 'Zellenklickmodus:';
             }
 
-            else if (option.value === 'EN') {
-               fileChoose.innerHTML = 'Choose file';
+            else if (option === 'EN') {
+               if (fileChoose)
+                  fileChoose.innerHTML = 'Choose file';
+
                rowLimiter.innerHTML = 'Row limiter: ';
                submitBtn.innerHTML = 'Submit';
                initialTableBtn.innerHTML = 'Initial table';
                resetBtn.innerHTML = 'Reset';
                fullTableBtn.innerHTML = 'Full table';
                summaryRow.innerHTML = 'Summary row';
-               saveFilters.innerHTML = 'Save filters';
                realRowsNumber.innerHTML = 'Number of shown rows:';
                addToFilterOption.innerHTML = 'Add to filters';
                showRowOption.innerHTML = 'Show row';
@@ -302,7 +306,7 @@
                diagramDesc.innerHTML = 'Here you can observe the percentage of production process via diagramm';
                cellMode.innerHTML = 'Cell click mode:';
             }
-         };
+         });
       </script>
 </body>
 
