@@ -12,7 +12,7 @@ interface Data {
 
 export default function Diagram(): void {
 	const dataPieInput: HTMLInputElement | null = document.querySelector('#pie-diagramm-checkbox');
-	const svgElem: SVGElement | null = document.querySelector('#svg-element');
+	const svgElem = document.querySelector('#svg-element') as SVGElement;
 	const labels: HTMLDivElement | null = document.querySelector('#labels');
 	const diagrammLabel: HTMLLabelElement | null = document.querySelector('#pie-diagramm-label');
 	const svgDiv: HTMLDivElement | null = document.querySelector('#svg-div');
@@ -25,7 +25,6 @@ export default function Diagram(): void {
 	};
 
 	diagrammLabel?.addEventListener('click', diagrammLabelClick);
-	diagrammLabel?.removeEventListener('click', diagrammLabelClick);
 
 	const handleDataPieInputChange = () => {
 		if (diagrammDescriptionLabel) {
@@ -64,9 +63,7 @@ export default function Diagram(): void {
 		}
 
 		zeros = zeros.map((zero: number | string) => {
-			return typeof zero === 'number'
-				? zero.toFixed(2)
-				: zero.toString();
+			return typeof zero === 'number' ? zero.toFixed(2) : zero.toString();
 		});
 
 		const inputData: Data[] = [
@@ -79,44 +76,46 @@ export default function Diagram(): void {
 		if (dataPieInput && !dataPieInput.checked) {
 			const radius = 150;
 
-			const arcGenerator = d3.arc<any, d3.DefaultArcObject>()
-				.innerRadius(100)
-				.outerRadius(radius)
-				.padAngle(0.03);
+			svgElem.innerHTML = '';
 
-			const pieGenerator = d3.pie<Data>()
+			const pieGenerator = d3
+				.pie<Data>()
 				.value((d) => parseFloat(d.value))
-				.padAngle(0.03);
+				.padAngle(0.03)
+				.sort(null);
 
-			const svg = d3.select<SVGSVGElement, unknown>('svg');
+			const arcGenerator = d3
+				.arc<d3.PieArcDatum<Data>>()
+				.innerRadius(100)
+				.outerRadius(radius);
 
-			svgElem?.setAttribute('innerHTML', '');
+			const pie = pieGenerator(inputData);
 
-			const center = { x: 200, y: 200 };
-
-			const circleDiagram = svg.append('g')
-				.attr('transform', `translate(${center.x},${center.y})`);
-
-			const arcs = circleDiagram.selectAll<SVGGElement, d3.PieArcDatum<Data>>('g.arc')
-				.data(pieGenerator(inputData))
-				.enter()
+			const svg = d3
+				.select(svgElem)
+				.append('svg')
+				.attr('width', radius * 2)
+				.attr('height', radius * 2)
 				.append('g')
-				.attr('class', 'arc');
+				.attr('transform', `translate(${radius},${radius})`);
 
-			arcs.filter(d => d.value !== 0)
+			svg
+				.selectAll('path')
+				.data(pie)
+				.enter()
 				.append('path')
-				//.attr('d', (d: d3.PieArcDatum<Data>) => arcGenerator(d) || '') // Use a custom value function
-				.style('fill', (d) => d.data.color)
-				.style('stroke', '#000000')
-				.style('stroke-width', '1.35px');
+				.attr('d', arcGenerator)
+				.attr('fill', (d) => d.data.color)
+				.attr('stroke', '#000000')
+				.attr('stroke-width', 1);
 
 			inputData.forEach((elem: Data, index: number) => {
 				const html = `
-				<div id='color-${index + 1}' style="display: flex; flex-direction: row; gap: 10px;">
-				  <span id='square' style="width: 40px; height: 40px; background-color: ${elem.color}; display: block; "></span>
-				  <p>${elem.label} - ${elem.value}</p>
-				</div>
-			  `;
+					<div id='color-${index + 1}' style="display: flex; flex-direction: row; gap: 10px;">
+						<span id='square' style="width: 40px; height: 40px; background-color: ${elem.color}; display: block; "></span>
+						<p>${elem.label} - ${elem.value}</p>
+					</div>
+				`;
 
 				if (labels) {
 					labels.insertAdjacentHTML('beforeend', html);
@@ -140,6 +139,6 @@ export default function Diagram(): void {
 			}
 		}
 	};
+
 	dataPieInput?.addEventListener('click', handleDataPieInputChange);
-	dataPieInput?.removeEventListener('click', handleDataPieInputChange);
 }

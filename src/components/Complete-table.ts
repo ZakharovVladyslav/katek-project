@@ -3,8 +3,10 @@ import CustomStorage from '../services/Storage/Local-Storage.js';
 const Storage = new CustomStorage();
 
 const fullTableSection: HTMLDivElement | null = document.querySelector('#full-table-section');
+const overTables = document.querySelector('#over-tables') as HTMLDivElement;
 
 export default function CompleteTable() {
+	console.log('Complete table');
 	fullTableSection?.setAttribute('style', 'display: block;');
 
 	const arr: object[] = [...Storage.items.data];
@@ -18,6 +20,7 @@ export default function CompleteTable() {
 	const rowLimiter: HTMLInputElement | null = document.querySelector('#row-limiter');
 
 	const handleFullTableButtonClick = () => {
+		overTables.style.display = 'none';
 		const submitBtn: HTMLButtonElement | null = document.querySelector('#submit-button');
 		const resetBtn: HTMLButtonElement | null = document.querySelector('#reset');
 		const fullTableBtn: HTMLButtonElement | null = document.querySelector('#full-table-button');
@@ -65,8 +68,8 @@ export default function CompleteTable() {
 		}
 
 		const renderTable = (index: number, keys: string[][]) => {
-			const thead = document.createElement('thead');
-			const tbody = document.createElement('tbody');
+			const thead: HTMLTableSectionElement = document.createElement('thead');
+			const tbody: HTMLTableSectionElement = document.createElement('tbody');
 
 			const headerRow = document.createElement('tr');
 
@@ -115,7 +118,7 @@ export default function CompleteTable() {
 			fullTable?.appendChild(thead);
 		};
 
-		renderTable(index as number, separatedKeys as string[][]);
+		renderTable(index, separatedKeys);
 
 		const handleLeftArrowClick = () => {
 			if (fullTable)
@@ -131,7 +134,6 @@ export default function CompleteTable() {
 		};
 
 		leftArrow?.addEventListener('click', handleLeftArrowClick);
-		leftArrow?.removeEventListener('click', handleLeftArrowClick);
 
 		const handleRightArrowClick = () => {
 			if (fullTable)
@@ -146,8 +148,6 @@ export default function CompleteTable() {
 			renderTable(index, separatedKeys);
 		};
 		rightArrow?.addEventListener('click', handleRightArrowClick);
-		rightArrow?.removeEventListener('click', handleRightArrowClick);
 	};
 	fullTableButton?.addEventListener('click', handleFullTableButtonClick);
-	fullTableButton?.removeEventListener('click', handleFullTableButtonClick);
 }

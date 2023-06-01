@@ -83,5 +83,4 @@ export default function SummaryTable() {
 		array = null;
 	};
 	toggleCheckboxInput?.addEventListener('change', handleToggleCheckboxInputChange);
-	toggleCheckboxInput?.removeEventListener('change', handleToggleCheckboxInputChange);
 }

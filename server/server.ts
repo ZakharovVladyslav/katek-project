@@ -49,9 +49,9 @@ app.get('/:action', (req, res) => {
 
 		console.log(sql);
 
-		connection.query(sql, (err, results) => {
-			if (err)
-				throw err;
+		connection.query(sql, (error, results) => {
+			if (error)
+				console.log(error);
 
 			res.send(results);
 		});
@@ -62,7 +62,7 @@ app.get('/:action', (req, res) => {
 
 		connection.query(sql, (error, results) => {
 			if (error)
-				throw error;
+				console.log(error);
 
 			res.send(results);
 		});
@@ -73,7 +73,7 @@ app.get('/:action', (req, res) => {
 
 		connection.query(sql, (error, results) => {
 			if (error)
-				throw error;
+				console.log(error);
 
 			res.send(results);
 		});

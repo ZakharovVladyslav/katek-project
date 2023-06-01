@@ -32,8 +32,8 @@ export default function fillStorage() {
 		Storage.setItem('inputTextLength', Storage.items.data.length);
 	}
 
-	Storage.setItem('firstDate', document.querySelector('#left-date-inp'));
-	Storage.setItem('secondDate', document.querySelector('#right-date-inp'));
+	Storage.setItem('firstDate', document.querySelector('#left-date-inp') as HTMLInputElement);
+	Storage.setItem('secondDate', document.querySelector('#right-date-inp') as HTMLInputElement);
 
 	const headersMap: Map<string, string> = new Map();
 	Storage.items.tableHeaders.forEach((header: string, index: number) => {
@@ -42,6 +42,7 @@ export default function fillStorage() {
 
 	Storage.setItem('objectKeysMap', headersMap);
 
+	console.log(Storage.items.data);
 	if (Storage.items.data) {
 		/**
          * dbSelects - select html elements near to input field

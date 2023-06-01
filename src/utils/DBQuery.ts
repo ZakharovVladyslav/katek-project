@@ -6,8 +6,6 @@ const dateOptionSelector: HTMLSelectElement | null = document.querySelector('#da
 const Storage = new CustomStorage();
 
 export default async function DBQuery() {
-	console.log('DBQuery works');
-
 	if (Storage.items.limiter === undefined)
 		Storage.setItem('limiter', 1000);
 

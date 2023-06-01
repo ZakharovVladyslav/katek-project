@@ -20,35 +20,60 @@ import { FullDataInterface } from './utils/types.ts';
 const Storage = new CustomStorage();
 
 /* HTML Elements import */
-const inputForm: HTMLFormElement | null = document.querySelector('#input-form');
-const submitBtn: HTMLButtonElement | null = document.querySelector('#submit-button');
-const resetBtn: HTMLButtonElement | null = document.querySelector('#reset');
-const dataTable: HTMLTableElement | null = document.querySelector('#data-table');
-const emptyMessage: HTMLParagraphElement | null = document.querySelector('#empty-message');
-const rowLimiter: HTMLInputElement | null = document.querySelector('#row-limiter');
-const reloadTable: HTMLButtonElement | null = document.querySelector('#reload-table');
-const cellSelect: HTMLSelectElement | null = document.querySelector('#click-toggler');
-const filters: HTMLDivElement | null = document.querySelector('#filters');
-const clickToggler: HTMLSelectElement | null = document.querySelector('#click-toggler');
-const saveButton: HTMLButtonElement | null = document.querySelector('#save');
-const rowsAmount: HTMLParagraphElement | null = document.querySelector('#rows-amount');
-const fullTable: HTMLTableElement | null = document.querySelector('#full-table');
-const fullTableBtn: HTMLButtonElement | null = document.querySelector('#full-table-button');
-const arrows: HTMLDivElement | null = document.querySelector('#index-arrows');
-const saveDiv: HTMLDivElement | null = document.querySelector('#save-div');
-const realRowsNumber: HTMLParagraphElement | null = document.querySelector('#real-rows-number');
-const shownRowsCounter: HTMLParagraphElement | null = document.querySelector('#shown-rows-counter');
-const shownRowsCounterDiv: HTMLDivElement | null = document.querySelector('.shown-rows-counter-div');
-const fullTableSection: HTMLDivElement | null = document.querySelector('#full-table-section');
-const SummaryTableInput: HTMLInputElement | null = document.querySelector('#summary-row-toggler-input');
-const pieDiagrammInput: HTMLInputElement | null = document.querySelector('#pie-diagramm-checkbox');
-const svgDiv: HTMLDivElement | null = document.querySelector('#svg-div');
-const diagrammDescription: HTMLParagraphElement | null = document.querySelector('#diagramm-description');
-const svgElement: SVGElement | null = document.querySelector('#svg-element');
-const modeLabel: HTMLParagraphElement | null = document.querySelector('#mode-label');
-const saveSelector: HTMLSelectElement | null = document.querySelector('#save-file-select');
-const dataSource: HTMLSelectElement | null = document.querySelector('#input-data-select');
-const countpassCounter: HTMLParagraphElement | null = document.querySelector('#countpass-counter');
+
+// BUTTONS ----------------------------------------------------------------------------------------
+const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
+const resetBtn = document.querySelector('#reset') as HTMLButtonElement;
+const reloadTable = document.querySelector('#reload-table') as HTMLButtonElement;
+const saveButton = document.querySelector('#save') as HTMLButtonElement;
+const fullTableBtn = document.querySelector('#full-table-button') as HTMLButtonElement;
+//-------------------------------------------------------------------------------------------------
+
+// SELECTS ----------------------------------------------------------------------------------------
+const clickToggler = document.querySelector('#click-toggler') as HTMLSelectElement;
+const saveSelector = document.querySelector('#save-file-select') as HTMLSelectElement;
+const dataSource = document.querySelector('#input-data-select') as HTMLSelectElement;
+//-------------------------------------------------------------------------------------------------
+
+// DIVS--------------------------------------------------------------------------------------------
+const filters = document.querySelector('#filters') as HTMLDivElement;
+const arrows = document.querySelector('#index-arrows') as HTMLDivElement;
+const saveDiv = document.querySelector('#save-div') as HTMLDivElement;
+const shownRowsCounterDiv = document.querySelector('.shown-rows-counter-div') as HTMLDivElement;
+const fullTableSection = document.querySelector('#full-table-section') as HTMLDivElement;
+const svgDiv = document.querySelector('#svg-div') as HTMLDivElement;
+const overTables = document.querySelector('#over-tables') as HTMLDivElement;
+//-------------------------------------------------------------------------------------------------
+
+// INPUTS-------------------------------------------------------------------------------------------
+const SummaryTableInput = document.querySelector('#summary-row-toggler-input') as HTMLInputElement;
+const pieDiagrammInput = document.querySelector('#pie-diagramm-checkbox') as HTMLInputElement;
+const rowLimiter = document.querySelector('#row-limiter') as HTMLInputElement;
+//-------------------------------------------------------------------------------------------------
+
+// PARAGRAPHS--------------------------------------------------------------------------------------
+const emptyMessage = document.querySelector('#empty-message') as HTMLParagraphElement;
+const rowsAmount = document.querySelector('#rows-amount') as HTMLParagraphElement;
+const realRowsNumber = document.querySelector('#real-rows-number') as HTMLParagraphElement;
+const shownRowsCounter = document.querySelector('#shown-rows-counter') as HTMLParagraphElement;
+const diagrammDescription = document.querySelector('#diagramm-description') as HTMLParagraphElement;
+const modeLabel = document.querySelector('#mode-label') as HTMLParagraphElement;
+const countpassCounter = document.querySelector('#countpass-counter') as HTMLParagraphElement;
+//-------------------------------------------------------------------------------------------------
+
+// TABLES------------------------------------------------------------------------------------------
+const dataTable = document.querySelector('#data-table') as HTMLTableElement;
+const fullTable = document.querySelector('#full-table') as HTMLTableElement;
+//-------------------------------------------------------------------------------------------------
+
+// FORM--------------------------------------------------------------------------------------------
+const inputForm = document.querySelector('#input-form') as HTMLTableElement;
+//-------------------------------------------------------------------------------------------------
+
+// SVG---------------------------------------------------------------------------------------------
+const svgElement = document.querySelector('#svg-element') as SVGElement;
+//--------------------------------------------------------------------------------------------------
+
 
 Storage.setItem('dataSourceOption',
 	dataSource?.options[dataSource?.selectedIndex]?.value
@@ -75,6 +100,11 @@ if (submitBtn)
 const dbConnectBtn = document.querySelector('#db-connect');
 
 window.addEventListener('load', () => {
+	const inputDataSelectOption = dataSource?.options[dataSource?.selectedIndex].value as string;
+
+	if (inputDataSelectOption === 'Datenbank')
+		clickToggler?.options[2].remove();
+
 	/*
 	if (sessionStorage.getItem('login') === null) {
 		LoginWindow();
@@ -164,6 +194,17 @@ const handleDbConnectBtnClick = async () => {
 dbConnectBtn?.addEventListener('click', handleDbConnectBtnClick);
 
 const handleDataSourceChange = () => {
+	submitBtn.disabled = true;
+	dataTable.innerHTML = '';
+	overTables.style.display = 'none';
+
+	submitBtn.disabled = true;
+	resetBtn.disabled = true;
+	fullTableBtn.disabled = true;
+	SummaryTableInput.disabled = true;
+	pieDiagrammInput.disabled = true;
+	reloadTable.disabled = true;
+
 	Storage.setItem('dataSourceOption', dataSource?.options[dataSource.selectedIndex].value as string);
 
 	const fileInputSection: HTMLDivElement | null = document.querySelector('#file-input-section');
@@ -180,65 +221,64 @@ const handleDataSourceChange = () => {
 
          <label id="fc" for="file-choose">Datei öffnen</label>
          <input type="file" id="file-choose"><br>
-         <p id="chosen-file"></p>
+         <p id="chosen-file" style="display: none;"></p>
       `;
 
 		fileInputSection?.insertAdjacentHTML('beforeend', html);
 
-		const file: HTMLInputElement | null = document.querySelector('#file-choose');
-		const chosenFile: HTMLParagraphElement | null = document.querySelector('#chosen-file');
+		const file = document.querySelector('#file-choose') as HTMLInputElement;
+		const chosenFile = document.querySelector('#chosen-file') as HTMLParagraphElement;
 
-		if (file && file.files && file.files.length > 0) {
-			const handleFileInput = () => {
-				// As file inputted, submit button become active and clickable
-				if (submitBtn)
-					submitBtn.disabled = true;
+		file.addEventListener('input', () => {
+			// As file inputted, submit button become active and clickable
+			submitBtn.disabled = true;
 
+			/**
+				 * Receive file name and put it to the site
+				 */
+			const arrFromFileName: string[] = file?.value.replaceAll('\\', ',').split(',');
+
+			chosenFile?.setAttribute('innerHTML', arrFromFileName[arrFromFileName.length - 1]);
+
+			// FileReader will read file data as text
+			const fileReader: FileReader = new FileReader();
+
+			/**
+				 *  file.files - object that contains data about the file from input
+				 *  file.files[0] - file name
+				*/
+			fileReader?.addEventListener('load', (e: ProgressEvent) => {
 				/**
-			 * Receive file name and put it to the site
-			 */
-				const arrFromFileName: string[] = file?.value.replaceAll('\\', ',').split(',');
-
-				chosenFile?.setAttribute('innerHTML', arrFromFileName[arrFromFileName.length - 1]);
-
-				// FileReader will read file data as text
-				const fileReader: FileReader = new FileReader();
-
-				/**
-			 *  file.files - object that contains data about the file from input
-			 *  file.files[0] - file name
-			*/
-				const handleFileReaderLoad = (e: ProgressEvent) => {
-					/**
 					* e.target.result returns the whole data from the file. In this case in text
 					* After text received, it stores in the Storage as inputText
 					*/
-					const target = e.target as FileReader;
+				const target = e.target as FileReader;
 
-					const text: string | ArrayBuffer | null | undefined = target?.result;
-					Storage.setItem('inputText', text as string | ArrayBuffer);
+				const text: string | ArrayBuffer | null | undefined = target?.result;
 
-					const delimiterSelection: HTMLSelectElement | null = document.querySelector('#delimiter-selection');
+				Storage.setItem('inputText', text);
 
-					const delimiterOption: string | undefined = delimiterSelection?.options[delimiterSelection?.selectedIndex]?.value;
+				const delimiterSelection: HTMLSelectElement | null = document.querySelector('#delimiter-selection');
 
-					/**
-					* Data will be stored as a result object[] from .csv text
-					*/
-					Storage.setItem('data', CsvToArray(Storage.items.inputText, delimiterOption).filter((obj) => {
-						return !Object.values(obj).includes(undefined);
-					}));
+				const delimiterOption: string | undefined = delimiterSelection?.options[delimiterSelection?.selectedIndex]?.value;
 
-					fillStorage();
-				};
-				fileReader?.addEventListener('load', handleFileReaderLoad);
+				/**
+				 * Data will be stored as a result object[] from .csv text
+				 */
+				Storage.setItem('data', CsvToArray(Storage.items.inputText, delimiterOption).filter((obj) => {
+					return !Object.values(obj).includes(undefined);
+				}));
 
-				// Set fileReader to read data from .csv file as text
-				if (file.files)
-					fileReader.readAsText(file.files[0]);
-			};
-			file?.addEventListener('input', handleFileInput);
-		}
+				fillStorage();
+
+				submitBtn.disabled = false;
+				submitBtn.click();
+			});
+
+			// Set fileReader to read data from .csv file as text
+			if (file.files)
+				fileReader.readAsText(file.files[0]);
+		});
 	}
 	else if (Storage.items.dataSourceOption === 'Datenbank') {
 		if (fileInputSection && dataTable) {
@@ -515,20 +555,32 @@ saveButton?.addEventListener('click', handleSaveButtonClick);
 const handleResetBtnClick = async (e: Event) => {
 	e.preventDefault();
 
-	document.querySelector<HTMLInputElement>('#filter-input-1')?.setAttribute('value', '');
-	document.querySelector<HTMLInputElement>('#filter-input-2')?.setAttribute('value', '');
-	document.querySelector<HTMLInputElement>('#filter-input-3')?.setAttribute('value', '');
-	document.querySelector<HTMLInputElement>('#filter-input-4')?.setAttribute('value', '');
-	document.querySelector<HTMLInputElement>('#filter-input-5')?.setAttribute('value', '');
+	const filterInput1 = document.querySelector('#filter-input-1') as HTMLInputElement;
+	const filterInput2 = document.querySelector('#filter-input-2') as HTMLInputElement;
+	const filterInput3 = document.querySelector('#filter-input-3') as HTMLInputElement;
+	const filterInput4 = document.querySelector('#filter-input-4') as HTMLInputElement;
+	const filterInput5 = document.querySelector('#filter-input-5') as HTMLInputElement;
+
+	filterInput1.value = '';
+	filterInput2.value = '';
+	filterInput3.value = '';
+	filterInput4.value = '';
+	filterInput5.value = '';
 
 	Storage.items.firstDate.value = '';
 	Storage.items.secondDate.value = '';
 
-	document.querySelector<HTMLSelectElement>('#db-select-1')?.setAttribute('selectedIndex', '0');
-	document.querySelector<HTMLSelectElement>('#db-select-2')?.setAttribute('selectedIndex', '0');
-	document.querySelector<HTMLSelectElement>('#db-select-3')?.setAttribute('selectedIndex', '0');
-	document.querySelector<HTMLSelectElement>('#db-select-4')?.setAttribute('selectedIndex', '0');
-	document.querySelector<HTMLSelectElement>('#db-select-5')?.setAttribute('selectedIndex', '0');
+	const dbSelect1 = document.querySelector('#db-select-1') as HTMLSelectElement;
+	const dbSelect2 = document.querySelector('#db-select-2') as HTMLSelectElement;
+	const dbSelect3 = document.querySelector('#db-select-3') as HTMLSelectElement;
+	const dbSelect4 = document.querySelector('#db-select-4') as HTMLSelectElement;
+	const dbSelect5 = document.querySelector('#db-select-5') as HTMLSelectElement;
+
+	dbSelect1.selectedIndex = 0;
+	dbSelect2.selectedIndex = 0;
+	dbSelect3.selectedIndex = 0;
+	dbSelect4.selectedIndex = 0;
+	dbSelect5.selectedIndex = 0;
 
 	Storage.items.dataSourceOption === 'Datenbank'
 		? await fetchData('/load-fetch')
@@ -560,9 +612,12 @@ const handleDateInputSectionClick = async (e: MouseEvent) => {
 	if (target.id.substring(0, 6) === 'eraser') {
 		const targetId: string = target.id.slice(7);
 
+		const leftDate = document.querySelector('#left-date-inp') as HTMLInputElement;
+		const rightDate = document.querySelector('#right-date-inp') as HTMLInputElement;
+
 		parseInt(targetId) === 6
-			? document.querySelector<HTMLInputElement>('#left-date-inp')?.setAttribute('value', '')
-			: document.querySelector<HTMLInputElement>('#right-date-inp')?.setAttribute('value', '');
+			? leftDate.value = ''
+			: rightDate.value = '';
 
 		Storage.items.dataSourceOption === 'Datenbank'
 			? await DBQuery()
@@ -725,8 +780,7 @@ const handleInputFormSubmit = async (e: Event) => {
 	pieDiagrammInput?.setAttribute('style', 'display: none;');
 	submitBtn?.setAttribute('style', 'display: none;');
 
-	if (pieDiagrammInput)
-		pieDiagrammInput.checked = true;
+	pieDiagrammInput.checked = true;
 
 	saveDiv?.setAttribute('style', 'display: 0;');
 	realRowsNumber?.setAttribute('style', 'display: 0;');
@@ -767,12 +821,28 @@ const handleInputFormSubmit = async (e: Event) => {
 		shownRowsCounter?.setAttribute('style', 'opacity: 1;');
 		shownRowsCounterDiv?.setAttribute('style', 'opacity: 1;');
 		modeLabel?.setAttribute('style', 'opacity: 1;');
+
 		clickToggler?.setAttribute('style', 'display: block;`');
 		saveButton?.setAttribute('style', 'display: block;');
 		submitBtn?.setAttribute('style', 'display: block;');
 		reloadTable?.setAttribute('style', 'display: block;');
 		fullTableBtn?.setAttribute('style', 'display: block');
 		resetBtn?.setAttribute('style', 'display: block;');
+
+		clickToggler?.setAttribute('style', 'display: block;`');
+		saveButton?.setAttribute('style', 'display: block;');
+		submitBtn?.setAttribute('style', 'display: block;');
+		reloadTable?.setAttribute('style', 'display: block;');
+		fullTableBtn?.setAttribute('style', 'display: block');
+		resetBtn?.setAttribute('style', 'display: block;');
+
+		submitBtn.disabled = false;
+		resetBtn.disabled = false;
+		fullTableBtn.disabled = false;
+		SummaryTableInput.disabled = false;
+		pieDiagrammInput.disabled = false;
+
+		overTables.style.display = 'flex';
 
 		if (countpassCounter)
 			countpassCounter.innerHTML = '0';
@@ -977,10 +1047,8 @@ const handleInputFormSubmit = async (e: Event) => {
 	   * This event handler allows user to check the whole row OR to add filters to the input field
 	   */
 		const handleTableClick = async (e: MouseEvent) => {
-			const clickOption: string | undefined = cellSelect?.options[cellSelect?.selectedIndex].value;
+			const clickOption: string | undefined = clickToggler?.options[clickToggler?.selectedIndex].value;
 			const target = e.target as HTMLElement;
-
-			console.log(clickOption);
 
 			if (target.tagName === 'BLOCKQUOTE' || target.tagName === 'TD') {
 				/**
@@ -995,7 +1063,6 @@ const handleInputFormSubmit = async (e: Event) => {
 						blockquotes?.forEach((blockquote: Element) => {
 							(blockquote as HTMLQuoteElement).contentEditable = 'false';
 						});
-
 
 						const id = target.id;
 						const colId = id.slice(id.indexOf('col') + 3, id.length);
@@ -1119,8 +1186,10 @@ const handleInputFormSubmit = async (e: Event) => {
 			 * the full row will be opened that contains more than 16 columns.
 			 * They are divided by 5 columns each
 			 */
-			else if (clickOption === 'show-row') {
-				console.log('works');
+			if (clickOption === 'show-row') {
+				if (dataTable)
+					dataTable.innerHTML = '';
+
 				const blockquotes = document.querySelectorAll('td blockquote');
 				blockquotes?.forEach((blockquote: Element) => {
 					(blockquote as HTMLQuoteElement).contentEditable = 'false';
@@ -1144,15 +1213,14 @@ const handleInputFormSubmit = async (e: Event) => {
 				 * we can find out target id by slicing from w + 1 to col, to receive just a number
 				 */
 				const targetId = target.id;
-				console.log(targetId);
 				const row = targetId.slice(targetId.indexOf('w') + 1, targetId.indexOf('col'));
 
 				console.log(row);
-				console.log(Storage.items.data);
-				console.log(Storage.items.data[row]);
 
 				// Recive the whole object by row number
 				const object = Storage.items.data[row];
+
+				console.log(object);
 
 				if (dataTable)
 					dataTable.innerHTML = '';
@@ -1199,6 +1267,8 @@ const handleInputFormSubmit = async (e: Event) => {
 					);
 				}
 
+				const rowTableBody: HTMLTableSectionElement = document.createElement('tbody');
+
 				for (let i = 0; i < 6; i++) {
 					const tr = document.createElement('tr');
 					for (let j = 0; j < 9; j++) {
@@ -1206,11 +1276,15 @@ const handleInputFormSubmit = async (e: Event) => {
 						td.innerHTML = resArr[i][j];
 						tr.appendChild(td);
 					}
-					tbody.appendChild(tr);
+					rowTableBody.appendChild(tr);
 				}
 
+				console.log(rowTableBody);
 
-				rowTable.append(tbody);
+				if (dataTable)
+					dataTable.innerHTML = '';
+
+				rowTable.append(rowTableBody);
 				dataTable?.append(rowTable);
 
 				if (typeof(object) === 'object')

@@ -411,7 +411,7 @@ button[type="button"]:hover {
 }
 
 #reset:hover {
-   background-color: #00ffff;
+   background-color: #00788b;
    transition: background-color ease 0.1s;
 }
 
