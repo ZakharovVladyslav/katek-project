@@ -1,10 +1,11 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import mysql from 'mysql';
+import cors from 'cors';
 
 const app = express();
 const PORT = 3000;
 
-app.use(express.static('public'));
+app.use(cors());
 
 const connection = mysql.createConnection({
 	host: 'localhost',
@@ -15,11 +16,12 @@ const connection = mysql.createConnection({
 
 connection.connect();
 
-app.get('/:action', (req, res) => {
+app.get('/:action', (req: Request, res: Response) => {
 	let dateQuery = '';
 	let query = '';
 	const keysToAvoid = ['firstDate', 'secondDate', 'dateOption'];
 
+	console.log(req.query);
 
 	const sqlQueryParams = Object.entries(req.query).map(([key, value]) => {
 		if (!keysToAvoid.includes(key))
@@ -79,7 +81,5 @@ app.get('/:action', (req, res) => {
 		});
 	}
 });
-
-app.get('/');
 
 app.listen(PORT, () => console.log(`Server started localhost:${PORT}`));

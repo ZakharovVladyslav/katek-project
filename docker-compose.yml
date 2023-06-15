@@ -1,0 +1,28 @@
+version: '3.1'
+services:
+  server:
+    build: ./server
+    container_name: server
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+  client:
+    build: ./client
+    container_name: client
+    ports:
+      - 3001:3001
+  db:
+    image: mysql:latest
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'katek'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'root'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: '135794ee497531E'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: '135794ee497531E'
+    ports:
+      - 3306:3306
