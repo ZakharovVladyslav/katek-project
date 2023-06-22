@@ -1,12 +1,10 @@
-import CustomStorage from '../services/Storage/Local-Storage.js';
-
-const Storage = new CustomStorage();
+import CustomStorage from '../services/Storage/CustomStorage.js';
+const Storage: Record<string, any> = new CustomStorage();
 
 const fullTableSection: HTMLDivElement | null = document.querySelector('#full-table-section');
 const overTables = document.querySelector('#over-tables') as HTMLDivElement;
 
 export default function CompleteTable() {
-	console.log('Complete table');
 	fullTableSection?.setAttribute('style', 'display: block;');
 
 	const arr: object[] = [...Storage.items.data];

@@ -35,3 +35,7 @@ export interface FullDataInterface {
     ConfirmCnt: number
     SAP_WkP: string
 }
+
+export interface StorageProperties {
+
+}

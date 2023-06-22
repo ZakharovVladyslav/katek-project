@@ -1,6 +1,6 @@
-import CustomStorage from '../../services/Storage/Local-Storage.js';
+import CustomStorage from '../../services/Storage/CustomStorage.js';
 
-const Storage = new CustomStorage();
+const Storage: Record<string, any> = new CustomStorage();
 
 const callPopupBtn: HTMLButtonElement | null = document.querySelector('#call-popup');
 const selectHeadersDiv: HTMLDivElement | null = document.querySelector('#select-headers-div');

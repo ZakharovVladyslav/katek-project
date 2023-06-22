@@ -1,7 +1,7 @@
-import CustomStorage from '../services/Storage/Local-Storage.js';
+import CustomStorage from '../services/Storage/CustomStorage.js';
 import * as d3 from 'd3';
 
-const Storage = new CustomStorage();
+const Storage: Record<string, any> = new CustomStorage();
 
 interface Data {
 	label: string;

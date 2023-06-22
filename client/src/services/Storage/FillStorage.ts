@@ -1,8 +1,8 @@
-import CustomStorage from './Local-Storage.js';
+import CustomStorage from './CustomStorage.js';
 import DropdownValues from '../../utils/Dropdown-values.js';
 const rowsAmount = document.querySelector('#rows-amount');
 
-const Storage = new CustomStorage();
+const Storage: Record<string, any> = new CustomStorage();
 
 export default function fillStorage() {
 	/**

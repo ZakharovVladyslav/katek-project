@@ -1,8 +1,8 @@
 'use strict';
 
-import CustomStorage from '../services/Storage/Local-Storage.js';
+import CustomStorage from '../services/Storage/CustomStorage.js';
 
-const Storage = new CustomStorage();
+const Storage: Record<string, any> = new CustomStorage();
 
 export default function getFilters() {
 	Storage.setItem('firstDate', (document.querySelector('#left-date-inp') as HTMLInputElement)?.value || '');

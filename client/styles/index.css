@@ -163,6 +163,9 @@ article a {
 /* ---------------------------------------------------------------------------------------------------- */
 
 #input-section {
+   border-bottom: 1px solid #444444;
+   padding-bottom: 20px;
+
    align-self: flex-end;
    min-width: 700px;
 
@@ -368,9 +371,32 @@ button[type="button"]:hover {
    align-items: center;
    justify-items: center;
 
-   grid-template-columns: minmax(150px auto);
+   min-height: fit-content;
+}
+.submit-section #load-filters-inp {
+   display: none;
 }
 
+.submit-section #load-filters-lbl {
+   margin-bottom: 7px;
+
+   font-size: 14px;
+
+   padding: 9px 13px;
+
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+
+   cursor: pointer;
+
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+}
+
+.submit-section #load-filters-lbl:hover {
+   background-color: #00788b;
+   transition: background-color 0.1s ease;
+}
 
 .submit-section button:disabled {
    border: 2px solid #222222;
@@ -382,6 +408,7 @@ button[type="button"]:hover {
 
 .submit-section button {
    padding: 9px 13px;
+   margin: 7px 0;
 
    background-color: transparent;
    transition: background-color ease 0.1s;
@@ -468,6 +495,7 @@ button[type="button"]:hover {
 .summary-row-toggler-il,
 .pie-diagramm-toggler {
    padding: 7px 10px;
+   margin: 7px 0;
 }
 
 .summary-row-toggler-il input:disabled+label,

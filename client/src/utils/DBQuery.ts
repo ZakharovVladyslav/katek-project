@@ -1,10 +1,10 @@
-import CustomStorage from '../services/Storage/Local-Storage.js';
+import CustomStorage from '../services/Storage/CustomStorage.js';
 import fetchData from './FetchDbJSON.js';
 import { FullDataInterface } from './types.js';
 
 const dateOptionSelector: HTMLSelectElement | null = document.querySelector('#date-params');
 
-const Storage = new CustomStorage();
+const Storage: Record<string, any> = new CustomStorage();
 
 export default async function DBQuery() {
 	if (Storage.items.limiter === undefined)
@@ -23,6 +23,9 @@ export default async function DBQuery() {
 
 		Storage.setItem('firstDateQuery', `${Storage.items.firstDate.value.replace('T', ' ')}.00.000`);
 		Storage.setItem('secondDateQuery', `${Storage.items.secondDate.value.replace('T', ' ')}.00.000`);
+
+		console.log(Storage.items.firstDateQuery);
+		console.log(Storage.items.secondDateQuery);
 
 		queryObjects.push(
 			{ dateOption: dateOption },
@@ -51,12 +54,12 @@ export default async function DBQuery() {
 				args += `${key}=${value}`;
 	});
 
+	console.log(args);
+
 	if (args !== '')
 		Storage.setItem('data', await fetchData(`http://localhost:3000/db-fetch?${args}`) as FullDataInterface[]);
 	else
 		Storage.setItem('data', await fetchData('http://localhost:3000/db-fetch') as FullDataInterface[]);
-
-	console.log(Storage.items.data);
 
 	queryObjects = null;
 }

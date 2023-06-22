@@ -1,4 +1,4 @@
-import CustomStorage from '../services/Storage/Local-Storage.js';
+import CustomStorage from '../services/Storage/CustomStorage.js';
 import LocalStacks from '../services/Stack/LocalStack.js';
 import fetchData from './FetchDbJSON.js';
 
@@ -9,7 +9,7 @@ const countpassWrapper: HTMLDivElement | null = document.querySelector('#countpa
 const dateOptionSelector: HTMLSelectElement | null = document.querySelector('#date-params');
 const distractProcentParag: HTMLParagraphElement | null = document.querySelector('#distract-procent');
 
-const Storage = new CustomStorage();
+const Storage: Record<string, any> = new CustomStorage();
 const LocalStack = new LocalStacks();
 
 const fetchCountPass = async (firstDate: string, secondDate: string) => {
