@@ -1,0 +1,43 @@
+* {
+	box-sizing: border-box;
+}
+
+.plusminus {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+
+    &.active {
+        &:before {
+            transform: translatey(-50%) rotate(-90deg);
+            opacity: 0;
+        }
+
+        &:after {
+            transform: translatey(-50%) rotate(0);
+        }
+    }
+
+    &:before,
+    &:after {
+        content: "";
+        display: block;
+        background-color: #a5a5a5;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transition: .35s;
+        width: 100%;
+        height: 3px;
+    }
+
+    &:before {
+        transform: translatey(-50%);
+    }
+
+    &:after {
+        transform: translatey(-50%) rotate(90deg);
+    }
+
+}
