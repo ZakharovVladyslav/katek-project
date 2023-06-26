@@ -1,51 +1,49 @@
-import CustomStorage from "../services/Storage/CustomStorage";
-import DBQuery from "../utils/DBQuery";
-import getFilters from "../utils/Data-filtering";
-import DropdownValues from "../utils/Dropdown-values";
+import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
 
-const rowsAmount = document.querySelector('#rows-amount') as HTMLParagraphElement;
+const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 
-const Storage = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 
 export async function handleLeftDateChange() {
-    console.log(Storage.items.firstDate);
-	console.log(Storage.items.firstDate.value);
 
 	// opt - one of the keys [tLogIn, tLogOut, tLastAcc]
 	const select: HTMLSelectElement | null = document?.querySelector('#date-params');
 	const opt: string | undefined = select?.options[select?.selectedIndex]?.value;
 
-	if (Storage.items.secondDate.value === '') {
+	if (Storage.items.secondDate?.value === '') {
 		/**
 	   * Looks for the latest date
 	   * takes first object's key opt as initial value and checks if next is bigger or not
 	   */
 		if (Storage.items.secondDate.value === '') {
 			if (opt) {
-				const latestDate = Storage.items.data.reduce((latest: Date, current: Record<string, any>) => {
+				const latestDate = Storage.items.data?.reduce((latest: Date, current: Record<string, any>) => {
 					const currentDate: Date = new Date(current[opt]);
 					return currentDate > latest ? currentDate : latest;
 				}, new Date(Storage.items.data[0][opt]));
 
 				const rightDateInput = document.querySelector<HTMLInputElement>('#right-date-inp');
 				if (rightDateInput) {
-					rightDateInput.value = latestDate.toISOString().slice(0, 16);
+					rightDateInput.value = `${latestDate?.toISOString().slice(0, 16)}`;
 				}
 			}
 		}
 
 	}
 
+	/*
 	Storage.items.dataSourceOption === 'Datenbank'
 		? await DBQuery()
 		: Storage.setItem('data', getFilters() as object[]);
 
 	if (rowsAmount)
-		rowsAmount.innerHTML = Storage.items.data.length;
+		rowsAmount.innerHTML = `${Storage.items.data?.length}`;
 
-	let dropdownValues: { values: string[], valueToHeaderMap: object } | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+	let dropdownValues: { values: string[], valueToHeaderMap: object } | null = null;
+	if (Storage.items.data && Storage.items.tableHeaders)
+				dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 
-	Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
+	Storage.items.datalists?.forEach((datalist: HTMLDataListElement) => {
 		datalist.innerHTML = '';
 
 		dropdownValues?.values.forEach((value: string) => {
@@ -57,37 +55,43 @@ export async function handleLeftDateChange() {
 	});
 
 	dropdownValues = null;
+	*/
+
+	submitBtn.click();
 }
 
 export async function handleRightDateChange() {
     const select: HTMLSelectElement | null = document.querySelector('date-params');
 	const opt = select?.options[select?.selectedIndex]?.value;
 
-	if (Storage.items.secondDate.value === '') {
+	if (Storage.items.secondDate?.value === '') {
 		if (opt) {
-			const latestDate = Storage.items.data.reduce((latest: Date, current: Record<string, any>) => {
+			const latestDate = Storage.items.data?.reduce((latest: Date, current: Record<string, any>) => {
 				const currentDate: Date = new Date(current[opt]);
 				return currentDate < latest ? currentDate : latest;
 			}, new Date(Storage.items.data[0][opt]));
 
 			const rightDateInput = document.querySelector<HTMLInputElement>('#left-date-inp');
 			if (rightDateInput) {
-				rightDateInput.value = latestDate.toISOString().slice(0, 16);
+				rightDateInput.value = `${latestDate?.toISOString().slice(0, 16)}`;
 			}
 		}
 	}
 
 
+	/*
 	Storage.items.dataSourceOption === 'Datenbank'
 		? await DBQuery()
 		: Storage.setItem('data', getFilters() as object[]);
 
 	if (rowsAmount)
-		rowsAmount.innerHTML = Storage.items.data.length;
+		rowsAmount.innerHTML = `${Storage.items.data?.length}`;
 
-	let dropdownValues: { values: string[], valueToHeaderMap: object } | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+	let dropdownValues: { values: string[], valueToHeaderMap: object } | null = null;
+	if (Storage.items.data && Storage.items.tableHeaders)
+				dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 
-	Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
+	Storage.items.datalists?.forEach((datalist: HTMLDataListElement) => {
 		datalist.innerHTML = '';
 
 		dropdownValues?.values.forEach((value: string) => {
@@ -97,6 +101,9 @@ export async function handleRightDateChange() {
 			datalist.appendChild(option);
 		});
 	});
-
 	dropdownValues = null;
+
+	*/
+
+	submitBtn.click();
 }

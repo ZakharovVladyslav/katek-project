@@ -1,13 +1,11 @@
 const clickToggler = document.querySelector('#click-toggler') as HTMLSelectElement;
 const dataSource = document.querySelector('#input-data-select') as HTMLSelectElement;
 
-import CustomStorage from "../services/Storage/CustomStorage";
+import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
 
-const Storage = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 
 export default function HandleWindowLoad() {
-    console.log('load');
-
 	const inputDataSelectOption = dataSource?.options[dataSource?.selectedIndex].value as string;
 
 	if (inputDataSelectOption === 'Datenbank')

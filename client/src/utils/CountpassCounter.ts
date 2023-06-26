@@ -1,4 +1,4 @@
-import CustomStorage from '../services/Storage/CustomStorage.js';
+import CustomStorage, { ICustomStorage } from '../services/Storage/CustomStorage.js';
 import LocalStacks from '../services/Stack/LocalStack.js';
 import fetchData from './FetchDbJSON.js';
 
@@ -9,7 +9,7 @@ const countpassWrapper: HTMLDivElement | null = document.querySelector('#countpa
 const dateOptionSelector: HTMLSelectElement | null = document.querySelector('#date-params');
 const distractProcentParag: HTMLParagraphElement | null = document.querySelector('#distract-procent');
 
-const Storage: Record<string, any> = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 const LocalStack = new LocalStacks();
 
 const fetchCountPass = async (firstDate: string, secondDate: string) => {
@@ -24,10 +24,12 @@ const fetchCountPass = async (firstDate: string, secondDate: string) => {
 	let queryObjects: object[] | null = [];
 	let args = '';
 
-	const usedInputFields: HTMLInputElement[] | null[] = Storage.items.inputFields.map((field: HTMLInputElement | null) => {
+	const usedInputFields: HTMLInputElement[] = (Storage.items.inputFields ?? [])
+	.filter((field: HTMLInputElement | null | undefined) => {
 		if (field?.value !== '')
-			return field;
-	}).filter((field: HTMLInputElement) => field !== undefined);
+			return true;
+		return false;
+	});
 
 	const dateOption: string | undefined = dateOptionSelector?.options[dateOptionSelector?.selectedIndex]?.value;
 
@@ -38,7 +40,7 @@ const fetchCountPass = async (firstDate: string, secondDate: string) => {
 	);
 
 	if (usedInputFields.length > 0) {
-		const usedDbSelects: HTMLSelectElement[] = usedInputFields.map((field: HTMLInputElement | null, index: number) => {
+		const usedDbSelects: HTMLSelectElement[] = usedInputFields.map((_, index: number) => {
 			return document.querySelector(`#db-select-${index + 1}`) as HTMLSelectElement;
 		});
 
@@ -68,7 +70,7 @@ const fetchCountPass = async (firstDate: string, secondDate: string) => {
 export default async function CountpassCounter(countpassValue: string) {
 	countpassDiv?.setAttribute('style', 'opacity: 1;');
 
-	if (Storage.items.firstDate.value && Storage.items.secondDate.value) {
+	if (Storage.items.firstDate?.value && Storage.items.secondDate?.value) {
 		const startDateTime: number = new Date(Storage.items.firstDate.value).getTime();
 		const endDateTime: number = new Date(Storage.items.secondDate.value).getTime();
 
@@ -145,7 +147,7 @@ export default async function CountpassCounter(countpassValue: string) {
 				countpassWrapper?.setAttribute('style', 'display: flex');
 			}, 2000);
 		}
-	} else if (Storage.items.firstDate.value && !Storage.items.secondDate.value) {
+	} else if (Storage.items.firstDate?.value && !Storage.items.secondDate?.value) {
 		countpassWrapper?.setAttribute('style', 'display: none;');
 		countpassErrorMsg?.setAttribute('style', 'display: block');
 		countpassDiv?.setAttribute('style', 'border: 1px solid #a80000;');
@@ -158,7 +160,7 @@ export default async function CountpassCounter(countpassValue: string) {
 			countpassDiv?.setAttribute('style', 'border: none');
 			countpassWrapper?.setAttribute('style', 'display: flex');
 		}, 2000);
-	} else if (!Storage.items.firstDate.value && Storage.items.secondDate.value) {
+	} else if (!Storage.items.firstDate?.value && Storage.items.secondDate?.value) {
 		countpassWrapper?.setAttribute('style', 'display: none;');
 		countpassErrorMsg?.setAttribute('style', 'display: block');
 		countpassDiv?.setAttribute('style', 'border: 1px solid #a80000;');

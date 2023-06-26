@@ -1,3 +1,5 @@
+import { FullDataInterface } from "./types";
+
 function removeSingleValues(arr: string[]) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const result: any[] = [];
@@ -25,7 +27,7 @@ function removeSingleValues(arr: string[]) {
 	return result;
 }
 
-export default function DropdownValues(array: object[], headers: string[]) {
+export default function DropdownValues(array: FullDataInterface[], headers: string[]) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const resultArray: any[] = [];
 	const timeKeys: string[] = ['tLogIn', 'tLogOut', 'tLastAcc'];

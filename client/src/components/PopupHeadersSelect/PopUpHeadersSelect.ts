@@ -1,15 +1,22 @@
-import CustomStorage from '../../services/Storage/CustomStorage.js';
+import CustomStorage, { ICustomStorage } from '../../services/Storage/CustomStorage.js';
+import { getElementYPosition } from '../../eventListeners/ShowHideTable.js';
 
-const Storage: Record<string, any> = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 
-const callPopupBtn: HTMLButtonElement | null = document.querySelector('#call-popup');
-const selectHeadersDiv: HTMLDivElement | null = document.querySelector('#select-headers-div');
-const headersTable: HTMLTableElement | null = document.querySelector('#select-headers-table');
-const tableWrapper: HTMLDivElement | null = document.querySelector('#table-wrapper');
+const callPopupBtn = document.querySelector('#call-popup') as HTMLButtonElement;
+const selectHeadersDiv = document.querySelector('#select-headers-div') as HTMLDivElement;
+const headersTable = document.querySelector('#select-headers-table') as HTMLTableElement;
+const tableWrapper = document.querySelector('#table-wrapper') as HTMLDivElement;
 
 let eventListenerAdded = false; // Variable to track if the event listener has been added
 
 export default function PopUpHeadersSelect() {
+	const callPopupBtnY = getElementYPosition(callPopupBtn);
+
+	console.log(callPopupBtnY);
+
+	tableWrapper.style.top = `${callPopupBtnY - 290}px`;
+
 	if (Storage.items.saveOption === 'Headers' || Storage.items.saveOption === 'Headers & Filters') {
 		selectHeadersDiv?.setAttribute('style', 'opacity: 1');
 
@@ -21,9 +28,9 @@ export default function PopUpHeadersSelect() {
 
 		const headersTableBody: HTMLTableSectionElement | null = document.createElement('tbody');
 
-		const allHeaders: string[]  = [...Storage.items.allHeaders];
+		const allHeaders: string[]  = [...Storage.items.allHeaders ?? []];
 		const headers: string[][] = [];
-		let selectedHeaders: string[] = [...Storage.items.selectedHeaders];
+		let selectedHeaders: string[] = [...Storage.items.selectedHeaders ?? []];
 
 		while (allHeaders.length > 0)
 			headers.push(allHeaders.splice(0, 5));
@@ -40,7 +47,7 @@ export default function PopUpHeadersSelect() {
 				tableCell.classList.add('sqr');
 				tableCell.id = 'sqr';
 
-				if (Storage.items.selectedHeaders.includes(header))
+				if (Storage.items.selectedHeaders?.includes(header))
 					tableCell.classList.toggle('selected');
 
 				tableCell.addEventListener('click', () => {

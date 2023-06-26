@@ -1,13 +1,13 @@
-import CustomStorage from "../services/Storage/CustomStorage";
-import fetchData from "../utils/FetchDbJSON";
+import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
 
-const rowsAmount = document.querySelector('#rows-amount') as HTMLParagraphElement;
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 
-const Storage = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 
-export default async function handleResetBtnClick (e: Event) {
+export default async function handleResetBtnClick(e: Event) {
 	e.preventDefault();
+
+	console.log('reset');
 
 	const filterInput1 = document.querySelector('#filter-input-1') as HTMLInputElement;
 	const filterInput2 = document.querySelector('#filter-input-2') as HTMLInputElement;
@@ -21,8 +21,10 @@ export default async function handleResetBtnClick (e: Event) {
 	filterInput4.value = '';
 	filterInput5.value = '';
 
-	Storage.items.firstDate.value = '';
-	Storage.items.secondDate.value = '';
+	if (Storage.items.firstDate && Storage.items.secondDate) {
+		Storage.items.firstDate.value = '';
+		Storage.items.secondDate.value = '';
+	}
 
 	const dbSelect1 = document.querySelector('#db-select-1') as HTMLSelectElement;
 	const dbSelect2 = document.querySelector('#db-select-2') as HTMLSelectElement;
@@ -36,22 +38,26 @@ export default async function handleResetBtnClick (e: Event) {
 	dbSelect4.selectedIndex = 0;
 	dbSelect5.selectedIndex = 0;
 
+	/*
 	Storage.items.dataSourceOption === 'Datenbank'
 		? Storage.setItem('data', await fetchData('http://localhost:3000/load-fetch'))
-		: Storage.setItem('data', [...Storage.items.staticData] as object[]);
+		: Storage.setItem('data', [...Storage.items.staticData ?? []] as object[]);
 
-	rowsAmount.innerHTML = Storage.items.staticDataLength;
+	rowsAmount.innerHTML = `${Storage.items.staticDataLength}`;
 
-	Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
+	Storage.items.datalists?.forEach((datalist: HTMLDataListElement) => {
 		datalist.innerHTML = '';
 
-		Storage.items.allValues.values.forEach((value: string) => {
-			const option: HTMLOptionElement = document.createElement('option');
-			option.className = 'datalist-option';
-			option.value = value;
-			datalist.appendChild(option);
-		});
+		if (Storage.items.allValues && Array.isArray(Storage.items.allValues.values)) {
+			Storage.items.allValues.values.forEach((value: string) => {
+				const option: HTMLOptionElement = document.createElement('option');
+				option.className = 'datalist-option';
+				option.value = value;
+				datalist.appendChild(option);
+			});
+		}
 	});
+	*/
 
 	submitBtn.click();
 };

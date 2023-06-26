@@ -34,8 +34,5 @@ export interface FullDataInterface {
     ConfirmNo: number
     ConfirmCnt: number
     SAP_WkP: string
-}
-
-export interface StorageProperties {
-
+    [key: string]: any
 }

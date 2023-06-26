@@ -1,19 +1,15 @@
-import CustomStorage from "../services/Storage/CustomStorage";
+import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
 import fetchData from "../utils/FetchDbJSON";
 import fillStorage from "../services/Storage/FillStorage";
-import DBQuery from "../utils/DBQuery";
 
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 const submitSection = document.querySelector('#submit-section') as HTMLDivElement;
 
-const Storage = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 
 export default async function HandleDBConnectionBtnClick() {
-    console.log('db connect');
 	try {
-		console.log('db try');
 		Storage.setItem('data', await fetchData('http://localhost:3000/load-fetch') as object[]);
-		console.log('db after fetch');
 
 		if (Storage.items.data) {
 			const dbConnectionDiv: HTMLDivElement | null = document.querySelector('#db-connect-div');
@@ -35,42 +31,14 @@ export default async function HandleDBConnectionBtnClick() {
 			submitBtn.disabled = false;
 			submitBtn?.click();
 
-			const loadFiltersBtn = `
-				<label for="load-filters-inp" id="load-filters-lbl">Load filters</label>
-				<input type="file" id="load-filters-inp" class="load-filters-inp" accept=".json, .csv">
-			`;
+			if (!document.querySelector('#load-filters-inp')) {
+				const loadFiltersBtn = `
+					<label for="load-filters-inp" id="load-filters-lbl">Load filters</label>
+					<input type="file" id="load-filters-inp" class="load-filters-inp" accept=".json, .csv">
+				`;
 
-			submitSection.insertAdjacentHTML('afterbegin', loadFiltersBtn);
-
-			Storage.setItem('loadFiltersInput', document.querySelector('#load-filters-inp') as HTMLInputElement);
-
-			Storage.items.loadFiltersInput?.addEventListener('input', () => {
-				const reader = new FileReader();
-
-				reader.addEventListener('load', async (e: ProgressEvent) => {
-					const fileContent = e.target as FileReader;
-					const filtersFromFile: string | ArrayBuffer | null | undefined = fileContent?.result;
-
-					Storage.setItem('filtersFromJson', filtersFromFile);
-
-					const content = JSON.parse(Storage.items.filtersFromJson);
-					let filters: string[][];
-
-					Array.isArray(content) ? filters = content : filters = content.filters;
-
-					filters.forEach((filter: string[], index: number) => {
-						Storage.items.dbSelects[index].selectedIndex = filter[0]
-						Storage.items.inputFields[index].value = filter[1];
-					})
-
-					await DBQuery();
-
-					submitBtn.click();
-				})
-
-				if (Storage.items.loadFiltersInput.files)
-					reader.readAsText(Storage.items.loadFiltersInput.files[0]);
-			})
+				submitSection.insertAdjacentHTML('afterbegin', loadFiltersBtn);
+			}
 		}
 	} catch (err) {
 		const dbConnectionDiv: HTMLDivElement | null = document.querySelector('#db-connect-div');

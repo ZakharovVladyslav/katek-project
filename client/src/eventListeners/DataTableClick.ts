@@ -1,14 +1,11 @@
 'use strict';
 
 /* Functions import from other files */
-import getFilters from '../utils/Data-filtering.ts';
-import DropdownValues from '../utils/Dropdown-values.ts';
-import CustomStorage from '../services/Storage/CustomStorage.ts';
-import DBQuery from '../utils/DBQuery.ts';
+import CustomStorage, { ICustomStorage } from '../services/Storage/CustomStorage.ts';
 import CountpassCounter from '../utils/CountpassCounter.ts';
 
 /* Defining storage classes instances */
-const Storage: Record<string, any> = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 
 // INTERFACES -------------------------------------------------------------------------------------
 import { FullDataInterface } from '../utils/types.ts';
@@ -32,10 +29,6 @@ const SummaryTableInput = document.querySelector('#summary-row-toggler-input') a
 const pieDiagrammInput = document.querySelector('#pie-diagramm-checkbox') as HTMLInputElement;
 //-------------------------------------------------------------------------------------------------
 
-// PARAGRAPHS--------------------------------------------------------------------------------------
-const rowsAmount = document.querySelector('#rows-amount') as HTMLParagraphElement;
-//-------------------------------------------------------------------------------------------------
-
 // TABLES------------------------------------------------------------------------------------------
 const dataTable = document.querySelector('#data-table') as HTMLTableElement;
 //-------------------------------------------------------------------------------------------------
@@ -45,13 +38,15 @@ export default async function handleTableClick(e: MouseEvent) {
     const target = e.target as HTMLElement;
 
     if (target.tagName === 'BLOCKQUOTE' || target.tagName === 'TD') {
+        const usedInputFieldsValues = Storage.items.inputFields?.map((field: HTMLInputElement) => field.value).filter(fieldValue => fieldValue !== '');
+
         /**
          * ClickOption is select html elment placed left-top from the table
          *
          * If clickOption is add to filters , so by clicking on any of the cells,
          * value from the cell will be added to the input field
          */
-        if (clickOption === 'add-to-filters' && Storage.items.data.length > 1) {
+        if (clickOption === 'add-to-filters' && Storage.items.data?.length && Storage.items.data.length > 1) {
             if (target.innerHTML.slice(target.innerHTML.indexOf('>') + 1, target.innerHTML.indexOf('</')) !== '') {
                 const blockquotes = document.querySelectorAll('td blockquote');
                 blockquotes?.forEach((blockquote: Element) => {
@@ -99,16 +94,18 @@ export default async function handleTableClick(e: MouseEvent) {
                      *
                      * If user presses on the date of other key, it will change select's selectedIndex (option)
                      */
-                    if (targetCol in indexMap && select) {
+                    if (targetCol in indexMap && select)
                         select.selectedIndex = indexMap[targetCol];
-                    }
 
                     /**
                      * Check which one of the date inputs empty first, so date will be added there
                      */
-                    Storage.items.firstDate.value === ''
-                        ? Storage.items.firstDate.value = targetCellValue.slice(0, 16)
-                        : Storage.items.secondDate.value = targetCellValue.slice(0, 16);
+                    if (Storage.items.firstDate && Storage.items.secondDate)
+                        Storage.items.firstDate.value === ''
+                            ? Storage.items.firstDate.value = targetCellValue.slice(0, 16)
+                            : Storage.items.secondDate.value = targetCellValue.slice(0, 16);
+
+                    submitBtn.click();
                 }
                 else if (targetCol === '11') {
                     CountpassCounter(targetCellValue);
@@ -120,61 +117,38 @@ export default async function handleTableClick(e: MouseEvent) {
                      * F.e. if IF1 and IF3 are used, the first empty will be IF2, so value from the cell will be added there
                      * If IF1 empty, value will be added there
                      */
-                    const emptyFieldIndexes = Storage.items.inputFields.map((filter: HTMLInputElement, index: number) => {
+                    const emptyFieldIndexes = Storage.items.inputFields?.map((filter: HTMLInputElement, index: number) => {
                         if (filter.value === '')
-                            return index;
-                    }).filter((filter: HTMLInputElement) => filter !== undefined);
+                          return index;
+                    }).filter((index: number | undefined) => index !== undefined);
 
-                    if (emptyFieldIndexes.length !== 0) {
-                        const targetInputField = Storage.items.inputFields[emptyFieldIndexes[0]];
-                        targetInputField.value = targetCellValue;
-                        const targetInputFieldId = targetInputField.id.slice(-1);
+                    if (emptyFieldIndexes?.length !== 0 && Storage.items.inputFields) {
+                        const targetInputField = Storage.items.inputFields[emptyFieldIndexes![0]!];
 
-                        const targetHeader = Storage.items.objectKeysMap.get(`${colId}`);
+                        if (!usedInputFieldsValues?.includes(targetCellValue)) {
+                            targetInputField.value = targetCellValue;
 
-                        let targetIndex = -1;
-                        console.log(Storage.items.dbSelects);
-                        console.log(targetInputFieldId);
-                        console.log(Storage.items.dbSelects[targetInputFieldId - 1]);
-                        console.log(Storage.items.dbSelects[targetInputFieldId - 1].length);
-                        for (let i = 0; i < Storage.items.dbSelects[targetInputFieldId - 1].length; i++) {
-                            if (Storage.items.dbSelects[targetInputFieldId - 1].options[i].value === targetHeader) {
-                                targetIndex = i;
-                                break;
+                            const targetInputFieldId = parseInt(targetInputField.id.slice(-1));
+
+                            const targetHeader = Storage.items.objectKeysMap?.get(`${colId}`);
+
+                            let targetIndex = -1;
+                            if (Storage.items.dbSelects && targetInputFieldId) {
+                                for (let i = 0; i < Storage.items.dbSelects[targetInputFieldId - 1].length; i++) {
+                                    if (Storage.items.dbSelects[targetInputFieldId - 1].options[i].value === targetHeader) {
+                                        targetIndex = i;
+                                        break;
+                                    }
+                                }
                             }
-                        }
 
-                        Storage.items.dbSelects[targetInputFieldId - 1].selectedIndex = targetIndex;
+                            if (Storage.items.dbSelects)
+                                Storage.items.dbSelects[targetInputFieldId - 1].selectedIndex = targetIndex;
+                        }
                     }
                 }
 
-                Storage.items.dataSourceOption === 'Datenbank'
-                    ? await DBQuery()
-                    : Storage.setItem('data', getFilters());
-
-                if (rowsAmount) {
-                    Storage.items.data.length === 0
-                        ? rowsAmount.innerHTML = '0'
-                        : rowsAmount.innerHTML = Storage.items.data.length;
-                }
-
-                let dropdownValues: {
-                    values: string[];
-                    valueToHeaderMap: object;
-                } | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
-
-                Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
-                    datalist.innerHTML = '';
-
-                    dropdownValues?.values.forEach(value => {
-                        const option = document.createElement('option');
-                        option.className = 'datalist-option';
-                        option.value = value;
-                        datalist.appendChild(option);
-                    });
-                });
-
-                dropdownValues = null;
+                submitBtn.click();
             }
         }
     }
@@ -211,14 +185,10 @@ export default async function handleTableClick(e: MouseEvent) {
          * we can find out target id by slicing from w + 1 to col, to receive just a number
          */
         const targetId = target.id;
-        const row = targetId.slice(targetId.indexOf('w') + 1, targetId.indexOf('col'));
-
-        console.log(row);
+        const row: number = +targetId.slice(targetId.indexOf('w') + 1, targetId.indexOf('col'));
 
         // Recive the whole object by row number
-        const object = Storage.items.data[row];
-
-        console.log(object);
+        let object: FullDataInterface | null | undefined = Storage.items.data && Storage.items.data[row];
 
         if (dataTable)
             dataTable.innerHTML = '';
@@ -233,7 +203,7 @@ export default async function handleTableClick(e: MouseEvent) {
          * allHeaders will contain ALL headers from the object
          * allValues will contain ALL values from the object
          */
-        if (!target.innerHTML.startsWith('<')) {
+        if (!target.innerHTML.startsWith('<') && object) {
             for (const [key, value] of Object.entries(object)) {
                 allHeaders.push(key);
                 allValues.push(value);
@@ -277,16 +247,14 @@ export default async function handleTableClick(e: MouseEvent) {
             rowTableBody.appendChild(tr);
         }
 
-        console.log(rowTableBody);
-
         if (dataTable)
             dataTable.innerHTML = '';
 
         rowTable.append(rowTableBody);
         dataTable?.append(rowTable);
 
-        if (typeof (object) === 'object')
-            object.length = 0;
+        if (object && typeof (object) === 'object')
+            object = null;
     }
     else if (clickOption === 'change-cell-content') {
         const blockquotes = document.querySelectorAll('td blockquote');
@@ -296,22 +264,23 @@ export default async function handleTableClick(e: MouseEvent) {
         Storage.setItem('blockquoteEditValue', '');
 
         const blockquoteId = target.id.slice(target.id.indexOf('r'), target.id.length);
-        const rowId = blockquoteId.slice(blockquoteId.indexOf('w') + 1, blockquoteId.indexOf('c'));
-        const colId = blockquoteId.slice(blockquoteId.indexOf('col') + 3, blockquoteId.length);
+        const rowId: number = +blockquoteId.slice(blockquoteId.indexOf('w') + 1, blockquoteId.indexOf('c'));
+        const colId: number = +blockquoteId.slice(blockquoteId.indexOf('col') + 3, blockquoteId.length);
 
-        let targetLogID = '';
-        if (!target.innerHTML.startsWith('<')) {
-            targetLogID = Storage.items.data[rowId]['LogID'];
+        let targetLogID = 0;
+        if (!target.innerHTML.startsWith('<') && Storage.items.data) {
+            targetLogID = +Storage.items.data[rowId]['LogID'];
         }
         const blockquote = document.querySelector(`#blockquote-${blockquoteId}`);
 
         blockquote?.addEventListener('focusout', () => {
             Storage.setItem('blockquoteEditValue', blockquote.textContent);
 
-            const targetObject = Storage.items.staticData.find((obj: FullDataInterface) => obj['LogID'] === +targetLogID);
-            const targetKey = Storage.items.objectKeysMap.get(`${colId}`);
+            const targetObject = Storage.items.staticData?.find((obj: FullDataInterface) => obj['LogID'] === targetLogID);
+            const targetKey: string | undefined = Storage.items.objectKeysMap?.get(`${colId}`);
 
-            Storage.items.staticData[Storage.items.staticData.indexOf(targetObject)][targetKey] = Storage.items.blockquoteEditValue;
+            if (Storage.items.staticData && targetObject && targetKey)
+                Storage.items.staticData[Storage.items.staticData.indexOf(targetObject)][targetKey] = Storage.items.blockquoteEditValue;
 
             delete Storage.items.blockquoteEditValue;
         });

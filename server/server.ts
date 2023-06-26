@@ -23,7 +23,7 @@ app.get('/:action', (req: Request, res: Response) => {
 
 	let dateQuery = '';
 	let query = '';
-	const keysToAvoid = ['firstDate', 'secondDate', 'dateOption'];
+	const keysToAvoid = ['firstDate', 'secondDate', 'dateOption', 'fullTableHeaders'];
 
 	const sqlQueryParams = Object.entries(req.query).map(([key, value]) => {
 		if (!keysToAvoid.includes(key))
@@ -74,7 +74,20 @@ app.get('/:action', (req: Request, res: Response) => {
 			res.send(results);
 		});
 	} else if (req.params.action === 'get-countpass') {
-		const sql = `SELECT \`CountPass\` from \`katek\`.\`test-500k-limes\`${query}`;
+		const sql = `SELECT \`CountPass\` FROM \`katek\`.\`test-500k-limes\`${query}`;
+
+		console.log(chalk.cyan(sql));
+
+		connection.query(sql, (error, results) => {
+			if (error)
+				console.log(error);
+
+			res.send(results);
+		});
+	} else if (req.params.action === 'full-table-pagination') {
+		const headers: string[] = req.query.fullTableHeaders as string[];
+
+		const sql = `SELECT ${headers} FROM \`katek\`.\`test-500k-limes\``;
 
 		console.log(chalk.cyan(sql));
 

@@ -1,8 +1,8 @@
-import CustomStorage from './CustomStorage.js';
+import CustomStorage, { ICustomStorage } from './CustomStorage.js';
 import DropdownValues from '../../utils/Dropdown-values.js';
 const rowsAmount = document.querySelector('#rows-amount');
 
-const Storage: Record<string, any> = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 
 export default function fillStorage() {
 	/**
@@ -19,14 +19,14 @@ export default function fillStorage() {
 		Storage.setItem('staticData', Storage.items.data);
 
 		// AllHeaders - needs for reset listener to fill dropdown immediately
-		Storage.setItem('allHeaders', Object.keys(Storage.items.staticData[0]));
+		Storage.setItem('allHeaders', Object.keys(Storage.items.staticData![0]) as string[]);
 
 		// StaticDataLength - stored, not to calculate length later
-		Storage.setItem('staticDataLength', Storage.items.staticData.length);
+		Storage.setItem('staticDataLength', Storage.items.staticData!.length);
 		Storage.setItem('headers', Object.keys(Storage.items.data[0]));
 
 		// AllValues - as same as allHeaders. not to calculate later. Receives all present value from the static data
-		Storage.setItem('allValues', DropdownValues(Storage.items.staticData, Storage.items.tableHeaders));
+		Storage.setItem('allValues', DropdownValues(Storage.items.staticData!, Storage.items.tableHeaders!) as { values: string[], valueToHeaderMap: object });
 
 		// Stored not to keep text present as it takes lot of memory
 		Storage.setItem('inputTextLength', Storage.items.data.length);
@@ -36,13 +36,12 @@ export default function fillStorage() {
 	Storage.setItem('secondDate', document.querySelector('#right-date-inp') as HTMLInputElement);
 
 	const headersMap: Map<string, string> = new Map();
-	Storage.items.tableHeaders.forEach((header: string, index: number) => {
+	Storage.items.tableHeaders?.forEach((header: string, index: number) => {
 		headersMap.set(`${index}`, `${header}`);
 	});
 
 	Storage.setItem('objectKeysMap', headersMap);
 
-	console.log(Storage.items.data);
 	if (Storage.items.data) {
 		/**
          * dbSelects - select html elements near to input field
@@ -50,7 +49,7 @@ export default function fillStorage() {
          *
          * Is fullfilled with all column names (headers) from the file
          */
-		Storage.items.dbSelects.forEach((select: HTMLSelectElement) => {
+		Storage.items.dbSelects?.forEach((select: HTMLSelectElement) => {
 			if (select)
 				select.innerHTML = '';
 
@@ -63,7 +62,7 @@ export default function fillStorage() {
 				select.appendChild(option);
 			}
 
-			Object.keys(Storage.items.data[0]).forEach((header: string) => {
+			Object.keys(Storage.items.data![0]).forEach((header: string) => {
 				const option: HTMLOptionElement = document.createElement('option');
 				option.className = 'database-option';
 				option.value = header;
@@ -75,12 +74,12 @@ export default function fillStorage() {
 		//rowsAmount?.setAttribute('innerHTML', Storage.items.data.length);
 
 		if (rowsAmount)
-			rowsAmount.innerHTML = Storage.items.data.length;
+			rowsAmount.innerHTML = `${Storage.items.data.length}`;
 
 		// Values from updated file data to fullfill dropdowns only with actual values
-		let dropdownValues: {values: string[], valueToHeaderMap: object } | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
+		let dropdownValues: {values: string[], valueToHeaderMap: object } | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders!);
 
-		Storage.items.datalists.forEach((datalist: HTMLDataListElement | null) => {
+		Storage.items.datalists?.forEach((datalist: HTMLDataListElement | null) => {
 			if (datalist)
 				datalist.innerHTML = '';
 

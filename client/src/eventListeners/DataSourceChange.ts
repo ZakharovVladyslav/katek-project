@@ -1,42 +1,38 @@
 import CsvToArray from "../utils/Convert-csv";
-import CustomStorage from "../services/Storage/CustomStorage";
+import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
 import fillStorage from "../services/Storage/FillStorage";
 import DBQuery from "../utils/DBQuery";
 
+// BUTTONS
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
-const resetBtn = document.querySelector('#reset') as HTMLButtonElement;
-const reloadTable = document.querySelector('#reload-table') as HTMLButtonElement;
-const fullTableBtn = document.querySelector('#full-table-button') as HTMLButtonElement;
 
-const dataTable = document.querySelector('#data-table') as HTMLTableElement;
-
+// DIVS
 const overTables = document.querySelector('#over-tables') as HTMLDivElement;
 const submitSection = document.querySelector('#submit-section') as HTMLDivElement;
 
-const SummaryTableInput = document.querySelector('#summary-row-toggler-input') as HTMLInputElement;
-const pieDiagrammInput = document.querySelector('#pie-diagramm-checkbox') as HTMLInputElement;
+// TABLE
+const dataTable = document.querySelector('#data-table') as HTMLTableElement;
+const fullTable = document.querySelector('#full-table') as HTMLTableElement;
 
+// INPUTS
+
+// SELECT
 const dataSource = document.querySelector('#input-data-select') as HTMLSelectElement;
 
-const Storage = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 
-export default function handleDataSourceChange () {
-	submitBtn.disabled = true;
-	dataTable.innerHTML = '';
-	overTables.style.display = 'none';
-
-	submitBtn.disabled = true;
-	resetBtn.disabled = true;
-	fullTableBtn.disabled = true;
-	SummaryTableInput.disabled = true;
-	pieDiagrammInput.disabled = true;
-	reloadTable.disabled = true;
-
+export default function handleDataSourceChange() {
 	Storage.setItem('dataSourceOption', dataSource?.options[dataSource.selectedIndex].value as string);
 
 	const fileInputSection: HTMLDivElement | null = document.querySelector('#file-input-section');
 
+	dataTable.style.display = 'none';
+	overTables.style.display = 'none';
+	fullTable.style.display = 'none';
+
 	if (Storage.items.dataSourceOption === 'Datei') {
+		Storage.clearStorage();
+
 		if (fileInputSection)
 			fileInputSection.innerHTML = '';
 
@@ -81,9 +77,9 @@ export default function handleDataSourceChange () {
 					*/
 				const target = e.target as FileReader;
 
-				const text: string | ArrayBuffer | null | undefined = target?.result;
+				const text = target?.result as string;
 
-				Storage.setItem('inputText', text);
+				Storage.setItem('inputText', text as string);
 
 				const delimiterSelection: HTMLSelectElement | null = document.querySelector('#delimiter-selection');
 
@@ -92,21 +88,25 @@ export default function handleDataSourceChange () {
 				/**
 				 * Data will be stored as a result object[] from .csv text
 				 */
-				Storage.setItem('data', CsvToArray(Storage.items.inputText, delimiterOption).filter((obj) => {
+				Storage.setItem('data', CsvToArray(Storage.items.inputText!, delimiterOption).filter((obj) => {
 					return !Object.values(obj).includes(undefined);
 				}));
+
+				console.log(Storage.items.data);
 
 				fillStorage();
 
 				submitBtn.disabled = false;
 				submitBtn.click();
 
-				const loadFiltersBtn = `
-					<label for="load-filters-inp" id="load-filters-lbl">Load filters</label>
-					<input type="file" id="load-filters-inp" class="load-filters-inp" accept=".json">
-				`;
+				if (!document.querySelector('#load-filters-inp') && Storage.items.data) {
+					const loadFiltersBtn = `
+						<label for="load-filters-inp" id="load-filters-lbl">Load filters</label>
+						<input type="file" id="load-filters-inp" class="load-filters-inp" accept=".json, .csv">
+					`;
 
-				submitSection.insertAdjacentHTML('afterbegin', loadFiltersBtn);
+					submitSection.insertAdjacentHTML('afterbegin', loadFiltersBtn);
+				}
 
 				Storage.setItem('loadFiltersInput', document.querySelector('#load-filters-inp') as HTMLInputElement);
 
@@ -115,15 +115,12 @@ export default function handleDataSourceChange () {
 
 					reader.addEventListener('load', (e: ProgressEvent) => {
 						const content = e.target as FileReader;
-						const filters: string | ArrayBuffer | null | undefined = content?.result;
+						const filters = content?.result as string;
 
-						Storage.setItem('filtersFromJson', filters);
+						Storage.setItem('filtersFromJson', filters as string);
 					})
 
-					console.log(Storage.items.filtersFromJson);
-
-					if (Storage.items.loadFiltersInput.files)
-						reader.readAsText(Storage.items.loadFiltersInput.files[0]);
+					Storage.items.loadFiltersInput?.files && reader.readAsText(Storage.items.loadFiltersInput.files[0]);
 				})
 			});
 
@@ -133,6 +130,12 @@ export default function handleDataSourceChange () {
 		});
 	}
 	else if (Storage.items.dataSourceOption === 'Datenbank') {
+		console.log("Datenbank chosen");
+
+		overTables.style.display = 'none';
+
+		Storage.clearStorage();
+
 		if (fileInputSection && dataTable) {
 			fileInputSection.innerHTML = '';
 			dataTable.innerHTML = '';
@@ -157,16 +160,21 @@ export default function handleDataSourceChange () {
 			try {
 				await DBQuery();
 
+				console.log('Data fetched');
+				console.log(Storage.items.dataSourceOption);
+
 				if (submitBtn)
 					submitBtn.disabled = false;
 
 				const connectionCheckHTML = `
                <i class="fa-solid fa-check fa-2xl" style="color: #00b336;" id="connection-check"></i>
-            `;
+            	`;
 
 				dbConnectionDiv?.insertAdjacentHTML('beforeend', connectionCheckHTML);
 
 				fillStorage();
+
+				submitBtn.click();
 			} catch (err) {
 				console.log(err);
 			}
@@ -176,12 +184,14 @@ export default function handleDataSourceChange () {
 		submitBtn.disabled = false;
 		submitBtn.click();
 
-		const loadFiltersBtn = `
-			<label for="load-filters-inp" id="load-filters-lbl">Load filters</label>
-			<input type="file" id="load-filters-inp" class="load-filters-inp" accept=".json">
-		`;
+		if (!document.querySelector('#load-filters-inp') && Storage.items.data) {
+			const loadFiltersBtn = `
+				<label for="load-filters-inp" id="load-filters-lbl">Load filters</label>
+				<input type="file" id="load-filters-inp" class="load-filters-inp" accept=".json, .csv">
+			`;
 
-		submitSection.insertAdjacentHTML('afterbegin', loadFiltersBtn);
+			submitSection.insertAdjacentHTML('afterbegin', loadFiltersBtn);
+		}
 
 		Storage.setItem('loadFiltersInput', document.querySelector('#load-filters-inp') as HTMLInputElement);
 
@@ -196,10 +206,7 @@ export default function handleDataSourceChange () {
 					Storage.setItem('filtersFromJson', JSON.parse(filters));
 			})
 
-			console.log(Storage.items.filtersFromJson);
-
-			if (Storage.items.loadFiltersInput.files)
-				reader.readAsText(Storage.items.loadFiltersInput.files[0]);
+			Storage.items.loadFiltersInput?.files && reader.readAsText(Storage.items.loadFiltersInput.files[0]);
 		})
 	}
 };

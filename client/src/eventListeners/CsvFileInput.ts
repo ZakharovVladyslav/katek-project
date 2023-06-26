@@ -1,11 +1,11 @@
-import CustomStorage from "../services/Storage/CustomStorage";
+import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
 import fillStorage from "../services/Storage/FillStorage";
 
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 const file = document.querySelector('#file-choose') as HTMLInputElement;
 const chosenFile= document.querySelector('#chosen-file') as HTMLParagraphElement;
 
-const Storage = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 
 export default function handleCsvFileInput() {
     // As file inputted, submit button become active and clickable

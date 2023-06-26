@@ -1,13 +1,14 @@
 const saveButton = document.querySelector('#save') as HTMLButtonElement;
+const callPopupWindowButton = document.querySelector('#call-popup') as HTMLButtonElement;
 
-import CustomStorage from "../services/Storage/CustomStorage";
-const Storage = new CustomStorage();
+import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
+const Storage: ICustomStorage = new CustomStorage();
 
 export default async function SaveDataInCsv() {
-    Storage.setItem('RefinedData', [[...Storage.items.allHeaders]] as string[][]);
+    Storage.setItem('RefinedData', [[...Storage.items.allHeaders!]] as string[][]);
 
-    Storage.items.data.forEach((obj: object) => {
-        let arr: object[] | null = Storage.items.RefinedData;
+    Storage.items.data?.forEach((obj: object) => {
+        let arr: object[] | null = Storage.items.RefinedData!;
         arr?.push(obj);
 
         Storage.setItem('RefinedData', arr as object[]);
@@ -17,7 +18,7 @@ export default async function SaveDataInCsv() {
     if (Storage.items.saveOption === 'Table') {
         let csvContent: string | null = '';
 
-        Storage.items.RefinedData.forEach((row: object) => {
+        Storage.items.RefinedData?.forEach((row: object) => {
             csvContent += Object.values(row).join(',') + '\n';
         });
 
@@ -34,26 +35,34 @@ export default async function SaveDataInCsv() {
     }
 
     else if (Storage.items.saveOption === 'Filters') {
+        callPopupWindowButton.style.display = 'inline-block';
+
         Storage.setItem('csvContent', '' as string);
 
-        const filters = Storage.items.inputFields.map((input: HTMLInputElement | null, index: number) => {
+        const filters: (string | number)[][] = (Storage.items.inputFields ?? [])
+        .map((input: HTMLInputElement | null, index: number): (string | number)[] | undefined => {
             if (input && input.value !== '')
-                return [Storage.items.dbSelects[index].selectedIndex, input.value];
-        }).filter((input: HTMLInputElement) => input !== undefined);
-
-        console.log(filters);
+                return [Storage.items.dbSelects![index].selectedIndex, input.value];
+            return undefined;
+        })
+        .filter((input: (string | number)[] | undefined): input is (string | number)[] => input !== undefined);
 
         Storage.setItem('jsonContent', JSON.stringify(filters, null, 4) as string);
         Storage.setItem('fileType', 'Filters' as string);
     }
 
     else if (Storage.items.saveOption === 'Headers & Filters') {
+        callPopupWindowButton.style.display = 'inline-block';
+
         Storage.setItem('csvContent', '' as string);
 
-        const filters = Storage.items.inputFields.map((input: HTMLInputElement) => {
-            if (input.value !== '')
-                return input.value;
-        }).filter((input: HTMLInputElement) => input !== undefined);
+        const filters: (string | number)[][] = (Storage.items.inputFields ?? [])
+        .map((input: HTMLInputElement | null, index: number): (string | number)[] | undefined => {
+            if (input && input.value !== '')
+                return [Storage.items.dbSelects![index].selectedIndex, input.value];
+            return undefined;
+        })
+        .filter((input: (string | number)[] | undefined): input is (string | number)[] => input !== undefined);
 
         let jsonContent: object = {};
 
@@ -66,11 +75,11 @@ export default async function SaveDataInCsv() {
 
 
     Storage.items.csvContent === ''
-        ? Storage.setItem('blob', new Blob([Storage.items.jsonContent], { type: 'application/json' }) as Blob)
-        : Storage.setItem('blob', new Blob([Storage.items.csvContent], { type: 'text/csv; charset=utf-8' }) as Blob);
+        ? Storage.setItem('blob', new Blob([Storage.items.jsonContent!], { type: 'application/json' }) as Blob)
+        : Storage.setItem('blob', new Blob([Storage.items.csvContent!], { type: 'text/csv; charset=utf-8' }) as Blob);
 
 
-    const objUrl: string = URL.createObjectURL(Storage.items.blob);
+    const objUrl: string = URL.createObjectURL(Storage.items.blob!);
     saveButton?.setAttribute('href', objUrl);
 
     const dateNow: Date = new Date();

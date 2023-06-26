@@ -1,9 +1,9 @@
 'use strict';
 
 import ldap from 'ldapjs';
-import CustomStorage from '../../services/Storage/CustomStorage.js';
+import CustomStorage, { ICustomStorage } from '../../services/Storage/CustomStorage.js';
 
-const Storage: Record<string, any> = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 
 const passwordField: HTMLInputElement | null = document.querySelector('#password-input');
 const logInfield: HTMLInputElement | null = document.querySelector('#login-input');
