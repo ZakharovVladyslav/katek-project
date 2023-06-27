@@ -1,3 +1,7 @@
+import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
+
+const Storage: ICustomStorage = new CustomStorage();
+
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 const loadFiltersInput: HTMLInputElement | null = document.querySelector('#load-filters-inp');
 
@@ -14,15 +18,29 @@ export default async function handleLoadFilters() {
 
             reader.addEventListener('load', function (event) {
                 const fileContent = event.target?.result as string;
-                const filters = JSON.parse(fileContent) as [number, string][];
 
-                filters.forEach((filter, index) => {
-                    const filterInput = document.getElementById(`filter-input-${index + 1}`) as HTMLInputElement;
-                    const dbSelect = document.getElementById(`db-select-${index + 1}`) as HTMLSelectElement;
+                console.log(JSON.parse(fileContent));
 
-                    filterInput.value = filter[1];
-                    dbSelect.selectedIndex = filter[0];
-                });
+                const parsedFileContent = JSON.parse(fileContent) as {
+                    filters?: [number, string][];
+                    headers?: string[]
+                };
+
+                if (parsedFileContent.filters && +parsedFileContent.filters.length !== 0) {
+                    parsedFileContent.filters.forEach((filter: [number, string], index: number) => {
+                        const filterInput = document.getElementById(`filter-input-${index + 1}`) as HTMLInputElement;
+                        const dbSelect = document.getElementById(`db-select-${index + 1}`) as HTMLSelectElement;
+
+                        console.log(filter);
+
+                        filterInput.value = filter[1];
+                        dbSelect.selectedIndex = +filter[0];
+                    });
+                }
+
+                if (parsedFileContent.headers && +parsedFileContent.headers.length !== 0) {
+                    Storage.setItem('tableHeadersFromFile', parsedFileContent.headers);
+                }
 
                 submitBtn.click();
 

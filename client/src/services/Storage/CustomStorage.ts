@@ -4,7 +4,7 @@ import { FullDataInterface } from "../../utils/types";
 
 export interface ICustomStorage {
 	readonly items: ICore,
-	setItem: (prop: string, value: any) => void,
+	setItem: (prop: CoreFields, value: any) => void,
 	clearStorage: () => void
 }
 
@@ -39,8 +39,47 @@ interface ICore {
 	limiter?: number,
 	firstDateQuery?: string,
 	secondDateQuery?: string,
-	fullTablePageIndex?: number
+	fullTablePageIndex?: number,
+	password?: string,
+	login?: string,
+	tableHeadersFromFile?: string[]
 }
+
+type CoreFields =
+	| 'tableHeaders'
+	| 'selectedHeaders'
+	| 'staticData'
+	| 'allHeaders'
+	| 'staticDataLength'
+	| 'headers'
+	| 'allValues'
+	| 'inputTextLength'
+	| 'firstDate'
+	| 'secondDate'
+	| 'objectKeysMap'
+	| 'dataSourceOption'
+	| 'saveOption'
+	| 'inputText'
+	| 'data'
+	| 'RefinedData'
+	| 'inputFields'
+	| 'dbSelects'
+	| 'csvContent'
+	| 'fileType'
+	| 'jsonContent'
+	| 'blob'
+	| 'loadFiltersInput'
+	| 'filtersFromJson'
+	| 'datalists'
+	| 'blockquoteEditValue'
+	| 'sourceType'
+	| 'limiter'
+	| 'firstDateQuery'
+	| 'secondDateQuery'
+	| 'fullTablePageIndex'
+	| 'password'
+	| 'login'
+	| 'tableHeadersFromFile';
 
 class CustomStorage implements ICustomStorage {
 	private static _core: Record<string, any> = {};
@@ -58,7 +97,7 @@ class CustomStorage implements ICustomStorage {
 		return this._core;
 	}
 
-	setItem(prop: string, value: any): void {
+	setItem(prop: CoreFields, value: any): void {
 		this._core[prop] = value;
 	}
 

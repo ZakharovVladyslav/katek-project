@@ -441,6 +441,7 @@ article a {
 
    min-height: fit-content;
 }
+
 .submit-section #load-filters-inp {
    display: none;
 }
@@ -597,7 +598,7 @@ span {
    align-items: center;
 }
 
-.filters-buttons .load-filters-label  {
+.filters-buttons .load-filters-label {
    font-size: 22px;
 
    margin-top: 1.5px;
@@ -1229,24 +1230,19 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 .full-table-section {
    margin: 0 auto 60px auto;
-
    display: flex;
    flex-direction: row;
    justify-content: center;
    align-items: center;
-
    max-width: max-content;
 }
 
 .full-table-section button {
    background-color: #656565;
    transition: background-color ease 0.1s;
-
    width: 50px;
-
    border: 1px solid #646464;
    border-radius: 3px;
-
    cursor: pointer;
 }
 
@@ -1255,17 +1251,8 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
    transition: background-color ease 0.1s;
 }
 
-.full-table-section .left-arrow {
-   margin-right: 30px;
-}
-
-.full-table-section .right-arrow {
-   margin-left: 30px;
-}
-
 .index-arrows {
    max-width: fit-content;
-
    margin: auto;
    margin-right: 600px;
    margin-bottom: 20px;
@@ -1281,20 +1268,17 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 .full-table thead tr th {
    padding: 10px 10px;
-
    color: rgb(255, 255, 255);
    background-color: #00788b;
 }
 
 .full-table tbody tr td {
    padding: 12px 15px;
-
    color: rgb(0, 0, 0);
 }
 
 .full-table tbody tr td:hover {
    background-color: #6f6e6e;
-
    cursor: pointer;
 }
 
@@ -1304,6 +1288,19 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 .full-table tbody tr:nth-child(even) {
    background-color: #cacaca;
+}
+
+.fixed-button-left, .fixed-button-right {
+   position: fixed !important;
+   top: 450px !important;
+}
+
+.show-button-left, .show-button-right {
+   display: block !important;
+}
+
+.show-table-section {
+   display: flex !important;
 }
 
 /*-------------------------------------------------------------------------------------*/

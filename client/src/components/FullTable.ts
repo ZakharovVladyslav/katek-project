@@ -11,9 +11,13 @@ const fullTable = document.querySelector('#full-table') as HTMLTableElement;
 const summaryRowTogglerInput = document.querySelector('#summary-row-toggler-input') as HTMLInputElement;
 
 export default function printFullTable() {
+	leftArrow.style.display = 'block';
+	rightArrow.style.display = 'block';
+
 	let arr: object[] = [...Storage.items.data ?? []];
 
 	summaryRowTogglerInput.disabled = true;
+	leftArrow.disabled = true;
 
 	let index = 0;
 
@@ -26,55 +30,53 @@ export default function printFullTable() {
 
 	renderTable(index, separatedKeys);
 
-	const tableHeight = fullTable?.offsetHeight;
-
 	if (fullTable.innerHTML !== '') {
 		if (index === 0)
-			leftArrow?.setAttribute('style', `display: none; transition: 0.2s; height: 0px;`);
+			leftArrow?.setAttribute('style', `opacity: 0; transition: 0.2s; height: 40px; align-self: flex-start; position: static; left: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
 
-		rightArrow?.setAttribute('style', `display: block; transition: 0.2s; height: ${tableHeight}px;`);
+		rightArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; position: static; right: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
 	} else {
-		leftArrow.style.display = 'none';
-		rightArrow.style.display = 'none';
+		leftArrow.style.opacity = '0';
+		rightArrow.style.opacity = '0';
 	}
 
 	const handleLeftArrowClick = () => {
-
-		const tableHeight = fullTable?.offsetHeight;
-
 		console.log(index);
 
 		if (index === 0) {
-			leftArrow?.setAttribute('style', 'height: 0px; transition: 0.2s; display: none;');
+			leftArrow?.setAttribute('style', `height: 0px; transition: 0.2s; opacity: 0; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
+			leftArrow.disabled = true;
 		}
 		else {
 			index -= 1;
+			rightArrow.disabled = false;
 
 			index === 0
-			? leftArrow?.setAttribute('style', 'height: 0px; transition: 0.2s; display: none;')
-			: leftArrow?.setAttribute('style', `display: block; transition: 0.2s; height: ${tableHeight}px;`)
+			? leftArrow?.setAttribute('style', `opacity: 0; transition: 0.2s; height: 40px; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`)
+			: leftArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`)
 
 			renderTable(index, separatedKeys);
 		}
 
-		rightArrow?.setAttribute('style', `display: block; transition: 0.2s; height: ${tableHeight}px;`);
+		rightArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; right: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
 	};
 
 	leftArrow?.addEventListener('click', handleLeftArrowClick);
 
 	const handleRightArrowClick = () => {
-		const tableHeight = fullTable?.offsetHeight;
-
-		if (Storage.items.fullTablePageIndex === separatedKeys.length - 1)
+		if (index === separatedKeys.length - 1) {
 			index = separatedKeys.length - 1;
+			rightArrow?.setAttribute('style', `opacity: 0; transition: 0.2s; height: px; align-self: flex-start; right: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
+			rightArrow.disabled = true;
+		}
 		else {
 			index += 1;
+			leftArrow.disabled = false;
 		}
 
 		renderTable(index, separatedKeys);
 
-		leftArrow?.setAttribute('style', `display: block; transition: 0.2s; height: ${tableHeight}px;`);
-		rightArrow?.setAttribute('style', `display: block; transition: 0.2s; height: ${tableHeight}px;`);
+		leftArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
 	};
 	rightArrow?.addEventListener('click', handleRightArrowClick);
 };

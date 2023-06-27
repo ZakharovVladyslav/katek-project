@@ -37,6 +37,8 @@ const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 const resetBtn = document.querySelector('#reset') as HTMLButtonElement;
 const saveButton = document.querySelector('#save') as HTMLButtonElement;
 const toggleButton = document.querySelector('#scale-filters-wrapper-toggler') as HTMLButtonElement;
+const rightArrow = document.querySelector('#right-arrow') as HTMLButtonElement;
+const leftArrow = document.querySelector('#left-arrow') as HTMLButtonElement;
 //-------------------------------------------------------------------------------------------------
 
 // SELECTS ----------------------------------------------------------------------------------------
@@ -47,6 +49,7 @@ const dataSource = document.querySelector('#input-data-select') as HTMLSelectEle
 // DIVS--------------------------------------------------------------------------------------------
 const filters = document.querySelector('#filters') as HTMLDivElement;
 const filtersSectionWrapper = document.querySelector('#filters-wrapper') as HTMLDivElement;
+const fullTableSection = document.querySelector('#full-table-section') as HTMLDivElement;
 //-------------------------------------------------------------------------------------------------
 
 // PARAGRAPHS--------------------------------------------------------------------------------------
@@ -66,6 +69,12 @@ const loadFiltersLabel = document.querySelector("#load-filters-lbl") as HTMLLabe
 const tableCheckbox = document.querySelector('#content-input-table') as HTMLInputElement;
 const fullTableCheckbox = document.querySelector('#content-input-fullTable') as HTMLInputElement;
 
+const DISPLAY_NONE = 'display: none;';
+
+//-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+
 tableCheckbox.checked = true;
 document.querySelector('#over-tables')?.setAttribute('style', 'display: none;');
 
@@ -84,8 +93,29 @@ if (submitBtn)
 const dbConnectBtn = document.querySelector('#db-connect');
 
 window.addEventListener('load', HandleWindowLoad);
+
 dbConnectBtn?.addEventListener('click', HandleDBConnectionBtnClick);
+
 dataSource?.addEventListener('change', handleDataSourceChange);
+
+window.addEventListener('scroll', () => {
+  const scrollPosition = window.scrollY;
+
+  console.log(scrollPosition);
+
+  if (fullTableSection.getAttribute('style') !== DISPLAY_NONE) {
+	if (scrollPosition >= 373) {
+		leftArrow.classList.add('fixed-button-left', 'show-button-left');
+		rightArrow.classList.add('fixed-button-right', 'show-button-right');
+		fullTableSection.classList.add('show-table-section');
+	} else {
+		leftArrow.classList.remove('fixed-button-left', 'show-button-left');
+		rightArrow.classList.remove('fixed-button-right', 'show-button-right');
+		fullTableSection.classList.remove('show-table-section');
+	}
+	}
+});
+
 
 const file: HTMLInputElement | null = document.querySelector('#file-choose');
 
@@ -107,8 +137,8 @@ toggleButton.addEventListener('click', (e: MouseEvent) => {
 	// : filtersSectionWrapper.style.height = '0px';
 
 	target.classList.contains('active')
-	? filtersSectionWrapper.style.display = 'block'
-	: filtersSectionWrapper.style.display = 'none';
+		? filtersSectionWrapper.style.display = 'block'
+		: filtersSectionWrapper.style.display = 'none';
 })
 
 // listens to the first date change to change number of rows that will be outputed
@@ -120,7 +150,7 @@ document.querySelector('#right-date-inp')?.addEventListener('change', handleRigh
 const handleSaveSelectorChange = () => {
 	const saveFileSelectorOption = saveFileSelector.options[saveFileSelector.selectedIndex].value
 
-	if (saveFileSelectorOption === 'Filters' || saveFileSelectorOption === 'Headers & Filters')
+	if (saveFileSelectorOption === 'Headers' || saveFileSelectorOption === 'Headers & Filters')
 		document.querySelector<HTMLButtonElement>('#call-popup')?.setAttribute('style', 'display: inline-block;')
 
 	Storage.setItem('saveOption', saveFileSelector?.options[saveFileSelector.selectedIndex].value as string);

@@ -52,14 +52,16 @@ export default function renderDataTable() {
     * theaderCell.innerHTML will write header into 'th' html element as <th>header</th>
     */
     const hrow = document.createElement('tr');
-    for (let i = 0; i < 16; i++) {
+
+    const headers: string[] = Storage.items.tableHeadersFromFile ?? Storage.items.tableHeaders!;
+
+    headers.forEach((header: string) => {
         const theaderCell = document.createElement('th');
 
-        if (Storage.items.tableHeaders)
-            theaderCell.innerHTML = Storage.items.tableHeaders[i];
+        theaderCell.innerHTML = header;
 
         hrow.appendChild(theaderCell);
-    }
+    })
     thead.appendChild(hrow);
 
     /**
@@ -102,7 +104,7 @@ export default function renderDataTable() {
             /**
          * Iterating through tableHeaders to print only headers that were specified
          */
-            Storage.items.tableHeaders?.forEach((header: string, j: number) => {
+            headers.forEach((header: string, j: number) => {
                 let tableDataHTML = '';
 
                 /**

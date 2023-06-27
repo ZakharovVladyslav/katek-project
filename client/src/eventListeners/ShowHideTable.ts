@@ -6,6 +6,8 @@ const overTables = document.querySelector('#over-tables') as HTMLDivElement;
 const fullTableSection = document.querySelector('#full-table-section') as HTMLDivElement;
 
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
+const leftArrow = document.querySelector('#left-arrow') as HTMLButtonElement;
+const rightArrow = document.querySelector('#right-arrow') as HTMLButtonElement;
 
 const DISPLAY_NONE = 'display: none;'
 
@@ -14,8 +16,11 @@ export default function handleTableCheckboxChange() {
     console.log(table.getAttribute('style'));
 
     if (table.getAttribute('style') === DISPLAY_NONE) {
-        if (fullTableSection.getAttribute('style') !== DISPLAY_NONE)
+        if (fullTableSection.getAttribute('style') !== DISPLAY_NONE) {
             fullTableSection.style.display = 'none';
+            leftArrow.style.display = 'none';
+            rightArrow.style.display = 'none';
+        }
 
         overTables.style.display = 'flex';
         table.style.display = 'table';
@@ -60,6 +65,10 @@ export function getElementYPosition(element: HTMLElement): number {
     }
 
     return yPosition;
+}
+
+export function getElementWidth(element: HTMLElement): number {
+    return element.offsetWidth;
 }
 
 // Scroll the site to a specific Y position
