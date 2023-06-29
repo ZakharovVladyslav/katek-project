@@ -71,6 +71,8 @@ export default function DropdownValues(array: FullDataInterface[], headers: stri
 
 	flattenedArray = removeSingleValues(flattenedArray);
 
+	console.log(flattenedArray);
+
 	return {
 		values: flattenedArray as string[],
 		valueToHeaderMap: Object.fromEntries(valueToHeaderMap) as object

@@ -1,5 +1,6 @@
 import CustomStorage, { ICustomStorage } from './CustomStorage.js';
 import DropdownValues from '../../utils/Dropdown-values.js';
+
 const rowsAmount = document.querySelector('#rows-amount');
 
 const Storage: ICustomStorage = new CustomStorage();
@@ -58,7 +59,8 @@ export default function fillStorage() {
 			if (option) {
 				option.className = 'database-option';
 				option.value = 'Select';
-				option.innerHTML = 'Select';
+
+				option.innerHTML = 'Wählen';
 				select.appendChild(option);
 			}
 

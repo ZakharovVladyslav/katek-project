@@ -83,8 +83,7 @@ Storage.setItem('dataSourceOption',
 );
 
 /* If file is not inputted, submit button is not able to be pressed */
-if (submitBtn)
-	submitBtn.disabled = true;
+submitBtn.disabled = true;
 
 /*****************************************************************************************************************/
 /*----------------------------------------- SEPARATE EVENT LISTENERS --------------------------------------------*/
@@ -100,8 +99,6 @@ dataSource?.addEventListener('change', handleDataSourceChange);
 
 window.addEventListener('scroll', () => {
   const scrollPosition = window.scrollY;
-
-  console.log(scrollPosition);
 
   if (fullTableSection.getAttribute('style') !== DISPLAY_NONE) {
 	if (scrollPosition >= 373) {

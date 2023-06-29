@@ -5,11 +5,9 @@ WORKDIR /client
 COPY ./ /client
 
 RUN apt-get update && apt-get install -y xdg-utils
-
+RUN npm config set strict-ssl false
 RUN npm install vite
-
 RUN npm run build
-
 RUN npm install
 
 EXPOSE 3001

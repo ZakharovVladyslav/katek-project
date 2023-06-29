@@ -18,6 +18,8 @@ interface Data {
 }
 
 export default function CreateDiagram(): void {
+	labels.innerHTML = '';
+
 	const keys: string[] = ['CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
 
 	const values: string[][] | undefined = Storage.items.data?.map((object: FullDataInterface) => {
@@ -54,59 +56,51 @@ export default function CreateDiagram(): void {
 		{ label: 'CountFail_Retest', value: zeros[3].toString(), color: '#00FFEC', stroke: '#041A4C' },
 	];
 
-	if (dataPieInput && !dataPieInput.checked) {
-		const radius = 150;
+	const radius = 150;
 
-		svgElem.innerHTML = '';
+	svgElem.innerHTML = '';
 
-		const pieGenerator = d3
-			.pie<Data>()
-			.value((d) => parseFloat(d.value))
-			.padAngle(0.03)
-			.sort(null);
+	const pieGenerator = d3
+		.pie<Data>()
+		.value((d) => parseFloat(d.value))
+		.padAngle(0.03)
+		.sort(null);
 
-		const arcGenerator = d3
-			.arc<d3.PieArcDatum<Data>>()
-			.innerRadius(100)
-			.outerRadius(radius);
+	const arcGenerator = d3
+		.arc<d3.PieArcDatum<Data>>()
+		.innerRadius(100)
+		.outerRadius(radius);
 
-		const pie = pieGenerator(inputData);
+	const pie = pieGenerator(inputData);
 
-		const svg = d3
-			.select(svgElem)
-			.append('svg')
-			.attr('width', radius * 2)
-			.attr('height', radius * 2)
-			.append('g')
-			.attr('transform', `translate(${radius},${radius})`);
+	const svg = d3
+		.select(svgElem)
+		.append('svg')
+		.attr('width', radius * 2)
+		.attr('height', radius * 2)
+		.append('g')
+		.attr('transform', `translate(${radius},${radius})`);
 
-		svg
-			.selectAll('path')
-			.data(pie)
-			.enter()
-			.append('path')
-			.attr('d', arcGenerator)
-			.attr('fill', (d) => d.data.color)
-			.attr('stroke', '#000000')
-			.attr('stroke-width', 1);
+	svg
+		.selectAll('path')
+		.data(pie)
+		.enter()
+		.append('path')
+		.attr('d', arcGenerator)
+		.attr('fill', (d) => d.data.color)
+		.attr('stroke', '#000000')
+		.attr('stroke-width', 1);
 
-		inputData.forEach((elem: Data, index: number) => {
-			const html = `
+	inputData.forEach((elem: Data, index: number) => {
+		const html = `
 					<div id='color-${index + 1}' style="display: flex; flex-direction: row; gap: 10px;">
 						<span id='square' style="width: 40px; height: 40px; background-color: ${elem.color}; display: block; "></span>
 						<p>${elem.label} - ${elem.value}</p>
 					</div>
 				`;
 
-			if (labels) {
-				labels.insertAdjacentHTML('beforeend', html);
-			}
-		});
-	} else {
-		svgDiv.style.display = 'none';
-		svgElem.style.display
-		labels.innerHTML = '';
-		svgElem.innerHTML = '';
-		diagrammDescriptionLabel.style.display = 'none';
-	}
+		if (labels) {
+			labels.insertAdjacentHTML('beforeend', html);
+		}
+	});
 }

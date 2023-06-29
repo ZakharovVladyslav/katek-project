@@ -59,16 +59,14 @@
       <form id="input-form">
 
          <section id="input-section">
-            <div id="scale-filters-wrapper-toggler" class="plusminus active"></div>
-
             <select id="input-data-select" class="input-data-select">
-               <option value="Datenbank">Datenbank</option>
-               <option value="Datei">Datei</option>
+               <option id="database-option" value="Datenbank">Datenbank</option>
+               <option id="file-option" value="Datei">Datei</option>
             </select>
 
             <div id="file-input-section">
                <div id="db-connect-div" class="db-connect-div">
-                  <button type="button" id="db-connect" class='db-connect'>Connect database</button>
+                  <button type="button" id="db-connect" class='db-connect'>Datenbank verbinden</button>
                </div>
             </div>
 
@@ -83,12 +81,14 @@
             </select>
          </section><br>
 
+         <div id="scale-filters-wrapper-toggler" class="plusminus active" style="display: none;"></div>
          <section id="filters-wrapper" class="filters-wrapper">
+
             <section id="content-buttons" class="content-buttons" style="display: none;">
                <div>
                   <label for="content-input-table" id="content-label-table"><i class="fa-solid fa-table"></i></label>
                   <input type="checkbox" id="content-input-table" checked>
-                  <p>Table</p>
+                  <p>Tabelle</p>
                </div>
 
                <span class="dividing-column"></span>
@@ -97,7 +97,7 @@
                   <label for="content-input-fullTable" id="full-table-icon-btn"><i
                         class="fa-solid fa-table-cells"></i></label>
                   <input type="checkbox" id="content-input-fullTable">
-                  <p>Full Table</p>
+                  <p>Komplette Tabelle</p>
                </div>
 
                <span class="dividing-column"></span>
@@ -161,7 +161,7 @@
                   <section class="filters" id="filters">
                      <div class="filter-div-1">
                         <select class="database-select" id="db-select-1">
-                           <option value="Select">Select</option>
+                           <option value="Select">Wählen</option>
                         </select>
                         <input type="text" id="filter-input-1" class="filter-input" list="datalist-1">
                         <datalist id="datalist-1"></datalist>
@@ -169,7 +169,7 @@
                      </div>
                      <div class="filter-div-2">
                         <select class="database-select" id="db-select-2">
-                           <option value="Select">Select</option>
+                           <option value="Select">Wählen</option>
                         </select>
                         <input type="text" id="filter-input-2" class="filter-input" list="datalist-2">
                         <datalist id="datalist-2"></datalist>
@@ -177,7 +177,7 @@
                      </div>
                      <div class="filter-div-3">
                         <select class="database-select" id="db-select-3">
-                           <option value="Select">Select</option>
+                           <option value="Select">Wählen</option>
                         </select>
                         <input type="text" id="filter-input-3" class="filter-input" list="datalist-3">
                         <datalist id="datalist-3"></datalist>
@@ -185,7 +185,7 @@
                      </div>
                      <div class="filter-div-4">
                         <select class="database-select" id="db-select-4">
-                           <option value="Select">Select</option>
+                           <option value="Select">Wählen</option>
                         </select>
                         <input type="text" id="filter-input-4" class="filter-input" list="datalist-4">
                         <datalist id="datalist-4"></datalist>
@@ -193,7 +193,7 @@
                      </div>
                      <div class="filter-div-5">
                         <select class="database-select" id="db-select-5">
-                           <option value="Select">Select</option>
+                           <option value="Select">Wählen</option>
                         </select>
                         <input type="text" id="filter-input-5" class="filter-input" list="datalist-5">
                         <datalist id="datalist-5"></datalist>
@@ -267,11 +267,11 @@
             </div>
          </div>
          <select id="save-file-select" class="save-file-select">
-            <option value="Select">Select</option>
-            <option value="Table">Table - .csv</option>
-            <option value="Headers & Filters">Headers & Filters - .json</option>
-            <option value="Headers">Headers - .json</option>
-            <option value="Filters">Filters - .json</option>
+            <option id='save-file-select-opt-1' value="Select">Wählen</option>
+            <option id='save-file-select-opt-2' value="Table">Tabelle</option>
+            <option id='save-file-select-opt-3' value="Headers & Filters">Headers & Filtern</option>
+            <option id='save-file-select-opt-4' value="Headers">Headers</option>
+            <option id='save-file-select-opt-5' value="Filters">Filtern</option>
          </select>
          <a id="save" class="save" type="download"><i class="fa-solid fa-download"></i></a>
       </div>
@@ -280,9 +280,9 @@
    <table id="data-table"></table>
 
    <section id="full-table-section" class="full-table-section" style="display: none;">
-      <button type="button" id="left-arrow" class="left-arrow" style="display: none;"></button>
+      <button type="button" id="left-arrow" class="left-arrow" style="display: none;"><i class="fa-solid fa-chevron-left" style="color: #ededed;"></i></button>
       <table id="full-table" class="full-table"></table>
-      <button type="button" id="right-arrow" class="right-arrow" style="display: none;"></button>
+      <button type="button" id="right-arrow" class="right-arrow" style="display: none;"><i class="fa-solid fa-chevron-right" style="color: #ededed;"></i></button>
    </section>
 
 
@@ -314,13 +314,10 @@
          console.log(option);
 
          if (option === 'GE') {
-            fileChoose.innerHTML = 'Datei öffnen';
+            if (fileChoose)
+               fileChoose.innerHTML = 'Datei öffnen';
+
             rowLimiter.innerHTML = 'Anzahl der Zeilen begrenzen:';
-            submitBtn.innerHTML = 'Bestätigen ';
-            initialTableBtn.innerHTML = 'Ursprüngliche Tabelle';
-            resetBtn.innerHTML = 'Reset';
-            fullTableBtn.innerHTML = 'Komplette Tabelle';
-            summaryRow.innerHTML = 'Ergebnis';
             realRowsNumber.innerHTML = 'Anzahl der angezeigten Zeilen:';
             addToFilterOption.innerHTML = 'Zum Filtern hinzufügen';
             showRowOption.innerHTML = 'Zeile anzeigen';
@@ -330,6 +327,21 @@
             diagrammLabel.innerHTML = 'Kuchendiagramm';
             diagramDesc.innerHTML = 'Hier kannst du die Prozessfähigkeit in einem Diagramm (pro Prozent) ein einsehen/beobachten.';
             cellMode.innerHTML = 'Zellenklickmodus:';
+
+            document.querySelector("#database-option").innerHTML = 'Datenbank';
+            document.querySelector("#file-option").innerHTML = 'Datei';
+
+            for (let i = 0; i < 5; i++)
+               if (document.querySelector(`#db-select-${i + 1}`).selectedIndex === 0)
+                  document.querySelector(`#db-select-${i + 1}`).options[document.querySelector(`#db-select-${i + 1}`).selectedIndex].innerHTML = 'Wählen';
+
+            document.querySelector('#db-connect').innerHTML = 'Datenbank verbinden';
+
+            document.querySelector('#save-file-select-opt-1').innerHTML = 'Wählen'
+            document.querySelector('#save-file-select-opt-2').innerHTML = 'Tabelle';
+            document.querySelector('#save-file-select-opt-3').innerHTML = 'Headers';
+            document.querySelector('#save-file-select-opt-4').innerHTML = 'Headers';
+            document.querySelector('#save-file-select-opt-5').innerHTML = 'Filtern';
          }
 
          else if (option === 'EN') {
@@ -337,11 +349,6 @@
                fileChoose.innerHTML = 'Choose file';
 
             rowLimiter.innerHTML = 'Row limiter: ';
-            submitBtn.innerHTML = 'Submit';
-            initialTableBtn.innerHTML = 'Initial table';
-            resetBtn.innerHTML = 'Reset';
-            fullTableBtn.innerHTML = 'Full table';
-            summaryRow.innerHTML = 'Summary row';
             realRowsNumber.innerHTML = 'Number of shown rows:';
             addToFilterOption.innerHTML = 'Add to filters';
             showRowOption.innerHTML = 'Show row';
@@ -351,6 +358,21 @@
             diagrammLabel.innerHTML = 'Diagramm';
             diagramDesc.innerHTML = 'Here you can observe the percentage of production process via diagramm';
             cellMode.innerHTML = 'Cell click mode:';
+
+            document.querySelector("#database-option").innerHTML = 'Database';
+            document.querySelector("#file-option").innerHTML = 'File';
+
+            for (let i = 0; i < 5; i++)
+               if (document.querySelector(`#db-select-${i + 1}`).selectedIndex === 0)
+                  document.querySelector(`#db-select-${i + 1}`).options[document.querySelector(`#db-select-${i + 1}`).selectedIndex].innerHTML = 'Select';
+
+            document.querySelector('#db-connect').innerHTML = 'Connect database';
+
+            document.querySelector('#save-file-select-opt-1').innerHTML = 'Select'
+            document.querySelector('#save-file-select-opt-2').innerHTML = 'Table';
+            document.querySelector('#save-file-select-opt-3').innerHTML = 'Headers & Filters';
+            document.querySelector('#save-file-select-opt-4').innerHTML = 'Headers';
+            document.querySelector('#save-file-select-opt-5').innerHTML = 'Filters';
          }
       });
    </script>

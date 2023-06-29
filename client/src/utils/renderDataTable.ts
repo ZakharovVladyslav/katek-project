@@ -24,7 +24,6 @@ export default function renderDataTable() {
 
     console.log(document.querySelector<HTMLDivElement>('#filters-wrapper')?.offsetHeight);
 
-    const table: HTMLTableElement = document.createElement('table');
     const thead: HTMLTableSectionElement = document.createElement('thead');
     const tbody: HTMLTableSectionElement = document.createElement('tbody');
 
@@ -40,10 +39,8 @@ export default function renderDataTable() {
     const innerTable = document.createElement('table');
     innerTable.innerHTML = '';
 
-    table.appendChild(thead);
-    table.appendChild(tbody);
-
-    document.querySelector<HTMLTableElement>('data-table')?.appendChild(table);
+    dataTable.appendChild(thead);
+    dataTable.appendChild(tbody);
 
     /**
     * Building a header row
@@ -153,14 +150,13 @@ export default function renderDataTable() {
             tbody.appendChild(body_row);
         }
 
-        table.appendChild(thead);
-        table.appendChild(tbody);
-        dataTable?.appendChild(table);
+        dataTable.appendChild(thead);
+        dataTable.appendChild(tbody);
     }
 
     /**
          * This event handler allows to work with table by clicking on the cell
          */
 
-    table?.addEventListener('click', handleTableClick);
+    dataTable?.addEventListener('click', handleTableClick);
 }

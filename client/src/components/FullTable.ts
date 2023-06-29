@@ -32,9 +32,9 @@ export default function printFullTable() {
 
 	if (fullTable.innerHTML !== '') {
 		if (index === 0)
-			leftArrow?.setAttribute('style', `opacity: 0; transition: 0.2s; height: 40px; align-self: flex-start; position: static; left: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
+			leftArrow?.setAttribute('style', `opacity: 0; transition: 0.2s; height: 40px; align-self: flex-start; position: static; left: ${((1920 - fullTable.offsetWidth) / 2) - 120}px`);
 
-		rightArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; position: static; right: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
+		rightArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; position: static; right: ${((1920 - fullTable.offsetWidth) / 2) - 120}px`);
 	} else {
 		leftArrow.style.opacity = '0';
 		rightArrow.style.opacity = '0';
@@ -44,7 +44,7 @@ export default function printFullTable() {
 		console.log(index);
 
 		if (index === 0) {
-			leftArrow?.setAttribute('style', `height: 0px; transition: 0.2s; opacity: 0; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
+			leftArrow?.setAttribute('style', `height: 0px; transition: 0.2s; opacity: 0; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 120}px`);
 			leftArrow.disabled = true;
 		}
 		else {
@@ -52,13 +52,13 @@ export default function printFullTable() {
 			rightArrow.disabled = false;
 
 			index === 0
-			? leftArrow?.setAttribute('style', `opacity: 0; transition: 0.2s; height: 40px; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`)
-			: leftArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`)
+			? leftArrow?.setAttribute('style', `opacity: 0; transition: 0.2s; height: 40px; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 120}px`)
+			: leftArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 120}px`)
 
 			renderTable(index, separatedKeys);
 		}
 
-		rightArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; right: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
+		rightArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; right: ${((1920 - fullTable.offsetWidth) / 2) - 120}px`);
 	};
 
 	leftArrow?.addEventListener('click', handleLeftArrowClick);
@@ -66,17 +66,18 @@ export default function printFullTable() {
 	const handleRightArrowClick = () => {
 		if (index === separatedKeys.length - 1) {
 			index = separatedKeys.length - 1;
-			rightArrow?.setAttribute('style', `opacity: 0; transition: 0.2s; height: px; align-self: flex-start; right: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
+			rightArrow?.setAttribute('style', `opacity: 0; transition: 0.2s; height: px; align-self: flex-start; right: ${((1920 - fullTable.offsetWidth) / 2) - 120}px`);
 			rightArrow.disabled = true;
 		}
 		else {
 			index += 1;
 			leftArrow.disabled = false;
+			rightArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; right: ${((1920 - fullTable.offsetWidth) / 2) - 120}px`);
 		}
 
 		renderTable(index, separatedKeys);
 
-		leftArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 60}px`);
+		leftArrow?.setAttribute('style', `opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 120}px`);
 	};
 	rightArrow?.addEventListener('click', handleRightArrowClick);
 };

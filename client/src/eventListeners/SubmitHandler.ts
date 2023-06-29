@@ -30,6 +30,7 @@ const rowCounterDiv = document.querySelector('#row-counter-div') as HTMLDivEleme
 const contentSection = document.querySelector('#content-buttons') as HTMLDivElement;
 const filtersSections = document.querySelector('#filters-date-submit') as HTMLDivElement;
 const svgDiv = document.querySelector('#svg-div') as HTMLDivElement;
+const filtersWrapperToggler = document.querySelector('#scale-filters-wrapper-toggler') as HTMLDivElement;
 //-------------------------------------------------------------------------------------------------
 
 // INPUTS-------------------------------------------------------------------------------------------
@@ -87,6 +88,7 @@ export default async function handleInputFormSubmit(e: Event) {
 	});
 
 	if (Storage.items.data) {
+		filtersWrapperToggler.style.display = 'block';
 		rowCounterDiv.style.opacity = '1';
 		contentSection.style.display = 'flex';
 		filtersSections.style.display = 'flex';
@@ -115,46 +117,6 @@ export default async function handleInputFormSubmit(e: Event) {
 		/*---------------------------------------    PROGRAM ENTRY POINT    ----------------------------------------------*/
 		/*----------------------------------------------------------------------------------------------------------------*/
 		/*----------------------------------------------------------------------------------------------------------------*/
-
-		const select: HTMLSelectElement | null = document.querySelector<HTMLSelectElement>('#date-params');
-		const opt: string | undefined = select?.options[select?.selectedIndex]?.value;
-
-		/**
-		 * Check if one the datetime-local input field is empty, second datetime-local input field will be filled
-		 * with the earliest or the latest date
-		 *
-		 * toISOString() is a method in JavaScript that is used to convert a date object to a string in ISO format.
-		 * The term "ISO" stands for "International Organization for Standardization,"
-		 */
-
-		/*
-		if (Storage.items.firstDate?.value !== '' && Storage.items.secondDate?.value === '') {
-			if (opt) {
-				const latestDate = Storage.items.data.reduce((latest: Date, current: Record<string, any>) => {
-					const currentDate: Date = new Date(current[opt]);
-					return currentDate > latest ? currentDate : latest;
-				}, new Date(Storage.items.data[0][opt]));
-
-				const rightDateInput = document.querySelector<HTMLInputElement>('#right-date-inp');
-				if (rightDateInput) {
-					rightDateInput.value = latestDate.toISOString().slice(0, 16);
-				}
-			}
-		}
-		else if (Storage.items.firstDate?.value === '' && Storage.items.secondDate?.value !== '') {
-			if (opt) {
-				const latestDate = Storage.items.data.reduce((latest: Date, current: Record<string, any>) => {
-					const currentDate: Date = new Date(current[opt]);
-					return currentDate < latest ? currentDate : latest;
-				}, new Date(Storage.items.data[0][opt]));
-
-				const rightDateInput = document.querySelector<HTMLInputElement>('#left-date-inp');
-				if (rightDateInput) {
-					rightDateInput.value = latestDate.toISOString().slice(0, 16);
-				}
-			}
-		}
-		*/
 
 		// Number of the rows that will be outputted
 		if (rowsAmount && Storage.items.data) {
