@@ -1,11 +1,13 @@
 import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
+import { DISPLAY } from "../utils/enums";
 
 const Storage: ICustomStorage = new CustomStorage();
 
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 const loadFiltersInput: HTMLInputElement | null = document.querySelector('#load-filters-inp');
+const clearLoadedFiltersButton = document.querySelector('#load-filters-clear-btn') as HTMLButtonElement;
 
-export default async function handleLoadFilters() {
+export async function handleLoadFilters() {
     const fileInput = document.getElementById('load-filters-inp') as HTMLInputElement;
 
     const handleInputChange = (event: Event) => {
@@ -42,6 +44,8 @@ export default async function handleLoadFilters() {
                     Storage.setItem('tableHeadersFromFile', parsedFileContent.headers);
                 }
 
+                clearLoadedFiltersButton.setAttribute('style', DISPLAY.FLEX);
+
                 submitBtn.click();
 
                 if (loadFiltersInput)
@@ -53,4 +57,16 @@ export default async function handleLoadFilters() {
     };
 
     fileInput.addEventListener('change', handleInputChange);
+}
+
+export function handleFiltersClearButtonClick() {
+    Storage.items.inputFields?.forEach((field: HTMLInputElement) => {
+        field.value = '';
+    })
+
+    Storage.setItem('tableHeadersFromFile', null);
+
+    clearLoadedFiltersButton.setAttribute('style', DISPLAY.NONE);
+
+    submitBtn.click();
 }

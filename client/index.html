@@ -88,7 +88,7 @@
                <div>
                   <label for="content-input-table" id="content-label-table"><i class="fa-solid fa-table"></i></label>
                   <input type="checkbox" id="content-input-table" checked>
-                  <p>Tabelle</p>
+                  <p id="content-button-p-table">Tabelle</p>
                </div>
 
                <span class="dividing-column"></span>
@@ -97,7 +97,7 @@
                   <label for="content-input-fullTable" id="full-table-icon-btn"><i
                         class="fa-solid fa-table-cells"></i></label>
                   <input type="checkbox" id="content-input-fullTable">
-                  <p>Komplette Tabelle</p>
+                  <p id="content-button-p-full-table">Komplette Tabelle</p>
                </div>
 
                <span class="dividing-column"></span>
@@ -106,7 +106,7 @@
                   <label for="content-input-pieDiagram" id="content-label-pieDiagram"><i
                         class="fa-solid fa-chart-pie"></i></label>
                   <input type="checkbox" id="content-input-pieDiagram">
-                  <p>Pie Diagram</p>
+                  <p id="content-button-p-diagram">Diagramme</p>
                </div>
 
                <span class="dividing-column"></span>
@@ -115,7 +115,7 @@
                   <label for="content-input-summaryRow" id="content-label-summaryRow"><i
                         class="fa-solid fa-chart-simple"></i></label>
                   <input type="checkbox" id="content-input-summaryRow">
-                  <p>Parameters summary</p>
+                  <p id="content-button-p-summary">Alle parameter</p>
                </div>
             </section>
 
@@ -153,9 +153,12 @@
                      <button type="button" id="reset" class="reset-button"><i
                            class="fa-solid fa-rotate-right"></i></button>
 
-                     <label for="load-filters-inp" id="load-filters-lbl" class="load-filters-label"><i
+                     <div class="load-filters-div" id="load-filters-div">
+                        <button id="load-filters-clear-btn" class="load-filters-clear-btn" style="display: none;"><i class="fa-solid fa-xmark" style="color: #ffffff;"></i></button>
+                        <label for="load-filters-inp" id="load-filters-lbl" class="load-filters-label"><i
                            class="fa-solid fa-upload"></i></label>
-                     <input type="file" id="load-filters-inp" class="load-filters-inp" accept=".json">
+                        <input type="file" id="load-filters-inp" class="load-filters-inp" accept=".json">
+                     </div>
                   </section>
 
                   <section class="filters" id="filters">
@@ -221,7 +224,7 @@
       </form><br>
    </section>
 
-   <table id="summary-table"></table>
+   <table id="summary-table" style="display: none;"></table>
 
    <p id="diagramm-description" style="display: none;">Hier kannst du die Prozessfähigkeit in einem Diagramm (pro
       Prozent) ein einsehen/beobachten.</p>
@@ -331,6 +334,11 @@
             document.querySelector("#database-option").innerHTML = 'Datenbank';
             document.querySelector("#file-option").innerHTML = 'Datei';
 
+            document.querySelector('#content-button-p-table').innerHTML = 'Tabelle';
+            document.querySelector('#content-button-p-full-table').innerHTML = 'Komplette Tabelle';
+            document.querySelector('#content-button-p-diagram').innerHTML = 'Diagramme';
+            document.querySelector('#content-button-p-summary').innerHTML = 'Alle Parameter';
+
             for (let i = 0; i < 5; i++)
                if (document.querySelector(`#db-select-${i + 1}`).selectedIndex === 0)
                   document.querySelector(`#db-select-${i + 1}`).options[document.querySelector(`#db-select-${i + 1}`).selectedIndex].innerHTML = 'Wählen';
@@ -361,6 +369,12 @@
 
             document.querySelector("#database-option").innerHTML = 'Database';
             document.querySelector("#file-option").innerHTML = 'File';
+
+            document.querySelector('#content-button-p-table').innerHTML = 'Table';
+            document.querySelector('#content-button-p-full-table').innerHTML = 'Full table';
+            document.querySelector('#content-button-p-diagram').innerHTML = 'Diagram';
+            document.querySelector('#content-button-p-summary').innerHTML = 'Summary';
+
 
             for (let i = 0; i < 5; i++)
                if (document.querySelector(`#db-select-${i + 1}`).selectedIndex === 0)

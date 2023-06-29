@@ -9,6 +9,7 @@ import DBQuery from '../utils/DBQuery.ts';
 import renderDataTable from '../utils/renderDataTable.ts';
 
 import printFullTable from '../components/FullTable.ts';
+import generateSummaryRow from '../components/SummaryTable.ts';
 
 //import LoginWindow from './components/login-form/Login-window.ts';
 
@@ -46,6 +47,7 @@ const countpassCounter = document.querySelector('#countpass-counter') as HTMLPar
 // TABLES------------------------------------------------------------------------------------------
 const dataTable = document.querySelector('#data-table') as HTMLTableElement;
 const fullTable = document.querySelector('#full-table') as HTMLTableElement;
+const summaryTable = document.querySelector('#summary-table') as HTMLTableElement;
 //-------------------------------------------------------------------------------------------------
 
 Storage.setItem('dataSourceOption',
@@ -158,6 +160,9 @@ export default async function handleInputFormSubmit(e: Event) {
 
 			if (fullTable.getAttribute('style') !== 'display: none;')
 				printFullTable();
+
+			if (summaryTable.getAttribute('style') !== 'display: none;')
+				generateSummaryRow();
 		}
 	}
 };

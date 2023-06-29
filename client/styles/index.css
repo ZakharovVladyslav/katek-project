@@ -411,7 +411,7 @@ article a {
 /* ROW COUNTER PART --------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------------------------- */
 
-.row-counter-div {
+.dcounter-div {
    display: flex;
    flex-direction: row;
    justify-content: center;
@@ -421,7 +421,7 @@ article a {
    max-height: 25px;
 }
 
-.row-counter-div::before {
+.dcounter-div::before {
    content: '';
    height: 50px;
 
@@ -482,11 +482,43 @@ article a {
    transition: background-color ease 0.1s;
 }
 
-.submit-section #load-filters-lbl:hover {
+.submit-section .load-filters-lbl:hover {
    background-color: #00788b;
    transition: background-color 0.1s ease;
 }
 
+.load-filters-div {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: stretch;
+   gap: 10px;
+}
+
+.load-filters-clear-btn {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+
+   font-size: 30px;
+
+   padding: 1px 10px;
+
+   border: 1px solid #00ffff;
+   border-radius: 3px;
+
+   cursor: pointer;
+
+   background-color: transparent;
+   transition: background-color ease 0.1s;
+}
+
+.load-filters-clear-btn:hover {
+   background-color: #00788b;
+}
+
+/*
 .submit-section button:disabled {
    border: 2px solid #222222;
 
@@ -497,7 +529,6 @@ article a {
 
 .submit-section button {
    padding: 9px 13px;
-   margin: 7px 0;
 
    background-color: transparent;
    transition: background-color ease 0.1s;
@@ -511,47 +542,7 @@ article a {
    background-color: #00788b;
    transition: background-color ease 0.1s;
 }
-
-#reload-table,
-#submit-button {
-   border-radius: 3px;
-   border: 1px solid #00ffff;
-
-   background-color: transparent;
-
-   max-width: fit-content;
-}
-
-.submit-section .full-table-button {
-   background-color: transparent;
-   transition: background-color ease 0.1s;
-
-   border: 1px solid #00ffff;
-   border-radius: 3px;
-
-   cursor: pointer;
-}
-
-.submit-section .full-table-button:hover {
-   background-color: #00788b;
-   transition: background-color ease 0.1s;
-}
-
-#submit-button:hover,
-#reload-table:hover {
-   background-color: #00788b;
-
-   cursor: pointer;
-}
-
-#submit-button:disabled,
-#reload-table:disabled {
-   border: 2px solid #222222;
-
-   background-color: #444444;
-
-   cursor: not-allowed;
-}
+*/
 
 /* -------------------------------------------------------------------------------------------*/
 /* -------------------------------------------------------------------------------------------*/
@@ -621,7 +612,6 @@ span {
 .filters-buttons .load-filters-label {
    font-size: 22px;
 
-   margin-top: 1.5px;
    padding: 4.3px 10px;
 
    border: 1px solid #00ffff;
@@ -917,9 +907,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 /*-------------------------------------------------------------------------------------*/
 
 #summary-table {
-   margin: auto;
-   margin-top: 80px;
+   margin: 80px auto;
+   padding: 40px 0;
    max-width: 0px;
+
+   border-top: 1px solid #444;
+
+   filter: drop-shadow(0 0 40px rgba(0, 217, 255, 0.211));
 }
 
 #summary-table th,
@@ -929,7 +923,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 #summary-table tbody tr {
    border-bottom: 1px solid #464646;
-   background-color: #cacaca;
+   background-color: #29292a;
 }
 
 #summary-table tbody tr:nth-child(even) {
@@ -943,9 +937,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 
 #summary-table td {
-   color: rgb(0, 0, 0);
+   color: rgb(255, 255, 255);
    font-size: 11px;
-   font-weight: 500;
+   font-weight: 800;
 }
 
 #summary-table td:hover {
@@ -1209,12 +1203,12 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 #data-table #rowTable tbody tr {
    border-bottom: 1px solid #918b8b;
-   background-color: #00788b;
+   background-color: #29292a;
 }
 
 #data-table #rowTable tbody tr:nth-child(even) {
    transition: background-color ease 0.1s;
-   background-color: #cacaca;
+   background-color: #202022;
    margin-bottom: 15px;
 }
 
@@ -1224,9 +1218,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 
 #data-table #rowTable td {
-   color: rgb(0, 0, 0);
+   color: rgb(214, 214, 214);
    font-size: 13px;
-   font-weight: 500;
+   font-weight: 800;
 }
 
 #data-table #rowTable td:hover {

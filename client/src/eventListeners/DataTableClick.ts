@@ -167,19 +167,6 @@ export default async function handleTableClick(e: MouseEvent) {
             (blockquote as HTMLQuoteElement).contentEditable = 'false';
         });
 
-        if (reloadTable)
-            reloadTable.disabled = false;
-        if (submitBtn)
-            submitBtn.disabled = true;
-        if (resetBtn)
-            resetBtn.disabled = true;
-        if (fullTableBtn)
-            fullTableBtn.disabled = true;
-        if (SummaryTableInput)
-            SummaryTableInput.disabled = true;
-        if (pieDiagrammInput)
-            pieDiagrammInput.disabled = true;
-
         /**
          * As we have id on each of the cells as `cell row0col0`,
          * we can find out target id by slicing from w + 1 to col, to receive just a number

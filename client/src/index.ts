@@ -17,13 +17,13 @@ import handleFiltersEraserClick from './eventListeners/FiltersEraser.ts';
 import handleFindingOutKeyByValue from './eventListeners/FilterDataByValues.ts'
 import handleInputFormSubmit from './eventListeners/SubmitHandler.ts';
 import handleTableCheckboxChange from './eventListeners/ShowHideTable.ts';
-import handleSummaryRowCheckboxChange from './eventListeners/SummaryTable.ts';
 //-------------------------------------------------------------------------------------------------
 
 import { ICustomStorage } from './services/Storage/CustomStorage.ts';
 import handlePieDiagramCheckboxChange from './eventListeners/PieDiagram.ts';
-import handleLoadFilters from './eventListeners/LoadFilters.ts';
+import { handleLoadFilters, handleFiltersClearButtonClick } from './eventListeners/LoadFilters.ts';
 import handleFullTableCheckboxChange from './eventListeners/FullTableCheckboxChange.ts';
+import handleSummaryRowShowHide from './eventListeners/SummaryShowHide.ts';
 
 //import LoginWindow from './components/login-form/Login-window.ts';
 
@@ -39,6 +39,7 @@ const saveButton = document.querySelector('#save') as HTMLButtonElement;
 const toggleButton = document.querySelector('#scale-filters-wrapper-toggler') as HTMLButtonElement;
 const rightArrow = document.querySelector('#right-arrow') as HTMLButtonElement;
 const leftArrow = document.querySelector('#left-arrow') as HTMLButtonElement;
+const clearLoadedFiltersButton = document.querySelector('#load-filters-clear-btn') as HTMLButtonElement;
 //-------------------------------------------------------------------------------------------------
 
 // SELECTS ----------------------------------------------------------------------------------------
@@ -186,16 +187,17 @@ filters?.addEventListener('click', handleFiltersEraserClick);
 filters?.addEventListener('click', handleFindingOutKeyByValue);
 
 loadFiltersLabel?.addEventListener('click', handleLoadFilters);
+clearLoadedFiltersButton?.addEventListener('click', handleFiltersClearButtonClick);
+
 
 /**
  * Event listener for table content button
  * It will make table appear and disappear by clicking on the button
  */
 tableCheckboxLabel?.addEventListener('click', handleTableCheckboxChange);
-pieDiagramCheckboxLabel?.addEventListener('click', handlePieDiagramCheckboxChange);
-summaryRowCheckboxLabel?.addEventListener('click', handleSummaryRowCheckboxChange);
-
 fullTableCheckbox.addEventListener('click', handleFullTableCheckboxChange);
+pieDiagramCheckboxLabel?.addEventListener('click', handlePieDiagramCheckboxChange);
+summaryRowCheckboxLabel?.addEventListener('click', handleSummaryRowShowHide);
 
 /*****************************************************************************************************************/
 /*****************************************************************************************************************/

@@ -4,11 +4,8 @@ import { FullDataInterface } from '../../utils/types.js';
 
 const Storage: ICustomStorage = new CustomStorage();
 
-const dataPieInput = document.querySelector('#pie-diagramm-checkbox') as HTMLInputElement;
 const svgElem = document.querySelector('#svg-element') as SVGElement;
 const labels = document.querySelector('#labels') as HTMLDivElement;
-const svgDiv = document.querySelector('#svg-div') as HTMLDivElement;
-const diagrammDescriptionLabel = document.querySelector('#diagramm-description') as HTMLParagraphElement;
 
 interface Data {
 	label: string;

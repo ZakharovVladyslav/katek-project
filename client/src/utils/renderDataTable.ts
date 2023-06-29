@@ -21,9 +21,6 @@ const dataTable = document.querySelector('#data-table') as HTMLTableElement;
 //-------------------------------------------------------------------------------------------------
 
 export default function renderDataTable() {
-
-    console.log(document.querySelector<HTMLDivElement>('#filters-wrapper')?.offsetHeight);
-
     const thead: HTMLTableSectionElement = document.createElement('thead');
     const tbody: HTMLTableSectionElement = document.createElement('tbody');
 

@@ -13,8 +13,6 @@ let eventListenerAdded = false; // Variable to track if the event listener has b
 export default function PopUpHeadersSelect() {
 	const callPopupBtnY = getElementYPosition(callPopupBtn);
 
-	console.log(callPopupBtnY);
-
 	tableWrapper.style.top = `${callPopupBtnY - 290}px`;
 
 	if (Storage.items.saveOption === 'Headers' || Storage.items.saveOption === 'Headers & Filters') {

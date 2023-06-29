@@ -21,7 +21,10 @@ export default function printFullTable() {
 
 	let index = 0;
 
-	const allKeys: string[] = Object.keys(arr[0]);
+	let allKeys: string[] = [];
+
+	Storage.items.tableHeadersFromFile ? allKeys = [...Storage.items.tableHeadersFromFile] : allKeys = Object.keys(arr[0]);
+
 	const separatedKeys: string[][] = [];
 
 	while (allKeys.length > 0) {
@@ -41,7 +44,11 @@ export default function printFullTable() {
 	}
 
 	const handleLeftArrowClick = () => {
-		console.log(index);
+		Storage.items.tableHeadersFromFile ? allKeys = [...Storage.items.tableHeadersFromFile] : allKeys = Object.keys(arr[0]);
+
+		while (allKeys.length > 0) {
+			separatedKeys.push(allKeys.splice(0, 10));
+		}
 
 		if (index === 0) {
 			leftArrow?.setAttribute('style', `height: 0px; transition: 0.2s; opacity: 0; align-self: flex-start; left: ${((1920 - fullTable.offsetWidth) / 2) - 120}px`);
@@ -64,6 +71,12 @@ export default function printFullTable() {
 	leftArrow?.addEventListener('click', handleLeftArrowClick);
 
 	const handleRightArrowClick = () => {
+		Storage.items.tableHeadersFromFile ? allKeys = [...Storage.items.tableHeadersFromFile] : allKeys = Object.keys(arr[0]);
+
+		while (allKeys.length > 0) {
+			separatedKeys.push(allKeys.splice(0, 10));
+		}
+
 		if (index === separatedKeys.length - 1) {
 			index = separatedKeys.length - 1;
 			rightArrow?.setAttribute('style', `opacity: 0; transition: 0.2s; height: px; align-self: flex-start; right: ${((1920 - fullTable.offsetWidth) / 2) - 120}px`);
