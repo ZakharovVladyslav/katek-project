@@ -21,8 +21,6 @@ export async function handleLoadFilters() {
             reader.addEventListener('load', function (event) {
                 const fileContent = event.target?.result as string;
 
-                console.log(JSON.parse(fileContent));
-
                 const parsedFileContent = JSON.parse(fileContent) as {
                     filters?: [number, string][];
                     headers?: string[]
@@ -32,8 +30,6 @@ export async function handleLoadFilters() {
                     parsedFileContent.filters.forEach((filter: [number, string], index: number) => {
                         const filterInput = document.getElementById(`filter-input-${index + 1}`) as HTMLInputElement;
                         const dbSelect = document.getElementById(`db-select-${index + 1}`) as HTMLSelectElement;
-
-                        console.log(filter);
 
                         filterInput.value = filter[1];
                         dbSelect.selectedIndex = +filter[0];

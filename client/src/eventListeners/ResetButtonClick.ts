@@ -7,8 +7,6 @@ const Storage: ICustomStorage = new CustomStorage();
 export default async function handleResetBtnClick(e: Event) {
 	e.preventDefault();
 
-	console.log('reset');
-
 	const filterInput1 = document.querySelector('#filter-input-1') as HTMLInputElement;
 	const filterInput2 = document.querySelector('#filter-input-2') as HTMLInputElement;
 	const filterInput3 = document.querySelector('#filter-input-3') as HTMLInputElement;

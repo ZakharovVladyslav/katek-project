@@ -19,11 +19,9 @@ const Storage: Record<string, any> = new CustomStorage();
 /* HTML Elements import */
 
 // BUTTONS ----------------------------------------------------------------------------------------
-const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 //-------------------------------------------------------------------------------------------------
 
 // SELECTS ----------------------------------------------------------------------------------------
-const dataSource = document.querySelector('#input-data-select') as HTMLSelectElement;
 //-------------------------------------------------------------------------------------------------
 
 // DIVS--------------------------------------------------------------------------------------------
@@ -49,14 +47,6 @@ const dataTable = document.querySelector('#data-table') as HTMLTableElement;
 const fullTable = document.querySelector('#full-table') as HTMLTableElement;
 const summaryTable = document.querySelector('#summary-table') as HTMLTableElement;
 //-------------------------------------------------------------------------------------------------
-
-Storage.setItem('dataSourceOption',
-	dataSource?.options[dataSource?.selectedIndex]?.value
-);
-
-/* If file is not inputted, submit button is not able to be pressed */
-if (submitBtn)
-	submitBtn.disabled = true;
 
 export default async function handleInputFormSubmit(e: Event) {
 	e.preventDefault();

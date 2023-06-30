@@ -206,8 +206,7 @@
                </section>
 
                <div class="submit-section" id="submit-section" style="display: none;">
-                  <button type="submit" value="Bestätigen" id="submit-button" disabled
-                     style="display: none;">Bestätigen</button>
+                  <button type="submit" value="Bestätigen" id="submit-button" style="display: none;">Bestätigen</button>
 
                   <div class="summary-row-toggler-il" style="display: none;">
                      <input type="checkbox" id="summary-row-toggler-input" checked="false" disabled>
@@ -313,8 +312,6 @@
 
       chooseLangSelect.addEventListener('change', () => {
          const option = chooseLangSelect.options[chooseLangSelect.selectedIndex].value;
-
-         console.log(option);
 
          if (option === 'GE') {
             if (fileChoose)

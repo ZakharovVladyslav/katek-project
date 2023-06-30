@@ -24,6 +24,7 @@ import handlePieDiagramCheckboxChange from './eventListeners/PieDiagram.ts';
 import { handleLoadFilters, handleFiltersClearButtonClick } from './eventListeners/LoadFilters.ts';
 import handleFullTableCheckboxChange from './eventListeners/FullTableCheckboxChange.ts';
 import handleSummaryRowShowHide from './eventListeners/SummaryShowHide.ts';
+import { DISPLAY } from './utils/enums.ts';
 
 //import LoginWindow from './components/login-form/Login-window.ts';
 
@@ -33,7 +34,6 @@ const Storage: ICustomStorage = new CustomStorage();
 /* HTML Elements import */
 
 // BUTTONS ----------------------------------------------------------------------------------------
-const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 const resetBtn = document.querySelector('#reset') as HTMLButtonElement;
 const saveButton = document.querySelector('#save') as HTMLButtonElement;
 const toggleButton = document.querySelector('#scale-filters-wrapper-toggler') as HTMLButtonElement;
@@ -70,8 +70,6 @@ const loadFiltersLabel = document.querySelector("#load-filters-lbl") as HTMLLabe
 const tableCheckbox = document.querySelector('#content-input-table') as HTMLInputElement;
 const fullTableCheckbox = document.querySelector('#content-input-fullTable') as HTMLInputElement;
 
-const DISPLAY_NONE = 'display: none;';
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
@@ -82,9 +80,6 @@ document.querySelector('#over-tables')?.setAttribute('style', 'display: none;');
 Storage.setItem('dataSourceOption',
 	dataSource?.options[dataSource?.selectedIndex]?.value
 );
-
-/* If file is not inputted, submit button is not able to be pressed */
-submitBtn.disabled = true;
 
 /*****************************************************************************************************************/
 /*----------------------------------------- SEPARATE EVENT LISTENERS --------------------------------------------*/
@@ -101,7 +96,7 @@ dataSource?.addEventListener('change', handleDataSourceChange);
 window.addEventListener('scroll', () => {
   const scrollPosition = window.scrollY;
 
-  if (fullTableSection.getAttribute('style') !== DISPLAY_NONE) {
+  if (fullTableSection.getAttribute('style') !== DISPLAY.NONE) {
 	if (scrollPosition >= 373) {
 		leftArrow.classList.add('fixed-button-left', 'show-button-left');
 		rightArrow.classList.add('fixed-button-right', 'show-button-right');
@@ -135,8 +130,8 @@ toggleButton.addEventListener('click', (e: MouseEvent) => {
 	// : filtersSectionWrapper.style.height = '0px';
 
 	target.classList.contains('active')
-		? filtersSectionWrapper.style.display = 'block'
-		: filtersSectionWrapper.style.display = 'none';
+		? filtersSectionWrapper.setAttribute('style', DISPLAY.BLOCK)
+		: filtersSectionWrapper.setAttribute('style', DISPLAY.NONE);
 })
 
 // listens to the first date change to change number of rows that will be outputed
@@ -149,7 +144,7 @@ const handleSaveSelectorChange = () => {
 	const saveFileSelectorOption = saveFileSelector.options[saveFileSelector.selectedIndex].value
 
 	if (saveFileSelectorOption === 'Headers' || saveFileSelectorOption === 'Headers & Filters')
-		document.querySelector<HTMLButtonElement>('#call-popup')?.setAttribute('style', 'display: inline-block;')
+		document.querySelector<HTMLButtonElement>('#call-popup')?.setAttribute('style', DISPLAY.INLINE_BLOCK)
 
 	Storage.setItem('saveOption', saveFileSelector?.options[saveFileSelector.selectedIndex].value as string);
 	PopUpHeadersSelect();

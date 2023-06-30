@@ -29,7 +29,6 @@ export default async function HandleDBConnectionBtnClick() {
 
 				fillStorage();
 
-				submitBtn.disabled = false;
 				submitBtn?.click();
 
 				if (!document.querySelector('#load-filters-inp')) {

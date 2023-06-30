@@ -2,17 +2,17 @@ import CsvToArray from "../utils/Convert-csv";
 import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
 import fillStorage from "../services/Storage/FillStorage";
 import DBQuery from "../utils/DBQuery";
+import clearScreen from "../utils/clearScreen";
+import { DISPLAY } from "../utils/enums";
 
 // BUTTONS
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 
 // DIVS
-const overTables = document.querySelector('#over-tables') as HTMLDivElement;
 const submitSection = document.querySelector('#submit-section') as HTMLDivElement;
 
 // TABLE
 const dataTable = document.querySelector('#data-table') as HTMLTableElement;
-const fullTable = document.querySelector('#full-table') as HTMLTableElement;
 
 // INPUTS
 
@@ -26,12 +26,10 @@ export default function handleDataSourceChange() {
 
 	const fileInputSection: HTMLDivElement | null = document.querySelector('#file-input-section');
 
-	dataTable.style.display = 'none';
-	overTables.style.display = 'none';
-	fullTable.style.display = 'none';
+	clearScreen();
 
 	if (Storage.items.dataSourceOption === 'Datei') {
-		Storage.clearStorage();
+		//Storage.clearStorage();
 
 		if (fileInputSection)
 			fileInputSection.innerHTML = '';
@@ -54,7 +52,6 @@ export default function handleDataSourceChange() {
 
 		file.addEventListener('input', () => {
 			// As file inputted, submit button become active and clickable
-			submitBtn.disabled = true;
 
 			/**
 				 * Receive file name and put it to the site
@@ -92,11 +89,10 @@ export default function handleDataSourceChange() {
 					return !Object.values(obj).includes(undefined);
 				}));
 
-				console.log(Storage.items.data);
-
 				fillStorage();
 
-				submitBtn.disabled = false;
+				dataTable.setAttribute('style', DISPLAY.TABLE);
+
 				submitBtn.click();
 
 				if (!document.querySelector('#load-filters-inp') && Storage.items.data) {
@@ -108,6 +104,7 @@ export default function handleDataSourceChange() {
 					submitSection.insertAdjacentHTML('afterbegin', loadFiltersBtn);
 				}
 
+				/*
 				Storage.setItem('loadFiltersInput', document.querySelector('#load-filters-inp') as HTMLInputElement);
 
 				Storage.items.loadFiltersInput?.addEventListener('input', () => {
@@ -122,6 +119,7 @@ export default function handleDataSourceChange() {
 
 					Storage.items.loadFiltersInput?.files && reader.readAsText(Storage.items.loadFiltersInput.files[0]);
 				})
+				*/
 			});
 
 			// Set fileReader to read data from .csv file as text
@@ -130,16 +128,10 @@ export default function handleDataSourceChange() {
 		});
 	}
 	else if (Storage.items.dataSourceOption === 'Datenbank') {
-		console.log("Datenbank chosen");
+		clearScreen();
 
-		overTables.style.display = 'none';
-
-		Storage.clearStorage();
-
-		if (fileInputSection && dataTable) {
+		if (fileInputSection)
 			fileInputSection.innerHTML = '';
-			dataTable.innerHTML = '';
-		}
 
 		const html = `
          <div id="db-connect-div" class="db-connect-div">
@@ -160,19 +152,18 @@ export default function handleDataSourceChange() {
 			try {
 				await DBQuery();
 
-				console.log('Data fetched');
-				console.log(Storage.items.dataSourceOption);
-
 				if (submitBtn)
 					submitBtn.disabled = false;
 
 				const connectionCheckHTML = `
-               <i class="fa-solid fa-check fa-2xl" style="color: #00b336;" id="connection-check"></i>
+               		<i class="fa-solid fa-check fa-2xl" style="color: #00b336;" id="connection-check"></i>
             	`;
 
 				dbConnectionDiv?.insertAdjacentHTML('beforeend', connectionCheckHTML);
 
 				fillStorage();
+
+				dataTable.setAttribute('style', DISPLAY.TABLE);
 
 				submitBtn.click();
 			} catch (err) {
@@ -180,9 +171,6 @@ export default function handleDataSourceChange() {
 			}
 		};
 		dbConnectBtn?.addEventListener('click', handleDbConnectBtnClick);
-
-		submitBtn.disabled = false;
-		submitBtn.click();
 
 		if (!document.querySelector('#load-filters-inp') && Storage.items.data) {
 			const loadFiltersBtn = `
@@ -195,6 +183,7 @@ export default function handleDataSourceChange() {
 
 		Storage.setItem('loadFiltersInput', document.querySelector('#load-filters-inp') as HTMLInputElement);
 
+		/*
 		Storage.items.loadFiltersInput?.addEventListener('input', () => {
 			const reader = new FileReader();
 
@@ -208,5 +197,6 @@ export default function handleDataSourceChange() {
 
 			Storage.items.loadFiltersInput?.files && reader.readAsText(Storage.items.loadFiltersInput.files[0]);
 		})
+		*/
 	}
 };

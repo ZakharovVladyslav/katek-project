@@ -1,6 +1,7 @@
 import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
 
 import handleTableClick from '../eventListeners/DataTableClick';
+import { DISPLAY } from "./enums";
 
 const Storage: ICustomStorage = new CustomStorage();
 
@@ -88,7 +89,7 @@ export default function renderDataTable() {
     * Number of rows is limited by the outputLimiter (described above)
     */
 
-    if (dataTable.getAttribute('style') !== 'display: none;') {
+    if (dataTable.getAttribute('style') !== DISPLAY.NONE) {
         overTables.style.display = 'flex';
 
         for (let i = 0; i < Storage.items.limiter!; i++) {

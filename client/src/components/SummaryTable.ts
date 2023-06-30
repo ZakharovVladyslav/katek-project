@@ -41,8 +41,6 @@ export default function generateSummaryRow() {
 
     const FPY = `${((countPass * 100) / (countPass + countFail)).toPrecision(5)}%`;
 
-    console.log(zeros);
-
     zeros[4] = FPY;
 
     const keysRow: HTMLTableRowElement = document.createElement('tr');

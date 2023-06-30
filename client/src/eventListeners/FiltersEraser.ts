@@ -11,11 +11,6 @@ export default async function handleFiltersEraserClick (e: MouseEvent) {
 		const targetId: string = target?.id.slice(7);
 
 		if (Storage.items.inputFields && Storage.items.dbSelects) {
-			console.log(Storage.items.inputFields[+targetId - 1]);
-			console.log(Storage.items.dbSelects[+targetId - 1]);
-		}
-
-		if (Storage.items.inputFields && Storage.items.dbSelects) {
 			Storage.items.inputFields[+targetId - 1].value = '';
 			Storage.items.dbSelects[+targetId - 1].selectedIndex = 0;
 		}

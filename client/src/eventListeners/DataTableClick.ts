@@ -15,9 +15,6 @@ import { FullDataInterface } from '../utils/types.ts';
 
 // BUTTONS ----------------------------------------------------------------------------------------
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
-const resetBtn = document.querySelector('#reset') as HTMLButtonElement;
-const reloadTable = document.querySelector('#reload-table') as HTMLButtonElement;
-const fullTableBtn = document.querySelector('#full-table-button') as HTMLButtonElement;
 //-------------------------------------------------------------------------------------------------
 
 // SELECTS ----------------------------------------------------------------------------------------
@@ -25,8 +22,6 @@ const clickToggler = document.querySelector('#click-toggler') as HTMLSelectEleme
 //-------------------------------------------------------------------------------------------------
 
 // INPUTS-------------------------------------------------------------------------------------------
-const SummaryTableInput = document.querySelector('#summary-row-toggler-input') as HTMLInputElement;
-const pieDiagrammInput = document.querySelector('#pie-diagramm-checkbox') as HTMLInputElement;
 //-------------------------------------------------------------------------------------------------
 
 // TABLES------------------------------------------------------------------------------------------
