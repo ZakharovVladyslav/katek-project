@@ -42,7 +42,9 @@ interface ICore {
 	fullTablePageIndex?: number,
 	password?: string,
 	login?: string,
-	tableHeadersFromFile?: string[]
+	tableHeadersFromFile?: string[],
+	fullTableHeaders?: string[],
+	outputLimiter?: number;
 }
 
 type CoreFields =
@@ -79,7 +81,9 @@ type CoreFields =
 	| 'fullTablePageIndex'
 	| 'password'
 	| 'login'
-	| 'tableHeadersFromFile';
+	| 'tableHeadersFromFile'
+	| 'fullTableHeaders'
+	| 'outputLimiter';
 
 class CustomStorage implements ICustomStorage {
 	private static _core: Record<string, any> = {};

@@ -3,7 +3,7 @@
 const table = document.querySelector('#data-table') as HTMLTableElement;
 
 const overTables = document.querySelector('#over-tables') as HTMLDivElement;
-const fullTableSection = document.querySelector('#full-table-section') as HTMLDivElement;
+const fullNStaticTableSection = document.querySelector('#full-n-static-table-section') as HTMLDivElement;
 
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 const leftArrow = document.querySelector('#left-arrow') as HTMLButtonElement;
@@ -13,8 +13,8 @@ const DISPLAY_NONE = 'display: none;'
 
 export default function handleTableCheckboxChange() {
     if (table.getAttribute('style') === DISPLAY_NONE) {
-        if (fullTableSection.getAttribute('style') !== DISPLAY_NONE) {
-            fullTableSection.style.display = 'none';
+        if (fullNStaticTableSection.getAttribute('style') !== DISPLAY_NONE) {
+            fullNStaticTableSection.style.display = 'none';
             leftArrow.style.display = 'none';
             rightArrow.style.display = 'none';
         }

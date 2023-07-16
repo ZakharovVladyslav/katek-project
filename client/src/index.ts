@@ -94,21 +94,20 @@ dbConnectBtn?.addEventListener('click', HandleDBConnectionBtnClick);
 dataSource?.addEventListener('change', handleDataSourceChange);
 
 window.addEventListener('scroll', () => {
-  const scrollPosition = window.scrollY;
+	const scrollPosition = window.scrollY;
 
-  if (fullTableSection.getAttribute('style') !== DISPLAY.NONE) {
-	if (scrollPosition >= 373) {
-		leftArrow.classList.add('fixed-button-left', 'show-button-left');
-		rightArrow.classList.add('fixed-button-right', 'show-button-right');
-		fullTableSection.classList.add('show-table-section');
-	} else {
-		leftArrow.classList.remove('fixed-button-left', 'show-button-left');
-		rightArrow.classList.remove('fixed-button-right', 'show-button-right');
-		fullTableSection.classList.remove('show-table-section');
-	}
+	if (fullTableSection.getAttribute('style') !== DISPLAY.NONE) {
+		if (scrollPosition >= 373) {
+			leftArrow.classList.add('fixed-button-left', 'show-button-left');
+			rightArrow.classList.add('fixed-button-right', 'show-button-right');
+			fullTableSection.classList.add('show-table-section');
+		} else {
+			leftArrow.classList.remove('fixed-button-left', 'show-button-left');
+			rightArrow.classList.remove('fixed-button-right', 'show-button-right');
+			fullTableSection.classList.remove('show-table-section');
+		}
 	}
 });
-
 
 const file: HTMLInputElement | null = document.querySelector('#file-choose');
 

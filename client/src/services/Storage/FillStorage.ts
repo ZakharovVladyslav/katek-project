@@ -22,6 +22,18 @@ export default function fillStorage() {
 		// AllHeaders - needs for reset listener to fill dropdown immediately
 		Storage.setItem('allHeaders', Object.keys(Storage.items.staticData![0]) as string[]);
 
+		console.log(Storage.items.allHeaders);
+		let fullTableHeaders = Storage.items.allHeaders?.map((header: string) => {
+			const avoidableKeys = ['DBName', 'DBPath'];
+
+			if (!avoidableKeys.includes(header))
+				return header;
+		}).filter(Boolean);
+
+		// Full table headers does not include 'DBName' and 'DBPath'
+		Storage.setItem('fullTableHeaders', fullTableHeaders as string[]);
+		console.log(Storage.items.fullTableHeaders);
+
 		// StaticDataLength - stored, not to calculate length later
 		Storage.setItem('staticDataLength', Storage.items.staticData!.length);
 		Storage.setItem('headers', Object.keys(Storage.items.data[0]));

@@ -1246,87 +1246,91 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
+.full-n-static-table-section {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+   justify-content: center;
+   align-items: center;
+   gap: 150px;
+
+   margin-bottom: 60px;
+}
+
 .full-table-section {
-   margin: 0 auto 60px auto;
    display: flex;
    flex-direction: row;
    justify-content: center;
    align-items: center;
+
    max-width: max-content;
 }
 
 .full-table-section button {
-   background-color: #656565;
+   background-color: transparent;
    transition: background-color ease 0.1s;
-   width: 50px;
-   border: 1px solid #646464;
+   font-size: 90px;
+   border: none;
    border-radius: 3px;
    cursor: pointer;
 }
 
-.full-table-section button:hover {
-   background-color: #a5a4ab;
-   transition: background-color ease 0.1s;
+.full-table-section i {
+   color: #00b7ff;
 }
 
-.index-arrows {
-   max-width: fit-content;
-   margin: auto;
-   margin-right: 600px;
-   margin-bottom: 20px;
+.full-table-section i:hover {
+   color: #cccccc;
+   transition: color ease 0.2s;
 }
 
-.index-arrows button {
-   font-size: 15px;
-}
+.full-table {
+   border-spacing: 0;
 
-.left-arrow {
-   margin-right: 60px;
-}
-
-.right-arrow {
-   margin-left: 60px;
+   border-bottom: 1px solid #00b7ff
 }
 
 .left-arrow, .right-arrow {
    transition: ease 0.2s;
-   position: static;
    font-size: 30px;
+
+   position: absolute;
 }
 
-.full-table {
-   margin: auto;
-}
-
-.full-table thead tr th {
+.full-table thead tr th, .static-table thead tr th {
    padding: 10px 10px;
    color: rgb(255, 255, 255);
    background-color: #00788b;
 }
 
-.full-table tbody tr td {
+.full-table tbody tr td, .static-table tbody tr td {
    padding: 12px 15px;
    color: rgb(218, 218, 218);
    font-weight: 800;
    font-size: 13px;
+   border-spacing: 0;
 }
 
-.full-table tbody tr td:hover {
+.full-table td {
+   border-spacing: 0;
+}
+
+.full-table tbody tr td:hover, .static-table tbody tr td:hover {
    background-color: #6f6e6e;
    cursor: pointer;
 }
 
-.full-table tbody tr:nth-child(odd) {
+.full-table tbody tr:nth-child(odd), .static-table tbody tr:nth-child(odd) {
    background-color: #29292a;
 }
 
-.full-table tbody tr:nth-child(even) {
+.full-table tbody tr:nth-child(even), .static-table tbody tr:nth-child(even){
    background-color: #202022;
 }
 
 .fixed-button-left, .fixed-button-right {
    position: fixed !important;
    top: 450px !important;
+
 }
 
 .show-button-left, .show-button-right {
@@ -1337,12 +1341,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
    display: flex !important;
 }
 
-/*-------------------------------------------------------------------------------------*/
-/*--------------------------------------FULL TABLE-------------------------------------*/
-/*-------------------------------------------------------------------------------------*/
+.static-table {
+   border-spacing: 0;
 
-@media only screen and (max-width: 1500px) {
-   #input-form {
-      margin-right: -100px;
-   }
+   border-bottom: 1px solid #00b7ff
 }
+
+.static-table tbody tr td {
+   max-width: 10px;
+}
+

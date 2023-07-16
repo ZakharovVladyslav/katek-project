@@ -6,8 +6,6 @@ import { FullDataInterface } from './types.js';
 const Storage: ICustomStorage = new CustomStorage();
 
 export default function getFilters() {
-	console.log(Storage.items.dataSourceOption)
-
 	Storage.setItem('firstDate', (document.querySelector('#left-date-inp') as HTMLInputElement)?.value || '');
 	Storage.setItem('secondDate', (document.querySelector('#right-date-inp') as HTMLInputElement)?.value || '');
 
@@ -45,19 +43,14 @@ export default function getFilters() {
 
 		const values: string[] = inputFields.map((filter: HTMLInputElement) => filter.value).filter((filter: string) => filter !== undefined);
 
-		const avoidableKeys: string[] = ['tLatenz', 'tLatenzSumme', 'tCycle', 'CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
-
 		let keys: string[] = (Storage.items.dbSelects ?? []).map((dbSelect: HTMLSelectElement, index: number) => {
 			if (Storage.items.inputFields && Storage.items.inputFields[index].value !== '')
 				return dbSelect.options[dbSelect.selectedIndex]?.value || '';
 
 		}).filter((key: string | undefined): key is string => key !== undefined) ?? [];
 
-		console.log(keys);
-
 		filteredArray = inputData.filter((obj: FullDataInterface) => {
 			return keys?.every((key: string) => {
-				console.log(key);
 				return values.includes(obj[key]);
 			});
 		});

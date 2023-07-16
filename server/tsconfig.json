@@ -10,9 +10,11 @@
         ],
         "skipLibCheck": true,
         /* Bundler mode */
-        "moduleResolution": "bundler",
+        "moduleResolution": "node",
         "allowImportingTsExtensions": true,
+        "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,
+        "esModuleInterop": true,
         "isolatedModules": true,
         "noEmit": true,
         /* Linting */

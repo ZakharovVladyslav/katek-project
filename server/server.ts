@@ -11,11 +11,16 @@ app.use(cors());
 const connection = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
-	password: '135794ee497531E',
+	password: '123456789',
 	database: 'katek'
 });
 
-connection.connect();
+connection.connect((err) => {
+	if (err)
+		console.log(err);
+
+	console.log(`Connected as 'id':${connection.threadId}`);
+});
 
 app.get('/:action', (req: Request, res: Response) => {
 	console.log(chalk.red('_____________________________________________________________________________________________'))
@@ -48,7 +53,6 @@ app.get('/:action', (req: Request, res: Response) => {
 	}
 
 	if (req.params.action === 'load-fetch') {
-
 		const sql = 'SELECT * FROM `katek`.`test-500k-limes` LIMIT 1000';
 
 		console.log(chalk.cyan(sql));

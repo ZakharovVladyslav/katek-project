@@ -4,7 +4,7 @@
   "description": "",
   "main": "./server.ts",
   "scripts": {
-    "start": "nodemon --exec ts-node server.ts"
+    "start": "npx tsx watch server.ts"
   },
   "author": "",
   "license": "ISC",
@@ -14,11 +14,15 @@
     "chalk": "^5.2.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "mysql": "^2.18.1"
+    "fkill": "^8.1.0",
+    "mysql": "^2.18.1",
+    "ts-node": "^10.9.1",
+    "tsc": "^2.0.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
     "@types/mysql": "^2.15.21",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "typescript": "^5.1.6"
   }
 }

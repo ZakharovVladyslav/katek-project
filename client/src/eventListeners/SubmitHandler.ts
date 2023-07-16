@@ -4,9 +4,9 @@
 import getFilters from '../utils/Data-filtering.ts';
 import DropdownValues from '../utils/Dropdown-values.ts';
 import CreateDiagram from '../components/Diagram/Diagram.ts';
-import CustomStorage from '../services/Storage/CustomStorage.ts';
+import CustomStorage, { ICustomStorage } from '../services/Storage/CustomStorage.ts';
 import DBQuery from '../utils/DBQuery.ts';
-import renderDataTable from '../utils/renderDataTable.ts';
+import renderDataTable from '../utils/renderComponents/renderDataTable.ts';
 
 import printFullTable from '../components/FullTable.ts';
 import generateSummaryRow from '../components/SummaryTable.ts';
@@ -14,7 +14,7 @@ import generateSummaryRow from '../components/SummaryTable.ts';
 //import LoginWindow from './components/login-form/Login-window.ts';
 
 /* Defining storage classes instances */
-const Storage: Record<string, any> = new CustomStorage();
+const Storage: ICustomStorage = new CustomStorage();
 
 /* HTML Elements import */
 
@@ -66,7 +66,7 @@ export default async function handleInputFormSubmit(e: Event) {
 	let dropdownValues: {
 		values: string[];
 		valueToHeaderMap: object;
-	} | null = DropdownValues(Storage.items.data, Storage.items.tableHeaders as string[]);
+	} | null = DropdownValues(Storage.items.data!, Storage.items.tableHeaders as string[]);
 
 	Storage.items.datalists?.forEach((datalist: HTMLDataListElement) => {
 		datalist.innerHTML = '';
@@ -94,8 +94,10 @@ export default async function handleInputFormSubmit(e: Event) {
 			Array.isArray(content) ? filters = content : filters = content.filters;
 
 			filters.forEach((filter: string[], index: number) => {
-				Storage.items.dbSelects[index].selectedIndex = filter[0]
-				Storage.items.inputFields[index].value = filter[1];
+				if (Storage.items.dbSelects && Storage.items.inputFields) {
+					Storage.items.dbSelects[index].selectedIndex = +filter[0]
+					Storage.items.inputFields[index].value = filter[1];
+				}
 			})
 		}
 
@@ -114,7 +116,7 @@ export default async function handleInputFormSubmit(e: Event) {
 		if (rowsAmount && Storage.items.data) {
 			Storage.items.data.length === 0
 				? rowsAmount.innerHTML = '0'
-				: rowsAmount.innerHTML = Storage.items.data.length;
+				: rowsAmount.innerHTML = `${Storage.items.data.length}`;
 		}
 
 		let dropdownValues: {
@@ -127,7 +129,7 @@ export default async function handleInputFormSubmit(e: Event) {
 			dropdownValues = DropdownValues(Storage.items.data, Storage.items.tableHeaders);
 		}
 
-		Storage.items.datalists.forEach((datalist: HTMLDataListElement) => {
+		Storage.items.datalists?.forEach((datalist: HTMLDataListElement) => {
 			datalist.innerHTML = '';
 
 			dropdownValues?.values.forEach((value: string) => {
