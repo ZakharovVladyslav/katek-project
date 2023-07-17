@@ -33,7 +33,7 @@ export default function printFullTable() {
 	const separatedKeys: string[][] = [];
 
 	while (allKeys.length > 0) {
-		separatedKeys.push(allKeys.splice(0, 9));
+		separatedKeys.push(allKeys.splice(0, 7));
 	}
 
 	renderTable(index, separatedKeys);

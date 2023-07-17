@@ -8,6 +8,7 @@ const fullNStaticTableSection = document.querySelector('#full-n-static-table-sec
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 const leftArrow = document.querySelector('#left-arrow') as HTMLButtonElement;
 const rightArrow = document.querySelector('#right-arrow') as HTMLButtonElement;
+const scrollToTheBottom = document.querySelector('#scroll-to-the-bottom') as HTMLButtonElement;
 
 const DISPLAY_NONE = 'display: none;'
 
@@ -17,16 +18,20 @@ export default function handleTableCheckboxChange() {
             fullNStaticTableSection.style.display = 'none';
             leftArrow.style.display = 'none';
             rightArrow.style.display = 'none';
+            scrollToTheBottom.style.opacity = '0';
         }
 
         overTables.style.display = 'flex';
         table.style.display = 'table';
+
+        scrollToTheBottom.style.opacity = '1';
 
         submitBtn.click();
     } else {
         overTables.style.display = 'none';
         table.style.display = 'none';
         table.innerHTML = '';
+        scrollToTheBottom.style.opacity = '0';
     }
 }
 

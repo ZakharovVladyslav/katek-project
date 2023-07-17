@@ -28,25 +28,6 @@
    background: #555;
 }
 
-.scroll-to-top-btn {
-   position: absolute;
-   top: 900px;
-   right: 5px;
-
-   background-color: transparent;
-   border: none;
-
-   transition: ease 0.2s;
-
-   cursor: pointer;
-
-   width: fit-content;
-}
-
-.scroll-to-top-btn i {
-   font-size: 70px;
-}
-
 input {
    background-color: transparent;
 }
@@ -1370,7 +1351,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 .show-more-results-btn {
    background-color: transparent;
-   border: none;
+
+   border: 1px solid #00b7ff;
+
+   padding-left: 30px;
+   padding-right: 30px;
+
+   border-radius: 5px;
 
    font-size: 20px;
 
@@ -1384,8 +1371,54 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
    margin-bottom: 80px;
 
    cursor: pointer;
+
+   transition: ease 0.2s;
+}
+
+.show-more-results-btn:hover {
+   background-color: #00788b;
+
+   transition: ease 0.2s;
 }
 
 .show-more-results-btn i {
    font-size: 50px;
+}
+
+/*==========================================================================================*/
+
+.scroll-to-top-btn {
+   position: absolute;
+   top: 900px;
+   right: 5px;
+
+   background-color: transparent;
+   border: none;
+
+   transition: ease 0.2s;
+
+   cursor: pointer;
+
+   width: fit-content;
+}
+
+.scroll-to-top-btn i {
+   font-size: 70px;
+}
+
+.scroll-to-the-bottom {
+   position: absolute;
+   top: 860px;
+   right: 5px;
+
+   background-color: transparent;
+   border: none;
+
+   transition: ease 0.2s;
+
+   cursor: pointer;
+}
+
+.scroll-to-the-bottom i {
+   font-size: 70px;
 }

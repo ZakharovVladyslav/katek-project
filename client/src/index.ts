@@ -42,6 +42,7 @@ const rightArrow = document.querySelector('#right-arrow') as HTMLButtonElement;
 const leftArrow = document.querySelector('#left-arrow') as HTMLButtonElement;
 const clearLoadedFiltersButton = document.querySelector('#load-filters-clear-btn') as HTMLButtonElement;
 const scrollToTopBtn = document.querySelector('#scroll-to-top-btn') as HTMLButtonElement;
+const scrollToTheBottom = document.querySelector('#scroll-to-the-bottom') as HTMLButtonElement;
 const showMoreResultsBtn = document.querySelector('#show-more-results-btn') as HTMLButtonElement;
 //-------------------------------------------------------------------------------------------------
 
@@ -61,6 +62,8 @@ const fullTableSection = document.querySelector('#full-table-section') as HTMLDi
 
 // FORM--------------------------------------------------------------------------------------------
 const inputForm = document.querySelector('#input-form') as HTMLTableElement;
+const dataTable = document.querySelector('#data-table') as HTMLTableElement;
+const fullNStaticTableSection = document.querySelector('#full-n-static-table-section') as HTMLTableElement;
 //-------------------------------------------------------------------------------------------------
 
 // LABELS -----------------------------------------------------------------------------------------
@@ -114,7 +117,7 @@ window.addEventListener('scroll', () => {
 	if (scrollPosition > 900) {
 		scrollToTopBtn.setAttribute(
 			'style',
-			`opacity: 1; position: fixed; right: 3px; top: 880px; transition: ease 0.1s`
+			`opacity: 1; position: fixed; right: 3px; top: 800px; transition: ease 0.2s`
 		);
 		scrollToTopBtn.disabled = false;
 	} else {
@@ -123,6 +126,20 @@ window.addEventListener('scroll', () => {
 			'opacity: 0;'
 		);
 		scrollToTopBtn.disabled = true;
+	}
+
+	if (dataTable.getBoundingClientRect().height !== 0 || fullNStaticTableSection.getBoundingClientRect().height !== 0) {
+		if (scrollPosition > document.body.scrollHeight - 940) {
+			scrollToTheBottom.setAttribute(
+				'style',
+				'opacity: 0; transition: ease 0.2s;'
+			)
+		} else {
+			scrollToTheBottom.setAttribute(
+				'style',
+				'opacity: 1; position: fixed; right: 3px; top: 860px; transition: ease 0.2s;'
+			)
+		}
 	}
 });
 
@@ -226,4 +243,11 @@ scrollToTopBtn.addEventListener('click', () => {
         top: 0,
         behavior: 'smooth'
     })
+})
+
+scrollToTheBottom.addEventListener('click', () => {
+	window.scrollTo({
+		top: document.body.scrollHeight,
+		behavior: 'smooth'
+	})
 })

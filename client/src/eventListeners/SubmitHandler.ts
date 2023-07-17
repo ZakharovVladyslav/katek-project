@@ -48,6 +48,8 @@ const fullTable = document.querySelector('#full-table') as HTMLTableElement;
 const summaryTable = document.querySelector('#summary-table') as HTMLTableElement;
 //-------------------------------------------------------------------------------------------------
 
+const scrollToTheBottomBtn = document.querySelector('#scroll-to-the-bottom') as HTMLButtonElement;
+
 export default async function handleInputFormSubmit(e: Event) {
 	e.preventDefault();
 
@@ -84,7 +86,7 @@ export default async function handleInputFormSubmit(e: Event) {
 		rowCounterDiv.style.opacity = '1';
 		contentSection.style.display = 'flex';
 		filtersSections.style.display = 'flex';
-
+		scrollToTheBottomBtn.style.opacity = '1';
 		shownRowsCounter.style.opacity = '1';
 
 		if (Storage.items.filtersFromJson) {
