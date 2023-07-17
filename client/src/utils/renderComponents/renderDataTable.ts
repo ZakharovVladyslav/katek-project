@@ -21,7 +21,13 @@ const shownRowsCounter = document.querySelector('#shown-rows-counter') as HTMLPa
 const dataTable = document.querySelector('#data-table') as HTMLTableElement;
 //-------------------------------------------------------------------------------------------------
 
+const showMoreBtn = document.querySelector('#show-more-results-btn') as HTMLButtonElement;
+
 export default function renderDataTable() {
+    console.log(Storage.items.limiter);
+
+    showMoreBtn.style.display = 'flex';
+
     const thead: HTMLTableSectionElement = document.createElement('thead');
     const tbody: HTMLTableSectionElement = document.createElement('tbody');
 
@@ -76,9 +82,6 @@ export default function renderDataTable() {
         else
             Storage.setItem('limiter', Storage.items.data.length);
     }
-
-    if (Storage.items.limiter && Storage.items.limiter > 1000)
-        Storage.setItem('limiter', 1000);
 
     if (shownRowsCounter)
         shownRowsCounter.innerHTML = `${Storage.items.limiter}`;

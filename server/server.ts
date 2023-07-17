@@ -26,9 +26,11 @@ app.get('/:action', (req: Request, res: Response) => {
 	console.log(chalk.red('_____________________________________________________________________________________________'))
 	console.log(chalk.green(req.originalUrl));
 
+	const limiter = req.query.limiter;
+
 	let dateQuery = '';
 	let query = '';
-	const keysToAvoid = ['firstDate', 'secondDate', 'dateOption', 'fullTableHeaders'];
+	const keysToAvoid = ['firstDate', 'secondDate', 'dateOption', 'fullTableHeaders', 'limiter'];
 
 	const sqlQueryParams = Object.entries(req.query).map(([key, value]) => {
 		if (!keysToAvoid.includes(key))
@@ -53,7 +55,7 @@ app.get('/:action', (req: Request, res: Response) => {
 	}
 
 	if (req.params.action === 'load-fetch') {
-		const sql = 'SELECT * FROM `katek`.`test-500k-limes` LIMIT 1000';
+		const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\` LIMIT 1000`;
 
 		console.log(chalk.cyan(sql));
 
@@ -67,7 +69,7 @@ app.get('/:action', (req: Request, res: Response) => {
 
 		console.log(req.query);
 
-		const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\`${query} LIMIT 1000`;
+		const sql = `SELECT * FROM \`katek\`.\`test-500k-limes\`${query} LIMIT ${limiter}`;
 
 		console.log(chalk.cyan(sql));
 
@@ -91,7 +93,7 @@ app.get('/:action', (req: Request, res: Response) => {
 	} else if (req.params.action === 'full-table-pagination') {
 		const headers: string[] = req.query.fullTableHeaders as string[];
 
-		const sql = `SELECT ${headers} FROM \`katek\`.\`test-500k-limes\``;
+		const sql = `SELECT ${headers} FROM \`katek\`.\`test-500k-limes\` LIMIT ${limiter}`;
 
 		console.log(chalk.cyan(sql));
 

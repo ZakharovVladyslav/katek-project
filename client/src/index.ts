@@ -25,6 +25,7 @@ import { handleLoadFilters, handleFiltersClearButtonClick } from './eventListene
 import handleFullTableCheckboxChange from './eventListeners/FullTableCheckboxChange.ts';
 import handleSummaryRowShowHide from './eventListeners/SummaryShowHide.ts';
 import { DISPLAY } from './utils/enums.ts';
+import showMoreResults from './eventListeners/showMoreResults.ts';
 
 //import LoginWindow from './components/login-form/Login-window.ts';
 
@@ -40,6 +41,8 @@ const toggleButton = document.querySelector('#scale-filters-wrapper-toggler') as
 const rightArrow = document.querySelector('#right-arrow') as HTMLButtonElement;
 const leftArrow = document.querySelector('#left-arrow') as HTMLButtonElement;
 const clearLoadedFiltersButton = document.querySelector('#load-filters-clear-btn') as HTMLButtonElement;
+const scrollToTopBtn = document.querySelector('#scroll-to-top-btn') as HTMLButtonElement;
+const showMoreResultsBtn = document.querySelector('#show-more-results-btn') as HTMLButtonElement;
 //-------------------------------------------------------------------------------------------------
 
 // SELECTS ----------------------------------------------------------------------------------------
@@ -106,6 +109,20 @@ window.addEventListener('scroll', () => {
 			rightArrow.classList.remove('fixed-button-right', 'show-button-right');
 			fullTableSection.classList.remove('show-table-section');
 		}
+	}
+
+	if (scrollPosition > 900) {
+		scrollToTopBtn.setAttribute(
+			'style',
+			`opacity: 1; position: fixed; right: 3px; top: 880px; transition: ease 0.1s`
+		);
+		scrollToTopBtn.disabled = false;
+	} else {
+		scrollToTopBtn.setAttribute(
+			'style',
+			'opacity: 0;'
+		);
+		scrollToTopBtn.disabled = true;
 	}
 });
 
@@ -183,6 +200,7 @@ filters?.addEventListener('click', handleFindingOutKeyByValue);
 loadFiltersLabel?.addEventListener('click', handleLoadFilters);
 clearLoadedFiltersButton?.addEventListener('click', handleFiltersClearButtonClick);
 
+showMoreResultsBtn?.addEventListener('click', showMoreResults);
 
 /**
  * Event listener for table content button
@@ -202,3 +220,10 @@ summaryRowCheckboxLabel?.addEventListener('click', handleSummaryRowShowHide);
  */
 
 inputForm?.addEventListener('submit', handleInputFormSubmit);
+
+scrollToTopBtn.addEventListener('click', () => {
+	window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    })
+})

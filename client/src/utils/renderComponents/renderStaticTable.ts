@@ -7,7 +7,7 @@ const Storage: ICustomStorage = new CustomStorage();
 export default function renderStaticTable() {
     staticTable.innerHTML = '';
 
-    const columnNames = ['CountPass_Retest', 'CountFail_Retest'];
+    const columnNames = ['ProdCode', 'ProdName', 'Customer'];
 
     const staticTableHeader = document.createElement('thead');
     const staticTableBody = document.createElement('tbody');

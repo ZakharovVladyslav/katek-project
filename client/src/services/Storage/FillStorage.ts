@@ -10,7 +10,7 @@ export default function fillStorage() {
      * TableHeaders - needed for the table to print only exact columns
      * Also stores into the Storage to be able to be called later
     */
-	const tableHeaders: string[] = ['ProdCode', 'Customer', 'ProdName', 'HostName', 'MatNum', 'ArticleNum', 'WkStNmae', 'AdpNum', 'ProcName', 'AVO', 'FPY', 'CountPass', 'CountFail', 'tLogIn', 'tLogOut', 'tLastAcc'];
+	const tableHeaders: string[] = ['ProdCode', 'Customer', 'ProdName', 'HostName', 'MatNum', 'ArticleNum', 'WkStNmae', 'AdpNum','FPY', 'CountPass','CountFail' ,'CountPass_Retest' ,'CountFail_Retest' ,'tLogIn' , 'tLogOut', 'tLastAcc'];
 	Storage.setItem('tableHeaders', tableHeaders);
 
 	Storage.setItem('selectedHeaders', []);
@@ -24,7 +24,7 @@ export default function fillStorage() {
 
 		console.log(Storage.items.allHeaders);
 		let fullTableHeaders = Storage.items.allHeaders?.map((header: string) => {
-			const avoidableKeys = ['DBName', 'DBPath'];
+			const avoidableKeys = ['DBName', 'DBPath', 'Customer', 'ProdCode', 'ProdName'];
 
 			if (!avoidableKeys.includes(header))
 				return header;

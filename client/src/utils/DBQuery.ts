@@ -42,6 +42,8 @@ export default async function DBQuery() {
 		});
 	}
 
+	queryObjects.push({ limiter: Storage.items.limiter });
+
 	queryObjects.forEach((object: object, index: number) => {
 		if (queryObjects && index !== queryObjects.length - 1) {
 			for (const [key, value] of Object.entries(object))
@@ -51,6 +53,8 @@ export default async function DBQuery() {
 			for (const [key, value] of Object.entries(object))
 				args += `${key}=${value}`;
 	});
+
+	console.log(args);
 
 	if (args !== '')
 		Storage.setItem('data', await fetchData(`http://localhost:3000/db-fetch?${args}`) as FullDataInterface[]);

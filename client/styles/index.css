@@ -28,6 +28,25 @@
    background: #555;
 }
 
+.scroll-to-top-btn {
+   position: absolute;
+   top: 900px;
+   right: 5px;
+
+   background-color: transparent;
+   border: none;
+
+   transition: ease 0.2s;
+
+   cursor: pointer;
+
+   width: fit-content;
+}
+
+.scroll-to-top-btn i {
+   font-size: 70px;
+}
+
 input {
    background-color: transparent;
 }
@@ -1347,7 +1366,26 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
    border-bottom: 1px solid #00b7ff
 }
 
-.static-table tbody tr td {
-   max-width: 10px;
+/*--------------------------------------------------------------------------------------------*/
+
+.show-more-results-btn {
+   background-color: transparent;
+   border: none;
+
+   font-size: 20px;
+
+   margin: 0 auto 0 auto;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 10px;
+
+   margin-bottom: 80px;
+
+   cursor: pointer;
 }
 
+.show-more-results-btn i {
+   font-size: 50px;
+}
