@@ -2,6 +2,8 @@ import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage
 
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 
+const rowLimiterInput = document.querySelector('#row-limiter') as HTMLInputElement;
+
 const Storage: ICustomStorage = new CustomStorage();
 
 export default async function handleResetBtnClick(e: Event) {
@@ -36,26 +38,7 @@ export default async function handleResetBtnClick(e: Event) {
 	dbSelect4.selectedIndex = 0;
 	dbSelect5.selectedIndex = 0;
 
-	/*
-	Storage.items.dataSourceOption === 'Datenbank'
-		? Storage.setItem('data', await fetchData('http://localhost:3000/load-fetch'))
-		: Storage.setItem('data', [...Storage.items.staticData ?? []] as object[]);
-
-	rowsAmount.innerHTML = `${Storage.items.staticDataLength}`;
-
-	Storage.items.datalists?.forEach((datalist: HTMLDataListElement) => {
-		datalist.innerHTML = '';
-
-		if (Storage.items.allValues && Array.isArray(Storage.items.allValues.values)) {
-			Storage.items.allValues.values.forEach((value: string) => {
-				const option: HTMLOptionElement = document.createElement('option');
-				option.className = 'datalist-option';
-				option.value = value;
-				datalist.appendChild(option);
-			});
-		}
-	});
-	*/
+	rowLimiterInput.value = '1000';
 
 	submitBtn.click();
 };

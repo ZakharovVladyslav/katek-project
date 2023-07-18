@@ -24,8 +24,6 @@ const dataTable = document.querySelector('#data-table') as HTMLTableElement;
 const showMoreBtn = document.querySelector('#show-more-results-btn') as HTMLButtonElement;
 
 export default function renderDataTable() {
-    console.log(Storage.items.limiter);
-
     showMoreBtn.style.display = 'flex';
 
     const thead: HTMLTableSectionElement = document.createElement('thead');

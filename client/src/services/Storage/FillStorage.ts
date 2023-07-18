@@ -22,7 +22,6 @@ export default function fillStorage() {
 		// AllHeaders - needs for reset listener to fill dropdown immediately
 		Storage.setItem('allHeaders', Object.keys(Storage.items.staticData![0]) as string[]);
 
-		console.log(Storage.items.allHeaders);
 		let fullTableHeaders = Storage.items.allHeaders?.map((header: string) => {
 			const avoidableKeys = ['DBName', 'DBPath', 'Customer', 'ProdCode', 'ProdName'];
 

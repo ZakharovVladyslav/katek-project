@@ -10,11 +10,13 @@ import renderDataTable from '../utils/renderComponents/renderDataTable.ts';
 
 import printFullTable from '../components/FullTable.ts';
 import generateSummaryRow from '../components/SummaryTable.ts';
+import { ISetDisplay, SetDisplay } from '../utils/styleAttributes.ts';
 
 //import LoginWindow from './components/login-form/Login-window.ts';
 
 /* Defining storage classes instances */
 const Storage: ICustomStorage = new CustomStorage();
+const Display: ISetDisplay = new SetDisplay();
 
 /* HTML Elements import */
 
@@ -30,10 +32,11 @@ const contentSection = document.querySelector('#content-buttons') as HTMLDivElem
 const filtersSections = document.querySelector('#filters-date-submit') as HTMLDivElement;
 const svgDiv = document.querySelector('#svg-div') as HTMLDivElement;
 const filtersWrapperToggler = document.querySelector('#scale-filters-wrapper-toggler') as HTMLDivElement;
+const diagramsSection = document.querySelector('#diagrams-section') as HTMLDivElement;
 //-------------------------------------------------------------------------------------------------
 
 // INPUTS-------------------------------------------------------------------------------------------
-const tableCheckbox = document.querySelector('#content-input-table') as HTMLInputElement;
+const tableCheckbox: HTMLInputElement | null = document.querySelector('#content-input-table');
 //-------------------------------------------------------------------------------------------------
 
 // PARAGRAPHS--------------------------------------------------------------------------------------
@@ -84,7 +87,9 @@ export default async function handleInputFormSubmit(e: Event) {
 	if (Storage.items.data) {
 		filtersWrapperToggler.style.display = 'block';
 		rowCounterDiv.style.opacity = '1';
-		contentSection.style.display = 'flex';
+
+		diagramsSection.getBoundingClientRect().height === 0 ? Display.setDisplayFlex(contentSection) : Display.setDisplayNone(contentSection);
+
 		filtersSections.style.display = 'flex';
 		scrollToTheBottomBtn.style.opacity = '1';
 		shownRowsCounter.style.opacity = '1';
@@ -103,7 +108,8 @@ export default async function handleInputFormSubmit(e: Event) {
 			})
 		}
 
-		tableCheckbox.disabled = false;
+		if (tableCheckbox)
+			tableCheckbox.disabled = false;
 
 		if (countpassCounter)
 			countpassCounter.innerHTML = '0';

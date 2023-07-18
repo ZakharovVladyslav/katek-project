@@ -10,7 +10,9 @@
    <link rel="stylesheet" href="./styles/media.css">
    <link rel="stylesheet" href="./src/components/Login-form/Login-window.css">
    <link rel="stylesheet" href="./src/components/PopupHeadersSelect/PopUpHeadersSelect.css">
-   <link rel="stylesheet" href="./styles/toggler.css">
+   <link rel="stylesheet" href="./styles/openCloseContentSectionToggler.css">
+   <link rel="stylesheet" href="./styles/contentLinksSection.css">
+   <link rel="stylesheet" href="./styles/diagramSection.css">
 
    <script type="module" src="./src/index.ts" defer></script>
 
@@ -57,66 +59,88 @@
       </article>
 
       <form id="input-form">
-
-         <section id="input-section">
-            <select id="input-data-select" class="input-data-select">
-               <option id="database-option" value="Datenbank">Datenbank</option>
-               <option id="file-option" value="Datei">Datei</option>
-            </select>
-
-            <div id="file-input-section">
-               <div id="db-connect-div" class="db-connect-div">
-                  <button type="button" id="db-connect" class='db-connect'>Datenbank verbinden</button>
-               </div>
-            </div>
-
-            <div id="row-counter-div" class="row-counter-div" style="opacity: 0;">
-               <label id="row-counter-label">Anzahl der Zeilen begrenzen:</label>
-               <input type="number" id="row-limiter" value="1000">
-            </div>
-
-            <select id="chooseLangId">
-               <option id="opt">GE</option>
-               <option id="opt">EN</option>
-            </select>
-         </section><br>
-
          <div id="scale-filters-wrapper-toggler" class="plusminus active" style="display: none;"></div>
          <section id="filters-wrapper" class="filters-wrapper">
+            <section id="input-section">
+               <select id="input-data-select" class="input-data-select">
+                  <option id="database-option" value="Datenbank">Datenbank</option>
+                  <option id="file-option" value="Datei">Datei</option>
+               </select>
+
+               <div id="file-input-section">
+                  <div id="db-connect-div" class="db-connect-div">
+                     <button type="button" id="db-connect" class='db-connect'>Datenbank verbinden</button>
+                  </div>
+               </div>
+
+               <div id="row-counter-div" class="row-counter-div" style="opacity: 0;">
+                  <label id="row-counter-label">Anzahl der Zeilen begrenzen:</label>
+                  <input type="number" id="row-limiter" value="1000">
+               </div>
+
+               <select id="chooseLangId">
+                  <option id="opt">GE</option>
+                  <option id="opt">EN</option>
+               </select>
+            </section><br>
+
+            <section id="diagrams-section" class="diagrams-section" style="display: none;">
+               <button id="return-back-from-diagrams-section-btn" class="return-back-from-diagrams-section-btn">
+                  <i class="fa-solid fa-left-long"></i>
+               </button>
+
+               <div>
+                  <label for="content-input-pieDiagram" id="content-label-pieDiagram">
+                     <i class="fa-solid fa-chart-pie"></i></label>
+                  <input type="checkbox" id="content-input-pieDiagram">
+                  <p id="content-button-p-diagram">CountPass/Fail Diagrame</p>
+               </div>
+
+               <span class="dividing-column"></span>
+
+               <div>
+                  <label for="content-input-pieDiagram" id="content-label-pieDiagram">
+                     <i class="fa-solid fa-chart-pie"></i></label>
+                  <input type="checkbox" id="content-input-pieDiagram">
+                  <p id="content-button-p-diagram">Alle parameter diagram</p>
+               </div>
+            </section>
 
             <section id="content-buttons" class="content-buttons" style="display: none;">
                <div>
-                  <label for="content-input-table" id="content-label-table"><i class="fa-solid fa-table"></i></label>
+                  <label for="content-input-table" id="content-label-table">
+                  <i class="fa-solid fa-table"></i>
+                  </label>
                   <input type="checkbox" id="content-input-table" checked>
                   <p id="content-button-p-table">Tabelle</p>
-               </div>
+              </div>
 
-               <span class="dividing-column"></span>
+              <span class="dividing-column"></span>
 
-               <div>
-                  <label for="content-input-fullTable" id="full-table-icon-btn"><i
-                        class="fa-solid fa-table-cells"></i></label>
+              <div>
+                  <label for="content-input-fullTable" id="full-table-icon-btn">
+                  <i class="fa-solid fa-table-cells"></i></label>
                   <input type="checkbox" id="content-input-fullTable">
                   <p id="content-button-p-full-table">Komplette Tabelle</p>
-               </div>
+              </div>
 
-               <span class="dividing-column"></span>
+              <span class="dividing-column"></span>
 
-               <div>
-                  <label for="content-input-pieDiagram" id="content-label-pieDiagram"><i
-                        class="fa-solid fa-chart-pie"></i></label>
-                  <input type="checkbox" id="content-input-pieDiagram">
-                  <p id="content-button-p-diagram">Diagramme</p>
-               </div>
+              <div id="diagrams-link" class="diagrams-link">
+                  <label>
+                  <i class="fa-solid fa-chart-pie"></i>
+                  </label>
+                  <p>Diagrams section <i class="fa-solid fa-right"></i></p>
+              </div>
 
-               <span class="dividing-column"></span>
+              <span class="dividing-column"></span>
 
-               <div>
-                  <label for="content-input-summaryRow" id="content-label-summaryRow"><i
-                        class="fa-solid fa-chart-simple"></i></label>
+              <div>
+                  <label for="content-input-summaryRow" id="content-label-summaryRow">
+                  <i class="fa-solid fa-chart-simple"></i></label>
                   <input type="checkbox" id="content-input-summaryRow">
                   <p id="content-button-p-summary">Alle parameter</p>
-               </div>
+              </div>
             </section>
 
             <section class="filters-date-submit" id="filters-date-submit" style="display: none;">
@@ -306,7 +330,7 @@
    </section>
 
    <button id="scroll-to-top-btn" class="scroll-to-top-btn" style="opacity: 0;">
-      <i class="fa-solid fa-circle-up" id="scroll-to-top-icon" style="color: #00b3ff;"></i>
+      <i class="fa-solid fa-circle-up" id="scroll-to-top-icon" style="color: #00b7ff;"></i>
    </button>
 
    <button id="scroll-to-the-bottom" class="scroll-to-the-bottom" style="opacity: 0;">
@@ -362,7 +386,7 @@
 
             document.querySelector('#content-button-p-table').innerHTML = 'Tabelle';
             document.querySelector('#content-button-p-full-table').innerHTML = 'Komplette Tabelle';
-            document.querySelector('#content-button-p-diagram').innerHTML = 'Diagramme';
+            //document.querySelector('#content-button-p-diagram').innerHTML = 'Diagramme';
             document.querySelector('#content-button-p-summary').innerHTML = 'Alle Parameter';
 
             for (let i = 0; i < 5; i++)
@@ -398,7 +422,7 @@
 
             document.querySelector('#content-button-p-table').innerHTML = 'Table';
             document.querySelector('#content-button-p-full-table').innerHTML = 'Full table';
-            document.querySelector('#content-button-p-diagram').innerHTML = 'Diagram';
+            //document.querySelector('#content-button-p-diagram').innerHTML = 'Diagram';
             document.querySelector('#content-button-p-summary').innerHTML = 'Summary';
 
 

@@ -3,7 +3,10 @@
 }
 
 .plusminus {
-    position: relative;
+    position: absolute;
+    top: 80px;
+    left: 530px;
+
     width: 25px;
     height: 25px;
     cursor: pointer;

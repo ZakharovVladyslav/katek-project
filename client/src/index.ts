@@ -26,6 +26,7 @@ import handleFullTableCheckboxChange from './eventListeners/FullTableCheckboxCha
 import handleSummaryRowShowHide from './eventListeners/SummaryShowHide.ts';
 import { DISPLAY } from './utils/enums.ts';
 import showMoreResults from './eventListeners/showMoreResults.ts';
+import { appearDisappearDiagramsSection, returnBackFromDiagramsSection } from './eventListeners/DiagramsSectionAppear.ts';
 
 //import LoginWindow from './components/login-form/Login-window.ts';
 
@@ -44,6 +45,7 @@ const clearLoadedFiltersButton = document.querySelector('#load-filters-clear-btn
 const scrollToTopBtn = document.querySelector('#scroll-to-top-btn') as HTMLButtonElement;
 const scrollToTheBottom = document.querySelector('#scroll-to-the-bottom') as HTMLButtonElement;
 const showMoreResultsBtn = document.querySelector('#show-more-results-btn') as HTMLButtonElement;
+const returnBackDiagramsBtn = document.querySelector('#return-back-from-diagrams-section-btn') as HTMLButtonElement;
 //-------------------------------------------------------------------------------------------------
 
 // SELECTS ----------------------------------------------------------------------------------------
@@ -55,6 +57,8 @@ const dataSource = document.querySelector('#input-data-select') as HTMLSelectEle
 const filters = document.querySelector('#filters') as HTMLDivElement;
 const filtersSectionWrapper = document.querySelector('#filters-wrapper') as HTMLDivElement;
 const fullTableSection = document.querySelector('#full-table-section') as HTMLDivElement;
+const diagramsLink = document.querySelector('#diagrams-link') as HTMLDivElement;
+const diagramsSection = document.querySelector('#diagrams-section') as HTMLDivElement;
 //-------------------------------------------------------------------------------------------------
 
 // PARAGRAPHS--------------------------------------------------------------------------------------
@@ -73,14 +77,16 @@ const summaryRowCheckboxLabel = document.querySelector('#content-label-summaryRo
 const loadFiltersLabel = document.querySelector("#load-filters-lbl") as HTMLLabelElement;
 //-------------------------------------------------------------------------------------------------
 
-const tableCheckbox = document.querySelector('#content-input-table') as HTMLInputElement;
+const tableCheckbox: HTMLInputElement | null = document.querySelector('#content-input-table');
 const fullTableCheckbox = document.querySelector('#content-input-fullTable') as HTMLInputElement;
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 
-tableCheckbox.checked = true;
+if (tableCheckbox)
+	tableCheckbox.checked = true;
+
 document.querySelector('#over-tables')?.setAttribute('style', 'display: none;');
 
 Storage.setItem('dataSourceOption',
@@ -152,6 +158,9 @@ if (file) {
 	file.addEventListener('input', handleCsvFileInput);
 }
 
+diagramsLink.addEventListener('click', appearDisappearDiagramsSection);
+returnBackDiagramsBtn.addEventListener('click', returnBackFromDiagramsSection);
+
 toggleButton.addEventListener('click', (e: MouseEvent) => {
 	const target = e.target as HTMLElement;
 
@@ -161,6 +170,10 @@ toggleButton.addEventListener('click', (e: MouseEvent) => {
 	// target.classList.contains('active')
 	// ? filtersSectionWrapper.style.height = '582px'
 	// : filtersSectionWrapper.style.height = '0px';
+
+	if (target.classList.contains('active')) {
+		diagramsSection
+	}
 
 	target.classList.contains('active')
 		? filtersSectionWrapper.setAttribute('style', DISPLAY.BLOCK)
@@ -224,7 +237,7 @@ showMoreResultsBtn?.addEventListener('click', showMoreResults);
  * It will make table appear and disappear by clicking on the button
  */
 tableCheckboxLabel?.addEventListener('click', handleTableCheckboxChange);
-fullTableCheckbox.addEventListener('click', handleFullTableCheckboxChange);
+fullTableCheckbox?.addEventListener('click', handleFullTableCheckboxChange);
 pieDiagramCheckboxLabel?.addEventListener('click', handlePieDiagramCheckboxChange);
 summaryRowCheckboxLabel?.addEventListener('click', handleSummaryRowShowHide);
 
