@@ -13,6 +13,10 @@
    <link rel="stylesheet" href="./styles/openCloseContentSectionToggler.css">
    <link rel="stylesheet" href="./styles/contentLinksSection.css">
    <link rel="stylesheet" href="./styles/diagramSection.css">
+   <link rel="stylesheet" href="./styles/tablesSection.css">
+   <link rel="stylesheet" href="./styles/countPFTable.css">
+   <link rel="stylesheet" href="./styles/tlogTable.css">
+   <link rel="stylesheet" href="./styles/dateTableSection.css">
 
    <script type="module" src="./src/index.ts" defer></script>
 
@@ -58,6 +62,7 @@
                href="https://katek-group.de/?doing_wp_cron=1682963448.8188540935516357421875">Katek GmBH</a></p>
       </article>
 
+      <!-- MAIN SECTION FOR CONTENT SECTION | FILTERS -->
       <form id="input-form">
          <div id="scale-filters-wrapper-toggler" class="plusminus active" style="display: none;"></div>
          <section id="filters-wrapper" class="filters-wrapper">
@@ -84,6 +89,54 @@
                </select>
             </section><br>
 
+            <!-- TABLES SECTION -->
+
+            <section id="tables-section" class="tables-section" style="display: none;">
+               <button id="return-back-from-tables-section-btn" class="return-back-from-tables-section-btn">
+                  <i class="fa-solid fa-left-long"></i>
+               </button>
+
+               <div>
+                  <label for="content-input-table" id="content-label-table">
+                     <i class="fa-solid fa-table"></i>
+                  </label>
+                  <input type="checkbox" id="content-input-table" checked>
+                  <p id="content-button-p-table">Tabelle</p>
+               </div>
+
+               <span class="dividing-column"></span>
+
+               <div>
+                  <label for="content-input-fullTable" id="full-table-icon-btn">
+                     <i class="fa-solid fa-table-cells"></i>
+                  </label>
+                  <input type="checkbox" id="content-input-fullTable">
+                  <p id="content-button-p-full-table">Komplette Tabelle</p>
+               </div>
+
+               <span class="dividing-column"></span>
+
+               <div>
+                  <label for="content-input-summaryRow" id="content-label-summaryRow">
+                     <i class="fa-solid fa-chart-simple"></i>
+                  </label>
+                  <input type="checkbox" id="content-input-summaryRow">
+                  <p id="content-button-p-summary">Alle parameter</p>
+              </div>
+
+              <span class="dividing-column"></span>
+
+              <div>
+                  <label for="content-input-date-table" id="content-label-date-table">
+                     <i class="fa-regular fa-calendar-days"></i>
+                  </label>
+                  <input type="checkbox" id="content-input-date-table">
+                  <p id="content-button-date-table">Date table</p>
+              </div>
+            </section>
+
+            <!-- DIAGRAMS SECTION -->
+
             <section id="diagrams-section" class="diagrams-section" style="display: none;">
                <button id="return-back-from-diagrams-section-btn" class="return-back-from-diagrams-section-btn">
                   <i class="fa-solid fa-left-long"></i>
@@ -106,44 +159,33 @@
                </div>
             </section>
 
+            <!-- SECTIONS LINKS -->
+
             <section id="content-buttons" class="content-buttons" style="display: none;">
-               <div>
-                  <label for="content-input-table" id="content-label-table">
-                  <i class="fa-solid fa-table"></i>
-                  </label>
-                  <input type="checkbox" id="content-input-table" checked>
-                  <p id="content-button-p-table">Tabelle</p>
-              </div>
 
-              <span class="dividing-column"></span>
-
-              <div>
-                  <label for="content-input-fullTable" id="full-table-icon-btn">
-                  <i class="fa-solid fa-table-cells"></i></label>
-                  <input type="checkbox" id="content-input-fullTable">
-                  <p id="content-button-p-full-table">Komplette Tabelle</p>
-              </div>
-
-              <span class="dividing-column"></span>
-
-              <div id="diagrams-link" class="diagrams-link">
+               <div id="tables-link" class="tables-link">
                   <label>
-                  <i class="fa-solid fa-chart-pie"></i>
+                     <i class="fa-solid fa-table-list"></i>
                   </label>
-                  <p>Diagrams section <i class="fa-solid fa-right"></i></p>
-              </div>
 
-              <span class="dividing-column"></span>
+                  <p>Tables section</p>
+               </div>
 
-              <div>
-                  <label for="content-input-summaryRow" id="content-label-summaryRow">
-                  <i class="fa-solid fa-chart-simple"></i></label>
-                  <input type="checkbox" id="content-input-summaryRow">
-                  <p id="content-button-p-summary">Alle parameter</p>
-              </div>
+               <span class="dividing-column"></span>
+
+               <div id="diagrams-link" class="diagrams-link">
+                  <label>
+                     <i class="fa-solid fa-chart-pie"></i>
+                  </label>
+                  <p>Diagrams section</p>
+               </div>
             </section>
 
+            <!-- SECTION FOR FILTERS | DATE PICKER  -->
+
             <section class="filters-date-submit" id="filters-date-submit" style="display: none;">
+               <!-- DATE PICKER -->
+
                <div class="date-input" id="date-input">
                   <select id="date-params">
                      <option id="option">tLogIn</option>
@@ -168,6 +210,8 @@
                   </div>
                </div>
 
+               <!-- FILTERS SECTION WITH INPUT FIELDS | RESET BUTTON | SHOWN NUMBER OF AVAILABLE ROWS | UPLOAD DATA BUTTON -->
+
                <section class="filters-section">
                   <section class="filters-buttons" id="filters-buttons">
                      <div class="counter">
@@ -185,6 +229,8 @@
                         <input type="file" id="load-filters-inp" class="load-filters-inp" accept=".json">
                      </div>
                   </section>
+
+                  <!-- FILTER INPUT FIELDS -->
 
                   <section class="filters" id="filters">
                      <div class="filter-div-1">
@@ -248,7 +294,11 @@
       </form><br>
    </section>
 
+   <!-- SUMMARY TABLE -->
+
    <table id="summary-table" style="display: none;"></table>
+
+   <!-- DIAGRAM SECTION -->
 
    <p id="diagramm-description" style="display: none;">Hier kannst du die Prozessfähigkeit in einem Diagramm (pro
       Prozent) ein einsehen/beobachten.</p>
@@ -260,6 +310,8 @@
    </div>
 
    <p id="empty-message"></p>
+
+   <!-- SECTION WITH DATA/BUTTONS ABOVE THE TABLE -->
 
    <div class="over-tables" id="over-tables" style="display: none;">
       <div class="mode-div" id="mode-div">
@@ -304,9 +356,42 @@
       </div>
    </div>
 
-   <table id="data-table"></table>
+   <section id="inner-date-range-input-section" class="inner-date-range-input-section" style="display: none;">
+      <input type="datetime-local" id="left-inner-date-picker" class="left-inner-date-picker">
+      <input type="datetime-local" id="right-inner-date-picker" class="right-inner-date-picker">
+   </section>
+
+   <!-- DATE TABLE SECTION -->
+
+   <section id="date-table-section" class="date-table-section">
+      <button type="button" id="date-table-left-arrow" class="date-table-left-arrow" style="display: none; opacity: 0;">
+         <i class="fa-solid fa-chevron-left"></i>
+      </button>
+
+      <section id="table-carousel-section" class="table-carousel-section">
+         <!-- COUNTPASS COUNTFAIL ... TABLE -->
+
+         <table id="countPF-table" class="countPF-table" style="display: none;"></table>
+
+         <!-- DATA TABLE-->
+
+         <table id="data-table"></table>
+
+         <!-- TLOGOUT | TLOGIN | TLASTACC TABLE -->
+
+         <table id="tlog-table" class="tlog-table" style="display: none;"></table>
+      </section>
+
+      <button type="button" id="date-table-right-arrow" class="date-table-right-arrow" style="display: none; opacity: 0;">
+         <i class="fa-solid fa-chevron-right"></i>
+      </button>
+   </section>
+
+
+   <!-- SECTION FOR STATIC AND FULL TALES -->
 
    <section id="full-n-static-table-section" class="full-n-static-table-section" style="display: none;">
+      <!-- STATIC TABLE -->
       <table id="static-table" class="static-table">
          <thead>
             <tr>
@@ -316,10 +401,14 @@
          </thead>
       </table>
 
+      <!-- SECTION FOR FULL TABLE AND FOR ARROWS -->
+
       <section id="full-table-section" class="full-table-section">
          <button type="button" id="left-arrow" class="left-arrow" style="display: none; opacity: 0;">
             <i class="fa-solid fa-chevron-left"></i>
          </button>
+
+         <!-- FULL TABLE -->
 
          <table id="full-table" class="full-table"></table>
 
@@ -329,13 +418,19 @@
       </section>
    </section>
 
+   <!-- SCROLL TO THE TOP BUTTON -->
+
    <button id="scroll-to-top-btn" class="scroll-to-top-btn" style="opacity: 0;">
       <i class="fa-solid fa-circle-up" id="scroll-to-top-icon" style="color: #00b7ff;"></i>
    </button>
 
+   <!-- SCROLL TO THE BOTTOM BUTTON -->
+
    <button id="scroll-to-the-bottom" class="scroll-to-the-bottom" style="opacity: 0;">
       <i class="fa-solid fa-circle-down" style="color: #00b7ff;"></i>
    </button>
+
+   <!-- BUTTON TO SHOW MORE RESULTS -->
 
    <button id="show-more-results-btn" class="show-more-results-btn" style="display: none">
       Load more <i class="fa-solid fa-plus" style="color: rgb(0, 183, 255);"></i>

@@ -1,5 +1,5 @@
 import CustomStorage, { ICustomStorage } from '../../services/Storage/CustomStorage.js';
-import { getElementYPosition } from '../../eventListeners/ShowHideTable.js';
+import { getElementYPosition } from '../../eventListeners/componentsTogglers/dataTableToggler.js';
 
 const Storage: ICustomStorage = new CustomStorage();
 

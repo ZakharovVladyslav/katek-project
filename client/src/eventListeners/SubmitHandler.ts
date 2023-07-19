@@ -10,7 +10,9 @@ import renderDataTable from '../utils/renderComponents/renderDataTable.ts';
 
 import printFullTable from '../components/FullTable.ts';
 import generateSummaryRow from '../components/SummaryTable.ts';
-import { ISetDisplay, SetDisplay } from '../utils/styleAttributes.ts';
+import { ISetDisplay, SetDisplay } from '../services/Display/setDisplayClass.ts';
+import renderCountPFTable from '../utils/renderComponents/dateTable/renderCountTable.ts';
+import rendertLogTable from '../utils/renderComponents/dateTable/renderTLogTable.ts';
 
 //import LoginWindow from './components/login-form/Login-window.ts';
 
@@ -33,6 +35,7 @@ const filtersSections = document.querySelector('#filters-date-submit') as HTMLDi
 const svgDiv = document.querySelector('#svg-div') as HTMLDivElement;
 const filtersWrapperToggler = document.querySelector('#scale-filters-wrapper-toggler') as HTMLDivElement;
 const diagramsSection = document.querySelector('#diagrams-section') as HTMLDivElement;
+const tablesSection = document.querySelector('#tables-section') as HTMLDivElement;
 //-------------------------------------------------------------------------------------------------
 
 // INPUTS-------------------------------------------------------------------------------------------
@@ -49,6 +52,8 @@ const countpassCounter = document.querySelector('#countpass-counter') as HTMLPar
 const dataTable = document.querySelector('#data-table') as HTMLTableElement;
 const fullTable = document.querySelector('#full-table') as HTMLTableElement;
 const summaryTable = document.querySelector('#summary-table') as HTMLTableElement;
+const countPFTable = document.querySelector('#countPF-table') as HTMLTableElement;
+const tlogTable = document.querySelector('#tlog-table') as HTMLTableElement;
 //-------------------------------------------------------------------------------------------------
 
 const scrollToTheBottomBtn = document.querySelector('#scroll-to-the-bottom') as HTMLButtonElement;
@@ -60,13 +65,14 @@ export default async function handleInputFormSubmit(e: Event) {
 		? await DBQuery()
 		: Storage.setItem('data', getFilters() as object[]);
 
-	//rowsAmount.innerHTML = `${Storage.items.staticDataLength}`;
-
 	if (rowsAmount && Storage.items.data) {
 		Storage.items.data.length === 0
 			? rowsAmount.innerHTML = '0'
 			: rowsAmount.innerHTML = `${Storage.items.data.length}`;
 	}
+
+	Storage.setItem('limiter', Storage.items.data?.length);
+
 
 	let dropdownValues: {
 		values: string[];
@@ -88,7 +94,8 @@ export default async function handleInputFormSubmit(e: Event) {
 		filtersWrapperToggler.style.display = 'block';
 		rowCounterDiv.style.opacity = '1';
 
-		diagramsSection.getBoundingClientRect().height === 0 ? Display.setDisplayFlex(contentSection) : Display.setDisplayNone(contentSection);
+		diagramsSection.getBoundingClientRect().height === 0 ? Display.setDisplayFLEX(contentSection) : Display.setDisplayNONE(contentSection);
+		tablesSection.getBoundingClientRect().height === 0 ? Display.setDisplayFLEX(contentSection) : Display.setDisplayNONE(contentSection);
 
 		filtersSections.style.display = 'flex';
 		scrollToTheBottomBtn.style.opacity = '1';
@@ -163,6 +170,12 @@ export default async function handleInputFormSubmit(e: Event) {
 
 			if (summaryTable.getAttribute('style') !== 'display: none;')
 				generateSummaryRow();
+
+			if (Display.checkElementsDisplayProperty(countPFTable) !== 'none')
+				renderCountPFTable();
+
+			if (Display.checkElementsDisplayProperty(tlogTable) !== 'none')
+				rendertLogTable();
 		}
 	}
 };

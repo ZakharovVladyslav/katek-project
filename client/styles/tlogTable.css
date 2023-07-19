@@ -1,0 +1,60 @@
+.tlog-table #filters-table {
+    margin: none;
+}
+
+.tlog-table {
+    margin: 40px auto;
+
+    border-collapse: collapse;
+    border-radius: 5px;
+    font-size: 0.9em;
+    font-family: sans-serif;
+
+    min-width: fit-content;
+
+    box-shadow: 0 0 40px rgba(0, 217, 255, 0.211);
+
+    border-spacing: 0;
+}
+
+.tlog-table thead tr {
+    background-color: #00788b;
+    color: #d4d4d4;
+
+    text-align: left;
+}
+
+.tlog-table th,
+.tlog-table td {
+    padding: 10px 10px;
+}
+
+.tlog-table tbody tr {
+    background-color: #29292a;
+}
+
+.tlog-table tbody tr:nth-child(even) {
+    transition: background-color ease 0.1s;
+    background-color: #202022;
+}
+
+.tlog-table tbody tr:last-of-type {
+    border-bottom: 2px solid #00788b;
+    border-radius: 50px;
+}
+
+.tlog-table td {
+    color: rgb(209, 209, 209);
+    font-size: 12px;
+    font-weight: 500;
+
+    border-spacing: 0;
+
+    padding: 8px 10px;
+}
+
+.tlog-table td:hover {
+    cursor: pointer;
+    background-color: #004d59;
+    transition: background-color ease 0.1s;
+ }

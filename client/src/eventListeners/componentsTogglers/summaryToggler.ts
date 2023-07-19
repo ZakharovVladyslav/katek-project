@@ -1,4 +1,4 @@
-import { DISPLAY } from '../utils/enums';
+import { DISPLAY } from '../../utils/enums';
 
 const summaryTable = document.querySelector('#summary-table') as HTMLTableElement;
 

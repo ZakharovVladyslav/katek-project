@@ -44,7 +44,10 @@ interface ICore {
 	login?: string,
 	tableHeadersFromFile?: string[],
 	fullTableHeaders?: string[],
-	outputLimiter?: number;
+	outputLimiter?: number,
+	dateTableIndex?: number,
+	leftInnerDate?: string,
+	rightInnerDate?: string
 }
 
 type CoreFields =
@@ -83,7 +86,10 @@ type CoreFields =
 	| 'login'
 	| 'tableHeadersFromFile'
 	| 'fullTableHeaders'
-	| 'outputLimiter';
+	| 'outputLimiter'
+	| 'dateTableIndex'
+	| 'leftInnerDate'
+	| 'rightInnerDate'
 
 class CustomStorage implements ICustomStorage {
 	private static _core: Record<string, any> = {};

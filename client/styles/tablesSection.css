@@ -1,0 +1,151 @@
+.dividing-column {
+    min-width: 1px;
+    height: 190px;
+    border-right: 1px solid #444;
+}
+
+/*
+
+.tables-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    padding-bottom: 30px;
+    border-bottom: 1px solid #444;
+
+    gap: 20px;
+}
+
+.tables-section div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-width: 400px;
+    min-height: 220px;
+
+    border-radius: 3px;
+
+    cursor: pointer;
+}
+
+.tables-section div:hover {
+    background-color: #6565653b;
+    transition: background-color ease 0.1s;
+}
+
+.tables-section div input[type='checkbox'] {
+    display: none;
+}
+
+.tables-section div label {
+    font-size: 100px;
+
+    cursor: pointer;
+}
+*/
+
+.tables-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    border-bottom: 1px solid #444;
+
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.tables-section .dividing-column {
+    min-width: 1px;
+    height: 190px;
+    border-right: 1px solid #444;
+}
+
+.tables-section div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    max-width: 327px;
+
+    border-radius: 3px;
+}
+
+.tables-section div:hover {
+    background-color: #6565653b;
+    transition: background-color ease 0.1s;
+}
+
+.tables-section div label {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    background-color: transparent;
+    transition: background-color ease 0.1s;
+
+    border: none;
+
+    font-size: 100px;
+
+    height: 160px;
+    width: 327px;
+
+    cursor: pointer;
+}
+
+.tables-section div label i {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    color: rgb(171, 171, 171);
+    transition: 0.1s ease;
+    cursor: pointer;
+}
+
+.tables-section div label i:hover {
+    color: white;
+    transition: 0.1s ease;
+}
+
+.tables-section div input {
+    display: none;
+}
+
+.return-back-from-tables-section-btn {
+    position: absolute;
+
+    top: 100px;
+    left: 530px;
+
+    background-color: #333236;
+
+    border-radius: 45px;
+
+    border: none;
+}
+
+.return-back-from-tables-section-btn i {
+    color: #e6e6e6;
+
+    font-size: 70px;
+
+    cursor: pointer;
+}
+
+.return-back-from-tables-section-btn i:hover {
+    transition: 0.2s ease;
+
+    color: rgb(131, 131, 131);
+}

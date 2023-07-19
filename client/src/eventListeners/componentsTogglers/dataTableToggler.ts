@@ -1,7 +1,7 @@
 'use strict';
 
-import { DISPLAY } from "../utils/enums";
-import { ISetDisplay, SetDisplay } from "../utils/styleAttributes";
+import { DISPLAY } from "../../utils/enums";
+import { ISetDisplay, SetDisplay } from "../../services/Display/setDisplayClass";
 
 const table = document.querySelector('#data-table') as HTMLTableElement;
 const fullTable = document.querySelector('#full-table') as HTMLTableElement;
@@ -43,7 +43,7 @@ export default function handleTableCheckboxChange() {
 
         scrollToTheBottom.style.opacity = '0';
 
-        Display.setDisplayNone(document.querySelector('#show-more-results-btn') as HTMLButtonElement);
+        Display.setDisplayNONE(document.querySelector('#show-more-results-btn') as HTMLButtonElement);
     }
 }
 

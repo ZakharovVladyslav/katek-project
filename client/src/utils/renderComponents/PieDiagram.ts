@@ -1,6 +1,6 @@
-import CustomStorage, { ICustomStorage } from '../services/Storage/CustomStorage.js';
+import CustomStorage, { ICustomStorage } from '../../services/Storage/CustomStorage.js';
 import * as d3 from 'd3';
-import { FullDataInterface } from '../utils/types.js';
+import { FullDataInterface } from '../types.js';
 
 const Storage: ICustomStorage = new CustomStorage();
 

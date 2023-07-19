@@ -1,5 +1,5 @@
-import { DISPLAY } from "../utils/enums";
-import { ISetDisplay, SetDisplay } from "../utils/styleAttributes";
+import { DISPLAY } from "../../utils/enums";
+import { ISetDisplay, SetDisplay } from "../../services/Display/setDisplayClass";
 
 const fullNStaticTableSection = document.querySelector('#full-n-static-table-section') as HTMLDivElement;
 const overTables = document.querySelector('#over-tables') as HTMLDivElement;
@@ -36,6 +36,6 @@ export default function handleFullTableCheckboxChange() {
 
         scrollToTheBottom.style.opacity = '0';
 
-        Display.setDisplayNone(document.querySelector('#show-more-results-btn') as HTMLButtonElement);
+        Display.setDisplayNONE(document.querySelector('#show-more-results-btn') as HTMLButtonElement);
     }
 }

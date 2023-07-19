@@ -16,28 +16,37 @@ import handleDateInputSectionClick from './eventListeners/DateInputEraser.ts';
 import handleFiltersEraserClick from './eventListeners/FiltersEraser.ts';
 import handleFindingOutKeyByValue from './eventListeners/FilterDataByValues.ts'
 import handleInputFormSubmit from './eventListeners/SubmitHandler.ts';
-import handleTableCheckboxChange from './eventListeners/ShowHideTable.ts';
+import handleTableCheckboxChange from './eventListeners/componentsTogglers/dataTableToggler.ts';
 //-------------------------------------------------------------------------------------------------
 
 import { ICustomStorage } from './services/Storage/CustomStorage.ts';
-import handlePieDiagramCheckboxChange from './eventListeners/PieDiagram.ts';
+import handlePieDiagramCheckboxChange from './utils/renderComponents/PieDiagram.ts';
 import { handleLoadFilters, handleFiltersClearButtonClick } from './eventListeners/LoadFilters.ts';
-import handleFullTableCheckboxChange from './eventListeners/FullTableCheckboxChange.ts';
-import handleSummaryRowShowHide from './eventListeners/SummaryShowHide.ts';
+import handleFullTableCheckboxChange from './eventListeners/componentsTogglers/fullTableToggler.ts';
+import handleSummaryRowShowHide from './eventListeners/componentsTogglers/summaryToggler.ts';
 import { DISPLAY } from './utils/enums.ts';
-import showMoreResults from './eventListeners/showMoreResults.ts';
-import { appearDisappearDiagramsSection, returnBackFromDiagramsSection } from './eventListeners/DiagramsSectionAppear.ts';
+import showMoreResults from './eventListeners/componentsTogglers/showMoreResults.ts';
+import {
+	appearDisappearDiagramsSection,
+	appearDisappearTablesSection,
+	returnBackFromDiagramsSection,
+	returnBackFromTablesSection
+} from './eventListeners/componentsTogglers/diagramsSectionToggler.ts';
+import { ISetDisplay, SetDisplay } from './services/Display/setDisplayClass.ts';
+import dateTableToggler from './eventListeners/dateTable/dateTableToggler.ts';
 
 //import LoginWindow from './components/login-form/Login-window.ts';
 
 /* Defining storage classes instances */
 const Storage: ICustomStorage = new CustomStorage();
+const Display: ISetDisplay = new SetDisplay();
 
 /* HTML Elements import */
 
 // BUTTONS ----------------------------------------------------------------------------------------
 const resetBtn = document.querySelector('#reset') as HTMLButtonElement;
 const saveButton = document.querySelector('#save') as HTMLButtonElement;
+const submitButton = document.querySelector('#submit-button') as HTMLButtonElement;
 const toggleButton = document.querySelector('#scale-filters-wrapper-toggler') as HTMLButtonElement;
 const rightArrow = document.querySelector('#right-arrow') as HTMLButtonElement;
 const leftArrow = document.querySelector('#left-arrow') as HTMLButtonElement;
@@ -46,6 +55,9 @@ const scrollToTopBtn = document.querySelector('#scroll-to-top-btn') as HTMLButto
 const scrollToTheBottom = document.querySelector('#scroll-to-the-bottom') as HTMLButtonElement;
 const showMoreResultsBtn = document.querySelector('#show-more-results-btn') as HTMLButtonElement;
 const returnBackDiagramsBtn = document.querySelector('#return-back-from-diagrams-section-btn') as HTMLButtonElement;
+const returnBackTablesBtn = document.querySelector('#return-back-from-tables-section-btn') as HTMLButtonElement;
+const dateTableLeftArrow = document.querySelector('#date-table-left-arrow') as HTMLButtonElement;
+const dateTableRightArrow = document.querySelector('#date-table-right-arrow') as HTMLButtonElement;
 //-------------------------------------------------------------------------------------------------
 
 // SELECTS ----------------------------------------------------------------------------------------
@@ -55,10 +67,13 @@ const dataSource = document.querySelector('#input-data-select') as HTMLSelectEle
 
 // DIVS--------------------------------------------------------------------------------------------
 const filters = document.querySelector('#filters') as HTMLDivElement;
-const filtersSectionWrapper = document.querySelector('#filters-wrapper') as HTMLDivElement;
 const fullTableSection = document.querySelector('#full-table-section') as HTMLDivElement;
 const diagramsLink = document.querySelector('#diagrams-link') as HTMLDivElement;
+const tablesLink = document.querySelector('#tables-link') as HTMLDivElement;
 const diagramsSection = document.querySelector('#diagrams-section') as HTMLDivElement;
+const contentSection = document.querySelector('#content-buttons') as HTMLDivElement;
+const tablesSection = document.querySelector('#tables-section') as HTMLDivElement;
+const filtersNDatesSection = document.querySelector('#filters-date-submit') as HTMLDivElement;
 //-------------------------------------------------------------------------------------------------
 
 // PARAGRAPHS--------------------------------------------------------------------------------------
@@ -68,6 +83,8 @@ const diagramsSection = document.querySelector('#diagrams-section') as HTMLDivEl
 const inputForm = document.querySelector('#input-form') as HTMLTableElement;
 const dataTable = document.querySelector('#data-table') as HTMLTableElement;
 const fullNStaticTableSection = document.querySelector('#full-n-static-table-section') as HTMLTableElement;
+const countPFTable = document.querySelector('#countPF-table') as HTMLTableElement;
+const tlogTable = document.querySelector('#tlog-table') as HTMLTableElement;
 //-------------------------------------------------------------------------------------------------
 
 // LABELS -----------------------------------------------------------------------------------------
@@ -75,10 +92,13 @@ const tableCheckboxLabel = document.querySelector("#content-label-table") as HTM
 const pieDiagramCheckboxLabel = document.querySelector('#content-label-pieDiagram') as HTMLLabelElement;
 const summaryRowCheckboxLabel = document.querySelector('#content-label-summaryRow') as HTMLLabelElement;
 const loadFiltersLabel = document.querySelector("#load-filters-lbl") as HTMLLabelElement;
+const dateTableLabel = document.querySelector('#content-label-date-table') as HTMLLabelElement;
 //-------------------------------------------------------------------------------------------------
 
 const tableCheckbox: HTMLInputElement | null = document.querySelector('#content-input-table');
 const fullTableCheckbox = document.querySelector('#content-input-fullTable') as HTMLInputElement;
+const leftDatePicker = document.querySelector('#left-inner-date-picker') as HTMLInputElement;
+const rightDatePicker = document.querySelector('#right-inner-date-picker') as HTMLInputElement;
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
@@ -110,13 +130,23 @@ window.addEventListener('scroll', () => {
 
 	if (fullTableSection.getAttribute('style') !== DISPLAY.NONE) {
 		if (scrollPosition >= 373) {
-			leftArrow.classList.add('fixed-button-left', 'show-button-left');
-			rightArrow.classList.add('fixed-button-right', 'show-button-right');
-			fullTableSection.classList.add('show-table-section');
+			if (fullTableSection.getBoundingClientRect().height !== 0) {
+				leftArrow.classList.add('fixed-button-left', 'show-button-left');
+				rightArrow.classList.add('fixed-button-right', 'show-button-right');
+				fullTableSection.classList.add('show-table-section');
+			}
+
+			dateTableLeftArrow.classList.add('fixed-dt-arrow-left', 'show-dt-arrow-left');
+			dateTableRightArrow.classList.add('fixed-dt-arrow-right', 'show-dt-arrow-right');
 		} else {
-			leftArrow.classList.remove('fixed-button-left', 'show-button-left');
-			rightArrow.classList.remove('fixed-button-right', 'show-button-right');
-			fullTableSection.classList.remove('show-table-section');
+			if (fullTableSection.getBoundingClientRect().height !== 0) {
+				leftArrow.classList.remove('fixed-button-left', 'show-button-left');
+				rightArrow.classList.remove('fixed-button-right', 'show-button-right');
+				fullTableSection.classList.remove('show-table-section');
+			}
+
+			dateTableLeftArrow.classList.remove('fixed-dt-arrow-left', 'show-dt-arrow-left');
+			dateTableRightArrow.classList.remove('fixed-dt-arrow-right', 'show-dt-arrow-right');
 		}
 	}
 
@@ -159,7 +189,9 @@ if (file) {
 }
 
 diagramsLink.addEventListener('click', appearDisappearDiagramsSection);
+tablesLink.addEventListener('click', appearDisappearTablesSection);
 returnBackDiagramsBtn.addEventListener('click', returnBackFromDiagramsSection);
+returnBackTablesBtn.addEventListener('click', returnBackFromTablesSection)
 
 toggleButton.addEventListener('click', (e: MouseEvent) => {
 	const target = e.target as HTMLElement;
@@ -171,13 +203,23 @@ toggleButton.addEventListener('click', (e: MouseEvent) => {
 	// ? filtersSectionWrapper.style.height = '582px'
 	// : filtersSectionWrapper.style.height = '0px';
 
-	if (target.classList.contains('active')) {
-		diagramsSection
-	}
+	if (!target.classList.contains('active')) {
+		console.log(Display.checkElementsDisplayProperty(contentSection));
+		console.log(Display.checkElementsDisplayProperty(diagramsSection));
+		console.log(Display.checkElementsDisplayProperty(fullTableSection));
 
-	target.classList.contains('active')
-		? filtersSectionWrapper.setAttribute('style', DISPLAY.BLOCK)
-		: filtersSectionWrapper.setAttribute('style', DISPLAY.NONE);
+		if (Display.checkElementsDisplayProperty(diagramsSection) !== 'none')
+			Display.setDisplayNONE(diagramsSection);
+
+		if (Display.checkElementsDisplayProperty(tablesSection))
+			Display.setDisplayNONE(tablesSection);
+
+		Display.setDisplayNONE(contentSection);
+		Display.setDisplayNONE(filtersNDatesSection);
+	} else {
+		Display.setDisplayFLEX(contentSection);
+		Display.setDisplayFLEX(filtersNDatesSection);
+	}
 })
 
 // listens to the first date change to change number of rows that will be outputed
@@ -241,6 +283,60 @@ fullTableCheckbox?.addEventListener('click', handleFullTableCheckboxChange);
 pieDiagramCheckboxLabel?.addEventListener('click', handlePieDiagramCheckboxChange);
 summaryRowCheckboxLabel?.addEventListener('click', handleSummaryRowShowHide);
 
+dateTableLabel?.addEventListener('click', dateTableToggler);
+dateTableLeftArrow.addEventListener('click', () => {
+	const tables: HTMLTableElement[] = [countPFTable, dataTable, tlogTable];
+
+	if (Storage.items.dateTableIndex! > 0)
+		Storage.setItem('dateTableIndex', Storage.items.dateTableIndex! - 1);
+
+	else if (Storage.items.dateTableIndex === 0)
+		Display.setDisplayNONE(dateTableLeftArrow);
+
+	else if (Storage.items.dateTableIndex === 1)
+		Display.setDisplayBLOCK(dateTableRightArrow);
+
+	Display.setDisplayTABLE(tables[Storage.items.dateTableIndex!]);
+
+	tables.forEach((table: HTMLTableElement, index: number) => {
+		if (index !== Storage.items.dateTableIndex)
+			Display.setDisplayNONE(table);
+	});
+
+	submitButton.click();
+})
+
+dateTableRightArrow.addEventListener('click', () => {
+	const tables: HTMLTableElement[] = [countPFTable, dataTable, tlogTable];
+
+	if (Storage.items.dateTableIndex! < 2)
+		Storage.setItem('dateTableIndex', Storage.items.dateTableIndex! + 1);
+
+	else if (Storage.items.dateTableIndex === 2)
+		Display.setDisplayNONE(dateTableRightArrow);
+
+
+	else if (Storage.items.dateTableIndex === 1)
+		Display.setDisplayBLOCK(dateTableLeftArrow);
+
+	Display.setDisplayTABLE(tables[Storage.items.dateTableIndex!]);
+
+	tables.forEach((table: HTMLTableElement, index: number) => {
+		if (index !== Storage.items.dateTableIndex)
+			Display.setDisplayNONE(table);
+	});
+
+	submitButton.click();
+})
+
+leftDatePicker.addEventListener('change', () => {
+	Storage.setItem('leftInnerDate', leftDatePicker.value);
+})
+
+rightDatePicker.addEventListener('change', () => {
+	Storage.setItem('rightInnerDate', rightDatePicker.value);
+})
+
 /*****************************************************************************************************************/
 /*****************************************************************************************************************/
 /*****************************************************************************************************************/
@@ -253,9 +349,9 @@ inputForm?.addEventListener('submit', handleInputFormSubmit);
 
 scrollToTopBtn.addEventListener('click', () => {
 	window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    })
+		top: 0,
+		behavior: 'smooth'
+	})
 })
 
 scrollToTheBottom.addEventListener('click', () => {

@@ -2,8 +2,6 @@ import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage
 
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 
-const rowLimiterInput = document.querySelector('#row-limiter') as HTMLInputElement;
-
 const Storage: ICustomStorage = new CustomStorage();
 
 export default async function handleResetBtnClick(e: Event) {
@@ -38,7 +36,7 @@ export default async function handleResetBtnClick(e: Event) {
 	dbSelect4.selectedIndex = 0;
 	dbSelect5.selectedIndex = 0;
 
-	rowLimiterInput.value = '1000';
+	Storage.setItem('limiter', 1000)
 
 	submitBtn.click();
 };

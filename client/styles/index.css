@@ -1053,6 +1053,26 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 /*---------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------*/
+
+.inner-date-range-input-section {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 50px;
+
+   margin: 30px 0;
+}
+
+.inner-date-range-input-section input[type='datetime-local'] {
+   background-color: transparent;
+
+   border: 1px solid #a2a2a2;
+
+   padding: 15px 13px;
+
+   border-radius: 3px;
+}
+
 /*---------------------------------------------------------------------------------------*/
 
 #data-table #filters-table {

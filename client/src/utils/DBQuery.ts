@@ -54,6 +54,8 @@ export default async function DBQuery() {
 				args += `${key}=${value}`;
 	});
 
+	console.log(args);
+
 	if (args !== '')
 		Storage.setItem('data', await fetchData(`http://localhost:3000/db-fetch?${args}`) as FullDataInterface[]);
 	else

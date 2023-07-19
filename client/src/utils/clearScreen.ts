@@ -1,6 +1,6 @@
 import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
 import { DISPLAY } from "./enums";
-import { ISetDisplay, SetDisplay } from "./styleAttributes";
+import { ISetDisplay, SetDisplay } from "../services/Display/setDisplayClass";
 
 const Display: ISetDisplay = new SetDisplay();
 const Storage: ICustomStorage = new CustomStorage();

@@ -1,4 +1,4 @@
-import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
+import CustomStorage, { ICustomStorage } from "../../services/Storage/CustomStorage";
 
 const Storage: ICustomStorage = new CustomStorage();
 
