@@ -5,7 +5,7 @@ export default defineConfig({
 	base: '/',
 	server: {
 		port: '3001',
-		open: './index.html'
+		open: './'
 	},
 	build: {
 		rollupOptions: {

@@ -26,17 +26,17 @@ export default function clearScreen() {
     fullTable.innerHTML = '';
     summaryTable.innerHTML = '';
 
-    Display.setDisplayNone(dataTable);
-    Display.setDisplayNone(fullTable);
-    Display.setDisplayNone(summaryTable);
-    Display.setDisplayNone(overTables);
-    Display.setDisplayNone(svgDiv);
-    Display.setDisplayNone(diagramDescription);
-    Display.setDisplayNone(filtersDateSubmitSection);
-    Display.setDisplayNone(contentButtons);
-    Display.setDisplayNone(filtersWrapperToggler);
-    Display.setDisplayNone(diagramsSection);
-    Display.setDisplayNone(loadMoreBtn);
+    Display.setDisplayNONE(dataTable);
+    Display.setDisplayNONE(fullTable);
+    Display.setDisplayNONE(summaryTable);
+    Display.setDisplayNONE(overTables);
+    Display.setDisplayNONE(svgDiv);
+    Display.setDisplayNONE(diagramDescription);
+    Display.setDisplayNONE(filtersDateSubmitSection);
+    Display.setDisplayNONE(contentButtons);
+    Display.setDisplayNONE(filtersWrapperToggler);
+    Display.setDisplayNONE(diagramsSection);
+    Display.setDisplayNONE(loadMoreBtn);
 
     Storage.items.dbSelects?.forEach((select: HTMLSelectElement) => select.selectedIndex = 0);
     Storage.items.inputFields?.forEach((field: HTMLInputElement) => field.value = '');

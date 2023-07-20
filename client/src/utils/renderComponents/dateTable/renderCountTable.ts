@@ -1,4 +1,6 @@
 import CustomStorage, { ICustomStorage } from "../../../services/Storage/CustomStorage";
+import getDateDiffHours from "../../datesDifference";
+import { FullDataInterface } from "../../types";
 
 const countPFTable = document.querySelector('#countPF-table') as HTMLTableElement
 
@@ -6,6 +8,8 @@ const Storage: ICustomStorage = new CustomStorage();
 
 export default function renderCountPFTable() {
     countPFTable.innerHTML = '';
+
+    Storage.setItem('countPFCoeff', 1);
 
     const header: HTMLTableSectionElement = document.createElement('thead');
     const body: HTMLTableSectionElement = document.createElement('tbody');
@@ -28,9 +32,24 @@ export default function renderCountPFTable() {
         const bodyRow = document.createElement('tr') as HTMLTableRowElement;
 
         headers.forEach((header: string, columnIndex: number) => {
+            const row: FullDataInterface = Storage.items.data![rowIndex];
+            let coeff = 1;
+
+            console.log(coeff);
+            console.log(getDateDiffHours(Storage.items.leftInnerDate!, Storage.items.rightInnerDate!));
+            console.log(getDateDiffHours(row.tLogIn, row.tLogOut));
+
+            console.log(`${getDateDiffHours(Storage.items.leftInnerDate!, Storage.items.rightInnerDate!)} / ${getDateDiffHours(row.tLogIn, row.tLogOut)}`);
+
+            if (Storage.items.leftInnerDate && Storage.items.rightInnerDate)
+                if (Storage.items.data![rowIndex][header] !== null && Storage.items.data![rowIndex].CountPass !== 0)
+                    coeff = (getDateDiffHours(Storage.items.rightInnerDate, Storage.items.leftInnerDate)) / (getDateDiffHours(row.tLogIn, row.tLogOut));
+
+            console.log(coeff);
+
             const bodyRowCellHTML = `
                 <td id="countPF-table-body-cell-row${rowIndex}-col${columnIndex}" class="countPF-table-body-cell">
-                    ${Storage.items.data![rowIndex][header]}
+                    ${+Storage.items.data![rowIndex][header] * coeff}
                 </td>
             `
 

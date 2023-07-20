@@ -47,7 +47,8 @@ interface ICore {
 	outputLimiter?: number,
 	dateTableIndex?: number,
 	leftInnerDate?: string,
-	rightInnerDate?: string
+	rightInnerDate?: string,
+	countPFCoeff?: number
 }
 
 type CoreFields =
@@ -90,6 +91,7 @@ type CoreFields =
 	| 'dateTableIndex'
 	| 'leftInnerDate'
 	| 'rightInnerDate'
+	| 'countPFCoeff'
 
 class CustomStorage implements ICustomStorage {
 	private static _core: Record<string, any> = {};
