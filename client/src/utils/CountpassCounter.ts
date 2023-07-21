@@ -1,6 +1,6 @@
 import CustomStorage, { ICustomStorage } from '../services/Storage/CustomStorage.js';
 import LocalStacks from '../services/Stack/LocalStack.js';
-import fetchData from './FetchDbJSON.js';
+import fetchData from './fetchDbJSON.js';
 
 const countpassDiv: HTMLDivElement | null = document.querySelector('#countpass-counter-div');
 const countpassCounter: HTMLParagraphElement | null = document.querySelector('#countpass-counter');

@@ -1,4 +1,4 @@
-import DropdownValues from "../utils/Dropdown-values";
+import DropdownValues from "../utils/dropdown-values";
 import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
 
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;

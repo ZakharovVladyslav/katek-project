@@ -1,15 +1,15 @@
 'use strict';
 
 /* Functions import from other files */
-import getFilters from '../utils/Data-filtering.ts';
-import DropdownValues from '../utils/Dropdown-values.ts';
+import getFilters from '../utils/data-filtering.ts';
+import DropdownValues from '../utils/dropdown-values.ts';
 import CreateDiagram from '../components/Diagram/Diagram.ts';
 import CustomStorage, { ICustomStorage } from '../services/Storage/CustomStorage.ts';
-import DBQuery from '../utils/DBQuery.ts';
+import DBQuery from '../utils/dBQuery.ts';
 import renderDataTable from '../utils/renderComponents/renderDataTable.ts';
 
-import printFullTable from '../components/FullTable.ts';
-import generateSummaryRow from '../components/SummaryTable.ts';
+import printFullTable from '../components/FullTable/FullTable.ts';
+import generateSummaryRow from '../components/SummaryTable/SummaryTable.ts';
 import { ISetDisplay, SetDisplay } from '../services/Display/setDisplayClass.ts';
 import renderCountPFTable from '../utils/renderComponents/dateTable/renderCountTable.ts';
 import rendertLogTable from '../utils/renderComponents/dateTable/renderTLogTable.ts';
@@ -73,6 +73,7 @@ export default async function handleInputFormSubmit(e: Event) {
 
 	Storage.setItem('limiter', Storage.items.data?.length);
 
+	console.log(Storage.items.data);
 
 	let dropdownValues: {
 		values: string[];

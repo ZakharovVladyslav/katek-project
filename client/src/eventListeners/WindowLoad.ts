@@ -1,9 +1,13 @@
+import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
+import data from '../data/developmentData.json';
+import fillStorage from "../services/Storage/FillStorage";
+
+const Storage: ICustomStorage = new CustomStorage();
+
 const clickToggler = document.querySelector('#click-toggler') as HTMLSelectElement;
 const dataSource = document.querySelector('#input-data-select') as HTMLSelectElement;
 
-import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
-
-const Storage: ICustomStorage = new CustomStorage();
+const submitButton = document.querySelector('#submit-button') as HTMLButtonElement;
 
 export default function HandleWindowLoad() {
 	const inputDataSelectOption = dataSource?.options[dataSource?.selectedIndex].value as string;
@@ -16,6 +20,16 @@ export default function HandleWindowLoad() {
 		LoginWindow();
 	}
 	*/
+
+	Storage.setItem('dataSourceOption', dataSource.options[dataSource.selectedIndex].value);
+
+	if (Storage.items.dataSourceOption === 'development') {
+		Storage.setItem('data', data);
+
+		fillStorage();
+
+		submitButton.click();
+	}
 
 	Storage.setItem('inputFields', [
 		document.querySelector('#filter-input-1') as HTMLInputElement,

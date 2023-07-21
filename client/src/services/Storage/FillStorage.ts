@@ -1,5 +1,5 @@
 import CustomStorage, { ICustomStorage } from './CustomStorage.js';
-import DropdownValues from '../../utils/Dropdown-values.js';
+import DropdownValues from '../../utils/dropdown-values.js';
 
 const rowsAmount = document.querySelector('#rows-amount');
 
@@ -31,8 +31,6 @@ export default function fillStorage() {
 
 		// Full table headers does not include 'DBName' and 'DBPath'
 		Storage.setItem('fullTableHeaders', fullTableHeaders as string[]);
-		console.log(Storage.items.fullTableHeaders);
-
 		// StaticDataLength - stored, not to calculate length later
 		Storage.setItem('staticDataLength', Storage.items.staticData!.length);
 		Storage.setItem('headers', Object.keys(Storage.items.data[0]));

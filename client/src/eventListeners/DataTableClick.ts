@@ -2,7 +2,7 @@
 
 /* Functions import from other files */
 import CustomStorage, { ICustomStorage } from '../services/Storage/CustomStorage.ts';
-import CountpassCounter from '../utils/CountpassCounter.ts';
+import CountpassCounter from '../utils/countpassCounter.ts';
 
 /* Defining storage classes instances */
 const Storage: ICustomStorage = new CustomStorage();

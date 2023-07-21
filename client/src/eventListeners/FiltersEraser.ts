@@ -1,6 +1,6 @@
 import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
-import DBQuery from "../utils/DBQuery";
-import getFilters from "../utils/Data-filtering";
+import DBQuery from "../utils/dBQuery";
+import getFilters from "../utils/data-filtering";
 
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
 

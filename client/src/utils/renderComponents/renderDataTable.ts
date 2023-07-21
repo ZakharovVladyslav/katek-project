@@ -1,6 +1,6 @@
 import CustomStorage, { ICustomStorage } from "../../services/Storage/CustomStorage";
 
-import handleTableClick from '../../eventListeners/DataTableClick';
+import handleTableClick from '../../eventListeners/dataTableClick';
 import { DISPLAY } from "../enums";
 
 const Storage: ICustomStorage = new CustomStorage();

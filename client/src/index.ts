@@ -5,23 +5,23 @@ import CustomStorage from './services/Storage/CustomStorage.ts';
 import PopUpHeadersSelect from './components/PopupHeadersSelect/PopUpHeadersSelect.ts';
 
 // EVENT LISTENERS FROM EXTERNAL FILES-------------------------------------------------------------
-import SaveDataInCsv from './eventListeners/CsvSave.ts';
-import HandleWindowLoad from './eventListeners/WindowLoad.ts';
-import HandleDBConnectionBtnClick from './eventListeners/DBConnectionBtnClick.ts';
-import handleDataSourceChange from './eventListeners/DataSourceChange.ts';
-import handleCsvFileInput from './eventListeners/CsvFileInput.ts';
-import { handleLeftDateChange, handleRightDateChange } from './eventListeners/HandleDatesChange.ts';
-import handleResetBtnClick from './eventListeners/ResetButtonClick.ts';
-import handleDateInputSectionClick from './eventListeners/DateInputEraser.ts';
-import handleFiltersEraserClick from './eventListeners/FiltersEraser.ts';
-import handleFindingOutKeyByValue from './eventListeners/FilterDataByValues.ts'
-import handleInputFormSubmit from './eventListeners/SubmitHandler.ts';
+import SaveDataInCsv from './eventListeners/csvSave.ts';
+import HandleWindowLoad from './eventListeners/windowLoad.ts';
+import HandleDBConnectionBtnClick from './eventListeners/dBConnectionBtnClick.ts';
+import handleDataSourceChange from './eventListeners/dataSourceChange.ts';
+import handleCsvFileInput from './eventListeners/csvFileInput.ts';
+import { handleLeftDateChange, handleRightDateChange } from './eventListeners/handleDatesChange.ts';
+import handleResetBtnClick from './eventListeners/resetButtonClick.ts';
+import handleDateInputSectionClick from './eventListeners/dateInputEraser.ts';
+import handleFiltersEraserClick from './eventListeners/filtersEraser.ts';
+import handleFindingOutKeyByValue from './eventListeners/filterDataByValues.ts'
+import handleInputFormSubmit from './eventListeners/submitHandler.ts';
 import handleTableCheckboxChange from './eventListeners/componentsTogglers/dataTableToggler.ts';
 //-------------------------------------------------------------------------------------------------
 
 import { ICustomStorage } from './services/Storage/CustomStorage.ts';
 import handlePieDiagramCheckboxChange from './utils/renderComponents/PieDiagram.ts';
-import { handleLoadFilters, handleFiltersClearButtonClick } from './eventListeners/LoadFilters.ts';
+import { handleLoadFilters, handleFiltersClearButtonClick } from './eventListeners/loadFilters.ts';
 import handleFullTableCheckboxChange from './eventListeners/componentsTogglers/fullTableToggler.ts';
 import handleSummaryRowShowHide from './eventListeners/componentsTogglers/summaryToggler.ts';
 import { DISPLAY } from './utils/enums.ts';

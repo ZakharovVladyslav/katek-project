@@ -1,7 +1,7 @@
-import CsvToArray from "../utils/Convert-csv";
+import CsvToArray from "../utils/convert-csv";
 import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
 import fillStorage from "../services/Storage/FillStorage";
-import DBQuery from "../utils/DBQuery";
+import DBQuery from "../utils/dBQuery";
 import clearScreen from "../utils/clearScreen";
 import { DISPLAY } from "../utils/enums";
 
@@ -198,5 +198,8 @@ export default function handleDataSourceChange() {
 			Storage.items.loadFiltersInput?.files && reader.readAsText(Storage.items.loadFiltersInput.files[0]);
 		})
 		*/
+	}
+	else if ( Storage.items.dataSourceOption === 'development' ) {
+		clearScreen();
 	}
 };

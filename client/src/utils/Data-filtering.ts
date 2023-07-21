@@ -12,6 +12,8 @@ export default function getFilters() {
 	if (Storage.items.staticData) {
 		let inputData: FullDataInterface[] | undefined = [...Storage.items.staticData];
 
+		console.log(inputData);
+
 		const select = document.getElementById('date-params') as HTMLSelectElement | null;
 		const opt: string | undefined = select?.options[select?.selectedIndex]?.value;
 

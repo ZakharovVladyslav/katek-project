@@ -1,5 +1,5 @@
 import CustomStorage, { ICustomStorage } from "../services/Storage/CustomStorage";
-import fetchData from "../utils/FetchDbJSON";
+import fetchData from "../utils/fetchDbJSON";
 import fillStorage from "../services/Storage/FillStorage";
 
 const submitBtn = document.querySelector('#submit-button') as HTMLButtonElement;
