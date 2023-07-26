@@ -20,8 +20,6 @@ export const appearDisappearDiagramsSection = () => {
 }
 
 export const appearDisappearTablesSection = () => {
-    console.log('t');
-
     if (tablesSection.getBoundingClientRect().height !== 0) {
         Display.setDisplayFLEX(contentButtonsSection);
         Display.setDisplayNONE(tablesSection);

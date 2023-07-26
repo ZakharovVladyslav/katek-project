@@ -73,8 +73,6 @@ export default async function handleInputFormSubmit(e: Event) {
 
 	Storage.setItem('limiter', Storage.items.data?.length);
 
-	console.log(Storage.items.data);
-
 	let dropdownValues: {
 		values: string[];
 		valueToHeaderMap: object;

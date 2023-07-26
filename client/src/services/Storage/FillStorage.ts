@@ -6,6 +6,30 @@ const rowsAmount = document.querySelector('#rows-amount');
 const Storage: ICustomStorage = new CustomStorage();
 
 export default function fillStorage() {
+	Storage.setItem('dbSelects', [
+		document.querySelector('#db-select-1') as HTMLSelectElement,
+		document.querySelector('#db-select-2') as HTMLSelectElement,
+		document.querySelector('#db-select-3') as HTMLSelectElement,
+		document.querySelector('#db-select-4') as HTMLSelectElement,
+		document.querySelector('#db-select-5') as HTMLSelectElement,
+	] as HTMLSelectElement[]);
+
+	Storage.setItem('inputFields', [
+		document.querySelector('#filter-input-1') as HTMLInputElement,
+		document.querySelector('#filter-input-2') as HTMLInputElement,
+		document.querySelector('#filter-input-3') as HTMLInputElement,
+		document.querySelector('#filter-input-4') as HTMLInputElement,
+		document.querySelector('#filter-input-5') as HTMLInputElement
+	] as HTMLInputElement[]);
+
+	Storage.setItem('datalists', [
+		document.querySelector('#datalist-1') as HTMLDataListElement,
+		document.querySelector('#datalist-2') as HTMLDataListElement,
+		document.querySelector('#datalist-3') as HTMLDataListElement,
+		document.querySelector('#datalist-4') as HTMLDataListElement,
+		document.querySelector('#datalist-5') as HTMLDataListElement
+	] as HTMLDataListElement[]);
+
 	/**
      * TableHeaders - needed for the table to print only exact columns
      * Also stores into the Storage to be able to be called later

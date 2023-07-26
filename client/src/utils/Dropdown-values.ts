@@ -33,8 +33,6 @@ export default function DropdownValues(array: FullDataInterface[], headers: stri
 	const timeKeys: string[] = ['tLogIn', 'tLogOut', 'tLastAcc'];
 	const valuesMap: Map<string, string[]> = new Map();
 
-	console.log(array);
-
 	const mapHeaders = headers.filter((header: string) => !timeKeys.includes(header));
 
 	mapHeaders.forEach((header: string) => {

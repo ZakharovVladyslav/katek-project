@@ -1,5 +1,4 @@
 export default function getDateDiffHours(date1: string, date2: string): number {
-
     const newDate1 = new Date(date1);
     const newDate2 = new Date(date2);
 

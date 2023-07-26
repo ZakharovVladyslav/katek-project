@@ -35,17 +35,15 @@ export default function renderCountPFTable() {
             const row: FullDataInterface = Storage.items.data![rowIndex];
             let coeff = 1;
 
-            console.log(coeff);
-            console.log(getDateDiffHours(Storage.items.leftInnerDate!, Storage.items.rightInnerDate!));
-            console.log(getDateDiffHours(row.tLogIn, row.tLogOut));
-
-            console.log(`${getDateDiffHours(Storage.items.leftInnerDate!, Storage.items.rightInnerDate!)} / ${getDateDiffHours(row.tLogIn, row.tLogOut)}`);
-
             if (Storage.items.leftInnerDate && Storage.items.rightInnerDate)
-                if (Storage.items.data![rowIndex][header] !== null && Storage.items.data![rowIndex].CountPass !== 0)
+                if (
+                    Storage.items.data![rowIndex][header] !== null  &&
+                    Storage.items.data![rowIndex].CountPass !== 0 &&
+                    Storage.items.data![rowIndex].tLogOut !== 'NULL' &&
+                    Storage.items.data![rowIndex].tLogIn !== 'NULL' &&
+                    Storage.items.data![rowIndex].tLastAcc !== 'NULL'
+                )
                     coeff = (getDateDiffHours(Storage.items.rightInnerDate, Storage.items.leftInnerDate)) / (getDateDiffHours(row.tLogIn, row.tLogOut));
-
-            console.log(coeff);
 
             const bodyRowCellHTML = `
                 <td id="countPF-table-body-cell-row${rowIndex}-col${columnIndex}" class="countPF-table-body-cell">

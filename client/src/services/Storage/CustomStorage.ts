@@ -5,7 +5,9 @@ import { FullDataInterface } from "../../utils/types";
 export interface ICustomStorage {
 	readonly items: ICore,
 	setItem: (prop: CoreFields, value: any) => void,
-	clearStorage: () => void
+	clearStorage: () => void,
+	printItems: () => void,
+	printItemsByProp: (prop: CoreFields) => void
 }
 
 interface ICore {
@@ -115,6 +117,14 @@ class CustomStorage implements ICustomStorage {
 
 	clearStorage(): void {
 		this._core = {};
+	}
+
+	printItems(): void {
+		console.log(this._core);
+	}
+
+	printItemsByProp(prop: CoreFields): void {
+		console.log(this._core[prop]);
 	}
 }
 
