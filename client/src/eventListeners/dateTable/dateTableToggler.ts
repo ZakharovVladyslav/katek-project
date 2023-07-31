@@ -13,6 +13,7 @@ const rightInnerDatePicker = document.querySelector('#right-inner-date-picker') 
 const fullNStaticTableSection = document.querySelector('#full-n-static-table-section') as HTMLDivElement;
 
 const dataTable = document.querySelector('#data-table') as HTMLTableElement;
+const countTable = document.querySelector('#countPF-table') as HTMLTableElement;
 
 const Display: ISetDisplay = new SetDisplay();
 const Storage: ICustomStorage = new CustomStorage();
@@ -23,7 +24,6 @@ export default function dateTableToggler() {
             Display.setDisplayNONE(fullNStaticTableSection);
         }
 
-        Display.setDisplayBLOCK(dateTableLeftArrow);
         Display.setDisplayBLOCK(dateTableRightArrow);
 
         Display.setDisplayFLEX(innerDateRangeInputSection);
@@ -31,6 +31,7 @@ export default function dateTableToggler() {
         Display.setDisplayBLOCK(rightInnerDatePicker);
 
         Display.setDisplayTABLE(dataTable);
+        Display.setDisplayTABLE(countTable);
 
         submitBtn.click()
 
@@ -39,11 +40,12 @@ export default function dateTableToggler() {
         // const activeTable = dateTableLeftArrow.closest('table');
         // const activeTableCoords = dateTableLeftArrow.closest('table')?.getBoundingClientRect();
 
-        dateTableLeftArrow.setAttribute('style', 'opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; position: absolute;');
-        dateTableRightArrow.setAttribute('style', 'opacity: 1; transition: 0.2s; height: 40px; align-self: flex-start; position: absolute;');
+        dateTableLeftArrow.setAttribute('style', 'opacity: 1; transition: 0.2s; align-self: flex-start; position: absolute;');
+        dateTableRightArrow.setAttribute('style', 'opacity: 1; transition: 0.2s; align-self: flex-start; position: absolute;');
 
-        Display.setOpacityPos(dateTableLeftArrow);
         Display.setOpacityPos(dateTableRightArrow);
+
+        Display.setDisplayNONE(dateTableLeftArrow);
     } else {
         Display.setDisplayNONE(innerDateRangeInputSection);
 

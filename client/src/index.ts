@@ -285,46 +285,25 @@ summaryRowCheckboxLabel?.addEventListener('click', handleSummaryRowShowHide);
 
 dateTableLabel?.addEventListener('click', dateTableToggler);
 dateTableLeftArrow.addEventListener('click', () => {
-	const tables: HTMLTableElement[] = [countPFTable, dataTable, tlogTable];
+	Display.setDisplayNONE(dateTableLeftArrow);
+	Display.setDisplayBLOCK(dateTableRightArrow);
 
-	if (Storage.items.dateTableIndex! > 0)
-		Storage.setItem('dateTableIndex', Storage.items.dateTableIndex! - 1);
+	Display.setDisplayNONE(tlogTable);
 
-	else if (Storage.items.dateTableIndex === 0)
-		Display.setDisplayNONE(dateTableLeftArrow);
-
-	else if (Storage.items.dateTableIndex === 1)
-		Display.setDisplayBLOCK(dateTableRightArrow);
-
-	Display.setDisplayTABLE(tables[Storage.items.dateTableIndex!]);
-
-	tables.forEach((table: HTMLTableElement, index: number) => {
-		if (index !== Storage.items.dateTableIndex)
-			Display.setDisplayNONE(table);
-	});
+	Display.setDisplayTABLE(dataTable);
+	Display.setDisplayTABLE(countPFTable);
 
 	submitButton.click();
 })
 
 dateTableRightArrow.addEventListener('click', () => {
-	const tables: HTMLTableElement[] = [countPFTable, dataTable, tlogTable];
+	Display.setDisplayNONE(dateTableRightArrow);
+	Display.setDisplayBLOCK(dateTableLeftArrow);
 
-	if (Storage.items.dateTableIndex! < 2)
-		Storage.setItem('dateTableIndex', Storage.items.dateTableIndex! + 1);
+	Display.setDisplayTABLE(tlogTable);
 
-	else if (Storage.items.dateTableIndex === 2)
-		Display.setDisplayNONE(dateTableRightArrow);
-
-
-	else if (Storage.items.dateTableIndex === 1)
-		Display.setDisplayBLOCK(dateTableLeftArrow);
-
-	Display.setDisplayTABLE(tables[Storage.items.dateTableIndex!]);
-
-	tables.forEach((table: HTMLTableElement, index: number) => {
-		if (index !== Storage.items.dateTableIndex)
-			Display.setDisplayNONE(table);
-	});
+	Display.setDisplayNONE(dataTable);
+	Display.setDisplayNONE(countPFTable);
 
 	submitButton.click();
 })

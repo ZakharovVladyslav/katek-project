@@ -1,5 +1,6 @@
 .date-table-section {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
 
@@ -21,11 +22,17 @@
 }
 
 .date-table-section .date-table-left-arrow {
-    left: 140px;
+    left: 20px;
+    background-color: #333236;
+    border-radius: 7.5px;
+    border: 1px solid #00b7ff;
 }
 
 .date-table-section .date-table-right-arrow {
-    right: 140px;
+    right: 7px;
+    background-color: #333236;
+    border-radius: 7.5px;
+    border: 1px solid #00b7ff;
 }
 
 .date-table-section .date-table-left-arrow i,
@@ -43,4 +50,11 @@
     position: fixed !important;
     top: 450px !important;
 
+}
+
+.table-carousel-section {
+    display: flex;
+    justify-content: center;
+
+    gap: 20px;
 }

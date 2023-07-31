@@ -21,6 +21,8 @@ const scrollToTheBottom = document.querySelector('#scroll-to-the-bottom') as HTM
 const leftInnerDatePicker = document.querySelector('#left-inner-date-picker') as HTMLInputElement;
 const rightInnerDatePicker = document.querySelector('#right-inner-date-picker') as HTMLInputElement;
 
+const countTable = document.querySelector('#countPF-table') as HTMLTableElement;
+
 const Display: ISetDisplay = new SetDisplay();
 
 export default function handleTableCheckboxChange() {
@@ -49,6 +51,7 @@ export default function handleTableCheckboxChange() {
         if (Display.checkElementsDisplayProperty(dateTableLeftArrow) !== 'none' || Display.checkElementsDisplayProperty(dateTableRightArrow) !== 'none') {
             Display.setDisplayNONE(dateTableLeftArrow);
             Display.setDisplayNONE(dateTableRightArrow);
+            Display.setDisplayNONE(countTable);
         }
 
         if (Display.checkElementsDisplayProperty(leftInnerDatePicker) !== 'none' || Display.checkElementsDisplayProperty(rightInnerDatePicker) !== 'none') {
