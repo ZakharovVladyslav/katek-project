@@ -1,8 +1,10 @@
 import CustomStorage, { ICustomStorage } from "../../services/Storage/CustomStorage";
 
-import handleTableClick from '../../eventListeners/dataTableClick';
+import handleTableClick from '../../eventListeners/DataTableClick';
 import { DISPLAY } from "../enums";
+import { ISetDisplay, SetDisplay } from "../../services/Display/setDisplayClass";
 
+const Display: ISetDisplay = new SetDisplay();
 const Storage: ICustomStorage = new CustomStorage();
 
 // DIVS--------------------------------------------------------------------------------------------
@@ -22,6 +24,8 @@ const dataTable = document.querySelector('#data-table') as HTMLTableElement;
 //-------------------------------------------------------------------------------------------------
 
 const showMoreBtn = document.querySelector('#show-more-results-btn') as HTMLButtonElement;
+const leftDateTableArrowBtn = document.querySelector('#date-table-left-arrow') as HTMLButtonElement;
+const rightDateTableArrowBtn = document.querySelector('#date-table-right-arrow') as HTMLButtonElement;
 
 export default function renderDataTable() {
     showMoreBtn.style.display = 'flex';
@@ -52,7 +56,23 @@ export default function renderDataTable() {
     */
     const hrow = document.createElement('tr');
 
-    const headers: string[] = Storage.items.tableHeadersFromFile ?? Storage.items.tableHeaders!;
+    // const headers: string[] = Storage.items.tableHeadersFromFile ?? Storage.items.tableHeaders!;
+
+    let headers: string[] = [];
+
+    if (
+        Display.checkElementsDisplayProperty(leftDateTableArrowBtn) !== 'none' ||
+        Display.checkElementsDisplayProperty(rightDateTableArrowBtn) !== 'none'
+    ) {
+        const allHeaders: string[] | null = Storage.items.tableHeadersFromFile ?? Storage.items.tableHeaders!;
+
+        allHeaders?.forEach((header: string) => {
+            if (header !== 'tLogIn' && header !== 'tLogOut' && header !== 'tLastAcc')
+                headers.push(header);
+        });
+    } else {
+        headers = Storage.items.tableHeadersFromFile ?? Storage.items.tableHeaders!;
+    }
 
     headers.forEach((header: string) => {
         const theaderCell = document.createElement('th');

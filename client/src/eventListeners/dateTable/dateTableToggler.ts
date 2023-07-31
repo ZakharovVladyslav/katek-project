@@ -23,16 +23,16 @@ export default function dateTableToggler() {
             Display.setDisplayNONE(fullNStaticTableSection);
         }
 
-        Display.setDisplayTABLE(dataTable);
-
-        submitBtn.click()
-
         Display.setDisplayBLOCK(dateTableLeftArrow);
         Display.setDisplayBLOCK(dateTableRightArrow);
 
         Display.setDisplayFLEX(innerDateRangeInputSection);
         Display.setDisplayBLOCK(leftInnerDatePicker);
         Display.setDisplayBLOCK(rightInnerDatePicker);
+
+        Display.setDisplayTABLE(dataTable);
+
+        submitBtn.click()
 
         Storage.setItem('dateTableIndex', 1);
 

@@ -2,7 +2,7 @@
 
 /* Functions import from other files */
 import getFilters from '../utils/data-filtering.ts';
-import DropdownValues from '../utils/dropdown-values.ts';
+import DropdownValues from '../utils/Dropdown-values.ts';
 import CreateDiagram from '../components/Diagram/Diagram.ts';
 import CustomStorage, { ICustomStorage } from '../services/Storage/CustomStorage.ts';
 import DBQuery from '../utils/dBQuery.ts';
@@ -93,8 +93,11 @@ export default async function handleInputFormSubmit(e: Event) {
 		filtersWrapperToggler.style.display = 'block';
 		rowCounterDiv.style.opacity = '1';
 
-		diagramsSection.getBoundingClientRect().height === 0 ? Display.setDisplayFLEX(contentSection) : Display.setDisplayNONE(contentSection);
-		tablesSection.getBoundingClientRect().height === 0 ? Display.setDisplayFLEX(contentSection) : Display.setDisplayNONE(contentSection);
+		if (tablesSection.getBoundingClientRect().height === 0)
+			diagramsSection.getBoundingClientRect().height === 0 ? Display.setDisplayFLEX(contentSection) : Display.setDisplayNONE(contentSection);
+
+		if (diagramsSection.getBoundingClientRect().height === 0)
+			tablesSection.getBoundingClientRect().height === 0 ? Display.setDisplayFLEX(contentSection) : Display.setDisplayNONE(contentSection);
 
 		filtersSections.style.display = 'flex';
 		scrollToTheBottomBtn.style.opacity = '1';

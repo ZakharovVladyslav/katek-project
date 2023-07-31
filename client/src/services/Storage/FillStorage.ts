@@ -1,5 +1,5 @@
 import CustomStorage, { ICustomStorage } from './CustomStorage.js';
-import DropdownValues from '../../utils/dropdown-values.js';
+import DropdownValues from '../../utils/Dropdown-values.js';
 
 const rowsAmount = document.querySelector('#rows-amount');
 
@@ -34,7 +34,7 @@ export default function fillStorage() {
      * TableHeaders - needed for the table to print only exact columns
      * Also stores into the Storage to be able to be called later
     */
-	const tableHeaders: string[] = ['ProdCode', 'Customer', 'ProdName', 'HostName', 'MatNum', 'ArticleNum', 'FPY', 'CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest'];
+	const tableHeaders: string[] = ['ProdCode', 'Customer', 'ProdName', 'HostName', 'MatNum', 'ArticleNum', 'FPY', 'CountPass', 'CountFail', 'CountPass_Retest', 'CountFail_Retest', 'tLogIn', 'tLogOut', 'tLastAcc'];
 	Storage.setItem('tableHeaders', tableHeaders);
 
 	Storage.setItem('selectedHeaders', []);

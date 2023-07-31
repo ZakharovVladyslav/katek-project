@@ -56,6 +56,8 @@ export default function handleTableCheckboxChange() {
             Display.setDisplayNONE(rightInnerDatePicker);
             Display.setDisplayNONE(innerDateRangeInputSection);
         }
+
+        submitBtn.click();
     }
     else {
         overTables.style.display = 'none';
